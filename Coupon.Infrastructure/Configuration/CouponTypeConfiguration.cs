@@ -26,8 +26,8 @@ namespace Coupon.Infrastructure.Configuration
 
             new CouponEntity
             {
-                CouponId = 1,
-                CouponCode = "5OFF",
+                CouponId = 2,
+                CouponCode = "7OFF",
                 DiscountAmount = 5,
                 MinAmount = 10,
             });
