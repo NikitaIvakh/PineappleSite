@@ -1,19 +1,21 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Coupon.Application.DTOs;
 using Coupon.Application.Features.Coupons.Requests.Queries;
+using Coupon.Application.Interfaces;
 using MediatR;
-using PineappleSite.Coupon.Core.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponListRequestHandler(ICouponRepository repository, IMapper mapper) : IRequestHandler<GetCouponListRequest, IEnumerable<CouponDto>>
+    public class GetCouponListRequestHandler(ICouponDbContext repository, IMapper mapper) : IRequestHandler<GetCouponListRequest, IEnumerable<CouponDto>>
     {
-        private readonly ICouponRepository _repository = repository;
+        private readonly ICouponDbContext _repository = repository;
         private readonly IMapper _mapper = mapper;
 
         public async Task<IEnumerable<CouponDto>> Handle(GetCouponListRequest request, CancellationToken cancellationToken)
         {
-            var coupons = await _repository.GetAllAsync();
+            var coupons = await _repository.Coupons.ProjectTo<CouponDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
             return _mapper.Map<IEnumerable<CouponDto>>(coupons);
         }
     }

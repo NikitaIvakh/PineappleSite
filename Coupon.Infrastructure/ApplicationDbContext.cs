@@ -1,9 +1,10 @@
-﻿using Coupon.Core.Entities;
+﻿using Coupon.Application.Interfaces;
+using Coupon.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), ICouponDbContext
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

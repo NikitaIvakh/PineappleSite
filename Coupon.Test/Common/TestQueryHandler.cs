@@ -8,12 +8,12 @@ namespace Coupon.Test.Common
 {
     public class TestQueryHandler : IDisposable
     {
-        private readonly ApplicationDbContext _context;
+        public ApplicationDbContext Context;
         public IMapper Mapper;
 
         public TestQueryHandler()
         {
-            _context = CouponRepositoryContextFactory.Create();
+            Context = CouponRepositoryContextFactory.Create();
 
             var configuration = new MapperConfiguration(key =>
             {
@@ -25,7 +25,7 @@ namespace Coupon.Test.Common
 
         public void Dispose()
         {
-            CouponRepositoryContextFactory.DestroyDatabase(_context);
+            CouponRepositoryContextFactory.DestroyDatabase(Context);
         }
     }
 

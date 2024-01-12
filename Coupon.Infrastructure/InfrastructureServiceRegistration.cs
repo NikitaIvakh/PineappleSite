@@ -1,4 +1,5 @@
-﻿using Coupon.Infrastructure.Repository;
+﻿using Coupon.Application.Interfaces;
+using Coupon.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +17,7 @@ namespace Coupon.Infrastructure
             });
 
             services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddScoped<ICouponDbContext, ApplicationDbContext>();
 
             var score = services.BuildServiceProvider();
             using (var serviceProvider = score.CreateScope())

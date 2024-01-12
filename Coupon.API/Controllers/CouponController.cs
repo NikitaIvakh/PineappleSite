@@ -21,9 +21,10 @@ namespace Coupon.API.Controllers
 
         // GET api/<CouponController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<CouponDto>> Get(int id)
         {
-            return "value";
+            var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
+            return Ok(query);
         }
 
         // POST api/<CouponController>
