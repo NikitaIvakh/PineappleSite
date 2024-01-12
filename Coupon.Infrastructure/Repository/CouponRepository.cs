@@ -1,4 +1,5 @@
-﻿using Coupon.Core.Entities;
+﻿using AutoMapper.QueryableExtensions;
+using Coupon.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using PineappleSite.Coupon.Core.Interfaces;
 
@@ -10,7 +11,7 @@ namespace Coupon.Infrastructure.Repository
 
         public async Task<IEnumerable<CouponEntity>> GetAllAsync()
         {
-            return await _context.Coupons.ToListAsync();
+            return await _context.Coupons.OrderBy(key => key.CouponCode).ToListAsync();
         }
 
         public async Task<CouponEntity> GetAsync(int couponId)
