@@ -1,25 +1,28 @@
-var builder = WebApplication.CreateBuilder(args);
+using Coupon.Application;
+using Coupon.Infrastructure;
+
+WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();
+applicationBuilder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+applicationBuilder.Services.AddEndpointsApiExplorer();
+applicationBuilder.Services.AddSwaggerGen();
 
-var app = builder.Build();
+applicationBuilder.Services.ConfigureApplicationService();
+applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
+
+WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+if (webApplication.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    webApplication.UseSwagger();
+    webApplication.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
+webApplication.UseHttpsRedirection();
+webApplication.UseAuthorization();
+webApplication.MapControllers();
+webApplication.Run();
