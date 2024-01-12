@@ -16,4 +16,9 @@
     <ProjectReference Include="..\Coupon.Core\Coupon.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Coupons\Handlers\Commands\" />
+    <Folder Include="Features\Coupons\Requests\Commands\" />
+  </ItemGroup>
+
 </Project>
