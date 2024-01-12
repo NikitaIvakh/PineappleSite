@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Coupon.Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PineappleSite.Coupon.Core.Interfaces;
 
 namespace Coupon.Infrastructure
 {
@@ -12,6 +14,8 @@ namespace Coupon.Infrastructure
             {
                 options.UseSqlServer(configuration.GetConnectionString("CouponConnectionString"));
             });
+
+            services.AddScoped<ICouponRepository, CouponRepository>();
 
             var score = services.BuildServiceProvider();
             using (var serviceProvider = score.CreateScope())
