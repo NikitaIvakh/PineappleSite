@@ -7,6 +7,7 @@ namespace Coupon.Application
     {
         public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
         {
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             return services;
