@@ -1,4 +1,5 @@
 ﻿using Coupon.Application.DTOs;
+using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -29,8 +30,10 @@ namespace Coupon.API.Controllers
 
         // POST api/<CouponController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<CouponDto>> Post([FromBody] CreateCouponDto createCouponDto)
         {
+            var command = await _mediator.Send(new CreateCouponRequest { CreateCouponDto = createCouponDto });
+            return Ok(command);
         }
 
         // PUT api/<CouponController>/5
