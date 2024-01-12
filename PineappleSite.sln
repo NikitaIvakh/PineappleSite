@@ -13,7 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{31
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coupon", "Coupon", "{24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Core", "Coupon.Core\Coupon.Core.csproj", "{57D51F61-10DE-4C31-8A6C-4AF8990F666C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineappleSite.Coupon.Core", "PineappleSite.Coupon.Core\PineappleSite.Coupon.Core.csproj", "{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,17 +21,17 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{57D51F61-10DE-4C31-8A6C-4AF8990F666C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{57D51F61-10DE-4C31-8A6C-4AF8990F666C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{57D51F61-10DE-4C31-8A6C-4AF8990F666C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{57D51F61-10DE-4C31-8A6C-4AF8990F666C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D} = {3143D4DB-9EBD-44AD-8C04-E2B0AE7EE7A5}
-		{57D51F61-10DE-4C31-8A6C-4AF8990F666C} = {24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}
+		{F2FDFEBB-79B2-44A0-A87F-6E7BC405BAEE} = {24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {776AE2A6-AA1F-4163-ABA1-F06593D92A9E}

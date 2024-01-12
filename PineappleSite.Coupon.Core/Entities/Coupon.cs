@@ -1,4 +1,4 @@
-﻿namespace Coupon.Core.Entities
+﻿namespace PineappleSite.Coupon.Core.Entities
 {
     public class Coupon
     {
