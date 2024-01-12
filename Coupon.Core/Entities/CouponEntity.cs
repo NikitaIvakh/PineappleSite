@@ -1,6 +1,6 @@
-﻿namespace PineappleSite.Coupon.Core.Entities
+﻿namespace Coupon.Core.Entities
 {
-    public class Coupon
+    public class CouponEntity
     {
         public int CouponId { get; set; }
 
