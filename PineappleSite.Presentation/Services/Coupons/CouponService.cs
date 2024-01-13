@@ -31,12 +31,12 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         System.Threading.Tasks.Task<System.Collections.Generic.ICollection<CouponDto>> CouponAllAsync(System.Threading.CancellationToken cancellationToken);
 
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         System.Threading.Tasks.Task<BaseCommandResponse> CouponPOSTAsync(CreateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         System.Threading.Tasks.Task<BaseCommandResponse> CouponPOSTAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken);
 
@@ -188,7 +188,7 @@ namespace PineappleSite.Presentation.Services.Coupons
             }
         }
 
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         public virtual System.Threading.Tasks.Task<BaseCommandResponse> CouponPOSTAsync(CreateCouponDto body)
         {
@@ -196,7 +196,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Created</returns>
+        /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<BaseCommandResponse> CouponPOSTAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
@@ -240,7 +240,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         ProcessResponse(client_, response_);
 
                         var status_ = (int)response_.StatusCode;
-                        if (status_ == 201)
+                        if (status_ == 200)
                         {
                             var objectResponse_ = await ReadObjectResponseAsync<BaseCommandResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)

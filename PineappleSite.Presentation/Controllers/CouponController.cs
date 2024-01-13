@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models;
+using PineappleSite.Presentation.Models.Coupons;
+using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -22,7 +25,7 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: CouponController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -30,12 +33,25 @@ namespace PineappleSite.Presentation.Controllers
         // POST: CouponController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateCouponViewModel couponViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                var response = await _couponService.CreateCouponAsync(couponViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.Message;
+                    return RedirectToAction(nameof(Create));
+                }
             }
+
             catch
             {
                 return View();
