@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Application.DTOs.Validator
 {
-    public class ICouponDtoValidfator : AbstractValidator<ICouponDto>
+    public class ICouponDtoValidator : AbstractValidator<ICouponDto>
     {
         private readonly ICouponDbContext _context;
 
-        public ICouponDtoValidfator(ICouponDbContext context)
+        public ICouponDtoValidator(ICouponDbContext context)
         {
             _context = context;
 

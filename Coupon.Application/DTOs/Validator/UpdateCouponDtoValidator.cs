@@ -3,15 +3,15 @@ using FluentValidation;
 
 namespace Coupon.Application.DTOs.Validator
 {
-    public class UpdateCouponDtoValidfator : AbstractValidator<UpdateCouponDto>
+    public class UpdateCouponDtoValidator : AbstractValidator<UpdateCouponDto>
     {
         private readonly ICouponDbContext _context;
 
-        public UpdateCouponDtoValidfator(ICouponDbContext context)
+        public UpdateCouponDtoValidator(ICouponDbContext context)
         {
             _context = context;
             RuleFor(key => key.CouponId).NotNull().NotEmpty();
-            Include(key => new ICouponDtoValidfator(_context));
+            Include(key => new ICouponDtoValidator(_context));
         }
     }
 }
