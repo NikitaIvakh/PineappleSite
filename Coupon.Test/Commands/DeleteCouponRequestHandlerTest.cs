@@ -1,5 +1,4 @@
-﻿using Coupon.Application.DTOs;
-using Coupon.Application.Features.Coupons.Handlers.Commands;
+﻿using Coupon.Application.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Test.Common;
 using MediatR;
@@ -15,15 +14,12 @@ namespace Coupon.Test.Commands
         {
             // Arrange
             var handler = new DeleteCouponRequestHandler(Context, Mapper);
-            var deleteCoupon = new DeleteCouponDto
-            {
-                Id = 2,
-            };
+            var deleteCouponId = 2;
 
             // Act
             var result = await handler.Handle(new DeleteCouponRequest
             {
-                DeleteCoupon = deleteCoupon,
+                Id = deleteCouponId,
             }, CancellationToken.None);
 
             // Assert
@@ -35,15 +31,12 @@ namespace Coupon.Test.Commands
         {
             // Arrange
             var handler = new DeleteCouponRequestHandler(Context, Mapper);
-            var deleteCoupon = new DeleteCouponDto
-            {
-                Id = 29087,
-            };
+            var deleteCouponId = 254657;
 
             // Assert && Act
             await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(new DeleteCouponRequest
             {
-                DeleteCoupon = deleteCoupon,
+                Id = deleteCouponId,
             }, CancellationToken.None));
         }
     }

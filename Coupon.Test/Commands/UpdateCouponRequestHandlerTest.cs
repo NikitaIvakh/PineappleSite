@@ -16,7 +16,7 @@ namespace Coupon.Test.Commands
             var handler = new UpdateCouponRequestHandler(Context, Mapper);
             var updateCouponDto = new UpdateCouponDto
             {
-                CouponId = 3,
+                CouponId = 2,
                 CouponCode = "Test",
                 DiscountAmount = 56,
                 MinAmount = 45,
