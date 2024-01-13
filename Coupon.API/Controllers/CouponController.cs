@@ -15,6 +15,9 @@ namespace Coupon.API.Controllers
 
         // GET: api/<CouponController>
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<IEnumerable<CouponDto>>> Get()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
@@ -23,6 +26,9 @@ namespace Coupon.API.Controllers
 
         // GET api/<CouponController>/5
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CouponDto>> Get(int id)
         {
             var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
@@ -31,6 +37,8 @@ namespace Coupon.API.Controllers
 
         // POST api/<CouponController>
         [HttpPost]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateCouponDto createCouponDto)
         {
             var command = await _mediator.Send(new CreateCouponRequest { CreateCouponDto = createCouponDto });
@@ -39,6 +47,9 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status304NotModified)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] UpdateCouponDto updateCouponDto)
         {
             var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
@@ -47,6 +58,8 @@ namespace Coupon.API.Controllers
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<CouponDto>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
         {
             var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
