@@ -1,27 +1,36 @@
-var builder = WebApplication.CreateBuilder(args);
+using PineappleSite.Presentation.Services.Coupons;
+using System.Reflection;
+
+WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+applicationBuilder.Services.AddControllersWithViews();
+applicationBuilder.Services.AddHttpContextAccessor();
+applicationBuilder.Services.AddHttpClient();
 
-var app = builder.Build();
+applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+
+applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7149"));
+
+WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+if (!webApplication.Environment.IsDevelopment())
 {
-    app.UseExceptionHandler("/Home/Error");
+    webApplication.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-    app.UseHsts();
+    webApplication.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseStaticFiles();
+webApplication.UseHttpsRedirection();
+webApplication.UseStaticFiles();
 
-app.UseRouting();
+webApplication.UseRouting();
 
-app.UseAuthorization();
+webApplication.UseAuthorization();
 
-app.MapControllerRoute(
+webApplication.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.Run();
+webApplication.Run();
