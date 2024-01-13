@@ -1,7 +1,9 @@
-﻿using Coupon.Application.Features.Coupons.Handlers.Commands;
+﻿using Coupon.Application.DTOs;
+using Coupon.Application.DTOs.Validator;
+using Coupon.Application.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Features.Coupons.Requests.Commands;
+using Coupon.Application.Response;
 using Coupon.Test.Common;
-using MediatR;
 using Shouldly;
 using Xunit;
 
@@ -13,31 +15,43 @@ namespace Coupon.Test.Commands
         public async Task DeleteCouponRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new DeleteCouponRequestHandler(Context, Mapper);
-            var deleteCouponId = 2;
+            var validator = new DeleteCouponDtoValidator();
+            var handler = new DeleteCouponRequestHandler(Context, validator);
+            var deleteCoupon = new DeleteCouponDto
+            {
+                Id = 2,
+            };
 
             // Act
             var result = await handler.Handle(new DeleteCouponRequest
             {
-                Id = deleteCouponId,
+                DeleteCoupon = deleteCoupon,
             }, CancellationToken.None);
 
             // Assert
-            result.ShouldBeOfType<Unit>();
+            result.IsSuccess.ShouldBeTrue();
+            result.ShouldBeOfType<BaseCommandResponse>();
         }
 
         [Fact]
         public async Task DeleteCouponRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new DeleteCouponRequestHandler(Context, Mapper);
-            var deleteCouponId = 254657;
-
-            // Assert && Act
-            await Assert.ThrowsAsync<ArgumentNullException>(async () => await handler.Handle(new DeleteCouponRequest
+            var validator = new DeleteCouponDtoValidator();
+            var handler = new DeleteCouponRequestHandler(Context, validator);
+            var deleteCoupon = new DeleteCouponDto
             {
-                Id = deleteCouponId,
-            }, CancellationToken.None));
+                Id = 324542,
+            };
+
+            // Act
+            var result = await handler.Handle(new DeleteCouponRequest
+            {
+                DeleteCoupon = deleteCoupon,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeFalse();
         }
     }
 }

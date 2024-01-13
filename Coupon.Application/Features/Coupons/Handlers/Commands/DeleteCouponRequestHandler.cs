@@ -41,7 +41,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     response.Id = coupon.CouponId;
 
                     return response;
-
                 }
             }
 
