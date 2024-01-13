@@ -4,7 +4,7 @@
     ViewData["Title"] = "Список купонов";
 }
 
-<h1>Index</h1>
+<h1>Список купонов</h1>
 
 <p>
     <a asp-action="Create">Добавить новый купон</a>
@@ -45,7 +45,7 @@
                         @Html.DisplayFor(modelItem => item.MinAmount)
                     </td>
                     <td>
-                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Обновить купон", "Edit", new { id=item.CouponId }) |
                         @Html.ActionLink("Посмотреть купон", "Details", new { id=item.CouponId }) |
                         @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                     </td>

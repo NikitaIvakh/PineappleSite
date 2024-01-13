@@ -3,6 +3,7 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
+using System.Diagnostics;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -37,7 +38,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                var response = await _couponService.CreateCouponAsync(couponViewModel);
+                ResponseViewModel response = await _couponService.CreateCouponAsync(couponViewModel);
 
                 if (response.IsSuccess)
                 {
@@ -59,20 +60,34 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: CouponController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var coupon = await _couponService.GetCouponAsync(id);
+            return View(coupon);
         }
 
         // POST: CouponController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(int id, UpdateCouponViewModel updateCoupon)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ResponseViewModel response = await _couponService.UpdateCouponAsync(id, updateCoupon);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.Message;
+                    return RedirectToAction(nameof(Edit));
+                }
             }
+
             catch
             {
                 return View();

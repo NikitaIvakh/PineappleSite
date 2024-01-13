@@ -1,16 +1,21 @@
-﻿@model PineappleSite.Presentation.Models.Coupons.CreateCouponViewModel
+﻿@model PineappleSite.Presentation.Models.Coupons.CouponViewModel
 
 @{
-    ViewData["Title"] = "Добавить купон";
+    ViewData["Title"] = "Обновить купон";
 }
 
-<h1>Добавить новый купон</h1>
-
+<h1>Обновить купон</h1>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="CouponId" class="control-label" hidden></label>
+                <input asp-for="CouponId" class="form-control" readonly hidden/>
+                <span asp-validation-for="CouponId" class="text-danger" hidden></span>
+            </div>
             <div class="form-group">
                 <label asp-for="CouponCode" class="control-label"></label>
                 <input asp-for="CouponCode" class="form-control" />
@@ -30,7 +35,7 @@
             </div>
             <br />
             <div class="form-group">
-                <input type="submit" value="Добавить" class="btn btn-primary" />
+                <input type="submit" value="Обновить" class="btn btn-primary" />
             </div>
         </form>
     </div>
