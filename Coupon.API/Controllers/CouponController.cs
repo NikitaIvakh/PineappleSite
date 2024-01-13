@@ -65,5 +65,15 @@ namespace Coupon.API.Controllers
             var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
             return Ok(command);
         }
+
+        // DELETE api/<CouponController>/5
+        [HttpDelete()]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<BaseCommandResponse>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
+        {
+            var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });
+            return Ok(command);
+        }
     }
 }

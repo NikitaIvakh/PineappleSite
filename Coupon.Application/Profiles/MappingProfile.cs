@@ -11,6 +11,7 @@ namespace Coupon.Application.Profiles
             CreateMap<CouponEntity, CouponDto>().ReverseMap();
             CreateMap<CouponEntity, CreateCouponDto>().ReverseMap();
             CreateMap<CouponEntity, UpdateCouponDto>().ReverseMap();
+            CreateMap<CouponEntity, DeleteCouponListDto>().ReverseMap();
         }
     }
 }
