@@ -1,6 +1,6 @@
 ﻿namespace Coupon.Application.DTOs
 {
-    public class CreateCouponDto
+    public class CreateCouponDto : ICouponDto
     {
         public string CouponCode { get; set; }
 

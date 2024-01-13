@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Coupon.Core\Coupon.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\Validator\" />
+  </ItemGroup>
+
 </Project>
