@@ -14,5 +14,7 @@ namespace PineappleSite.Presentation.Contracts
         Task<ResponseViewModel> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon);
 
         Task<ResponseViewModel> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon);
+
+        Task<ResponseViewModel> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList);
     }
 }

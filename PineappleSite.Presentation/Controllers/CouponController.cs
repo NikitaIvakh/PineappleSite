@@ -119,5 +119,29 @@ namespace PineappleSite.Presentation.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> DeleteMultiple(List<int> selectedCoupons)
+        {
+            if (selectedCoupons is null || selectedCoupons.Count <= 1)
+            {
+                TempData["error"] = "Выберите хотя бы один купон для удаления.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var deleteCouponList = new DeleteCouponListViewModel { CouponIds = selectedCoupons };
+            var response = await _couponService.DeleteCouponsAsync(deleteCouponList);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.Message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            else
+            {
+                TempData["error"] = response.ValidationErrors;
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

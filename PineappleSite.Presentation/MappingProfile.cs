@@ -14,6 +14,7 @@ namespace PineappleSite.Presentation
             CreateMap<CreateCouponDto, CreateCouponViewModel>().ReverseMap();
             CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
+            CreateMap<DeleteCouponListDto, DeleteCouponListViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();

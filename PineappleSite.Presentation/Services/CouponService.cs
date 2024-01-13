@@ -3,6 +3,7 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
+using System;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -94,7 +95,7 @@ namespace PineappleSite.Presentation.Services
             {
                 ResponseViewModel responseView = new();
                 DeleteCouponDto deleteCouponDto = _mapper.Map<DeleteCouponDto>(deleteCoupon);
-                BaseCommandResponse apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponDto.Id.ToString(), deleteCouponDto);
+                BaseCommandResponse apiResponse = await _couponClient.CouponDELETE2Async(deleteCouponDto.Id.ToString(), deleteCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
@@ -112,6 +113,38 @@ namespace PineappleSite.Presentation.Services
                 }
 
                 return responseView;
+            }
+
+            catch (CouponExceptions exceptions)
+            {
+                return ConvertCouponExceptions(exceptions);
+            }
+        }
+
+        public async Task<ResponseViewModel> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
+        {
+            try
+            {
+                ResponseViewModel response = new();
+                DeleteCouponListDto deleteCouponListDto = _mapper.Map<DeleteCouponListDto>(deleteCouponList);
+                BaseCommandResponse apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponListDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Id = apiResponse.Id;
+                    response.Message = apiResponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
             }
 
             catch (CouponExceptions exceptions)

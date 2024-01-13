@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<PineappleSite.Presentation.Models.Coupons.CouponViewModel>
 
+
 @{
     ViewData["Title"] = "Список купонов";
 }
@@ -8,51 +9,64 @@
 
 <p>
     <a asp-action="Create">Добавить новый купон</a>
+    <br />
+    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteForm">Удалить выбранные</button>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.CouponId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CouponCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountAmount)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.MinAmount)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CouponId)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.CouponCode)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.DiscountAmount)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.MinAmount)
-                    </td>
-                    <td>
-                        @Html.ActionLink("Обновить купон", "Edit", new { id=item.CouponId }) |
-                        @Html.ActionLink("Посмотреть купон", "Details", new { id=item.CouponId }) |
-                        <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
-                            <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
-                        </form>
-                    </td>
-                </tr>
+
+<form id="deleteForm" asp-action="DeleteMultiple" method="post">
+    <table class="table">
+        <thead>
+            <tr>
+                <th></th>
+                <th>@Html.DisplayNameFor(model => model.CouponId)</th>
+                <th>@Html.DisplayNameFor(model => model.CouponCode)</th>
+                <th>@Html.DisplayNameFor(model => model.DiscountAmount)</th>
+                <th>@Html.DisplayNameFor(model => model.MinAmount)</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int itemCount = 0;
             }
-        }
-    </tbody>
-</table>
+
+            @{
+                foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="selectedCoupons" value="@item.CouponId" />
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.CouponId)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CouponCode)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DiscountAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.MinAmount)</td>
+                        <td>
+                            @Html.ActionLink("Обновить купон", "Edit", new { id = item.CouponId }) |
+                            @Html.ActionLink("Посмотреть купон", "Details", new { id = item.CouponId }) |
+                            <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
+                                <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                    itemCount++;
+                }
+            }
+        </tbody>
+    </table>
+</form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+    // Toggle the visibility of the "Delete All" button based on the number of selected checkboxes
+    $(document).ready(function () {
+        $('input[name="selectedCoupons"]').change(function () {
+            var selectedCount = $('input[name="selectedCoupons"]:checked').length;
+            if (selectedCount >= 2) {
+                $('#deleteAllButton').show();
+            } else {
+                $('#deleteAllButton').hide();
+            }
+        });
+    });
+</script>
