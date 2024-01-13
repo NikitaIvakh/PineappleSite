@@ -13,15 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{31
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Coupon", "Coupon", "{24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Core", "Coupon.Core\Coupon.Core.csproj", "{7B2FE625-14CD-47EF-98CB-0E74D50A8566}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Core", "Coupon.Core\Coupon.Core.csproj", "{7B2FE625-14CD-47EF-98CB-0E74D50A8566}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Infrastructure", "Coupon.Infrastructure\Coupon.Infrastructure.csproj", "{B8CBD21D-A0D1-4DB7-A4ED-D509753C2B1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Infrastructure", "Coupon.Infrastructure\Coupon.Infrastructure.csproj", "{B8CBD21D-A0D1-4DB7-A4ED-D509753C2B1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Application", "Coupon.Application\Coupon.Application.csproj", "{B5C40757-DEDA-4A2D-A191-9C7C1B7C8C70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Application", "Coupon.Application\Coupon.Application.csproj", "{B5C40757-DEDA-4A2D-A191-9C7C1B7C8C70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.API", "Coupon.API\Coupon.API.csproj", "{0545A361-6AD4-416A-BB5F-BD9D1B063A73}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.API", "Coupon.API\Coupon.API.csproj", "{0545A361-6AD4-416A-BB5F-BD9D1B063A73}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coupon.Test", "Coupon.Test\Coupon.Test.csproj", "{18778053-8D86-4773-BA27-1502A14BC680}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Coupon.Test", "Coupon.Test\Coupon.Test.csproj", "{18778053-8D86-4773-BA27-1502A14BC680}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PineappleSite.Presentation", "PineappleSite.Presentation\PineappleSite.Presentation.csproj", "{58EF760D-DEEB-4D78-90AD-B9D8A568DD60}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,6 +51,10 @@ Global
 		{18778053-8D86-4773-BA27-1502A14BC680}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{18778053-8D86-4773-BA27-1502A14BC680}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{18778053-8D86-4773-BA27-1502A14BC680}.Release|Any CPU.Build.0 = Release|Any CPU
+		{58EF760D-DEEB-4D78-90AD-B9D8A568DD60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{58EF760D-DEEB-4D78-90AD-B9D8A568DD60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{58EF760D-DEEB-4D78-90AD-B9D8A568DD60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{58EF760D-DEEB-4D78-90AD-B9D8A568DD60}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,6 +66,7 @@ Global
 		{B5C40757-DEDA-4A2D-A191-9C7C1B7C8C70} = {24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}
 		{0545A361-6AD4-416A-BB5F-BD9D1B063A73} = {24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}
 		{18778053-8D86-4773-BA27-1502A14BC680} = {24B5BB03-2BAA-43BC-A37F-FB13DBA2DE3D}
+		{58EF760D-DEEB-4D78-90AD-B9D8A568DD60} = {185CBFB5-E04C-4C28-8934-5BE7BD4E0190}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {776AE2A6-AA1F-4163-ABA1-F06593D92A9E}
