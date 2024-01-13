@@ -47,7 +47,9 @@
                     <td>
                         @Html.ActionLink("Обновить купон", "Edit", new { id=item.CouponId }) |
                         @Html.ActionLink("Посмотреть купон", "Details", new { id=item.CouponId }) |
-                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                        <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;" onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                        </form>
                     </td>
                 </tr>
             }

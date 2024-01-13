@@ -2,8 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Coupons;
-using PineappleSite.Presentation.Services.Coupons;
-using System.Diagnostics;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -94,21 +92,28 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        // GET: CouponController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: CouponController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(int id, DeleteCouponViewModel deleteCoupon)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ResponseViewModel response = await _couponService.DeleteCouponAsync(id, deleteCoupon);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
             catch
             {
                 return View();
