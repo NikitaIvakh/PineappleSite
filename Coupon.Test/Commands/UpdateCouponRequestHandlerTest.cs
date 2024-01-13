@@ -1,8 +1,11 @@
 ﻿using Coupon.Application.DTOs;
+using Coupon.Application.DTOs.Validator;
+using Coupon.Application.Exceptions;
 using Coupon.Application.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Test.Common;
 using FluentAssertions;
+using Shouldly;
 using Xunit;
 
 namespace Coupon.Test.Commands
@@ -13,7 +16,8 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Context, Mapper);
+            var validator = new UpdateCouponDtoValidator(Context);
+            var handler = new UpdateCouponRequestHandler(Context, Mapper, validator);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 2,
@@ -30,13 +34,16 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.Should().NotBeNull();
+            result.Message.ShouldBe("Купон успешно обновлен");
+            result.ValidationErrors.ShouldBeNull();
         }
 
         [Fact]
         public async Task UpdateCouponRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Context, Mapper);
+            var validator = new UpdateCouponDtoValidator(Context);
+            var handler = new UpdateCouponRequestHandler(Context, Mapper, validator);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 999,
@@ -45,11 +52,40 @@ namespace Coupon.Test.Commands
                 MinAmount = 45,
             };
 
-            // Assert && Act
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(new UpdateCouponRequest
+            // Act
+            var result = await handler.Handle(new UpdateCouponRequest
             {
                 UpdateCoupon = updateCouponDto,
-            }, CancellationToken.None));
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeFalse();
+            result.Message.ShouldBe("Sequence contains no elements");
+        }
+
+        [Fact]
+        public async Task UpdateCouponRequestHandlerTest_ValidationError()
+        {
+            // Arrange
+            var validator = new UpdateCouponDtoValidator(Context);
+            var handler = new UpdateCouponRequestHandler(Context, Mapper, validator);
+            var updateCouponDto = new UpdateCouponDto
+            {
+                CouponId = 1,
+                CouponCode = "Test",
+                DiscountAmount = 23456,
+                MinAmount = 56745,
+            };
+
+            // Act
+            var result = await handler.Handle(new UpdateCouponRequest
+            {
+                UpdateCoupon = updateCouponDto,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeFalse();
+            result.Message.ShouldBe("Ошибка при обновлении купона");
         }
     }
 }
