@@ -1,9 +1,11 @@
-﻿using MediatR;
+﻿using Coupon.Application.DTOs;
+using Coupon.Application.Response;
+using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands
 {
-    public class DeleteCouponRequest : IRequest<Unit>
+    public class DeleteCouponRequest : IRequest<BaseCommandResponse>
     {
-        public int Id { get; set; }
+        public DeleteCouponDto DeleteCoupon { get; set; }
     }
 }
