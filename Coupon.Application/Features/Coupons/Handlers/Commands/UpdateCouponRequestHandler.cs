@@ -13,7 +13,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
         public async Task<Unit> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
         {
-            var coupon = await _repository.Coupons.FirstAsync(key => key.CouponId == request.UpdateCoupon.CouponId, cancellationToken: cancellationToken);
+            var coupon = await _repository.Coupons.FirstAsync(key => key.CouponId == request.Id, cancellationToken: cancellationToken);
 
             _mapper.Map(request.UpdateCoupon, coupon);
             _repository.Coupons.Update(coupon);

@@ -38,17 +38,17 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<CouponDto>> Put([FromBody] UpdateCouponDto updateCouponDto)
+        public async Task<ActionResult<CouponDto>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
         {
-            var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
+            var command = await _mediator.Send(new UpdateCouponRequest { Id = id, UpdateCoupon = updateCouponDto });
             return Ok(command);
         }
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<CouponDto>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<CouponDto>> Delete(int id)
         {
-            var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
+            var command = await _mediator.Send(new DeleteCouponRequest { Id = id });
             return Ok(command);
         }
     }
