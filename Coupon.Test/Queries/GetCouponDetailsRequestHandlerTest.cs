@@ -1,4 +1,5 @@
-﻿using Coupon.Application.Features.Coupons.Handlers.Queries;
+﻿using Coupon.Application.Exceptions;
+using Coupon.Application.Features.Coupons.Handlers.Queries;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Test.Common;
 using Shouldly;
@@ -35,11 +36,15 @@ namespace Coupon.Test.Queries
             var handler = new GetCouponDetailsRequestHandler(Context, Mapper);
             var couponId = 999;
 
-            // Assert && Act
-            await Assert.ThrowsAsync<InvalidOperationException>(async () => await handler.Handle(new GetCouponDetailsRequest
+            // Act
+            var exception = await Record.ExceptionAsync(async () => await handler.Handle(new GetCouponDetailsRequest
             {
                 Id = couponId,
             }, CancellationToken.None));
+
+            // Assert
+            exception.ShouldBeOfType<NotFoundException>();
+            exception.Message.ShouldBe($"CouponEntity ({couponId}) не найдено!");
         }
     }
 }
