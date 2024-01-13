@@ -1,3 +1,5 @@
+using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Services;
 using PineappleSite.Presentation.Services.Coupons;
 using System.Reflection;
 
@@ -11,6 +13,7 @@ applicationBuilder.Services.AddHttpClient();
 applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7149"));
+applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 
 WebApplication webApplication = applicationBuilder.Build();
 
