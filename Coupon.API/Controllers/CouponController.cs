@@ -39,7 +39,7 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<CouponDto>> Put([FromBody] UpdateCouponDto updateCouponDto)
+        public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] UpdateCouponDto updateCouponDto)
         {
             var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
             return Ok(command);
