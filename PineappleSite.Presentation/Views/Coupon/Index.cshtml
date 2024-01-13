@@ -1,13 +1,13 @@
 ﻿@model IEnumerable<PineappleSite.Presentation.Models.Coupons.CouponViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Список купонов";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Добавить новый купон</a>
 </p>
 <table class="table">
     <thead>
@@ -46,7 +46,7 @@
                     </td>
                     <td>
                         @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Посмотреть купон", "Details", new { id=item.CouponId }) |
                         @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
                     </td>
                 </tr>

@@ -15,9 +15,10 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: CouponController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var coupon = await _couponService.GetCouponAsync(id);
+            return View(coupon);
         }
 
         // GET: CouponController/Create
