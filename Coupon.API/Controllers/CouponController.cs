@@ -47,7 +47,7 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status304NotModified)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] UpdateCouponDto updateCouponDto)
@@ -60,7 +60,7 @@ namespace Coupon.API.Controllers
         [HttpDelete("{id}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CouponDto>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<BaseCommandResponse>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
         {
             var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
             return Ok(command);

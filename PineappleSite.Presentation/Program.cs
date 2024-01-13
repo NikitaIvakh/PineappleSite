@@ -15,6 +15,8 @@ applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7149"));
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 
+applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.

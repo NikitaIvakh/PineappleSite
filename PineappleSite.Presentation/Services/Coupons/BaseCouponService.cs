@@ -9,7 +9,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly ICouponClient _couponClient = couponClient;
 
-        protected ResponseViewModel ConvertApiExceptions<Guid>(CouponExceptions couponExceptions)
+        protected ResponseViewModel ConvertCouponExceptions(CouponExceptions couponExceptions)
         {
             if (couponExceptions.StatusCode == 400)
             {
