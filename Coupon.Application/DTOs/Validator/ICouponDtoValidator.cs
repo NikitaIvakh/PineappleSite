@@ -17,12 +17,12 @@ namespace Coupon.Application.DTOs.Validator
                 .MinimumLength(3).WithMessage("Строка должна превышать 3 символа");
 
             RuleFor(key => key.DiscountAmount).NotEmpty().NotNull()
-                .LessThanOrEqualTo(2).WithMessage("Сумма скидки не доложна быть ниже 2 единиц")
-                .GreaterThanOrEqualTo(100).WithMessage("Сумма скидки не должна превышать 100 единиц");
+                .LessThanOrEqualTo(100).WithMessage("Сумма скидки не доложна превышать 100 единиц")
+                .GreaterThanOrEqualTo(2).WithMessage("Сумма скидки должна превышать 2 единицы");
 
             RuleFor(key => key.MinAmount).NotEmpty().NotNull()
-                .LessThanOrEqualTo(7).WithMessage("Цена товара не должна быть ниже 7 единиц")
-                .GreaterThanOrEqualTo(100).WithMessage("Сумма товара не должна превышать 100 единиц");
+                .LessThanOrEqualTo(100).WithMessage("Цена товара должна быть ниже 100 единиц")
+                .GreaterThanOrEqualTo(2).WithMessage("Сумма товара должна превышать 2 единицы");
         }
 
         private async Task<bool> BeQniqueCouponCode(string couponCode, CancellationToken token)
