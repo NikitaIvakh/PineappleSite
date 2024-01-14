@@ -19,12 +19,12 @@ namespace Coupon.Infrastructure
             services.AddScoped<ICouponRepository, CouponRepository>();
             services.AddScoped<ICouponDbContext, ApplicationDbContext>();
 
-            //var score = services.BuildServiceProvider();
-            //using (var serviceProvider = score.CreateScope())
-            //{
-            //    var context = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            //    context.Database.Migrate();
-            //}
+            var score = services.BuildServiceProvider();
+            using (var serviceProvider = score.CreateScope())
+            {
+                var context = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                context.Database.Migrate();
+            }
 
             return services;
         }
