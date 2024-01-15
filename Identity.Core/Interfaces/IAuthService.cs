@@ -5,8 +5,8 @@ namespace Identity.Core.Interfaces
 {
     public interface IAuthService
     {
-        Task<BaseIdentityResponse> Login(AuthRequest authRequest);
+        Task<BaseIdentityResponse> LoginAsync(AuthRequest authRequest);
 
-        Task<BaseIdentityResponse> Register(RegisterRequest registerRequest);
+        Task<BaseIdentityResponse> RegisterAsync(RegisterRequest registerRequest);
     }
 }

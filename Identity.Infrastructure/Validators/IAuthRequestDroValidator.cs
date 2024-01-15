@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
-using Identity.Infrastructure;
+using Identity.Core.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.DTOs.Identity.Validators
+namespace Identity.Infrastructure.Validators
 {
-    public class IAuthRequestDroValidator : AbstractValidator<AuthRequestDto>
+    public class IAuthRequestDroValidator : AbstractValidator<AuthRequest>
     {
         private readonly PineAppleIdentityDbContext _context;
 

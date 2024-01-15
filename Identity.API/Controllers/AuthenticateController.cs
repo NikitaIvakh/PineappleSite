@@ -13,13 +13,13 @@ namespace Identity.API.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult<AuthResponse>> Login(AuthRequest authRequest)
         {
-            return Ok(await _authService.Login(authRequest));
+            return Ok(await _authService.LoginAsync(authRequest));
         }
 
         [HttpPost("Register")]
         public async Task<ActionResult<AuthResponse>> Register(RegisterRequest registerRequest)
         {
-            return Ok(await _authService.Register(registerRequest));
+            return Ok(await _authService.RegisterAsync(registerRequest));
         }
     }
 }

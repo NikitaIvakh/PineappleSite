@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using Identity.Application.DTOs.Identity;
-using Identity.Infrastructure;
+using Identity.Core.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
-namespace Identity.Core.Validators
+namespace Identity.Infrastructure.Validators
 {
-    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
+    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequest>
     {
         private readonly PineAppleIdentityDbContext _context;
 
@@ -21,7 +21,8 @@ namespace Identity.Core.Validators
 
             RuleFor(key => key.EmailAddress).NotEmpty().NotNull()
                 .MaximumLength(50).WithMessage("Строка не может превышать 50 символов")
-                .MustAsync(BeUniqueEmailAddress).WithMessage("Такой адрес электронной почты уже используется!");
+                .MustAsync(BeUniqueEmailAddress).WithMessage("Такой адрес электронной почты уже используется!")
+                .MustAsync(BeValidEmailAddress).WithMessage("Введите действительный адрес электронной почты");
 
             RuleFor(key => key.UserName).NotEmpty().NotNull()
                 .MaximumLength(50).WithMessage("Длина строки не должна превышать 50 символов")
@@ -49,6 +50,13 @@ namespace Identity.Core.Validators
                 return false;
 
             return true;
+        }
+        
+        private Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)
+        {
+            string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+            bool isValid = Regex.IsMatch(emailAddress, emailPattern);
+            return Task.FromResult(isValid);
         }
     }
 }

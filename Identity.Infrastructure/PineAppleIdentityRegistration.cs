@@ -1,4 +1,5 @@
-﻿using Identity.Core.Entities.Identities;
+﻿using FluentValidation;
+using Identity.Core.Entities.Identities;
 using Identity.Core.Entities.User;
 using Identity.Core.Interfaces;
 using Identity.Infrastructure.Services;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using System.Reflection;
 using System.Text;
 
 namespace Identity.Infrastructure
@@ -26,6 +28,7 @@ namespace Identity.Infrastructure
 
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PineAppleIdentityDbContext>().AddDefaultTokenProviders();
             services.AddScoped<IAuthService, AuthService>();
+            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
