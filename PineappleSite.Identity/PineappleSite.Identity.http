@@ -1,0 +1,6 @@
+@PineappleSite.Identity_HostAddress = http://localhost:5226
+
+GET {{PineappleSite.Identity_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
