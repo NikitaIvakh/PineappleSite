@@ -1,5 +1,6 @@
 ﻿using Identity.Core.Entities.Identities;
 using Identity.Core.Interfaces;
+using Identity.Core.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
@@ -11,15 +12,17 @@ namespace Identity.API.Controllers
         private readonly IAuthService _authService = authService;
 
         [HttpPost("Login")]
-        public async Task<ActionResult<AuthResponse>> Login(AuthRequest authRequest)
+        public async Task<ActionResult<BaseIdentityResponse<AuthResponse>>> Login([FromBody] AuthRequest authRequest)
         {
-            return Ok(await _authService.LoginAsync(authRequest));
+            var login = await _authService.LoginAsync(authRequest);
+            return Ok(login);
         }
 
         [HttpPost("Register")]
-        public async Task<ActionResult<RegisterResponse>> Register(RegisterRequest registerRequest)
+        public async Task<ActionResult<BaseIdentityResponse<RegisterResponse>>> Register([FromBody] RegisterRequest registerRequest)
         {
-            return Ok(await _authService.RegisterAsync(registerRequest));
+            var register = await _authService.RegisterAsync(registerRequest);
+            return Ok(register);
         }
     }
 }

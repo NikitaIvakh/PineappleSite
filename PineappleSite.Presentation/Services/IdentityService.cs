@@ -18,51 +18,78 @@ namespace PineappleSite.Presentation.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new();
 
-        public async Task<bool> LoginAsync(AuthRequestViewModel authRequestViewModel)
+        public async Task<IdentityResponseViewModel> LoginAsync(AuthRequestViewModel authRequestViewModel)
         {
-            try
-            {
-                AuthRequest authRequest = _mapper.Map<AuthRequest>(authRequestViewModel);
-                var authResponse = await _identityClient.LoginAsync(authRequest);
+            IdentityResponseViewModel response = new();
+            AuthRequest authRequest = _mapper.Map<AuthRequest>(authRequestViewModel);
+            AuthResponseBaseIdentityResponse authResponse = await _identityClient.LoginAsync(authRequest);
 
-                if (authResponse.Token != string.Empty)
+            if (authResponse.IsSuccess)
+            {
+                if (authResponse.Data.Token != string.Empty)
                 {
-                    var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Token);
+                    var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.Token);
                     var claims = ParseClaim(tokenContent);
                     var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
                     var login = _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
-                    _localStorageService.SetStorageValue("token", authResponse.Token);
+                    _localStorageService.SetStorageValue("token", authResponse.Data.Token);
 
-                    return true;
+                    response.IsSuccess = true;
+                    response.Data = authResponse;
+                    response.Message = authResponse.Message;
+
+                    return response;
                 }
-
-                return false;
             }
 
-            catch
+            else
             {
-                return false;
+                foreach (string error in authResponse.ValidationErrors)
+                {
+                    response.ValidationErrors += error + Environment.NewLine;
+                }
             }
+
+            response.IsSuccess = false;
+            return response;
         }
 
-        public async Task<bool> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
+        public async Task<IdentityResponseViewModel> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
         {
+            IdentityResponseViewModel response = new();
             RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(registerRequestViewModel);
-            RegisterResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
+            RegisterResponseBaseIdentityResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
 
-            if (!string.IsNullOrEmpty(registerResponse.UserId))
+            if (registerResponse.IsSuccess)
             {
-                var authRequest = new AuthRequestViewModel
+                if (!string.IsNullOrEmpty(registerResponse.Data.UserId))
                 {
-                    Email = registerRequestViewModel.EmailAddress,
-                    Password = registerRequestViewModel.Password,
-                };
+                    var authRequest = new AuthRequestViewModel
+                    {
+                        Email = registerRequestViewModel.EmailAddress,
+                        Password = registerRequestViewModel.Password,
+                    };
 
-                await LoginAsync(authRequest);
-                return true;
+                    await LoginAsync(authRequest);
+
+                    response.IsSuccess = true;
+                    response.Data = authRequest;
+                    response.Message = registerResponse.Message;
+
+                    return response;
+                }
             }
 
-            return false;
+            else
+            {
+                foreach (string erro in registerResponse.ValidationErrors)
+                {
+                    response.ValidationErrors += erro + Environment.NewLine;
+                }
+            }
+
+            response.IsSuccess = false;
+            return response;
         }
 
         public async Task LogoutAsync()

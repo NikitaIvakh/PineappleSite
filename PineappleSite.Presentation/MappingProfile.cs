@@ -26,6 +26,8 @@ namespace PineappleSite.Presentation
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
+            CreateMap<AuthResponseBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
+            CreateMap<RegisterResponseBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
         }
     }
 }

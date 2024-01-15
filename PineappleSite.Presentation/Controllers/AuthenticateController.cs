@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -20,12 +21,18 @@ namespace PineappleSite.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 authRequestViewModel.ReturnUrl ??= Url.Content("/");
-                var isLoggedIn = await _identityService.LoginAsync(authRequestViewModel);
+                IdentityResponseViewModel response = await _identityService.LoginAsync(authRequestViewModel);
 
-                if (isLoggedIn)
+                if (response.IsSuccess)
                 {
-                    TempData["success"] = "Успешный вход в аккаукнт";
+                    TempData["success"] = response.Message;
                     return LocalRedirect(authRequestViewModel.ReturnUrl);
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Login));
                 }
             }
 
@@ -45,11 +52,18 @@ namespace PineappleSite.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 var returnUrl = Url.Content("/");
-                var IsRegister = await _identityService.RegisterAsync(registerRequestViewModel);
+                IdentityResponseViewModel response = await _identityService.RegisterAsync(registerRequestViewModel);
 
-                if (IsRegister)
+                if (response.IsSuccess)
                 {
+                    TempData["success"] = response.Message;
                     return LocalRedirect(returnUrl);
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Register));
                 }
             }
 
