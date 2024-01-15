@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Identity.Core.Interfaces;
+using Identity.Infrastructure.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,8 @@ namespace Identity.Infrastructure
             {
                 config.UseNpgsql(configuration.GetConnectionString("IdentityConnextionString"));
             });
+
+            services.AddScoped<IAuthService, AuthService>();
 
             var scope = services.BuildServiceProvider();
             var score = services.BuildServiceProvider();
