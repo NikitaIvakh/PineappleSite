@@ -1,8 +1,6 @@
 ﻿using Identity.Core.Entities.Identities;
 using Identity.Core.Entities.User;
 using Identity.Core.Interfaces;
-using Identity.Core.Response;
-using Identity.Infrastructure.Validators;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -12,131 +10,69 @@ using System.Text;
 
 namespace Identity.Infrastructure.Services
 {
-    public class AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings,
-        IAuthRequestDroValidator validationRules, IRegisterRequestDtoValidator validations) : IAuthService
+    public class AuthService(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> jwtSettings) : IAuthService
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly JwtSettings _jwtSettings = jwtSettings.Value;
-        private readonly IAuthRequestDroValidator _authValidator = validationRules;
-        private readonly IRegisterRequestDtoValidator _registerValidator = validations;
 
-        public async Task<BaseIdentityResponse> LoginAsync(AuthRequest authRequest)
+        public async Task<AuthResponse> LoginAsync(AuthRequest authRequest)
         {
-            var response = new BaseIdentityResponse();
+            var user = await _userManager.FindByEmailAsync(authRequest.Email) ?? throw new Exception($"{nameof(authRequest.Email)} не найден");
+            var result = await _signInManager.CheckPasswordSignInAsync(user, authRequest.Password, false);
 
-            try
+            if (!result.Succeeded)
             {
-                var validationResult = await _authValidator.ValidateAsync(authRequest);
-
-                if (!validationResult.IsValid)
-                {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка авторизации";
-                    response.ValidationErrors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
-                }
-
-                else
-                {
-                    var user = await _userManager.FindByEmailAsync(authRequest.Email) ?? throw new Exception($"{nameof(authRequest.Email)} не найден");
-                    var result = await _signInManager.CheckPasswordSignInAsync(user, authRequest.Password, false);
-
-                    if (!result.Succeeded)
-                    {
-                        throw new Exception($"{nameof(authRequest.Email)} не существует");
-                    }
-
-                    JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
-                    AuthResponse authResponse = new()
-                    {
-                        Id = user.Id,
-                        Email = user.Email,
-                        UserName = user.UserName,
-                        Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                    };
-
-                    response.IsSuccess = true;
-                    response.Message = "Успешный вход в систему";
-                    response.Data = authResponse;
-
-                    return response;
-                }
+                throw new Exception($"{nameof(authRequest.Email)} не существует");
             }
 
-            catch (Exception exception)
+            JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
+            AuthResponse authResponse = new()
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
-            }
+                Id = user.Id,
+                Email = user.Email,
+                UserName = user.UserName,
+                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+            };
 
-            return response;
+            return authResponse;
         }
 
-        public async Task<BaseIdentityResponse> RegisterAsync(RegisterRequest registerRequest)
+
+        public async Task<RegisterResponse> RegisterAsync(RegisterRequest registerRequest)
         {
-            var response = new BaseIdentityResponse();
+            var existsUser = await _userManager.FindByNameAsync(registerRequest.UserName);
 
-            try
+            if (existsUser is not null)
+                throw new Exception($"Такой пользователь уже существует");
+
+            var user = new ApplicationUser
             {
-                var validationResult = await _registerValidator.ValidateAsync(registerRequest);
+                FirstName = registerRequest.FirstName,
+                LastName = registerRequest.LastName,
+                UserName = registerRequest.UserName,
+                Email = registerRequest.EmailAddress,
+                EmailConfirmed = true,
+            };
 
-                if (!validationResult.IsValid)
+            var existsEmail = await _userManager.FindByEmailAsync(registerRequest.EmailAddress);
+
+            if (existsEmail is null)
+            {
+                var result = await _userManager.CreateAsync(user, registerRequest.Password);
+
+                if (result.Succeeded)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка регистрации";
-                    response.ValidationErrors = validationResult.Errors.Select(x => x.ErrorMessage).ToList();
+                    await _userManager.AddToRoleAsync(user, "Employee");
+                    return new RegisterResponse { UserId = user.Id };
                 }
 
                 else
-                {
-                    var existsUser = await _userManager.FindByNameAsync(registerRequest.UserName);
-                    
-                    if (existsUser is not null)
-                        throw new Exception($"Такой пользователь уже существует");
-
-                    var user = new ApplicationUser
-                    {
-                        FirstName = registerRequest.FirstName,
-                        LastName = registerRequest.LastName,
-                        UserName = registerRequest.UserName,
-                        Email = registerRequest.EmailAddress,
-                        EmailConfirmed = true,
-                    };
-
-                    var existsEmail = await _userManager.FindByEmailAsync(registerRequest.EmailAddress);
-
-                    if (existsEmail is not null)
-                    {
-                        var result = await _userManager.CreateAsync(user, registerRequest.Password);
-
-                        if (result.Succeeded)
-                        {
-                            await _userManager.AddToRoleAsync(user, "Employee");
-                            var registerResponse = new RegisterResponse { UserId = user.Id };
-
-                            response.IsSuccess = true;
-                            response.Data = registerResponse;
-
-                            return response;
-                        }
-
-                        else
-                            throw new Exception($"{result.Errors}");
-                    }
-
-                    else
-                        throw new Exception($"{registerRequest.EmailAddress} уже используется");
-                }
-
+                    throw new Exception($"{result.Errors}");
             }
 
-            catch (Exception exception)
-            {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
-            }
-
-            return response;
+            else
+                throw new Exception($"{registerRequest.EmailAddress} уже используется");
         }
 
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
