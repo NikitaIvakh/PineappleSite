@@ -4,37 +4,61 @@
     ViewData["Title"] = "Детали купона";
 }
 
-<h1>Делати купона</h1>
+<form class="container col-7" asp-action="Details">
+    <br />
+    <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Детали купона</h1>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="CouponId" readonly hidden />
+                    <span class="text-danger" asp-validation-for="CouponId" hidden></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Код купона</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="CouponCode" readonly />
+                    <span class="text-danger" asp-validation-for="CouponCode"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Сумма скидки</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="DiscountAmount" readonly />
+                    <span class="text-danger" asp-validation-for="DiscountAmount"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Стоимость продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="MinAmount" readonly />
+                    <span class="text-danger" asp-validation-for="MinAmount"></span>
+                </div>
+            </div>
+            <div class="col-5 offset-3">
+                <a class="btn-primary btn form-control" asp-action="Index">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
 
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CouponId)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CouponId)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CouponCode)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CouponCode)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DiscountAmount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DiscountAmount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.MinAmount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.MinAmount)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Вернуться назад</a>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
