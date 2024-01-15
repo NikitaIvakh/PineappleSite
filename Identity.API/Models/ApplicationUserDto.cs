@@ -2,7 +2,7 @@
 
 namespace Identity.API.Models
 {
-    public class ApplicationUser : IdentityUser
+    public class ApplicationUserDto : IdentityUser
     {
         public string FirstName { get; set; }
 
