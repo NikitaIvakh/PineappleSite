@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
+using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation
 {
@@ -17,6 +18,7 @@ namespace PineappleSite.Presentation
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
+            CreateMap<BaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
         }
     }
 }
