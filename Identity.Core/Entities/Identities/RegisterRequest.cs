@@ -2,7 +2,7 @@
 
 namespace Identity.Core.Entities.Identities
 {
-    internal class RegisterRequest
+    public class RegisterRequest
     {
         [Required]
         public string FirstName { get; set; }
