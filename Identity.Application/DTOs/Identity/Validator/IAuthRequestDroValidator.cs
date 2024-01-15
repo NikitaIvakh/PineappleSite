@@ -12,11 +12,8 @@ namespace Identity.Application.DTOs.Identity.Validator
         {
             _context = context;
 
-            RuleFor(key => key.Email).NotEmpty().NotNull().MaximumLength(50)
-                .MustAsync(BeQniqueEmailAddress).WithMessage("Такой адрес электронной почты уже используется!");
-
-            RuleFor(key => key.Password).NotEmpty().NotNull()
-                .MaximumLength(50).WithMessage("Длина пароля не может превышать 50 символов");
+            RuleFor(key => key.Email).NotEmpty().NotNull().MaximumLength(50);
+            RuleFor(key => key.Password).NotEmpty().NotNull();
         }
 
         private async Task<bool> BeQniqueEmailAddress(string emailAddress, CancellationToken token)
