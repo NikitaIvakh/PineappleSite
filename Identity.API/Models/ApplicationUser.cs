@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace PineappleSite.Identity.Models
+namespace Identity.API.Models
 {
     public class ApplicationUser : IdentityUser
     {
