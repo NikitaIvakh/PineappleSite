@@ -62,5 +62,29 @@ namespace Coupon.Test.Commands
             // Assert
             result.IsSuccess.ShouldBeFalse();
         }
+
+        [Fact]
+        public async Task CreareCouponRequestHandlerTest_DiscountAmount_Fail()
+        {
+            // Arrange
+            var validator = new CreateCouponDtoValidator(Context);
+            var handler = new CreateCouponRequestHandler(Context, Mapper, validator);
+            var createCouponDto = new CreateCouponDto
+            {
+                CouponCode = "Test",
+                DiscountAmount = 56,
+                MinAmount = 25,
+            };
+
+            // Act
+            var result = await handler.Handle(new CreateCouponRequest
+            {
+                CreateCouponDto = createCouponDto,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeFalse();
+            result.Message.ShouldBe("Ошибка при создании купона");
+        }
     }
 }

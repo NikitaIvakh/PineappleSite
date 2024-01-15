@@ -22,7 +22,7 @@ namespace Coupon.Test.Commands
             {
                 CouponId = 2,
                 CouponCode = "Test",
-                DiscountAmount = 56,
+                DiscountAmount = 25,
                 MinAmount = 45,
             };
 
@@ -48,7 +48,7 @@ namespace Coupon.Test.Commands
             {
                 CouponId = 999,
                 CouponCode = "Test",
-                DiscountAmount = 56,
+                DiscountAmount = 24,
                 MinAmount = 45,
             };
 

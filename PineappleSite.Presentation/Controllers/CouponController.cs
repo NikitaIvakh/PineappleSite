@@ -46,7 +46,7 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.Message;
+                    TempData["error"] = response.ValidationErrors;
                     return RedirectToAction(nameof(Create));
                 }
             }
@@ -81,7 +81,7 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.Message;
+                    TempData["error"] = response.ValidationErrors;
                     return RedirectToAction(nameof(Edit));
                 }
             }
