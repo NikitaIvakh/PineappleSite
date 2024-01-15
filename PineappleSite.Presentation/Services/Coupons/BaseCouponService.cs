@@ -1,5 +1,4 @@
 ﻿using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models;
 using System.Net.Http.Headers;
 
 namespace PineappleSite.Presentation.Services.Coupons

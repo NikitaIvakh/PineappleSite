@@ -1,4 +1,4 @@
-﻿namespace PineappleSite.Presentation.Models
+﻿namespace PineappleSite.Presentation.Services.Coupons
 {
     public class ResponseViewModel
     {

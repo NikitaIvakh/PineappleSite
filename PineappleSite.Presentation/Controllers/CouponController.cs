@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Coupons;
+using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers
 {

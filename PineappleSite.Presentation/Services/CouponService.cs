@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
 using System;

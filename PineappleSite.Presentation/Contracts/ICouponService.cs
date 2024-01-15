@@ -1,5 +1,5 @@
-﻿using PineappleSite.Presentation.Models;
-using PineappleSite.Presentation.Models.Coupons;
+﻿using PineappleSite.Presentation.Models.Coupons;
+using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Contracts
 {
