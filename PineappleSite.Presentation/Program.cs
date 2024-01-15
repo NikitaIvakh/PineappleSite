@@ -16,6 +16,7 @@ applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponCli
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
+applicationBuilder.Services.AddScoped<IIdentityService, IdentityService>();
 
 WebApplication webApplication = applicationBuilder.Build();
 
