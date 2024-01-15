@@ -12,6 +12,8 @@ namespace Identity.Application.Profiles
             CreateMap<AuthRequest, AuthRequestDto>().ReverseMap();
             CreateMap<RegisterRequest, RegisterRequestDto>().ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
+            CreateMap<AuthResponse, AuthResponseDto>().ReverseMap();
+            CreateMap<RegisterResponse, RegisterResponseDto>().ReverseMap();
         }
     }
 }

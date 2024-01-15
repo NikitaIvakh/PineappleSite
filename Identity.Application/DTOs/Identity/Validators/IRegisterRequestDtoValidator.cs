@@ -1,8 +1,9 @@
 ﻿using FluentValidation;
+using Identity.Application.DTOs.Identity;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.DTOs.Identity.Validator
+namespace Identity.Core.Validators
 {
     public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
     {

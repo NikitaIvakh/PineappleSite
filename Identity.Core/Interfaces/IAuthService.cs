@@ -1,11 +1,12 @@
 ﻿using Identity.Core.Entities.Identities;
+using Identity.Core.Response;
 
 namespace Identity.Core.Interfaces
 {
     public interface IAuthService
     {
-        Task<AuthResponse> Login(AuthRequest authRequest);
+        Task<BaseIdentityResponse> Login(AuthRequest authRequest);
 
-        Task<RegisterResponse> Register(RegisterRequest registerRequest);
+        Task<BaseIdentityResponse> Register(RegisterRequest registerRequest);
     }
 }

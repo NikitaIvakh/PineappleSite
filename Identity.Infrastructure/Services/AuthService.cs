@@ -1,6 +1,7 @@
 ﻿using Identity.Core.Entities.Identities;
 using Identity.Core.Entities.User;
 using Identity.Core.Interfaces;
+using Identity.Core.Response;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -16,8 +17,9 @@ namespace Identity.Infrastructure.Services
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly JwtSettings _jwtSettings = jwtSettings.Value;
 
-        public async Task<AuthResponse> Login(AuthRequest authRequest)
+        public async Task<BaseIdentityResponse> Login(AuthRequest authRequest)
         {
+            var response = new BaseIdentityResponse();
             var user = await _userManager.FindByEmailAsync(authRequest.Email) ?? throw new Exception($"{nameof(authRequest.Email)} не найден");
             var result = await _signInManager.CheckPasswordSignInAsync(user, authRequest.Password, false);
 
@@ -35,11 +37,16 @@ namespace Identity.Infrastructure.Services
                 Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
             };
 
-            return authResponse;
+            response.IsSuccess = true;
+            response.Message = "Успешный вход в систему";
+            response.Data = authResponse;
+
+            return response;
         }
 
-        public async Task<RegisterResponse> Register(RegisterRequest registerRequest)
+        public async Task<BaseIdentityResponse> Register(RegisterRequest registerRequest)
         {
+            var response = new BaseIdentityResponse();
             var existsUser = await _userManager.FindByNameAsync(registerRequest.UserName);
 
             if (existsUser is not null)
@@ -63,7 +70,12 @@ namespace Identity.Infrastructure.Services
                 if (result.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, "Employee");
-                    return new RegisterResponse { UserId = user.Id };
+                    var registerResponse = new RegisterResponse { UserId = user.Id };
+
+                    response.IsSuccess = true;
+                    response.Data = registerResponse;
+
+                    return response;
                 }
 
                 else

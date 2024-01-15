@@ -8,9 +8,9 @@ namespace Identity.Application
     {
         public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
         {
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
-            services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
 
             return services;
         }

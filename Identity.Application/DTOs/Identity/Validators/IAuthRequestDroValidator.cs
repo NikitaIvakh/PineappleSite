@@ -2,7 +2,7 @@
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.DTOs.Identity.Validator
+namespace Identity.Application.DTOs.Identity.Validators
 {
     public class IAuthRequestDroValidator : AbstractValidator<AuthRequestDto>
     {

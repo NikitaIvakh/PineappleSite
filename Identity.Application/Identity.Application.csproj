@@ -19,9 +19,4 @@
     <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Identities\Commands\Queries\" />
-    <Folder Include="Features\Identities\Requests\Queries\" />
-  </ItemGroup>
-
 </Project>

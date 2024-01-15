@@ -1,4 +1,4 @@
-﻿namespace Identity.Application.Response
+﻿namespace Identity.Core.Response
 {
     public class BaseIdentityResponse
     {
