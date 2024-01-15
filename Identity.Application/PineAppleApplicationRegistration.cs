@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Identity.Application
@@ -8,6 +9,7 @@ namespace Identity.Application
         public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
+            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
             return services;
         }
     }
