@@ -2,6 +2,7 @@
 using Identity.Application.DTOs;
 using Identity.Core.Entities.User;
 using Identity.Core.Entities.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Profiles
 {
@@ -9,7 +10,7 @@ namespace Identity.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<ApplicationUser, ApplicationUserDto>().ReverseMap();
+            CreateMap<ApplicationUser, ApplicationUser>().ReverseMap();
             CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, DeleteUserDto>().ReverseMap();

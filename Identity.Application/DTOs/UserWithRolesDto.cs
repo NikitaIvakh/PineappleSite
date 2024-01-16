@@ -4,7 +4,7 @@ namespace Identity.Application.DTOs
 {
     public class UserWithRolesDto
     {
-        public ApplicationUserDto User { get; set; }
+        public ApplicationUser User { get; set; }
 
         public IList<string> Roles { get; set; }
     }

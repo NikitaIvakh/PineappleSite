@@ -1,4 +1,5 @@
 using Identity.Infrastructure;
+using Identity.Application;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
+applicationBuilder.Services.ConfigureApplicationService();
 
 applicationBuilder.Services.AddCors(key =>
 {
