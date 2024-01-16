@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.DTOs;
+using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Core.Entities.User;
 using Identity.Core.Entities.Users;

@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.DTOs;
+using Identity.Application.DTOs.Identities;
 using Identity.Core.Entities.User;
 using Identity.Core.Entities.Users;
 using Microsoft.AspNetCore.Identity;

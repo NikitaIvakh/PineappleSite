@@ -1,4 +1,4 @@
-﻿using Identity.Application.DTOs;
+﻿using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;

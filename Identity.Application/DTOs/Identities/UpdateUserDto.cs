@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Identity.Application.DTOs
+namespace Identity.Application.DTOs.Identities
 {
-    internal class DeleteUserDto
+    internal class UpdateUserDto
     {
     }
 }

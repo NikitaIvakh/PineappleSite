@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Identity.Application.DTOs;
+using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Core.Entities.User;
 using MediatR;

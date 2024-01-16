@@ -22,6 +22,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="DTOs\Register\" />
 	  <Folder Include="Features\Identities\Commands\Commands\" />
 	  <Folder Include="Features\Identities\Requests\Commands\" />
 	</ItemGroup>

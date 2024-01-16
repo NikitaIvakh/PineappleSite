@@ -1,6 +1,6 @@
 ﻿using Identity.Core.Entities.User;
 
-namespace Identity.Application.DTOs
+namespace Identity.Application.DTOs.Identities
 {
     public class UserWithRolesDto
     {

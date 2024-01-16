@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace Identity.Core.Entities.Users
+namespace Identity.Application.DTOs.Identities
 {
     public class CreateUserDto : IdentityUser
     {
