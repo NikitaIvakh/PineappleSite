@@ -22,7 +22,7 @@ namespace Identity.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Identity.Core.Entities.ApplicationUser", b =>
+            modelBuilder.Entity("Identity.Core.Entities.User.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -98,7 +98,7 @@ namespace Identity.Infrastructure.Migrations
                         {
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dbfdf990-f9a9-4972-a0cc-7d1e125f42f0",
+                            ConcurrencyStamp = "9aaada00-89da-4c69-aa9d-665903b65b7c",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -106,9 +106,9 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOiIwnP95iXpsfYQq24NXU38TMs9buhg7r/kKTtb1b3F5ZbeyfQYHitT3VAYU2XMXg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIWK1fWNvNoAmeJo6J6okhoZtZkIkIIFiPwIo1MeBOYyWkYpgtcXBnKcwuwUdjLRVw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "13e9591b-23c9-42bc-a902-7cfab5fa0033",
+                            SecurityStamp = "fd786608-589a-43b9-9a61-89e83b732bbc",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         },
@@ -116,7 +116,7 @@ namespace Identity.Infrastructure.Migrations
                         {
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6543dbea-8dee-4b90-80c9-4f2646071360",
+                            ConcurrencyStamp = "ab357e15-ff55-4bf3-9860-8e736670dcc2",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             FirstName = "System",
@@ -124,9 +124,9 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKuBYtVBzySbMinLqQOEmLtCn7M/FXS1NqFaQhYldZrQAr5XEso+SnL0KxjWjs8rng==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG8BwX93Tg507J7aIDIBV4tZQHvCLoTjFgVzKwSeMywii/HMH5e5tjS9YwOWrhibqg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "83237014-0488-49a8-a23b-aee67da3c963",
+                            SecurityStamp = "0dfd21a8-c366-4d66-83f4-df7b50a4785a",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
@@ -301,7 +301,7 @@ namespace Identity.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("Identity.Core.Entities.ApplicationUser", null)
+                    b.HasOne("Identity.Core.Entities.User.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -310,7 +310,7 @@ namespace Identity.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("Identity.Core.Entities.ApplicationUser", null)
+                    b.HasOne("Identity.Core.Entities.User.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -325,7 +325,7 @@ namespace Identity.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Identity.Core.Entities.ApplicationUser", null)
+                    b.HasOne("Identity.Core.Entities.User.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -334,7 +334,7 @@ namespace Identity.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("Identity.Core.Entities.ApplicationUser", null)
+                    b.HasOne("Identity.Core.Entities.User.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

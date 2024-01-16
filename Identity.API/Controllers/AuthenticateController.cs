@@ -7,10 +7,9 @@ namespace Identity.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticateController(IAuthService authService, IUserService userService) : ControllerBase
+    public class AuthenticateController(IAuthService authService) : ControllerBase
     {
         private readonly IAuthService _authService = authService;
-        private readonly IUserService _userService = userService;
 
         [HttpPost("Login")]
         public async Task<ActionResult<BaseIdentityResponse<AuthResponse>>> Login([FromBody] AuthRequest authRequest)
@@ -24,13 +23,6 @@ namespace Identity.API.Controllers
         {
             var register = await _authService.RegisterAsync(registerRequest);
             return Ok(register);
-        }
-
-        [HttpPost("GetAllUsers")]
-        public async Task<ActionResult<BaseIdentityResponse<RegisterResponse>>> GetAllUsers()
-        {
-            var users = await _userService.GetAllUsersAsync();
-            return Ok(users);
         }
     }
 }

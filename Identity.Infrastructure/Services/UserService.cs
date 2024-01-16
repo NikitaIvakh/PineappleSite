@@ -1,5 +1,6 @@
 ﻿using Identity.Core.Entities.Identities;
 using Identity.Core.Entities.User;
+using Identity.Core.Entities.Users;
 using Identity.Core.Interfaces;
 using Identity.Core.Response;
 using Identity.Infrastructure.Validators;
@@ -14,15 +15,33 @@ namespace Identity.Infrastructure.Services
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly IRegisterRequestDtoValidator _registerValidator = registerValidator;
 
-        public async Task<IEnumerable<ApplicationUser>> GetAllUsersAsync()
+        public async Task<IEnumerable<UserWithRoles>> GetAllUsersAsync()
         {
             var users = await _userManager.Users.ToListAsync();
-            return users;
+            var usersWithRoles = new List<UserWithRoles>();
+
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                usersWithRoles.Add(new UserWithRoles { User = user, Roles = roles });
+            }
+
+            return usersWithRoles;
         }
 
-        public Task<ApplicationUser> GetByIdAsync(Guid id)
+        public async Task<UserWithRoles> GetByIdAsync(string id)
         {
-            throw new NotImplementedException();
+            var user = await _userManager.Users.FirstOrDefaultAsync(key => key.Id == id) ??
+                throw new Exception("Такого пользователя нет");
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var userWithRolesDto = new UserWithRoles
+            {
+                User = user,
+                Roles = roles.ToList()
+            };
+
+            return userWithRolesDto;
         }
 
         public Task<BaseIdentityResponse<ApplicationUser>> CreateUserAsync(RegisterRequest user)

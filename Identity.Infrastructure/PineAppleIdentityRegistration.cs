@@ -29,6 +29,7 @@ namespace Identity.Infrastructure
             services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PineAppleIdentityDbContext>().AddDefaultTokenProviders();
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<RoleManager<IdentityRole>>();
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
