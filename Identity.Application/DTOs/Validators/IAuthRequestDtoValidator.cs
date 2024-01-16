@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Identity.Application.DTOs.Authentications;
-using Identity.Core.Entities.Identities;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
