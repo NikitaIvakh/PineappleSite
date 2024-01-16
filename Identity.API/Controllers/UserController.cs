@@ -18,13 +18,13 @@ namespace Identity.API.Controllers
             return Ok(command);
         }
 
-        //// GET api/<UserController>/5
-        //[HttpGet("GetUserById/{id}")]
-        //public async Task<ActionResult<BaseIdentityResponse<ApplicationUser>>> GetUserById(string id)
-        //{
-        //    var user = await _userService.GetByIdAsync(id);
-        //    return Ok(user);
-        //}
+        // GET api/<UserController>/5
+        [HttpGet("GetUserById/{id}")]
+        public async Task<ActionResult<UserWithRolesDto>> GetUserById(string id)
+        {
+            var command = await _mediator.Send(new GetUserDetailsRequest { Id = id });
+            return Ok(command);
+        }
 
         // POST api/<UserController>
         [HttpPost]

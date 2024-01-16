@@ -11,6 +11,7 @@ namespace Identity.Application.Profiles
         public MappingProfile()
         {
             CreateMap<ApplicationUser, ApplicationUser>().ReverseMap();
+            CreateMap<UserWithRoles, UserWithRolesDto>().ReverseMap();
             CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, DeleteUserDto>().ReverseMap();
