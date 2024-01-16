@@ -17,9 +17,6 @@ namespace PineappleSite.Presentation.Services
             var users = await _identityClient.GetAllUsersAsync();
             var usersWithRoles = _mapper.Map<IList<UserWithRolesViewModel>>(users);
 
-            //foreach (var userWithRoles in usersWithRoles)
-            //    userWithRoles.ApplicationUser = _mapper.Map<ApplicationUserViewModel>(userWithRoles.ApplicationUser);
-
             return usersWithRoles;
         }
 

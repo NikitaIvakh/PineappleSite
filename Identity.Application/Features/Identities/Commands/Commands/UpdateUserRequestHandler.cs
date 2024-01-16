@@ -41,8 +41,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     if (!string.IsNullOrEmpty(request.UpdateUser.Password))
                     {
-                        var newpaswordHash = _userManager.PasswordHasher.HashPassword(user, request.UpdateUser.Password);
-                        user.PasswordHash = newpaswordHash;
+                        var newPaswordHash = _userManager.PasswordHasher.HashPassword(user, request.UpdateUser.Password);
+                        user.PasswordHash = newPaswordHash;
                     }
 
                     var result = await _userManager.UpdateAsync(user);
@@ -65,12 +65,14 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                         return response;
                     }
+
                     else
                     {
                         throw new Exception($"{result.Errors}");
                     }
                 }
             }
+
             catch (Exception exception)
             {
                 response.IsSuccess = false;
