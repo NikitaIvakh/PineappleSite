@@ -21,8 +21,8 @@ namespace PineappleSite.Presentation.Services
         public async Task<IdentityResponseViewModel> LoginAsync(AuthRequestViewModel authRequestViewModel)
         {
             IdentityResponseViewModel response = new();
-            AuthRequest authRequest = _mapper.Map<AuthRequest>(authRequestViewModel);
-            AuthResponseBaseIdentityResponse authResponse = await _identityClient.LoginAsync(authRequest);
+            AuthRequestDto authRequest = _mapper.Map<AuthRequestDto>(authRequestViewModel);
+            AuthResponseDtoBaseIdentityResponse authResponse = await _identityClient.LoginAsync(authRequest);
 
             if (authResponse.IsSuccess)
             {
@@ -57,8 +57,8 @@ namespace PineappleSite.Presentation.Services
         public async Task<IdentityResponseViewModel> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
         {
             IdentityResponseViewModel response = new();
-            RegisterRequest registerRequest = _mapper.Map<RegisterRequest>(registerRequestViewModel);
-            RegisterResponseBaseIdentityResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
+            RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
+            RegisterResponseDtoBaseIdentityResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
 
             if (registerResponse.IsSuccess)
             {

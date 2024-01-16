@@ -19,15 +19,15 @@ namespace PineappleSite.Presentation
             #endregion
 
             #region
-            CreateMap<AuthRequest, AuthRequestViewModel>().ReverseMap();
-            CreateMap<AuthResponse, AuthResponseViewModel>().ReverseMap();
-            CreateMap<RegisterRequest, RegisterRequestViewModel>().ReverseMap();
-            CreateMap<RegisterResponse, RegisterResponseViewModel>().ReverseMap();
+            CreateMap<AuthRequestDto, AuthRequestViewModel>().ReverseMap();
+            CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
+            CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
+            CreateMap<RegisterResponseDto, RegisterResponseViewModel>().ReverseMap();
+            CreateMap<AuthResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
+            CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
-            CreateMap<AuthResponseBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
-            CreateMap<RegisterResponseBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
         }
     }
 }
