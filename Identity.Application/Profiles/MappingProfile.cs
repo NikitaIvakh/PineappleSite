@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Identity.Application.DTOs.Authentications;
 using Identity.Application.DTOs.Identities;
+using Identity.Core.Entities.Identities;
 using Identity.Core.Entities.User;
 using Identity.Core.Entities.Users;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +17,9 @@ namespace Identity.Application.Profiles
             CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
             CreateMap<ApplicationUser, DeleteUserDto>().ReverseMap();
+
+            CreateMap<AuthRequest, AuthRequestDto>().ReverseMap();
+            CreateMap<RegisterRequest, RegisterRequestDto>().ReverseMap();
         }
     }
 }

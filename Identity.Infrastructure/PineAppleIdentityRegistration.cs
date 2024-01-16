@@ -32,32 +32,6 @@ namespace Identity.Infrastructure
             services.AddScoped<RoleManager<IdentityRole>>();
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-               .AddCookie(options =>
-               {
-                   options.ExpireTimeSpan = TimeSpan.FromHours(10);
-                   options.LoginPath = "/Identity/Login";
-                   options.AccessDeniedPath = "/Identity/AccessDenied";
-               });
-
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidIssuer = configuration["JwtSettings:Issuer"],
-                    ValidAudience = configuration["JwtSettings:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
-                };
-            });
 
             var scope = services.BuildServiceProvider();
             var score = services.BuildServiceProvider();

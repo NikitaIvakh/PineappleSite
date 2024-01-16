@@ -12,7 +12,7 @@ applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
-applicationBuilder.Services.ConfigureApplicationService();
+applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
 
 applicationBuilder.Services.AddCors(key =>
 {

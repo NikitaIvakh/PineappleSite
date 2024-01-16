@@ -19,12 +19,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Identity.Core\Identity.Core.csproj" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="DTOs\Register\" />
-	  <Folder Include="Features\Identities\Commands\Commands\" />
-	  <Folder Include="Features\Identities\Requests\Commands\" />
+	  <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
 	</ItemGroup>
 
 </Project>
