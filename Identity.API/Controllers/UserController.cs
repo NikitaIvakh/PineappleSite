@@ -1,5 +1,8 @@
-﻿using Identity.Application.DTOs.Identities;
+﻿using Identity.Application.DTOs.Authentications;
+using Identity.Application.DTOs.Identities;
+using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Features.Identities.Requests.Queries;
+using Identity.Application.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,16 +29,12 @@ namespace Identity.API.Controllers
             return Ok(command);
         }
 
-        // POST api/<UserController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser)
         {
+            var command = await _mediator.Send(new UpdateUserRequest { UpdateUser = updateUser });
+            return Ok(command);
         }
 
         // DELETE api/<UserController>/5

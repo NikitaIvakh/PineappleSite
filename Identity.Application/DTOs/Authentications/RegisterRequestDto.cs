@@ -2,7 +2,7 @@
 
 namespace Identity.Application.DTOs.Authentications
 {
-    public class RegisterRequestDto
+    public class RegisterRequestDto : IRegisterRequestDto
     {
         [Required]
         public string FirstName { get; set; }

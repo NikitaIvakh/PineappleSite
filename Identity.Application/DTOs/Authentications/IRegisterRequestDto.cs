@@ -1,12 +1,9 @@
-﻿using Identity.Application.DTOs.Authentications;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Identity.Application.DTOs.Identities
+namespace Identity.Application.DTOs.Authentications
 {
-    public class UpdateUserDto : IRegisterRequestDto
+    public interface IRegisterRequestDto
     {
-        public string Id { get; set; }
-
         [Required]
         public string FirstName { get; set; }
 

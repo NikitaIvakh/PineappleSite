@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace Identity.Application.DTOs.Validators
 {
-    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
+    public class IRegisterRequestDtoValidator : AbstractValidator<IRegisterRequestDto>
     {
         private readonly PineAppleIdentityDbContext _context;
 
