@@ -1,10 +1,12 @@
 ﻿using Identity.Application.DTOs.Authentications;
 using Identity.Application.DTOs.Validators;
+using Identity.Application.Extecsions;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Response;
 using Identity.Core.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using static Identity.Application.Utilities.StaticDetails;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
@@ -41,8 +43,13 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     if (result.Succeeded)
                     {
+                        var existsRoles = await _userManager.GetRolesAsync(user);
+                        await _userManager.RemoveFromRolesAsync(user, existsRoles);
+
+                        var roleNames = request.UserRoles.GetDisplayName();
+                        await _userManager.AddToRoleAsync(user, roleNames);
                         RegisterResponseDto updateResponse = new()
-                        { 
+                        {
                             UserId = user.Id
                         };
 

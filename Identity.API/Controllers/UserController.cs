@@ -5,6 +5,7 @@ using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Application.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Identity.Application.Utilities.StaticDetails;
 
 namespace Identity.API.Controllers
 {
@@ -31,9 +32,9 @@ namespace Identity.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser)
+        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser, UserRoles userRoles)
         {
-            var command = await _mediator.Send(new UpdateUserRequest { UpdateUser = updateUser });
+            var command = await _mediator.Send(new UpdateUserRequest { UpdateUser = updateUser, UserRoles = userRoles });
             return Ok(command);
         }
 
