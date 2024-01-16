@@ -10,6 +10,8 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<UserWithRolesViewModel> GetUserAsync(string id);
 
+        Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register);
+
         Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register);
 
         Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete);

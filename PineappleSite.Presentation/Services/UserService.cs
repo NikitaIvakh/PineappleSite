@@ -28,6 +28,11 @@ namespace PineappleSite.Presentation.Services
             return userWithRole;
         }
 
+        public Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register)
         {
             throw new NotImplementedException();
