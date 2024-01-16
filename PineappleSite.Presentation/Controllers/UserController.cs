@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -22,7 +24,7 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -30,12 +32,25 @@ namespace PineappleSite.Presentation.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(RegisterRequestViewModel registerRequest)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                IdentityResponseViewModel response = await _userService.CreateUserAsync(registerRequest);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = "Пользователь успешно добавлен";
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Create));
+                }
             }
+
             catch
             {
                 return View();

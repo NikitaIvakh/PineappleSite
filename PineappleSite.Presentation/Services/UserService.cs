@@ -28,9 +28,36 @@ namespace PineappleSite.Presentation.Services
             return userWithRole;
         }
 
-        public Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register)
+        public async Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IdentityResponseViewModel response = new();
+                RegisterRequestDto registerRequestDto = _mapper.Map<RegisterRequestDto>(register);
+                RegisterResponseDtoBaseIdentityResponse apiResoponse = await _identityClient.RegisterAsync(registerRequestDto);
+
+                if (apiResoponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Data = apiResoponse.Data;
+                    response.Message = apiResoponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResoponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (IdentityExceptions exception)
+            {
+                return ConvertIdentityExceptions(exception);
+            }
         }
 
         public Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register)
