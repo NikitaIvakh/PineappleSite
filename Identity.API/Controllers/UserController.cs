@@ -39,8 +39,10 @@ namespace Identity.API.Controllers
 
         // DELETE api/<UserController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<BaseIdentityResponse<DeleteUserDto>>> Delete([FromBody] DeleteUserDto deleteUserDto)
         {
+            var command = await _mediator.Send(new DeleteUserRequest { DeleteUser = deleteUserDto });
+            return Ok(command);
         }
     }
 }

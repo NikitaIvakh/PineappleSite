@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Identity.Application.DTOs.Identities
+﻿namespace Identity.Application.DTOs.Identities
 {
-    internal class DeleteUserDto
+    public class DeleteUserDto
     {
+        public string Id { get; set; }
     }
 }
