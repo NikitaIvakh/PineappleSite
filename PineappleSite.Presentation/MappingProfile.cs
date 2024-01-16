@@ -32,7 +32,9 @@ namespace PineappleSite.Presentation
                 .ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
-            CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
+            CreateMap<UpdateUserDto, UpdateUserViewModel>()
+                .ForMember(key => key.Password, opt => opt.MapFrom(key => key.Password))
+                .ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
