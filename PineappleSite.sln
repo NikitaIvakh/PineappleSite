@@ -27,11 +27,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PineappleSite.Presentation"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{7A1E3696-31C6-4604-8F0D-2EF9E68C8BA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Identity.API\Identity.API.csproj", "{6B5EA5D6-477E-48C9-A99C-86FA71D96775}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{6B5EA5D6-477E-48C9-A99C-86FA71D96775}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Infrastructure", "Identity.Infrastructure\Identity.Infrastructure.csproj", "{CAD1AFD1-0748-43AF-A8B3-9AA3F26AB3DC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Infrastructure", "Identity.Infrastructure\Identity.Infrastructure.csproj", "{CAD1AFD1-0748-43AF-A8B3-9AA3F26AB3DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Core", "Identity.Core\Identity.Core.csproj", "{B18ED835-051B-402D-B0AB-55F762AC4FC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Core", "Identity.Core\Identity.Core.csproj", "{B18ED835-051B-402D-B0AB-55F762AC4FC7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
