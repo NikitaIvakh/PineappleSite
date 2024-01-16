@@ -19,11 +19,11 @@ namespace Identity.API.Controllers
             return Ok(login);
         }
 
-        //[HttpPost("Register")]
-        //public async Task<ActionResult<<Application.Response.BaseIdentityResponse<RegisterResponse>>> Register([FromBody] RegisterRequest registerRequest)
-        //{
-        //    var register = await _authService.RegisterAsync(registerRequest);
-        //    return Ok(register);
-        //}
+        [HttpPost("Register")]
+        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Register([FromBody] RegisterRequestDto registerRequest)
+        {
+            var register = await _mediator.Send(new RegisterUserRequest { RegisterRequest = registerRequest });
+            return Ok(register);
+        }
     }
 }

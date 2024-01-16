@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using Identity.Core.Entities.Identities;
+using Identity.Application.DTOs.Authentications;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using System.Text.RegularExpressions;
 
 namespace Identity.Application.DTOs.Validators
 {
-    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequest>
+    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
     {
         private readonly PineAppleIdentityDbContext _context;
 
