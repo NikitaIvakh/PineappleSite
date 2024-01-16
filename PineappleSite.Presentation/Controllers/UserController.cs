@@ -15,9 +15,10 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(string id)
         {
-            return View();
+            var user = await _userService.GetUserAsync(id);
+            return View(user);
         }
 
         // GET: UserController/Create

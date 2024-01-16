@@ -20,9 +20,12 @@ namespace PineappleSite.Presentation.Services
             return usersWithRoles;
         }
 
-        public Task<IdentityResponseViewModel> GetUsersAsync()
+        public async Task<UserWithRolesViewModel> GetUserAsync(string id)
         {
-            throw new NotImplementedException();
+            var user = await _identityClient.GetUserByIdAsync(id);
+            var userWithRole = _mapper.Map<UserWithRolesViewModel>(user);
+
+            return userWithRole;
         }
 
         public Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register)
