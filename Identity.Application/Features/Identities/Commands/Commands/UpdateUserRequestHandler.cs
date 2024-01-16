@@ -39,6 +39,12 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     user.Email = request.UpdateUser.EmailAddress;
                     user.UserName = request.UpdateUser.UserName;
 
+                    if (!string.IsNullOrEmpty(request.UpdateUser.Password))
+                    {
+                        var newpaswordHash = _userManager.PasswordHasher.HashPassword(user, request.UpdateUser.Password);
+                        user.PasswordHash = newpaswordHash;
+                    }
+
                     var result = await _userManager.UpdateAsync(user);
 
                     if (result.Succeeded)
