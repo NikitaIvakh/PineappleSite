@@ -1,0 +1,50 @@
+﻿@model IList<PineappleSite.Presentation.Models.Users.UserWithRolesViewModel>
+
+@{
+    ViewData["Title"] = "Пользователи";
+}
+
+<h1>Зарегистрированные пользователи</h1>
+
+<p>
+    <a asp-action="Create">Добавить ногово пользователя</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Имя</th>
+            <th>Фамилия</th>
+            <th>Почта</th>
+            <th>Имя пользователя</th>
+            <th>Роль</th>
+            <th>Функции</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@(item.User?.FirstName)</td>
+                    <td>@(item.User?.LastName)</td>
+                    <td>@(item.User?.Email)</td>
+                    <td>@(item.User?.UserName)</td>
+                    <td>
+                        @{
+                            foreach (var role in item.Roles)
+                            {
+                                <p>@role</p>
+                            }
+                        }
+                    </td>
+                    <td>
+                        @Html.ActionLink("Изменить", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Детали", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Удалить", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

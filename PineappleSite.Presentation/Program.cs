@@ -20,6 +20,7 @@ applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(ident
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
+applicationBuilder.Services.AddScoped<IUserService, UserService>();
 
 applicationBuilder.Services.Configure<CookiePolicyOptions>(options =>
 {
