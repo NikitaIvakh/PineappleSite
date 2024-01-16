@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Controllers
@@ -58,20 +60,44 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(string id)
         {
-            return View();
+            var userWithRoles = await _userService.GetUserAsync(id);
+            var updateUser = new UpdateUserViewModel
+            {
+                Id = userWithRoles.User.Id,
+                FirstName = userWithRoles.User.FirstName,
+                LastName = userWithRoles.User.LastName,
+                EmailAddress = userWithRoles.User.Email,
+                UserName = userWithRoles.User.UserName,
+                UserRoles = userWithRoles.User.UserRoles,
+            };
+
+            return View(updateUser);
         }
 
         // POST: UserController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(UpdateUserViewModel updateUser)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                IdentityResponseViewModel response = await _userService.UpdateUserAsync(updateUser);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Edit));
+                }
             }
+
             catch
             {
                 return View();

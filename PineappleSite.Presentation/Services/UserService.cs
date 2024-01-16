@@ -60,9 +60,36 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register)
+        public async Task<IdentityResponseViewModel> UpdateUserAsync(UpdateUserViewModel updateUserView)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IdentityResponseViewModel response = new();
+                UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserView);
+                RegisterResponseDtoBaseIdentityResponse apiResponse = await _identityClient.UserPUTAsync(updateUserDto.Id, updateUserDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Data = apiResponse.Data;
+                    response.Message = apiResponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (IdentityExceptions exception)
+            {
+                return ConvertIdentityExceptions(exception);
+            }
         }
 
         public Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete)

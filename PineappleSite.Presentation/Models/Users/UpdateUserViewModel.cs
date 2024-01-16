@@ -1,10 +1,9 @@
-﻿using Identity.Application.DTOs.Authentications;
+﻿using PineappleSite.Presentation.Services.Identities;
 using System.ComponentModel.DataAnnotations;
-using static Identity.Application.Utilities.StaticDetails;
 
-namespace Identity.Application.DTOs.Identities
+namespace PineappleSite.Presentation.Models.Users
 {
-    public class UpdateUserDto : IRegisterRequestDto
+    public class UpdateUserViewModel
     {
         public string Id { get; set; }
 

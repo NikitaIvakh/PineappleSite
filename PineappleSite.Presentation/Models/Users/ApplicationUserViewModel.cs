@@ -1,4 +1,6 @@
-﻿namespace PineappleSite.Presentation.Models.Users
+﻿using PineappleSite.Presentation.Services.Identities;
+
+namespace PineappleSite.Presentation.Models.Users
 {
     public class ApplicationUserViewModel
     {
@@ -35,5 +37,7 @@
         public bool LockoutEnabled { get; set; }
 
         public int AccessFailedCount { get; set; }
+
+        public UserRoles UserRoles { get; set; }
     }
 }

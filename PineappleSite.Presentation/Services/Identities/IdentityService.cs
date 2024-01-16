@@ -60,12 +60,12 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(UserRoles? userRoles, string id, UpdateUserDto body);
+        System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(string id, UpdateUserDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(UserRoles? userRoles, string id, UpdateUserDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(string id, UpdateUserDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
@@ -435,15 +435,15 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(UserRoles? userRoles, string id, UpdateUserDto body)
+        public virtual System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(string id, UpdateUserDto body)
         {
-            return UserPUTAsync(userRoles, id, body, System.Threading.CancellationToken.None);
+            return UserPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(UserRoles? userRoles, string id, UpdateUserDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<RegisterResponseDtoBaseIdentityResponse> UserPUTAsync(string id, UpdateUserDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -468,12 +468,6 @@ namespace PineappleSite.Presentation.Services.Identities
                     urlBuilder_.Append("User");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-            urlBuilder_.Append('?');
-            if (userRoles != null)
-            {
-                urlBuilder_.Append(System.Uri.EscapeDataString("userRoles") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userRoles, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-            }
-            urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -919,6 +913,9 @@ namespace PineappleSite.Presentation.Services.Identities
         [System.ComponentModel.DataAnnotations.Required]
         [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 5)]
         public string Password { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userRoles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public UserRoles UserRoles { get; set; }
 
     }
 

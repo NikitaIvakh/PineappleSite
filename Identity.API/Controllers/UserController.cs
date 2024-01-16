@@ -32,9 +32,9 @@ namespace Identity.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser, UserRoles userRoles)
+        public async Task<ActionResult<BaseIdentityResponse<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser)
         {
-            var command = await _mediator.Send(new UpdateUserRequest { UpdateUser = updateUser, UserRoles = userRoles });
+            var command = await _mediator.Send(new UpdateUserRequest { UpdateUser = updateUser });
             return Ok(command);
         }
 

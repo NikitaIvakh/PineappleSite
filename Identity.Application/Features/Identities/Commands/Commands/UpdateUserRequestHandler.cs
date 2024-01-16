@@ -52,7 +52,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         var existsRoles = await _userManager.GetRolesAsync(user);
                         await _userManager.RemoveFromRolesAsync(user, existsRoles);
 
-                        var roleNames = request.UserRoles.GetDisplayName();
+                        var roleNames = request.UpdateUser.UserRoles.GetDisplayName();
                         await _userManager.AddToRoleAsync(user, roleNames);
                         RegisterResponseDto updateResponse = new()
                         {

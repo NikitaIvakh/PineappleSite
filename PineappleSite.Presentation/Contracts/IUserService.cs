@@ -12,7 +12,7 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register);
 
-        Task<IdentityResponseViewModel> UpdateUserAsync(RegisterRequestViewModel register);
+        Task<IdentityResponseViewModel> UpdateUserAsync(UpdateUserViewModel updateUserView);
 
         Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete);
     }
