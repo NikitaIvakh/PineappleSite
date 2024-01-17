@@ -103,6 +103,7 @@ namespace PineappleSite.Presentation.Services
                 if (apiResponse.IsSuccess)
                 {
                     response.IsSuccess = true;
+                    response.Data = apiResponse.Data;
                     response.Message = apiResponse.Message;
                 }
 

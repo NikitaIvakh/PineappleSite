@@ -36,7 +36,10 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     var result = await _userManager.DeleteAsync(user);
 
                     response.IsSuccess = true;
+                    response.Data = request.DeleteUser;
                     response.Message = "Пользователь успешно удален";
+
+                    return response;
                 }
             }
 

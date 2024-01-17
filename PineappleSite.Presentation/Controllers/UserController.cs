@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
@@ -104,13 +103,6 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        // GET: UserController/Delete/5
-        public async Task<ActionResult> Delete(string id)
-        {
-            var user = await _userService.GetUserAsync(id);
-            return View(user);
-        }
-
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -129,7 +121,7 @@ namespace PineappleSite.Presentation.Controllers
                 else
                 {
                     TempData["error"] = response.ValidationErrors;
-                    return RedirectToAction(nameof(Delete));
+                    return RedirectToAction(nameof(Index));
                 }
             }
 

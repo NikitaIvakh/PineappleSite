@@ -41,7 +41,10 @@
                     <td>
                         @Html.ActionLink("Изменить", "Edit", new { id=item.User.Id }) |
                         @Html.ActionLink("Детали", "Details", new { id = item.User.Id }) |
-                        @Html.ActionLink("Удалить", "Delete", new { /* id=item.PrimaryKey */ })
+                        <form asp-action="Delete" asp-route-id="@item.User.Id" style="display:inline;"
+                              onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
+                            <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                        </form>
                     </td>
                 </tr>
             }
