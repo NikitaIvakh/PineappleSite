@@ -42,12 +42,12 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync();
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(string userId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
@@ -272,15 +272,15 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync()
+        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(string userId)
         {
-            return GetAllUsersAsync(System.Threading.CancellationToken.None);
+            return GetAllUsersAsync(userId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<UserWithRolesDto>> GetAllUsersAsync(string userId, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -298,6 +298,12 @@ namespace PineappleSite.Presentation.Services.Identities
                     urlBuilder_.Append("User");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetAllUsers");
+            urlBuilder_.Append('?');
+            if (userId != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

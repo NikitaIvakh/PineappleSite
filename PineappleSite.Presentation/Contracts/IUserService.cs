@@ -6,7 +6,7 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface IUserService
     {
-        Task<IList<UserWithRolesViewModel>> GetAllUsersAsync();
+        Task<IList<UserWithRolesViewModel>> GetAllUsersAsync(string userId);
 
         Task<UserWithRolesViewModel> GetUserAsync(string id);
 

@@ -5,6 +5,7 @@ using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Application.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using static Identity.Application.Utilities.StaticDetails;
 
 namespace Identity.API.Controllers
@@ -16,7 +17,7 @@ namespace Identity.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpGet("GetAllUsers")]
-        public async Task<ActionResult<IEnumerable<UserWithRolesDto>>> GetAllUsers(string? userId = "")
+        public async Task<ActionResult<IEnumerable<UserWithRolesDto>>> GetAllUsers(string userId = "")
         {
             var command = await _mediator.Send(new GetUserListRequest() { UserId = userId });
             return Ok(command);

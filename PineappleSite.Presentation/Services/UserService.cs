@@ -12,9 +12,10 @@ namespace PineappleSite.Presentation.Services
         private readonly IIdentityClient _identityClient = identityClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<IList<UserWithRolesViewModel>> GetAllUsersAsync()
+        public async Task<IList<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
         {
-            var users = await _identityClient.GetAllUsersAsync();
+            var user = await _identityClient.GetUserByIdAsync(userId);
+            var users = await _identityClient.GetAllUsersAsync(user.User.Id);
             var usersWithRoles = _mapper.Map<IList<UserWithRolesViewModel>>(users);
 
             return usersWithRoles;

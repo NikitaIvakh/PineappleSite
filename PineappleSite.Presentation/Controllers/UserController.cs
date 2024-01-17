@@ -3,6 +3,7 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -13,7 +14,8 @@ namespace PineappleSite.Presentation.Controllers
         // GET: UserController
         public async Task<ActionResult> Index()
         {
-            var users = await _userService.GetAllUsersAsync();
+            string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+            var users = await _userService.GetAllUsersAsync(userId);
             return View(users);
         }
 
