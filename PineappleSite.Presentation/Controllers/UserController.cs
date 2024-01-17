@@ -132,5 +132,13 @@ namespace PineappleSite.Presentation.Controllers
                 return View();
             }
         }
+
+        public async Task<ActionResult> Profile()
+        {
+            string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+            var user = await _userService.GetUserAsync(userId);
+
+            return View(user);
+        }
     }
 }

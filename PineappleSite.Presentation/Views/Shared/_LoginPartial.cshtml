@@ -3,7 +3,7 @@
         if (User.Identity.IsAuthenticated)
         {
             <li class="nav-item">
-                <a class="nav-link" href="#" title="Manage">@User.Identity.Name!</a>
+                <a class="nav-link" asp-controller="User" asp-action="Profile" title="Профиль">@User.Identity.Name!</a>
             </li>
 
             <li class="nav-item">

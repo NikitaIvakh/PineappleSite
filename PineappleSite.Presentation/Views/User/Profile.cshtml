@@ -1,0 +1,69 @@
+﻿@model PineappleSite.Presentation.Models.Users.UserWithRolesViewModel
+
+@{
+    ViewData["Title"] = "Профиль пользователя";
+}
+
+<h1>Профиль</h1>
+<hr />
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.FirstName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.FirstName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.LastName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.LastName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.Email)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.Email)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.NormalizedEmail)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.NormalizedEmail)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.UserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.UserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.NormalizedUserName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.NormalizedUserName)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(key => key.User.PasswordHash)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(key => key.User.PasswordHash)
+        </dd>
+        @{
+            foreach (var role in Model.Roles)
+            {
+                <dt class="col-sm-2">
+                    @Html.DisplayName(role.ToString())
+                </dt>
+                <dd class="col-sm-10">
+                    @role
+                </dd>
+            }
+        }
+    </dl>
+</div>
+<div>
+    <a asp-action="Index">Вернуться назад</a>
+</div>
