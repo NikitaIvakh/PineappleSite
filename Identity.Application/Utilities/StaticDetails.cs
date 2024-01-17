@@ -7,5 +7,8 @@
             Employee = 1,
             Administrator = 2,
         }
+
+        public static string AdministratorRole = "Administrator";
+        public static string EmployeeRole = "Employee";
     }
 }

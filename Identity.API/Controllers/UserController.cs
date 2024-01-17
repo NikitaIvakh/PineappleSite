@@ -16,9 +16,9 @@ namespace Identity.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpGet("GetAllUsers")]
-        public async Task<ActionResult<IEnumerable<UserWithRolesDto>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserWithRolesDto>>> GetAllUsers(string? userId = "")
         {
-            var command = await _mediator.Send(new GetUserListRequest());
+            var command = await _mediator.Send(new GetUserListRequest() { UserId = userId });
             return Ok(command);
         }
 

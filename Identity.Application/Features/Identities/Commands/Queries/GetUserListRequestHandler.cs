@@ -2,11 +2,11 @@
 using AutoMapper.QueryableExtensions;
 using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Queries;
+using Identity.Application.Utilities;
 using Identity.Core.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
@@ -17,16 +17,37 @@ namespace Identity.Application.Features.Identities.Commands.Queries
 
         public async Task<IEnumerable<UserWithRolesDto>> Handle(GetUserListRequest request, CancellationToken cancellationToken)
         {
-            var users = await _userManager.Users.ProjectTo<ApplicationUser>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
             var usersWithRoles = new List<UserWithRolesDto>();
+            var currentUser = await _userManager.FindByIdAsync(request.UserId);
 
-            foreach (var user in users)
+            if (currentUser != null)
             {
-                var roles = await _userManager.GetRolesAsync(user);
-                usersWithRoles.Add(new UserWithRolesDto { User = user, Roles = roles });
+                var roles = await _userManager.GetRolesAsync(currentUser);
+
+                if (roles.Contains(StaticDetails.AdministratorRole))
+                {
+                    var users = await _userManager.Users.ProjectTo<ApplicationUser>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
+
+                    foreach (var user in users)
+                    {
+                        var role = await _userManager.GetRolesAsync(user);
+                        usersWithRoles.Add(new UserWithRolesDto { User = user, Roles = role });
+                    }
+                }
+
+                else
+                {
+                    var userWithRoles = new UserWithRolesDto
+                    {
+                        User = currentUser,
+                        Roles = roles.ToList()
+                    };
+
+                    usersWithRoles.Add(userWithRoles);
+                }
             }
 
-            return _mapper.Map<IEnumerable<UserWithRolesDto>>(usersWithRoles);
+            return usersWithRoles;
         }
     }
 }
