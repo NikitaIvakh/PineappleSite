@@ -20,7 +20,9 @@ namespace Identity.Infrastructure.Configurations
                 UserName = "user@localhost.com",
                 NormalizedUserName = "USER@LOCALHOST.COM",
                 PasswordHash = hasher.HashPassword(null, "P@ssword1"),
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Description = "Test",
+                Age = 24,
             },
 
             new ApplicationUser
@@ -33,7 +35,9 @@ namespace Identity.Infrastructure.Configurations
                 UserName = "admin@localhost.com",
                 NormalizedUserName = "ADMIN@LOCALHOST.COM",
                 PasswordHash = hasher.HashPassword(null, "P@ssword1"),
-                EmailConfirmed = true
+                EmailConfirmed = true,
+                Description = "Test",
+                Age = 24,
             });
         }
     }

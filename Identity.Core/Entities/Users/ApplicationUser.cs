@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System.Text.Json.Serialization;
 
 namespace Identity.Core.Entities.User
 {
@@ -8,5 +7,9 @@ namespace Identity.Core.Entities.User
         public string FirstName { get; set; }
 
         public string LastName { get; set; }
+
+        public string Description { get; set; }
+
+        public int Age { get; set; }
     }
 }
