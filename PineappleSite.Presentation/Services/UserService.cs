@@ -92,9 +92,35 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete)
+        public async Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete)
         {
-            throw new NotImplementedException();
+            try
+            {
+                IdentityResponseViewModel response = new();
+                DeleteUserDto deleteUserDto = _mapper.Map<DeleteUserDto>(delete);
+                DeleteUserDtoBaseIdentityResponse apiResponse = await _identityClient.UserDELETEAsync(deleteUserDto.Id, deleteUserDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Message = apiResponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (IdentityExceptions exception)
+            {
+                return ConvertIdentityExceptions(exception);
+            }
         }
     }
 }
