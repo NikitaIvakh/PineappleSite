@@ -2,19 +2,20 @@
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Response;
 using Identity.Core.Entities.User;
+using Identity.Core.Entities.Users;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto) : IRequestHandler<UpdateUserProfileRequest, BaseIdentityResponse<ApplicationUser>>
+    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto) : IRequestHandler<UpdateUserProfileRequest, BaseIdentityResponse<UserWithRoles>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserProfileDto _updateUserProfileDto = updateUserProfileDto;
 
-        public async Task<BaseIdentityResponse<ApplicationUser>> Handle(UpdateUserProfileRequest request, CancellationToken cancellationToken)
+        public async Task<BaseIdentityResponse<UserWithRoles>> Handle(UpdateUserProfileRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<ApplicationUser>();
+            var response = new BaseIdentityResponse<UserWithRoles>();
 
             try
             {
@@ -49,9 +50,16 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     if (result.Succeeded)
                     {
+                        var existsRoles = await _userManager.GetRolesAsync(user);
+                        var userWithRoles = new UserWithRoles
+                        {
+                            User = user,
+                            Roles = existsRoles,
+                        };
+
                         response.IsSuccess = true;
                         response.Message = "Профиль пользователя успешно обновлен";
-                        response.Data = user;
+                        response.Data = userWithRoles;
                     }
                 }
 

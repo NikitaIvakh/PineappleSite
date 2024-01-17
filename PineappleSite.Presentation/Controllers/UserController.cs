@@ -138,7 +138,45 @@ namespace PineappleSite.Presentation.Controllers
             string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
             var user = await _userService.GetUserAsync(userId);
 
-            return View(user);
+            var updateUserPrifile = new UpdateUserProfileViewModel
+            {
+                Id = user.User.Id,
+                FirstName = user.User.FirstName,
+                LastName = user.User.LastName,
+                EmailAddress = user.User.Email,
+                UserName = user.User.UserName,
+                Description = user.User.Description,
+                Age = user.User.Age,
+            };
+
+            return View(updateUserPrifile);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Profile(UpdateUserProfileViewModel updateUserProfile)
+        {
+            try
+            {
+                IdentityResponseViewModel response = await _userService.UpdateUserProfileAsync(updateUserProfile);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Profile));
+                }
+
+                else
+                {
+                    TempData["error"] = response.Message;
+                    return RedirectToAction(nameof(Profile));
+                }
+            }
+
+            catch (Exception ex)
+            {
+                return View();
+            }
         }
     }
 }

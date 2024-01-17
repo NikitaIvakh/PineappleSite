@@ -1,69 +1,115 @@
-﻿@model PineappleSite.Presentation.Models.Users.UserWithRolesViewModel
+﻿@using PineappleSite.Presentation.Utility
+@model PineappleSite.Presentation.Models.Users.UpdateUserProfileViewModel
 
 @{
-    ViewData["Title"] = "Профиль пользователя";
+    ViewData["Title"] = "Обновить пользователя";
 }
 
-<h1>Профиль</h1>
-<hr />
+@{
+    ViewBag.Title = "User profile";
+}
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.NormalizedEmail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.NormalizedEmail)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.NormalizedUserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.NormalizedUserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.PasswordHash)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.PasswordHash)
-        </dd>
-        @{
-            foreach (var role in Model.Roles)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayName(role.ToString())
-                </dt>
-                <dd class="col-sm-10">
-                    @role
-                </dd>
+<br />
+<div class="row">
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Profile">
+                    <h5 class="card-title">Profile Data</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Электронная Почта</label>
+                        <input class="form-control" asp-for="EmailAddress" readonly />
+                        <div class="form-text">Длина строки не может превышать 50 символов.</div>
+                    </div>
+                    <div class="card-buttons-group">
+                        <button class='btn btn-primary' value="Обновить">Обновить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Profile">
+                    <input asp-for="Id" hidden="hidden" />
+                    <h5 class="card-title">Профиль пользователя</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Имя</label>
+                        <input class="form-control" asp-for="FirstName" />
+                        <div class="form-text">Длина строки не может превышать 20 символов.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Фамилия</label>
+                        <input class="form-control" asp-for="LastName" />
+                        <div class="form-text">Длина строки не может превышать 20 символов.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Возраст</label>
+                        <input type="text" class="form-control" asp-for="Age">
+                        <div class="form-text">Возраст должен быть больше 18, но меньше 120.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Описание</label>
+                        <textarea class="form-control" asp-for="Description" rows="3"></textarea>
+                        <div class="form-text">Длина строки должна быть более 10 символов, но не более 300 символов.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-black-50">Отображаемое имя</label>
+                        <input class="form-control" asp-for="UserName" />
+                        <div class="form-text">Длина строки не должна превышать 50 символов.</div>
+                    </div>
+                    <div class="card-buttons-group">
+                        <button class="btn btn-primary" value="Обновить">Обновить</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card text-center">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="@Url.Action("Index", "Home")">Main page</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="@Url.Action("GetCars", "Car")">Cars</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Special title treatment</h5>
+                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#togglePassword').click(function () {
+            var passwordInput = $('input[name="Password"]');
+            var passwordType = passwordInput.attr('type');
+
+            if (passwordType === 'password') {
+                passwordInput.attr('type', 'text');
+                $('#togglePassword i').removeClass('fa-eye').addClass('fa-eye-slash');
+                $('#togglePassword').text('Скрыть');
+            } else {
+                passwordInput.attr('type', 'password');
+                $('#togglePassword i').removeClass('fa-eye-slash').addClass('fa-eye');
+                $('#togglePassword').text('Показать');
             }
-        }
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Вернуться назад</a>
-</div>
+        });
+    });
+</script>

@@ -4,6 +4,7 @@ using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Application.Response;
 using Identity.Core.Entities.User;
+using Identity.Core.Entities.Users;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
@@ -42,7 +43,7 @@ namespace Identity.API.Controllers
 
         // PUT api/<UserController>/5
         [HttpPut("UpdateUserProfile/{id}")]
-        public async Task<ActionResult<BaseIdentityResponse<ApplicationUser>>> UpdateUserProfile([FromBody] UpdateUserProfileDto updateUserProfile)
+        public async Task<ActionResult<BaseIdentityResponse<UserWithRoles>>> UpdateUserProfile([FromBody] UpdateUserProfileDto updateUserProfile)
         {
             var command = await _mediator.Send(new UpdateUserProfileRequest { UpdateUserProfile = updateUserProfile });
             return Ok(command);

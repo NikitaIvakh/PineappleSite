@@ -124,5 +124,37 @@ namespace PineappleSite.Presentation.Services
                 return ConvertIdentityExceptions(exception);
             }
         }
+
+        public async Task<IdentityResponseViewModel> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
+        {
+            try
+            {
+                IdentityResponseViewModel response = new();
+                UpdateUserProfileDto updateUserProfileDto = _mapper.Map<UpdateUserProfileDto>(updateUserProfile);
+                UserWithRolesBaseIdentityResponse apiResponse = await _identityClient.UpdateUserProfileAsync(updateUserProfileDto.Id, updateUserProfileDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Data = apiResponse.Data;
+                    response.Message = apiResponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (IdentityExceptions exception)
+            {
+                return ConvertIdentityExceptions(exception);
+            }
+        }
     }
 }
