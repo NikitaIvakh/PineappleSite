@@ -1,69 +1,87 @@
 ﻿@model PineappleSite.Presentation.Models.Users.UserWithRolesViewModel
 
 @{
-    ViewData["Title"] = "Детали";
+    ViewData["Title"] = "Детали пользователя";
 }
 
-<h1>Детали пользователя</h1>
-<hr />
+<form class="container col-7" asp-action="Details">
+    <br />
+    <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Детали пользователя</h1>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="User.Id" readonly hidden />
+                    <span class="text-danger" asp-validation-for="User.Id" hidden></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Имя</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="User.FirstName" readonly />
+                    <span class="text-danger" asp-validation-for="User.LastName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="User.LastName" readonly />
+                    <span class="text-danger" asp-validation-for="User.LastName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Почтовый адрес</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="User.Email" readonly />
+                    <span class="text-danger" asp-validation-for="User.Email"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Отображаемое имя</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="User.UserName" readonly />
+                    <span class="text-danger" asp-validation-for="User.UserName"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Роль</label>
+                </div>
+                <div class="col-6 pb-3">
+                    @{
+                        foreach (var role in Model.Roles)
+                        {
+                            <input class="form-control" asp-for="@role" readonly />
+                        }
+                    }
+                    <span class="text-danger" asp-validation-for="Roles"></span>
+                </div>
+            </div>
+            <div class="col-5 offset-3">
+                <a class="btn-primary btn form-control" asp-action="Index">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.FirstName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.FirstName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.LastName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.LastName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.Email)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.Email)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.NormalizedEmail)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.NormalizedEmail)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.UserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.UserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.NormalizedUserName)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.NormalizedUserName)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(key => key.User.PasswordHash)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(key => key.User.PasswordHash)
-        </dd>
-        @{
-            foreach (var role in Model.Roles)
-            {
-                <dt class="col-sm-2">
-                    @Html.DisplayName(role.ToString())
-                </dt>
-                <dd class="col-sm-10">
-                    @role
-                </dd>
-            }
-        }
-    </dl>
-</div>
-<div>
-    <a asp-action="Index">Вернуться назад</a>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
