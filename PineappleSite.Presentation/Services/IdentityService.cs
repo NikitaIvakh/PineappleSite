@@ -48,6 +48,8 @@ namespace PineappleSite.Presentation.Services
                 {
                     response.ValidationErrors += error + Environment.NewLine;
                 }
+
+                response.Message = authResponse.Message;
             }
 
             response.IsSuccess = false;

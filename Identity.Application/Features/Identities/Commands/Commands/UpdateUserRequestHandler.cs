@@ -6,14 +6,13 @@ using Identity.Application.Response;
 using Identity.Core.Entities.User;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using static Identity.Application.Utilities.StaticDetails;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IRegisterRequestDtoValidator validationRules) : IRequestHandler<UpdateUserRequest, BaseIdentityResponse<RegisterResponseDto>>
+    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules) : IRequestHandler<UpdateUserRequest, BaseIdentityResponse<RegisterResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly IRegisterRequestDtoValidator _updateValidator = validationRules;
+        private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
 
         public async Task<BaseIdentityResponse<RegisterResponseDto>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
@@ -38,12 +37,6 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     user.LastName = request.UpdateUser.LastName;
                     user.Email = request.UpdateUser.EmailAddress;
                     user.UserName = request.UpdateUser.UserName;
-
-                    if (!string.IsNullOrEmpty(request.UpdateUser.Password))
-                    {
-                        var newPaswordHash = _userManager.PasswordHasher.HashPassword(user, request.UpdateUser.Password);
-                        user.PasswordHash = newPaswordHash;
-                    }
 
                     var result = await _userManager.UpdateAsync(user);
 

@@ -31,7 +31,7 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.Message;
                     return RedirectToAction(nameof(Login));
                 }
             }

@@ -22,11 +22,6 @@ namespace PineappleSite.Presentation.Models.Users
         [MinLength(2)]
         public string UserName { get; set; }
 
-        [Required]
-        [MinLength(5)]
-        [DataType(DataType.Password)]
-        public string Password { get; set; }
-
         public UserRoles UserRoles { get; set; }
     }
 }

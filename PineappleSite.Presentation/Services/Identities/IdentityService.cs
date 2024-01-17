@@ -915,11 +915,6 @@ namespace PineappleSite.Presentation.Services.Identities
         [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 2)]
         public string UserName { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Always)]
-        [System.ComponentModel.DataAnnotations.Required]
-        [System.ComponentModel.DataAnnotations.StringLength(int.MaxValue, MinimumLength = 5)]
-        public string Password { get; set; }
-
         [Newtonsoft.Json.JsonProperty("userRoles", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public UserRoles UserRoles { get; set; }
 

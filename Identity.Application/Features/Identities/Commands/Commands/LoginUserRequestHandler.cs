@@ -44,23 +44,29 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     if (!result.Succeeded)
                     {
-                        throw new Exception($"{nameof(request.AuthRequest.Email)} не существует");
+                        response.IsSuccess = false;
+                        response.Message = "Неверно введен логин или пароль";
+                        response.Data = new AuthResponseDto();
+                        response.ValidationErrors = validator.Errors.Select(_ => _.ErrorMessage).ToList();
                     }
 
-                    JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
-                    AuthResponseDto authResponse = new()
+                    else
                     {
-                        Id = user.Id,
-                        Email = user.Email,
-                        UserName = user.UserName,
-                        Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                    };
+                        JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
+                        AuthResponseDto authResponse = new()
+                        {
+                            Id = user.Id,
+                            Email = user.Email,
+                            UserName = user.UserName,
+                            Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                        };
 
-                    response.IsSuccess = true;
-                    response.Message = "Уcпешный вход";
-                    response.Data = authResponse;
+                        response.IsSuccess = true;
+                        response.Message = "Уcпешный вход";
+                        response.Data = authResponse;
 
-                    return response;
+                        return response;
+                    }
                 }
             }
 

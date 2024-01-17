@@ -30,8 +30,8 @@ namespace PineappleSite.Presentation
             CreateMap<UserWithRolesDto, UserWithRolesViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
-            CreateMap<UpdateUserDto, UpdateUserViewModel>().ForMember(key => key.Password, opt => opt.MapFrom(key => key.Password)).ReverseMap();
-            CreateMap<ApplicationUser, UpdateUserViewModel>().ForMember(key => key.Password, opt => opt.MapFrom(key => key.PasswordHash)).ReverseMap();
+            CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
+            CreateMap<ApplicationUser, UpdateUserViewModel>().ReverseMap();
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
             #endregion
 
