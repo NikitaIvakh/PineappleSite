@@ -19,7 +19,7 @@ namespace PineappleSite.Presentation
             CreateMap<DeleteCouponListDto, DeleteCouponListViewModel>().ReverseMap();
             #endregion
 
-            #region
+            #region Identity && User Mapping
             CreateMap<AuthRequestDto, AuthRequestViewModel>().ReverseMap();
             CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
             CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
@@ -27,16 +27,11 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
             CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
 
-            CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
-                .ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles))
-                .ReverseMap();
+            CreateMap<UserWithRolesDto, UserWithRolesViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
-            CreateMap<UpdateUserDto, UpdateUserViewModel>()
-                .ForMember(key => key.Password, opt => opt.MapFrom(key => key.Password)).ReverseMap();
-
-            CreateMap<RegisterRequestDto, UpdateUserViewModel>()
-             .ForMember(key => key.Password, opt => opt.MapFrom(key => key.Password)).ReverseMap();
+            CreateMap<UpdateUserDto, UpdateUserViewModel>().ForMember(key => key.Password, opt => opt.MapFrom(key => key.Password)).ReverseMap();
+            CreateMap<ApplicationUser, UpdateUserViewModel>().ForMember(key => key.Password, opt => opt.MapFrom(key => key.PasswordHash)).ReverseMap();
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
             #endregion
 
