@@ -5,90 +5,139 @@
     ViewData["Title"] = "Обновить пользователя";
 }
 
-@{
-    ViewBag.Title = "User profile";
-}
+<style>
+    .form-control:focus {
+        box-shadow: none;
+        border-color: #BA68C8
+    }
 
-<br />
-<div class="row">
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <form asp-action="Profile">
-                    <h5 class="card-title">Profile Data</h5>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Электронная Почта</label>
-                        <input class="form-control" asp-for="EmailAddress" readonly />
-                        <div class="form-text">Длина строки не может превышать 50 символов.</div>
+    .profile-button {
+        background: rgb(99, 39, 120);
+        box-shadow: none;
+        border: none
+    }
+
+        .profile-button:hover,
+        .profile-button:focus,
+        .profile-button:active {
+            background: #682773;
+            box-shadow: none
+        }
+
+    .back:hover {
+        color: #682773;
+        cursor: pointer
+    }
+
+    .labels {
+        font-size: 15px
+    }
+
+    .add-experience:hover {
+        background: #BA68C8;
+        color: #fff;
+        cursor: pointer;
+        border: solid 1px #BA68C8
+    }
+
+    .form-container {
+        width: 70%;
+        margin: 0 auto; /* Center the form horizontally */
+        margin-top: 2px; /* Adjust the top margin as needed */
+    }
+
+    .user-profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+        .user-profile h4 {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+            margin-bottom: 1rem;
+        }
+</style>
+
+<form asp-action="Profile" class="form-container rounded bg-white mt-0 mb-md-0 ml-0 py-0">
+    <div class="container rounded bg-white">
+        <div class="row">
+            <div class="col-md-4 user-profile">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" width="150px"
+                         src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <span class="font-weight-bold">@Model.UserName</span>
+                    <span class="text-black-50">@Model.EmailAddress</span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 style="font-size: 130%">Профиль пользователя - @Model.UserName</h4>
                     </div>
-                    <div class="card-buttons-group">
-                        <button class='btn btn-primary' value="Обновить">Обновить</button>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Имя</label>
+                            <input type="text" class="form-control mb-3" placeholder="Имя" asp-for="FirstName">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">Фамилия</label>
+                            <input type="text" class="form-control mb-3" placeholder="Фамилия" asp-for="LastName">
+                        </div>
                     </div>
-                </form>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">Электронная почта</label>
+                            <input type="text" class="form-control mb-3" placeholder="Электронная почта" asp-for="EmailAddress" readonly />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Отображаемое имя</label>
+                            <input type="text" class="form-control mb-3" placeholder="Отображаемое имя" asp-for="UserName" />
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Возраст</label>
+                            <input type="text" class="form-control mb-3" placeholder="Возраст" asp-for="Age" />
+                        </div>
+                        <br />
+                        <div class="col-md-12">
+                            <label class="labels">Описание</label>
+                            <textarea type="text" class="form-control mb-3" placeholder="Описание" asp-for="Description" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">Смена пароля</label>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" placeholder="Введите новый пароль" value="" asp-for="Password">
+                                <button type="button" class="btn btn-secondary" id="togglePassword"><i class="fa fa-eye"></i>Показать</button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control" asp-for="Id" readonly hidden />
+                            <span class="text-danger" asp-validation-for="Id" hidden></span>
+                        </div>
+                    </div>
+                    @* <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">Country</label>
+                            <input type="text" class="form-control mb-3" placeholder="country" value="">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">State/Region</label>
+                            <input type="text" class="form-control mb-3" value="" placeholder="state">
+                        </div>
+                    </div> *@
+                    <div class="mt-3">
+                        <button class="btn btn-primary profile-button" value="Обновить">Сохранить профиль</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    <div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <form asp-action="Profile">
-                    <input asp-for="Id" hidden="hidden" />
-                    <h5 class="card-title">Профиль пользователя</h5>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Имя</label>
-                        <input class="form-control" asp-for="FirstName" />
-                        <div class="form-text">Длина строки не может превышать 20 символов.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Фамилия</label>
-                        <input class="form-control" asp-for="LastName" />
-                        <div class="form-text">Длина строки не может превышать 20 символов.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Возраст</label>
-                        <input type="text" class="form-control" asp-for="Age">
-                        <div class="form-text">Возраст должен быть больше 18, но меньше 120.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Описание</label>
-                        <textarea class="form-control" asp-for="Description" rows="3"></textarea>
-                        <div class="form-text">Длина строки должна быть более 10 символов, но не более 300 символов.</div>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label text-black-50">Отображаемое имя</label>
-                        <input class="form-control" asp-for="UserName" />
-                        <div class="form-text">Длина строки не должна превышать 50 символов.</div>
-                    </div>
-                    <div class="card-buttons-group">
-                        <button class="btn btn-primary" value="Обновить">Обновить</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<br />
-<div class="row">
-    <div class="col-sm-12">
-        <div class="card text-center">
-            <div class="card-header">
-                <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="@Url.Action("Index", "Home")">Main page</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="@Url.Action("GetCars", "Car")">Cars</a>
-                    </li>
-                </ul>
-            </div>
-            <div class="card-body">
-                <h5 class="card-title">Special title treatment</h5>
-                <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-            </div>
-        </div>
-    </div>
-</div>
+</form>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
