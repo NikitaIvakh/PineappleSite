@@ -105,20 +105,34 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Delete/5
-        public ActionResult Delete(int id)
+        public async Task<ActionResult> Delete(string id)
         {
-            return View();
+            var user = await _userService.GetUserAsync(id);
+            return View(user);
         }
 
         // POST: UserController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(DeleteUserViewModel deleteUser)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                IdentityResponseViewModel response = await _userService.DeleteUserAsync(deleteUser);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Delete));
+                }
             }
+
             catch
             {
                 return View();
