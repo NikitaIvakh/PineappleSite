@@ -27,18 +27,19 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
             CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
 
-            //CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>()
-            //    .ForPath(dest => dest.Avatar, opt => opt.MapFrom(src => src.User.Avatar))
-            //    .ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles))
-            //    .ReverseMap();
-            //CreateMap<UserWithRolesDto, UserWithRolesViewModel>();
-            ////CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
-            ////    .ForMember(key => key.User.Avatar, opt => opt.MapFrom(key => key.User.Avatar))
-            ////    .ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles))
-            ////    .ReverseMap();
-            //CreateMap<ApplicationUser, ApplicationUserViewModel>()
-            //    .ForMember(key => key.Avatar, opt => opt.MapFrom(key => key.Avatar))
-            //    .ReverseMap();
+            CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>().ReverseMap();
+            CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
+                .ForPath(key => key.User.Id, opt => opt.MapFrom(key => key.User.Id))
+                .ForPath(key => key.User.FirstName, opt => opt.MapFrom(key => key.User.FirstName))
+                .ForPath(key => key.User.LastName, opt => opt.MapFrom(key => key.User.LastName))
+                .ForPath(key => key.User.UserName, opt => opt.MapFrom(key => key.User.UserName))
+                .ForPath(key => key.User.Email, opt => opt.MapFrom(key => key.User.Email))
+                .ForPath(key => key.User.Age, opt => opt.MapFrom(key => key.User.Age))
+                .ForPath(key => key.User.Description, opt => opt.MapFrom(key => key.User.Description))
+                .ForPath(key => key.User.ImageUrl, opt => opt.MapFrom(key => key.User.ImageUrl))
+                .ForPath(key => key.User.ImageLocalPath, opt => opt.MapFrom(key => key.User.ImageLocalPath))
+                .ReverseMap();
+            CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
             CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserViewModel>().ReverseMap();

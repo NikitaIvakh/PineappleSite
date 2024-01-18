@@ -21,5 +21,11 @@ namespace PineappleSite.Presentation.Models.Users
         public int? Age { get; set; }
 
         public IList<string> Roles { get; set; }
+
+        public IFormFile? Avatar { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }

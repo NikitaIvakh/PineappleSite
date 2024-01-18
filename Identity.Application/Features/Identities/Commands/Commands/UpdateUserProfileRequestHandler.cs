@@ -86,11 +86,6 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         user.ImageLocalPath = filePath;
                     }
 
-                    else
-                    {
-                        user.ImageUrl = "https://placehold.co/600x400";
-                    }
-
                     var result = await _userManager.UpdateAsync(user);
 
                     if (result.Succeeded)

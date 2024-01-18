@@ -43,5 +43,9 @@ namespace PineappleSite.Presentation.Models.Users
         public int AccessFailedCount { get; set; }
 
         public UserRoles UserRoles { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }

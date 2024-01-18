@@ -167,6 +167,8 @@ namespace PineappleSite.Presentation.Controllers
                 Description = user.User.Description,
                 Age = user.User.Age,
                 Roles = user.Roles,
+                ImageUrl = user.User.ImageUrl,
+                ImageLocalPath = user.User.ImageLocalPath,
             };
 
             return View(updateUserPrifile);
@@ -176,26 +178,18 @@ namespace PineappleSite.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Profile(UpdateUserProfileViewModel updateUserProfile)
         {
-            try
+            IdentityResponseViewModel response = await _userService.UpdateUserProfileAsync(updateUserProfile);
+
+            if (response.IsSuccess)
             {
-                IdentityResponseViewModel response = await _userService.UpdateUserProfileAsync(updateUserProfile);
-
-                if (response.IsSuccess)
-                {
-                    TempData["success"] = response.Message;
-                    return RedirectToAction(nameof(Profile));
-                }
-
-                else
-                {
-                    TempData["error"] = response.ValidationErrors;
-                    return RedirectToAction(nameof(Profile));
-                }
+                TempData["success"] = response.Message;
+                return RedirectToAction(nameof(Profile));
             }
 
-            catch (Exception ex)
+            else
             {
-                return View();
+                TempData["error"] = response.ValidationErrors;
+                return RedirectToAction(nameof(Profile));
             }
         }
     }

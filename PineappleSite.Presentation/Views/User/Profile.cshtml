@@ -18,12 +18,12 @@
         border: none
     }
 
-        .profile-button:hover,
-        .profile-button:focus,
-        .profile-button:active {
-            background: #682773;
-            box-shadow: none
-        }
+    .profile-button:hover,
+    .profile-button:focus,
+    .profile-button:active {
+        background: #682773;
+        box-shadow: none
+    }
 
     .back:hover {
         color: #682773;
@@ -54,22 +54,21 @@
         text-align: center;
     }
 
-        .user-profile h4 {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 70%;
-            margin-bottom: 1rem;
+    .user-profile h4 {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 70%;
+        margin-bottom: 1rem;
         }
 </style>
 
-<form asp-action="Profile" class="form-container rounded bg-white mt-0 mb-md-0 ml-0 py-0">
+<form asp-action="Profile" class="form-container rounded bg-white mt-0 mb-md-0 ml-0 py-0" enctype="multipart/form-data">
     <div class="container rounded bg-white">
         <div class="row">
             <div class="col-md-4 user-profile">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px"
-                         src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
+                    <img class="rounded-circle mt-5" width="150px" src="@(Model.ImageUrl ?? string.Empty)">
                     <span class="font-weight-bold">@Model.UserName</span>
                     <span class="text-black-50">@Model.EmailAddress</span>
                     <span class="text-black-50">
@@ -131,6 +130,15 @@
                         <div class="col-md-12">
                             <input class="form-control" asp-for="Id" readonly hidden />
                             <span class="text-danger" asp-validation-for="Id" hidden></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label pt-2" style="font-size:20px;">Картинка</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input asp-for="Avatar" type="file" class="form-control" id="avatarInput" accept="image/*" onchange="previewImage(event)">
+                            <input asp-for="ImageUrl" hidden class="form-control" id="imageUrlInput">
+                            <input asp-for="ImageLocalPath" hidden class="form-control">
+                            <span asp-validation-for="Avatar" class="text-danger"></span>
                         </div>
                     </div>
                     @* <div class="row mt-3">

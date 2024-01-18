@@ -6,11 +6,12 @@ using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper) : BaseIdentityService(localStorageService, identityClient), IUserService
+    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IUserService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IIdentityClient _identityClient = identityClient;
         private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<IList<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
         {
@@ -129,9 +130,18 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
+                string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
                 IdentityResponseViewModel response = new();
-                UpdateUserProfileDto updateUserProfileDto = _mapper.Map<UpdateUserProfileDto>(updateUserProfile);
-                UserWithRolesBaseIdentityResponse apiResponse = await _identityClient.UpdateUserProfileAsync(updateUserProfileDto.Id, updateUserProfileDto);
+
+                FileParameter avatarFileParameter = null;
+                if (updateUserProfile.Avatar is not null)
+                {
+                    avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);
+                }
+
+                UserWithRolesBaseIdentityResponse apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfile.Id, updateUserProfile?.FirstName, updateUserProfile?.LastName, updateUserProfile?.EmailAddress,
+                    updateUserProfile?.UserName, updateUserProfile?.Password, updateUserProfile?.Description, updateUserProfile?.Age, avatarFileParameter, updateUserProfile?.ImageUrl, updateUserProfile?.ImageLocalPath
+                );
 
                 if (apiResponse.IsSuccess)
                 {
