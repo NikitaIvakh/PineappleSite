@@ -1,4 +1,6 @@
-﻿namespace Identity.Application.DTOs.Identities
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Identity.Application.DTOs.Identities
 {
     public class UpdateUserProfileDto
     {
@@ -17,5 +19,7 @@
         public string? Description { get; set; }
 
         public int? Age { get; set; }
+
+        public IFormFile? Avatar { get; set; }
     }
 }

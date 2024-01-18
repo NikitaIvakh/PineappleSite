@@ -46,6 +46,14 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         user.PasswordHash = newPassword;
                     }
 
+                    if (request.UpdateUserProfile.Avatar is not null)
+                    {
+                        using var memoryStream = new MemoryStream();
+                        await request.UpdateUserProfile.Avatar.CopyToAsync(memoryStream, cancellationToken);
+                        var avatarData = memoryStream.ToArray();
+                        user.Avatar = avatarData;
+                    }
+
                     var result = await _userManager.UpdateAsync(user);
 
                     if (result.Succeeded)

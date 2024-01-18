@@ -11,5 +11,7 @@ namespace Identity.Core.Entities.User
         public string? Description { get; set; }
 
         public int? Age { get; set; }
+
+        public byte[]? Avatar { get; set; }
     }
 }
