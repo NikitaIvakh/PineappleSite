@@ -1,4 +1,5 @@
-﻿@model IList<PineappleSite.Presentation.Models.Users.UserWithRolesViewModel>
+﻿@using PineappleSite.Presentation.Models.Paginated
+@model PaginatedList<PineappleSite.Presentation.Models.Users.UserWithRolesViewModel>
 
 <style>
     label {
@@ -11,6 +12,36 @@
         border: 1px solid #ccc;
         border-radius: 4px;
     }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+        .pagination .page-item {
+            margin: 0 5px;
+        }
+
+            .pagination .page-item.disabled span {
+                color: #6c757d;
+                pointer-events: none;
+            }
+
+            .pagination .page-item a,
+            .pagination .page-item span {
+                display: inline-block;
+                padding: 5px 10px;
+                color: #007bff;
+                border: 1px solid #007bff;
+                border-radius: 4px;
+                text-decoration: none;
+            }
+
+            .pagination .page-item.active span {
+                background-color: #007bff;
+                color: #fff;
+            }
 </style>
 
 <form>
@@ -91,6 +122,22 @@
                     }
                 </tbody>
             </table>
+            <div class="pagination">
+                <a asp-action="Index"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-searchUser="@ViewData["SearchUser"]"
+                   asp-route-pageNumber="@(Model.PageIndex - 1)"
+                   class="page-item @(Model.HasPreviosPage ? "" : "disabled")">
+                    <span>&laquo; Назад</span>
+                </a>
+                <a asp-action="Index"
+                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                   asp-route-searchUser="@ViewData["SearchUser"]"
+                   asp-route-pageNumber="@(Model.PageIndex + 1)"
+                   class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                    <span>Вперед &raquo;</span>
+                </a>
+            </div>
         </div>
     </div>
 </form>

@@ -2,6 +2,7 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Extecsions;
 using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
 using System.IdentityModel.Tokens.Jwt;
@@ -13,7 +14,7 @@ namespace PineappleSite.Presentation.Controllers
         private readonly IUserService _userService = userService;
 
         // GET: UserController
-        public async Task<ActionResult> Index(string searchUser)
+        public async Task<ActionResult> Index(string searchUser, string currentFilter, int? pageNumber)
         {
             string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
             var users = await _userService.GetAllUsersAsync(userId);
@@ -28,7 +29,13 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             ViewData["SearchUser"] = searchUser;
-            return View(users);
+            ViewData["CurrentFilter"] = currentFilter;
+
+            int pageSize = 10;
+            var filteredUsers = users.AsQueryable();
+            var paginatedUsers = PaginatedList<UserWithRolesViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
+
+            return View(paginatedUsers);
         }
 
         // GET: UserController/Details/5
