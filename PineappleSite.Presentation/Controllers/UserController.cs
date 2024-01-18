@@ -13,10 +13,20 @@ namespace PineappleSite.Presentation.Controllers
         private readonly IUserService _userService = userService;
 
         // GET: UserController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchUser)
         {
             string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
             var users = await _userService.GetAllUsersAsync(userId);
+
+            if (!string.IsNullOrEmpty(searchUser))
+            {
+                users = users.Where(key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) || 
+                key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
+            }
+
+            ViewData["SearchUser"] = searchUser;
             return View(users);
         }
 
