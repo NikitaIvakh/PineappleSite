@@ -42,7 +42,7 @@ namespace Identity.API.Controllers
         }
 
         // PUT api/<UserController>/5
-        [HttpPut("UpdateUserProfile/{id}")]
+        [HttpPut("UpdateUserProfile/{userId}")]
         public async Task<ActionResult<BaseIdentityResponse<UserWithRoles>>> UpdateUserProfile([FromForm] UpdateUserProfileDto updateUserProfile)
         {
             var command = await _mediator.Send(new UpdateUserProfileRequest { UpdateUserProfile = updateUserProfile });

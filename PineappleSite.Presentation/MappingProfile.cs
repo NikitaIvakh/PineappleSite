@@ -27,15 +27,24 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
             CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
 
-            CreateMap<UserWithRolesDto, UserWithRolesViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
-            CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
-            CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
+            //CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>()
+            //    .ForPath(dest => dest.Avatar, opt => opt.MapFrom(src => src.User.Avatar))
+            //    .ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles))
+            //    .ReverseMap();
+            //CreateMap<UserWithRolesDto, UserWithRolesViewModel>();
+            ////CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
+            ////    .ForMember(key => key.User.Avatar, opt => opt.MapFrom(key => key.User.Avatar))
+            ////    .ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles))
+            ////    .ReverseMap();
+            //CreateMap<ApplicationUser, ApplicationUserViewModel>()
+            //    .ForMember(key => key.Avatar, opt => opt.MapFrom(key => key.Avatar))
+            //    .ReverseMap();
 
             CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserViewModel>().ReverseMap();
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
 
-            CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
+            //CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();

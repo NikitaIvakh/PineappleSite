@@ -12,6 +12,8 @@ namespace Identity.Core.Entities.User
 
         public int? Age { get; set; }
 
-        public byte[]? Avatar { get; set; }
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }

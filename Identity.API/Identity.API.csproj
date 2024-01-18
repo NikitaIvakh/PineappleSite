@@ -22,4 +22,8 @@
     <ProjectReference Include="..\Identity.Infrastructure\Identity.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\UserImages\" />
+  </ItemGroup>
+
 </Project>
