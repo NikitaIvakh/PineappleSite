@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
+using PineappleSite.Presentation.Models.Paginated;
+using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers
@@ -10,7 +12,7 @@ namespace PineappleSite.Presentation.Controllers
         private readonly ICouponService _couponService = couponService;
 
         // GET: CouponController
-        public async Task<ActionResult> Index(string searchCode)
+        public async Task<ActionResult> Index(string searchCode, string currentFilter, int? pageNumber)
         {
             var coupons = await _couponService.GetAllCouponsAsync();
 
@@ -23,7 +25,13 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             ViewData["SearchCode"] = searchCode;
-            return View(coupons);
+            ViewData["CurrentFilter"] = currentFilter;
+
+            int pageSize = 10;
+            var filteredCoupons = coupons.AsQueryable();
+            var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
+
+            return View(paginatedCoupons);
         }
 
         // GET: CouponController/Details/5
