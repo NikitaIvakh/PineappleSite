@@ -6,10 +6,7 @@ namespace Identity.Application.Utilities
     {
         public enum UserRoles
         {
-            [Display(Name = "Пользователь")]
             Employee = 1,
-
-            [Display(Name = "Администратор")]
             Administrator = 2
         }
 
