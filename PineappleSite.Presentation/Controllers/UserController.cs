@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Extecsions;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
@@ -147,6 +148,7 @@ namespace PineappleSite.Presentation.Controllers
                 UserName = user.User.UserName,
                 Description = user.User.Description,
                 Age = user.User.Age,
+                Roles = user.Roles,
             };
 
             return View(updateUserPrifile);
@@ -168,7 +170,7 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.Message;
+                    TempData["error"] = response.ValidationErrors;
                     return RedirectToAction(nameof(Profile));
                 }
             }

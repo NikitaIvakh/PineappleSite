@@ -1,4 +1,6 @@
-﻿namespace PineappleSite.Presentation.Models.Users
+﻿using PineappleSite.Presentation.Services.Identities;
+
+namespace PineappleSite.Presentation.Models.Users
 {
     public class UpdateUserProfileViewModel
     {
@@ -17,5 +19,7 @@
         public string? Description { get; set; }
 
         public int? Age { get; set; }
+
+        public IList<string> Roles { get; set; }
     }
 }

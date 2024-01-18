@@ -28,6 +28,7 @@ namespace PineappleSite.Presentation
             CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
 
             CreateMap<UserWithRolesDto, UserWithRolesViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
+            CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>().ForMember(key => key.Roles, opt => opt.MapFrom(key => key.Roles)).ReverseMap();
             CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
             CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
