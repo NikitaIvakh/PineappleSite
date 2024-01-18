@@ -20,10 +20,11 @@ namespace PineappleSite.Presentation.Controllers
 
             if (!string.IsNullOrEmpty(searchUser))
             {
-                users = users.Where(key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) || 
-                key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                users = users.Where(
+                    key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
             }
 
             ViewData["SearchUser"] = searchUser;
