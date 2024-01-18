@@ -10,9 +10,19 @@ namespace PineappleSite.Presentation.Controllers
         private readonly ICouponService _couponService = couponService;
 
         // GET: CouponController
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string searchCode)
         {
             var coupons = await _couponService.GetAllCouponsAsync();
+
+            if (!string.IsNullOrEmpty(searchCode))
+            {
+                coupons = coupons.Where(
+                    key => key.CouponCode.Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase));
+            }
+
+            ViewData["SearchCode"] = searchCode;
             return View(coupons);
         }
 
