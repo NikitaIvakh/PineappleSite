@@ -33,7 +33,7 @@
 }
 
 .form-container {
-    width: 70%;
+    width: 90%;
     margin: 0 auto; /* Center the form horizontally */
     margin-top: 2px; /* Adjust the top margin as needed */
 }
@@ -51,4 +51,11 @@
     text-overflow: ellipsis;
     max-width: 70%;
     margin-bottom: 1rem;
+}
+
+.rounded-circle {
+    border-radius: 50%;
+    width: 400px; /* Adjust the desired size */
+    height: 300px; /* Adjust the desired size */
+    object-fit:cover; /* Ensure the image fills the container */
 }

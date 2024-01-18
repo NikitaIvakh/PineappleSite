@@ -12,7 +12,7 @@
         <div class="row">
             <div class="col-md-4 user-profile">
                 <div class="d-flex flex-column align-items-center text-center p-3 py-5">
-                    <img class="rounded-circle mt-5" width="150px" src="@(Model.ImageUrl ?? string.Empty)">
+                    <img class="rounded-circle mt-5" src="@(Model.ImageUrl ?? string.Empty)" alt="User Profile Image">
                     <span class="font-weight-bold">@Model.UserName</span>
                     <span class="text-black-50">@Model.EmailAddress</span>
                     <span class="text-black-50">
@@ -109,21 +109,4 @@
 }
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function () {
-        $('#togglePassword').click(function () {
-            var passwordInput = $('input[name="Password"]');
-            var passwordType = passwordInput.attr('type');
-
-            if (passwordType === 'password') {
-                passwordInput.attr('type', 'text');
-                $('#togglePassword i').removeClass('fa-eye').addClass('fa-eye-slash');
-                $('#togglePassword').text('Скрыть');
-            } else {
-                passwordInput.attr('type', 'password');
-                $('#togglePassword i').removeClass('fa-eye-slash').addClass('fa-eye');
-                $('#togglePassword').text('Показать');
-            }
-        });
-    });
-</script>
+<script src="~/js/userProfile.js" asp-append-version="true"></script>
