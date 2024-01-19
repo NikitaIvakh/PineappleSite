@@ -192,5 +192,29 @@ namespace PineappleSite.Presentation.Controllers
                 return RedirectToAction(nameof(Profile));
             }
         }
+
+        public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds)
+        {
+            if (selectedUserIds is null || selectedUserIds.Count <= 1)
+            {
+                TempData["error"] = "Выберите хотя бы один купон для удаления.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            var deleteUsersList = new DeleteUserListViewModel { UserIds = selectedUserIds };
+            var response = await _userService.DeleteUsersAsync(deleteUsersList);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.Message;
+                return RedirectToAction(nameof(Index));
+            }
+
+            else
+            {
+                TempData["error"] = response.ValidationErrors;
+                return RedirectToAction(nameof(Index));
+            }
+        }
     }
 }
