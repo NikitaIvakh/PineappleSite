@@ -197,7 +197,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             if (selectedUserIds is null || selectedUserIds.Count <= 1)
             {
-                TempData["error"] = "Выберите хотя бы один купон для удаления.";
+                TempData["error"] = "Выберите хотя бы одного пользователя для удаления.";
                 return RedirectToAction(nameof(Index));
             }
 

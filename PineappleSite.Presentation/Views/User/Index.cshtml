@@ -72,7 +72,21 @@
             }
 </style>
 
-<form>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p class="mb-0">
+            <label for="searchUser">Поиск пользователя:</label>
+        </p>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" name="searchUser" id="searchUser" value="@ViewData["SearchUser"]" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary search-button">Поиск</button>
+                <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+            </div>
+        </div>
+    </div>
+</form>
+<form id="deleteSelectedForm" asp-action="DeleteUserList" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
@@ -87,27 +101,16 @@
                 </div>
                 <div class="col-6 text-end">
                     <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Добавить нового пользователя</a>
+                    <br />  <br />
+                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
                     <div class="col-12 form-text">
-                        <form asp-action="Index" method="get">
-                            <div class="form-actions no-color">
-                                <p class="mb-0">
-                                    <label for="searchUser">Поиск пользователя:</label>
-                                </p>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" name="searchUser" id="searchUser" value="@ViewData["SearchUser"]" />
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary search-button">Поиск</button>
-                                        <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
             <table class="table text-center">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Имя</th>
                         <th>Фамилия</th>
                         <th>Почтовый адрес</th>
@@ -119,9 +122,15 @@
                 </thead>
                 <tbody>
                     @{
+                        int itemCount = 0;
+                    }
+                    @{
                         foreach (var item in Model)
                         {
                             <tr>
+                                <td>
+                                    <input type="checkbox" name="selectedUserIds" value="@item.User.Id" />
+                                </td>
                                 <td>@item.User.FirstName</td>
                                 <td>@item.User.LastName</td>
                                 <td>@item.User.Email</td>
@@ -146,6 +155,7 @@
                                     </form>
                                 </td>
                             </tr>
+                            itemCount++;
                         }
                     }
                 </tbody>
@@ -170,9 +180,21 @@
     </div>
 </form>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
     document.getElementById("clearSearch").addEventListener("click", function () {
         document.getElementById("searchUser").value = "";
         window.location.href = "/User/Index";
+    });
+
+    $(document).ready(function () {
+        $('input[name="selectedUserIds"]').change(function () {
+            var selectedCount = $('input[name="selectedUserIds"]:checked').length;
+            if (selectedCount >= 2) {
+                $('#deleteAllButton').show();
+            } else {
+                $('#deleteAllButton').hide();
+            }
+        });
     });
 </script>
