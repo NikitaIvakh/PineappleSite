@@ -1,7 +1,13 @@
 ﻿using FluentValidation;
 using Identity.Application.DTOs.Authentications;
+using Identity.Application.Features.Identities.Commands.Commands;
+using Identity.Application.Services;
+using Identity.Application.Services.IServices;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -19,6 +25,7 @@ namespace Identity.Application
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
             services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+            services.AddScoped<ITokenProvider, TokenProvider>();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
@@ -26,6 +33,10 @@ namespace Identity.Application
                    options.ExpireTimeSpan = TimeSpan.FromHours(10);
                    options.LoginPath = "/Identity/Login";
                    options.AccessDeniedPath = "/Identity/AccessDenied";
+                   options.Cookie.Name = "JWTToken";
+                   options.Cookie.HttpOnly = true;
+                   options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+                   options.ExpireTimeSpan = TimeSpan.FromDays(1);
                });
 
             services.AddAuthentication(options =>
@@ -47,6 +58,8 @@ namespace Identity.Application
                 };
             });
 
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
             return services;
         }
     }

@@ -12,5 +12,7 @@ namespace Identity.Application.Utilities
 
         public static string AdministratorRole = "Administrator";
         public static string EmployeeRole = "Employee";
+
+        public static string TokenCookie = "JWTToken";
     }
 }

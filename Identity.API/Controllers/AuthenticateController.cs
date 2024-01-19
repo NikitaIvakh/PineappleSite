@@ -25,5 +25,12 @@ namespace Identity.API.Controllers
             var register = await _mediator.Send(new RegisterUserRequest { RegisterRequest = registerRequest });
             return Ok(register);
         }
+
+        [HttpPost("Logout")]
+        public async Task<ActionResult<BaseIdentityResponse<Unit>>> Logout([FromBody] string retirnUrl)
+        {
+            var command = await _mediator.Send(new LogoutUserRequest { ReturnUrl = retirnUrl });
+            return Ok(command);
+        }
     }
 }

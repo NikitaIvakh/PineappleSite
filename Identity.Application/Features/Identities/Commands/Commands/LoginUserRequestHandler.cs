@@ -1,10 +1,13 @@
-﻿using AutoMapper;
-using Identity.Application.DTOs.Authentications;
+﻿using Identity.Application.DTOs.Authentications;
 using Identity.Application.DTOs.Validators;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Response;
+using Identity.Application.Services.IServices;
 using Identity.Core.Entities.User;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -15,12 +18,15 @@ using System.Text;
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
     public class LoginUserRequestHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> options,
-        IAuthRequestDtoValidator authValidator) : IRequestHandler<LoginUserRequest, BaseIdentityResponse<AuthResponseDto>>
+        IAuthRequestDtoValidator authValidator, ITokenProvider tokenProvider,
+        IHttpContextAccessor httpContextAccessor) : IRequestHandler<LoginUserRequest, BaseIdentityResponse<AuthResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
         private readonly JwtSettings _jwtSettings = options.Value;
         private readonly IAuthRequestDtoValidator _authValidator = authValidator;
+        private readonly ITokenProvider _tokenProvider = tokenProvider;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<BaseIdentityResponse<AuthResponseDto>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
         {
@@ -60,6 +66,9 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             UserName = user.UserName,
                             Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
                         };
+
+                        SingInUserAsync(authResponse);
+                        _tokenProvider.SetToken(authResponse.Token);
 
                         response.IsSuccess = true;
                         response.Message = "Уcпешный вход";
@@ -109,6 +118,30 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                 signingCredentials: signingCredintials);
 
             return jwtSecurityToken;
+        }
+
+        private async void SingInUserAsync(AuthResponseDto authResponse)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            var jwt = handler.ReadJwtToken(authResponse.Token);
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var tokenCookieValue = authResponse.Token;
+            _httpContextAccessor.HttpContext?.Response.Cookies.Append("TokenCookie", tokenCookieValue, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false, // Измените на true в продакшн среде, если используется HTTPS
+                Expires = DateTime.UtcNow.AddDays(1),
+                SameSite = SameSiteMode.None, 
+                Path = "/" 
+            });
+
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Sub).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Email).Value));
+
+            var principal = new ClaimsPrincipal(identity);
+            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }
