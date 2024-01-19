@@ -2,33 +2,27 @@
 using Identity.Application.Response;
 using Identity.Application.Services.IServices;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Mvc.Routing;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LogoutUserRequestHandler(ITokenProvider tokenProvider, IActionContextAccessor actionContextAccessor, IUrlHelperFactory urlHelperFactory) : IRequestHandler<LogoutUserRequest, BaseIdentityResponse<Unit>>
+    public class LogoutUserRequestHandler(ITokenProvider tokenProvider) : IRequestHandler<LogoutUserRequest, BaseIdentityResponse<bool>>
     {
         private readonly ITokenProvider _tokenProvider = tokenProvider;
-        private readonly IUrlHelperFactory _urlHelperFactory = urlHelperFactory;
-        private readonly IActionContextAccessor _actionContextAccessor = actionContextAccessor;
 
-        public async Task<BaseIdentityResponse<Unit>> Handle(LogoutUserRequest request, CancellationToken cancellationToken)
+        public async Task<BaseIdentityResponse<bool>> Handle(LogoutUserRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<Unit>();
+            var response = new BaseIdentityResponse<bool>();
 
             try
             {
-                var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-                request.ReturnUrl ??= urlHelper.Content("/");
                 _tokenProvider.ClearToken();
 
-                response.IsSuccess = true;
-                response.Message = "Успешный выход из аккаунта";
-                response.Data = Unit.Value;
-
-                return response;
+                return new BaseIdentityResponse<bool>
+                {
+                    IsSuccess = true,
+                    Message = "Успешный выход из аккаунта",
+                    Data = true
+                };
             }
 
             catch (Exception exception)

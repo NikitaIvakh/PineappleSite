@@ -3,8 +3,8 @@ using MediatR;
 
 namespace Identity.Application.Features.Identities.Requests.Commands
 {
-    public class LogoutUserRequest : IRequest<BaseIdentityResponse<Unit>>
+    public class LogoutUserRequest : IRequest<BaseIdentityResponse<bool>>
     {
-        public string ReturnUrl { get; set; }
+
     }
 }

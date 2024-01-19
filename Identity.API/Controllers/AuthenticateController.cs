@@ -27,9 +27,9 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("Logout")]
-        public async Task<ActionResult<BaseIdentityResponse<Unit>>> Logout([FromBody] string retirnUrl)
+        public async Task<ActionResult<BaseIdentityResponse<bool>>> Logout()
         {
-            var command = await _mediator.Send(new LogoutUserRequest { ReturnUrl = retirnUrl });
+            var command = await _mediator.Send(new LogoutUserRequest());
             return Ok(command);
         }
     }
