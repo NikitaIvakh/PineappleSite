@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = "Список пользователей";
-    <link rel="stylesheet" href="~/css/userList.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/users/userList.css" asp-append-version="true" />
 }
 
 <form asp-action="Index" method="get">
@@ -115,20 +115,4 @@
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    document.getElementById("clearSearch").addEventListener("click", function () {
-        document.getElementById("searchUser").value = "";
-        window.location.href = "/User/Index";
-    });
-
-    $(document).ready(function () {
-        $('input[name="selectedUserIds"]').change(function () {
-            var selectedCount = $('input[name="selectedUserIds"]:checked').length;
-            if (selectedCount >= 2) {
-                $('#deleteAllButton').show();
-            } else {
-                $('#deleteAllButton').hide();
-            }
-        });
-    });
-</script>
+<script src="~/js/users/userList.js" asp-append-version="true"></script>
