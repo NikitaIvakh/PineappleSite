@@ -1,4 +1,5 @@
 ﻿using Identity.Application.DTOs.Authentications;
+using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Response;
 using MediatR;
@@ -26,10 +27,10 @@ namespace Identity.API.Controllers
             return Ok(register);
         }
 
-        [HttpPost("Logout")]
-        public async Task<ActionResult<BaseIdentityResponse<bool>>> Logout()
+        [HttpPost("Logout/{userId}")]
+        public async Task<ActionResult<BaseIdentityResponse<bool>>> Logout([FromBody] LogoutUserDto logoutUser)
         {
-            var command = await _mediator.Send(new LogoutUserRequest());
+            var command = await _mediator.Send(new LogoutUserRequest { LogoutUser = logoutUser });
             return Ok(command);
         }
     }
