@@ -20,6 +20,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> LoginAsync(AuthRequestViewModel authRequestViewModel)
         {
+            AddBearerToken();
             IdentityResponseViewModel response = new();
             AuthRequestDto authRequest = _mapper.Map<AuthRequestDto>(authRequestViewModel);
             AuthResponseDtoBaseIdentityResponse authResponse = await _identityClient.LoginAsync(authRequest);
@@ -52,12 +53,12 @@ namespace PineappleSite.Presentation.Services
                 response.Message = authResponse.Message;
             }
 
-            response.IsSuccess = false;
             return response;
         }
 
         public async Task<IdentityResponseViewModel> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
         {
+            AddBearerToken();
             IdentityResponseViewModel response = new();
             RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
             RegisterResponseDtoBaseIdentityResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
@@ -96,6 +97,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task LogoutAsync()
         {
+            AddBearerToken();
             _localStorageService.ClearStorage(["token"]);
             await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
         }

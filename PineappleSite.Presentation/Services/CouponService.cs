@@ -14,18 +14,21 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IEnumerable<CouponViewModel>> GetAllCouponsAsync()
         {
+            AddBearerToken();
             var coupons = await _couponClient.CouponAllAsync();
             return _mapper.Map<IEnumerable<CouponViewModel>>(coupons);
         }
 
         public async Task<CouponViewModel> GetCouponAsync(int couponId)
         {
+            AddBearerToken();
             var coupon = await _couponClient.CouponGETAsync(couponId);
             return _mapper.Map<CouponViewModel>(coupon);
         }
 
         public async Task<ResponseViewModel> CreateCouponAsync(CreateCouponViewModel createCoupon)
         {
+            AddBearerToken();
             try
             {
                 ResponseViewModel responseView = new();
@@ -58,6 +61,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ResponseViewModel> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon)
         {
+            AddBearerToken();
             try
             {
                 ResponseViewModel responseView = new();
@@ -90,6 +94,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ResponseViewModel> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon)
         {
+            AddBearerToken();
             try
             {
                 ResponseViewModel responseView = new();
@@ -122,6 +127,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ResponseViewModel> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
         {
+            AddBearerToken();
             try
             {
                 ResponseViewModel response = new();

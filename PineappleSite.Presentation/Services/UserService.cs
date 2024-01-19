@@ -15,6 +15,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IList<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
         {
+            AddBearerToken();
             var user = await _identityClient.GetUserByIdAsync(userId);
             var users = await _identityClient.GetAllUsersAsync(user.User.Id);
             var usersWithRoles = _mapper.Map<IList<UserWithRolesViewModel>>(users);
@@ -24,6 +25,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<UserWithRolesViewModel> GetUserAsync(string id)
         {
+            AddBearerToken();
             var user = await _identityClient.GetUserByIdAsync(id);
             var userWithRole = _mapper.Map<UserWithRolesViewModel>(user);
 
@@ -32,6 +34,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register)
         {
+            AddBearerToken();
             try
             {
                 IdentityResponseViewModel response = new();
@@ -64,6 +67,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> UpdateUserAsync(UpdateUserViewModel updateUserView)
         {
+            AddBearerToken();
             try
             {
                 IdentityResponseViewModel response = new();
@@ -96,6 +100,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete)
         {
+            AddBearerToken();
             try
             {
                 IdentityResponseViewModel response = new();
@@ -128,6 +133,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
         {
+            AddBearerToken();
             try
             {
                 string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
@@ -169,6 +175,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResponseViewModel> DeleteUsersAsync(DeleteUserListViewModel deleteUsers)
         {
+            AddBearerToken();
             try
             {
                 IdentityResponseViewModel response = new();
