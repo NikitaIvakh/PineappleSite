@@ -11,7 +11,7 @@ namespace Product.Infrastructure
         {
             services.AddDbContext<PineAppleProductsDbContext>(config =>
             {
-                config.UseNpgsql(configuration.GetConnectionString("PineAppleProductDbContext"));
+                config.UseNpgsql(configuration.GetConnectionString("PineAppleProductDbContextConnectionString"));
             });
 
             services.AddScoped<IProductDbContext, PineAppleProductsDbContext>();
