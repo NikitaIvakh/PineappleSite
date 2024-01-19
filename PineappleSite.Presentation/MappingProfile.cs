@@ -44,6 +44,7 @@ namespace PineappleSite.Presentation
             CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserViewModel>().ReverseMap();
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
+            CreateMap<DeleteUserListDto, DeleteUserListViewModel>().ReverseMap();
 
             //CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
             #endregion

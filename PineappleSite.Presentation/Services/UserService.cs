@@ -166,5 +166,37 @@ namespace PineappleSite.Presentation.Services
                 return ConvertIdentityExceptions(exception);
             }
         }
+
+        public async Task<IdentityResponseViewModel> DeleteUsersAsync(DeleteUserListViewModel deleteUsers)
+        {
+            try
+            {
+                IdentityResponseViewModel response = new();
+                DeleteUserListDto deleteUserListDto = _mapper.Map<DeleteUserListDto>(deleteUsers);
+                DeleteUserListDtoBaseIdentityResponse apiResponse = await _identityClient.UserDELETE2Async(deleteUserListDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Data = apiResponse.Data;
+                    response.Message = apiResponse.Message;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return ConvertIdentityExceptions(exceptions);
+            }
+        }
     }
 }

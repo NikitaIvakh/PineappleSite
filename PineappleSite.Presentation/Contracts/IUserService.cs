@@ -17,5 +17,7 @@ namespace PineappleSite.Presentation.Contracts
         Task<IdentityResponseViewModel> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
 
         Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete);
+
+        Task<IdentityResponseViewModel> DeleteUsersAsync(DeleteUserListViewModel deleteUsers);
     }
 }
