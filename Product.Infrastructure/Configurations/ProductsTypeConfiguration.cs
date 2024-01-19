@@ -38,7 +38,7 @@ namespace Product.Infrastructure.Configurations
 
                 new ProductEntity
                 {
-                    Id = 2,
+                    Id = 3,
                     Name = "Кока-кола",
                     Description = "Газированный напиток.",
                     ProductCategory = ProductCategory.Drinks,
