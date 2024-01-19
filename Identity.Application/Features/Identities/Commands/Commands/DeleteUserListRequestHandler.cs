@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Identity.Application.DTOs.Identities;
 using Identity.Application.DTOs.Validators;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Response;
@@ -11,14 +12,14 @@ using Microsoft.EntityFrameworkCore;
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
     public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager,
-        IDeleteUserListDtoValidator deleteValidator) : IRequestHandler<DeleteUserListRequest, BaseIdentityResponse<UserWithRoles>>
+        IDeleteUserListDtoValidator deleteValidator) : IRequestHandler<DeleteUserListRequest, BaseIdentityResponse<DeleteUserListDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IDeleteUserListDtoValidator _deleteValidator = deleteValidator;
 
-        public async Task<BaseIdentityResponse<UserWithRoles>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
+        public async Task<BaseIdentityResponse<DeleteUserListDto>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<UserWithRoles>();
+            var response = new BaseIdentityResponse<DeleteUserListDto>();
 
             try
             {
@@ -51,6 +52,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     }
 
                     response.IsSuccess = true;
+                    response.Data = request.DeleteUserList;
                     response.Message = "Пользователи успешно удалены";
                 }
             }

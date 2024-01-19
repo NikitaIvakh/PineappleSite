@@ -7,7 +7,7 @@ namespace Identity.Application.DTOs.Validators
     {
         public IDeleteUserListDtoValidator()
         {
-            RuleFor(key => key.UserIds).NotNull().NotEmpty().NotEqual(key => key.UserIds);
+            RuleFor(key => key.UserIds).NotNull().NotEmpty().NotEqual([]);
         }
     }
 }

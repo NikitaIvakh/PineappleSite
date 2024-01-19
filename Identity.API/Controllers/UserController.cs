@@ -56,5 +56,12 @@ namespace Identity.API.Controllers
             var command = await _mediator.Send(new DeleteUserRequest { DeleteUser = deleteUserDto });
             return Ok(command);
         }
+
+        [HttpDelete()]
+        public async Task<ActionResult<BaseIdentityResponse<DeleteUserListDto>>> Delete([FromBody] DeleteUserListDto deleteUserListDto)
+        {
+            var comamnd = await _mediator.Send(new DeleteUserListRequest { DeleteUserList = deleteUserListDto });
+            return Ok(comamnd);
+        }
     }
 }
