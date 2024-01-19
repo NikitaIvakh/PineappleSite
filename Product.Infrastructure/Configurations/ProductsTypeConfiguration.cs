@@ -40,7 +40,7 @@ namespace Product.Infrastructure.Configurations
                 {
                     Id = 2,
                     Name = "Кока-кола",
-                    Description = "Газированный напиток",
+                    Description = "Газированный напиток.",
                     ProductCategory = ProductCategory.Drinks,
                     Price = 5,
                 });
