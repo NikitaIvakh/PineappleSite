@@ -6,6 +6,7 @@ using Xunit;
 
 namespace Product.Test.Queries
 {
+    [CollectionDefinition("QueryCollection")]
     public class GetProductListRequestHanlderTest : TestQueryHandler
     {
         [Fact]
