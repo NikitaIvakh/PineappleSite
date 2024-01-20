@@ -14,7 +14,9 @@ namespace Product.Application.Features.Commands.Queries
 
         public async Task<ProductDto> Handle(GetProductDetailsRequest request, CancellationToken cancellationToken)
         {
-            var product = await _context.Products.FirstOrDefaultAsync(key => key.Id == request.Id, cancellationToken);
+            var product = await _context.Products.FirstOrDefaultAsync(key => key.Id == request.Id, cancellationToken) ??
+                throw new Exception($"Продукта с идентификатором ({request.Id}) не существует");
+
             return _mapper.Map<ProductDto>(product);
         }
     }

@@ -28,5 +28,19 @@ namespace Product.Test.Queries
             result.Description.ShouldBe("Test product 1");
             result.Price.ShouldBe(10);
         }
+
+        [Fact]
+        public async Task GetProductDetailsRequestHandlerTest_FailOrWrongId()
+        {
+            // Arrange
+            var handler = new GetProductDetailsRequestHandler(Context, Mapper);
+            var productId = 999;
+
+            // Act && Assert
+            await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(new GetProductDetailsRequest
+            {
+                Id = productId,
+            }, CancellationToken.None));
+        }
     }
 }
