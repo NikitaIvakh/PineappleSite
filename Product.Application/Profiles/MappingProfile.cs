@@ -12,6 +12,9 @@ namespace Product.Application.Profiles
             CreateMap<ProductEntity, ProductDto>()
                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
                 .ReverseMap();
+            CreateMap<ProductEntity, CreateProductDto>()
+                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
+                .ReverseMap();
             #endregion
         }
     }
