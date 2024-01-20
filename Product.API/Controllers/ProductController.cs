@@ -38,8 +38,10 @@ namespace Product.API.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<ActionResult<Unit>> Put([FromBody] UpdateProductDto updateProductDto)
         {
+            var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
+            return Ok(command);
         }
 
         // DELETE api/<ProductController>/5
