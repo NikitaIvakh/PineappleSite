@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs.Products;
+using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 
@@ -46,8 +47,10 @@ namespace Product.API.Controllers
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<ActionResult<Unit>> Delete([FromBody] DeleteProductDto deleteProductDto)
         {
+            var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
+            return Ok(command);
         }
     }
 }
