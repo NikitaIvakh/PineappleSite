@@ -17,9 +17,4 @@
     <ProjectReference Include="..\Product.Core\Product.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Commands\Handlers\" />
-    <Folder Include="Features\Requests\Handlers\" />
-  </ItemGroup>
-
 </Project>
