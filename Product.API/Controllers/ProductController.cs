@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs.Products;
+using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 
 namespace Product.API.Controllers
@@ -29,8 +30,10 @@ namespace Product.API.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<int>> Post([FromBody] CreateProductDto createProductDto)
         {
+            var command = await _mediator.Send(new CreateProductDtoRequest { CreateProduct = createProductDto });
+            return Ok(command);
         }
 
         // PUT api/<ProductController>/5
