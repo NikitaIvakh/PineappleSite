@@ -21,9 +21,10 @@ namespace Product.API.Controllers
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<ProductDto>> Get(int id)
         {
-            return "value";
+            var query = await _mediator.Send(new GetProductDetailsRequest { Id = id });
+            return Ok(query);
         }
 
         // POST api/<ProductController>
