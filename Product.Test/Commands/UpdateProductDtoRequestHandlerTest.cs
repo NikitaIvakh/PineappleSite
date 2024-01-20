@@ -34,5 +34,26 @@ namespace Product.Test.Commands
             // Assert
             result.ShouldBeOfType<Unit>();
         }
+
+        [Fact]
+        public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongId()
+        {
+            // Arrange
+            var handler = new UpdateProductDtoRequestHandler(Context, Mapper);
+            var updateProductDto = new UpdateProductDto
+            {
+                Id = 999,
+                Name = "Name 1",
+                Description = "Description 1",
+                ProductCategory = ProductCategory.Snacks,
+                Price = 20,
+            };
+
+            // Act && Assert
+            await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(new UpdateProductDtoRequest
+            {
+                UpdateProduct = updateProductDto,
+            }, CancellationToken.None));
+        }
     }
 }
