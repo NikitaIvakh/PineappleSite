@@ -15,7 +15,7 @@ namespace Product.Application.Features.Commands.Queries
 
         public async Task<IReadOnlyCollection<ProductDto>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-            var products = await _context.Products.ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
+            var products = await _context.Products.OrderBy(key => key.Id).ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
             return _mapper.Map<IReadOnlyCollection<ProductDto>>(products);
         }
     }

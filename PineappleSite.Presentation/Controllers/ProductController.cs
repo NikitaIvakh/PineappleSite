@@ -107,24 +107,31 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        // GET: ProductController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: ProductController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> Delete(DeleteProductViewModel deleteProductViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ProductAPIViewModel response = await _productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(GetProducts));
+                }
             }
+
             catch
             {
-                return View();
+                return View(deleteProductViewModel);
             }
         }
     }
