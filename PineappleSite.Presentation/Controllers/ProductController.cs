@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Products;
 
 namespace PineappleSite.Presentation.Controllers
@@ -52,7 +53,7 @@ namespace PineappleSite.Presentation.Controllers
                 else
                 {
                     TempData["error"] = response.ValidationErrors;
-                    return RedirectToAction(nameof(GetProducts));
+                    return RedirectToAction(nameof(Create));
                 }
             }
 
@@ -63,23 +64,46 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ProductController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Edit(int id)
         {
-            return View();
+            var user = await _productService.GetProductAsync(id);
+            var updateUserViewModel = new UpdateProductViewModel
+            {
+                Id = user.Id,
+                Name = user.Name,
+                Description = user.Description,
+                ProductCategory = user.ProductCategory,
+                Price = user.Price,
+            };
+
+            return View(updateUserViewModel);
         }
 
         // POST: ProductController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public async Task<ActionResult> Edit(UpdateProductViewModel updateProductViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ProductAPIViewModel response = await _productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Edit));
+                }
             }
+
             catch
             {
-                return View();
+                return View(updateProductViewModel);
             }
         }
 
