@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Product.Application.DTOs.Validator;
 using Product.Application.Profiles;
 using Product.Infrastructure;
 
@@ -8,10 +9,12 @@ namespace Product.Test.Common
     {
         protected PineAppleProductsDbContext Context;
         protected IMapper Mapper;
+        protected ICreateProductDtoValidator Validator;
 
         public TestCommandHandler()
         {
             Context = ProductDbContextFactory.Create();
+            Validator = new ICreateProductDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
