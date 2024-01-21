@@ -1,4 +1,5 @@
-﻿using Product.Application.DTOs.Products;
+﻿using Microsoft.EntityFrameworkCore;
+using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Response;
@@ -15,7 +16,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_Success()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, Validator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
             var createProductDto = new CreateProductDto
             {
                 Name = "name",
@@ -35,13 +36,20 @@ namespace Product.Test.Commands
             result.IsSuccess.ShouldBeTrue();
             result.Message.ShouldBe("Продукт успешно добавлен");
             result.ValidationErrors.ShouldBeNull();
+
+            var createProduct = await Context.Products.AsNoTracking().FirstOrDefaultAsync(key => key.Id == result.Id);
+            createProduct?.Id.ShouldBe(result.Id);
+            createProduct?.Name.ShouldBe("name");
+            createProduct?.Description.ShouldBe("description");
+            createProduct?.ProductCategory.ShouldBe(ProductCategory.Drinks);
+            createProduct?.Price.ShouldBe(24);
         }
 
         [Fact]
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidName()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, Validator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
             var createProductDto = new CreateProductDto
             {
                 Name = "na",
@@ -67,7 +75,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidDescription()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, Validator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",
@@ -99,7 +107,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidPrice()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, Validator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",

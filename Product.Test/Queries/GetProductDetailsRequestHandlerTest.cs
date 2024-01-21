@@ -1,7 +1,6 @@
 ﻿using Product.Application.Features.Commands.Queries;
 using Product.Application.Features.Requests.Queries;
 using Product.Test.Common;
-using Should;
 using Shouldly;
 using Xunit;
 

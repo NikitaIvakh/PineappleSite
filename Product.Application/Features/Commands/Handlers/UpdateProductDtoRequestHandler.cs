@@ -25,14 +25,14 @@ namespace Product.Application.Features.Commands.Handlers
                 if (!validator.IsValid)
                 {
                     _productAPIResponse.IsSuccess = false;
-                    _productAPIResponse.Message = "Ошибка обновления";
+                    _productAPIResponse.Message = "Ошибка обновления продукта";
                     _productAPIResponse.ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList();
                 }
 
                 else
                 {
                     var product = await _context.Products.FirstOrDefaultAsync(key => key.Id == request.UpdateProduct.Id, cancellationToken) ??
-                        throw new NotFoundException($"У продукта {request.UpdateProduct.Name} не существует идкетификатора: ", request.UpdateProduct.Id);
+                        throw new NotFoundException($"У продукта ({request.UpdateProduct.Name}) не существует идкетификатора: ", request.UpdateProduct.Id);
 
                     _mapper.Map(request.UpdateProduct, product);
                     _context.Products.Update(product);

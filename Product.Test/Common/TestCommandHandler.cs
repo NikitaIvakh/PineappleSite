@@ -9,12 +9,14 @@ namespace Product.Test.Common
     {
         protected PineAppleProductsDbContext Context;
         protected IMapper Mapper;
-        protected ICreateProductDtoValidator Validator;
+        protected ICreateProductDtoValidator CreateValidator;
+        protected IUpdateProductDtoValidator UpdateValidator;
 
         public TestCommandHandler()
         {
             Context = ProductDbContextFactory.Create();
-            Validator = new ICreateProductDtoValidator();
+            CreateValidator = new ICreateProductDtoValidator();
+            UpdateValidator = new IUpdateProductDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
