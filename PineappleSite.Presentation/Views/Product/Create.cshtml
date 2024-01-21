@@ -1,0 +1,76 @@
+﻿@using PineappleSite.Presentation.Extecsions
+@using PineappleSite.Presentation.Models.Products.Enum
+@model PineappleSite.Presentation.Models.Products.CreateProductViewModel
+
+@{
+    ViewData["Title"] = "Добавить продукт";
+}
+
+<h1>Добавить продукт</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="ProductCategory" class="control-label"></label>
+                <select asp-for="ProductCategory" class="form-control">
+                    @{
+                        foreach (ProductCategory category in Enum.GetValues(typeof(ProductCategory)))
+                        {
+                            <option value="@category">@category.GetDisplayName()</option>
+                        }
+                    }
+                </select>
+                <span asp-validation-for="ProductCategory" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Добавить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+<br />
+<div>
+    <a asp-action="GetProducts">Вернуться назад</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+@* <div class="form-group">
+    <label asp-for="ProductCategory" class="control-label"></label><br />
+    @foreach (var value in Enum.GetValues(typeof(PineappleSite.Presentation.Models.Products.Enum.ProductCategory)))
+    {
+        <div class="form-check">
+            <input class="form-check-input" type="radio" asp-for="ProductCategory" value="@value" id="@($"ProductCategory_{value}")">
+            <label class="form-check-label" for="@($"ProductCategory_{value}")">
+                @value
+            </label>
+        </div>
+    }
+    <span asp-validation-for="ProductCategory" class="text-danger"></span>
+</div> *@

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Services.Products;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -27,7 +29,7 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ProductController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> Create()
         {
             return View();
         }
@@ -35,15 +37,28 @@ namespace PineappleSite.Presentation.Controllers
         // POST: ProductController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> Create(CreateProductViewModel createProductViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                ProductAPIViewModel response = await _productService.CreateProductAsync(createProductViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(GetProducts));
+                }
             }
+
             catch
             {
-                return View();
+                return View(createProductViewModel);
             }
         }
 

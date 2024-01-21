@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PineappleSite.Presentation.Models.Products.Enum;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
 namespace PineappleSite.Presentation.Extecsions
@@ -10,6 +11,16 @@ namespace PineappleSite.Presentation.Extecsions
             return value.GetType().GetMember(value.ToString())
                 .First()
                 .GetCustomAttribute<DisplayAttribute>()?.GetName() ?? value.ToString();
+        }
+
+        public static string GetDisplayName(this ProductCategory category)
+        {
+            var displayAttribute = typeof(ProductCategory)
+                .GetField(category.ToString())
+                .GetCustomAttributes(typeof(DisplayAttribute), false)
+                .FirstOrDefault() as DisplayAttribute;
+
+            return displayAttribute?.Name ?? category.ToString();
         }
     }
 }
