@@ -2,6 +2,7 @@
 using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
+using Product.Application.Response;
 using Product.Test.Common;
 using Shouldly;
 using Xunit;
@@ -14,7 +15,7 @@ namespace Product.Test.Commands
         public async Task DeleteProductDtoRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new DeleteProductDtoRequestHandler(Context, Mapper);
+            var handler = new DeleteProductDtoRequestHandler(Context, DeleteValidator);
             var deleteProductDto = new DeleteProductDto
             {
                 Id = 3,
@@ -27,24 +28,32 @@ namespace Product.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.ShouldBeOfType<Unit>();
+            result.ShouldBeOfType<ProductAPIResponse>();
+            result.IsSuccess.ShouldBeTrue();
+            result.Message.ShouldBe("Продукт успешно удален");
+            result.ValidationErrors.ShouldBeNull();
         }
 
         [Fact]
         public async Task DeleteProductDtoRequestHandlerTest_FailOrWrong()
         {
             // Arrange
-            var handler = new DeleteProductDtoRequestHandler(Context, Mapper);
+            var handler = new DeleteProductDtoRequestHandler(Context, DeleteValidator);
             var deleteProductDto = new DeleteProductDto
             {
                 Id = 999,
             };
 
-            // Act &7 Assert
-            await Assert.ThrowsAsync<Exception>(async () => await handler.Handle(new DeleteProductDtoRequest
+            // Act
+            var result = await handler.Handle(new DeleteProductDtoRequest
             {
                 DeleteProduct = deleteProductDto
-            }, CancellationToken.None));
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeFalse();
+            result.Message.ShouldBe($"Продукта c идентификатором: ({deleteProductDto.Id}) не найдено");
+            result.ValidationErrors.ShouldBeNull();
         }
     }
 }

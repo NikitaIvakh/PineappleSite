@@ -29,7 +29,7 @@ namespace Product.Application.Features.Commands.Handlers
                 else
                 {
                     var product = await _context.Products.FindAsync(new object[] { request.DeleteProduct.Id }, cancellationToken)
-                        ?? throw new NotFoundException($"Продукт c идентификатором ({request.DeleteProduct.Id}) не существует", request.DeleteProduct.Id);
+                        ?? throw new NotFoundException($"Продукта c идентификатором:", request.DeleteProduct.Id);
 
                     _context.Products.Remove(product);
                     await _context.SaveChangesAsync(cancellationToken);

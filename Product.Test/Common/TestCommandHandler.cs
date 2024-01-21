@@ -11,12 +11,14 @@ namespace Product.Test.Common
         protected IMapper Mapper;
         protected ICreateProductDtoValidator CreateValidator;
         protected IUpdateProductDtoValidator UpdateValidator;
+        protected IDeleteProductDtoValidator DeleteValidator;
 
         public TestCommandHandler()
         {
             Context = ProductDbContextFactory.Create();
             CreateValidator = new ICreateProductDtoValidator();
             UpdateValidator = new IUpdateProductDtoValidator();
+            DeleteValidator = new IDeleteProductDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
