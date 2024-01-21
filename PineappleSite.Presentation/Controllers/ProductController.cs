@@ -20,9 +20,10 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ProductController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Details(int id)
         {
-            return View();
+            var product = await _productService.GetProductAsync(id);
+            return View(product);
         }
 
         // GET: ProductController/Create
