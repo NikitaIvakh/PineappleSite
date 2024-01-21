@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
+using PineappleSite.Presentation.Services.Products;
 
 namespace PineappleSite.Presentation
 {
@@ -49,7 +51,15 @@ namespace PineappleSite.Presentation
             //CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
             #endregion
 
+            #region
+            CreateMap<ProductDto, ProductViewModel>().ReverseMap();
+            CreateMap<CreateProductDto, CreateProductViewModel>().ReverseMap();
+            CreateMap<UpdateProductDto, UpdateProductViewModel>().ReverseMap();
+            CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+            #endregion
+
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
+            CreateMap<ProductAPIResponse, ProductAPIViewModel>().ReverseMap();
         }
     }
 }
