@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Services;
 using PineappleSite.Presentation.Services.Coupons;
@@ -23,6 +22,7 @@ applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageServi
 
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
 applicationBuilder.Services.AddScoped<IUserService, UserService>();
+applicationBuilder.Services.AddScoped<IProductService, ProductService>();
 
 applicationBuilder.Services.Configure<CookiePolicyOptions>(options =>
 {
