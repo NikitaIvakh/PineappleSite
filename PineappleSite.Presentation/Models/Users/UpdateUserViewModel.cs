@@ -1,5 +1,5 @@
-﻿using PineappleSite.Presentation.Services.Identities;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using static PineappleSite.Presentation.Utility.StaticDetails;
 
 namespace PineappleSite.Presentation.Models.Users
 {

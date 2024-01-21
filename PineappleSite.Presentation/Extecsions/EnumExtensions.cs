@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Models.Products.Enum;
+using PineappleSite.Presentation.Services.Identities;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 
@@ -21,6 +22,16 @@ namespace PineappleSite.Presentation.Extecsions
                 .FirstOrDefault() as DisplayAttribute;
 
             return displayAttribute?.Name ?? category.ToString();
+        }
+
+        public static string GetDisplayName(this UserRoles userRoles)
+        {
+            var displayAttribute = typeof(UserRoles)
+                .GetField(userRoles.ToString())
+                .GetCustomAttributes(typeof(DisplayAttribute), false)
+                .FirstOrDefault() as DisplayAttribute;
+
+            return displayAttribute?.Name ?? userRoles.ToString();
         }
     }
 }

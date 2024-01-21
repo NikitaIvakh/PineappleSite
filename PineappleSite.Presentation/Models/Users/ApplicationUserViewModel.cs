@@ -1,4 +1,4 @@
-﻿using PineappleSite.Presentation.Services.Identities;
+﻿using static PineappleSite.Presentation.Utility.StaticDetails;
 
 namespace PineappleSite.Presentation.Models.Users
 {
