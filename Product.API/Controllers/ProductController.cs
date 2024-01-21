@@ -48,7 +48,7 @@ namespace Product.API.Controllers
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Unit>> Delete([FromBody] DeleteProductDto deleteProductDto)
+        public async Task<ActionResult<ProductAPIResponse>> Delete([FromBody] DeleteProductDto deleteProductDto)
         {
             var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
             return Ok(command);
