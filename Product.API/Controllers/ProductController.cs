@@ -40,7 +40,7 @@ namespace Product.API.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Unit>> Put([FromBody] UpdateProductDto updateProductDto)
+        public async Task<ActionResult<ProductAPIResponse>> Put([FromBody] UpdateProductDto updateProductDto)
         {
             var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
             return Ok(command);
