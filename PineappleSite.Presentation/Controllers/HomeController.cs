@@ -1,21 +1,24 @@
 using Microsoft.AspNetCore.Mvc;
+using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using System.Diagnostics;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController(ILogger<HomeController> logger, IProductService productService) : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<HomeController> _logger = logger;
+        private readonly IProductService _productService = productService;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
-
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             return View();
+        }
+
+        public async Task<IActionResult> GetProducts()
+        {
+            var products = await _productService.GetAllProductsAsync();
+            return View(products);
         }
 
         public IActionResult Privacy()

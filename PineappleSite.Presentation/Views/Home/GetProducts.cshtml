@@ -1,0 +1,48 @@
+﻿@using PineappleSite.Presentation.Extecsions
+@model IEnumerable<PineappleSite.Presentation.Models.Products.ProductViewModel>
+
+@{
+    ViewData["Title"] = "Продукция";
+}
+
+<style>
+    .custom-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+
+<form>
+    <div class="container row">
+        @{
+            foreach (var product in Model)
+            {
+                <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
+                    <div class="p-0 my-3 border rounded">
+                        <div class="card d-flex flex-column h-100">
+                            <h3 class="card-title text-black-50 text-center py-2">@product.Name</h3>
+                            <img src="https://placehold.co/600x400" class="card-img-top custom-image">
+                            <div class="card-body d-flex flex-column flex-fill">
+                                <p class="card-text">@Html.Raw(product.Description.Substring(0, Math.Min(product.Description.Length, 11)))...</p>
+                                <div class="d-flex justify-content-between py-2">
+                                    <span class="badge bg-warning text-white p-2">@product.ProductCategory.GetDisplayName()</span>
+                                    <span class="badge bg-warning text-white p-2">@product.Price Br</span>
+                                </div>
+                                <div class="row mt-auto mb-0">
+                                    <div class="col">
+                                        <a class="btn btn-primary" asp-controller="Home" asp-action="Details" asp-route-id="@product.Id">Посмотреть детали</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
