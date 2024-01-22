@@ -1,46 +1,82 @@
-﻿@model PineappleSite.Presentation.Models.Products.ProductViewModel
+﻿@using PineappleSite.Presentation.Extecsions
+@using PineappleSite.Presentation.Models.Products.Enum
+@model PineappleSite.Presentation.Models.Products.ProductViewModel
 
 @{
     ViewData["Title"] = "Детали продукта";
 }
 
-<h1>Детали продукта</h1>
-<hr />
+<form class="container col-7" asp-action="Details">
+    <br />
+    <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Детали продукта</h1>
+                </div>
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Id" readonly hidden />
+                    <span class="text-danger" asp-validation-for="Id" hidden></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Наименование продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Name" readonly />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Описание</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <textarea class="form-control" asp-for="Description" readonly> </textarea>
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size: 20px;">Категория продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <select asp-for="ProductCategory" class="form-control" readonly disabled>
+                        @{
+                            foreach (ProductCategory category in Enum.GetValues(typeof(ProductCategory)))
+                            {
+                                <option readonly disabled value="@category">@category.GetDisplayName()</option>
+                            }
+                        }
+                    </select>
+                    <span readonly disabled asp-validation-for="ProductCategory" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Стоимость продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Price" readonly />
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+            </div>
+            <div class="col-5 offset-3">
+                <a class="btn-primary btn form-control" asp-action="GetProducts">Вернуться назад</a>
+            </div>
+        </div>
+    </div>
+</form>
 
-<div>
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Id)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Id)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.ProductCategory)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.ProductCategory)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-action="GetProducts">Вернуться назад</a>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
