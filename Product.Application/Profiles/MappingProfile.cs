@@ -8,7 +8,7 @@ namespace Product.Application.Profiles
     {
         public MappingProfile()
         {
-            #region
+            #region Product Mapping
             CreateMap<ProductEntity, ProductDto>()
                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
                 .ReverseMap();
@@ -18,6 +18,8 @@ namespace Product.Application.Profiles
             CreateMap<ProductEntity, UpdateProductDto>()
                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
                 .ReverseMap();
+            CreateMap<ProductEntity, DeleteProductDto>().ReverseMap();
+            CreateMap<ProductEntity, DeleteProductsDto>().ReverseMap();
             #endregion
         }
     }
