@@ -159,20 +159,26 @@
                 </tbody>
             </table>
             <div class="pagination">
-                <a asp-action="Index"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   asp-route-searchCode="@ViewData["SearchCode"]"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   class="page-item @(Model.HasPreviosPage ? "" : "disabled")">
-                    <span>&laquo; Назад</span>
-                </a>
-                <a asp-action="Index"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   asp-route-searchCode="@ViewData["SearchCode"]"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   class="page-item @(Model.HasNextPage ? "" : "disabled")">
-                    <span>Вперед &raquo;</span>
-                </a>
+                @if (Model.HasPreviosPage)
+                {
+                    <a asp-action="Index"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-searchCode="@ViewData["SearchCode"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="page-item">
+                        <span>&laquo; Назад</span>
+                    </a>
+                }
+                @if (Model.HasNextPage)
+                {
+                    <a asp-action="Index"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-searchCode="@ViewData["SearchCode"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="page-item">
+                        <span>Вперед &raquo;</span>
+                    </a>
+                }
             </div>
         </div>
     </div>
