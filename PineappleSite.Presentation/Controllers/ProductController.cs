@@ -16,9 +16,20 @@ namespace PineappleSite.Presentation.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetProducts()
+        public async Task<ActionResult> GetProducts(string searchProduct)
         {
             var products = await _productService.GetAllProductsAsync();
+
+            if (!string.IsNullOrEmpty(searchProduct))
+            {
+                products = products.Where(
+                    key => key.Name.Contains(searchProduct) ||
+                    key.Description.Contains(searchProduct) ||
+                    key.ProductCategory.ToString().Contains(searchProduct) ||
+                    key.Price.ToString().Contains(searchProduct)).ToList();
+            }
+
+            ViewData["SearchProduct"] = searchProduct;
             return View(products);
         }
 
