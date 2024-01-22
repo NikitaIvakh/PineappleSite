@@ -6,62 +6,80 @@
     ViewData["Title"] = "Обновить продукт";
 }
 
-<h1>Обновить продукт</h1>
-<hr />
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Id" hidden class="control-label"></label>
-                <input asp-for="Id" readonly hidden class="form-control" />
-                <span asp-validation-for="Id" hidden class="text-danger"></span>
+<form class="container col-7" asp-action="Edit">
+    <br />
+    <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Обновить продукт</h1>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Id" readonly hidden />
+                    <span class="text-danger" asp-validation-for="Id" hidden></span>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Наименование продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Name" />
+                    <span class="text-danger" asp-validation-for="Name"></span>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="ProductCategory" class="control-label"></label>
-                <select asp-for="ProductCategory" class="form-control">
-                    @{
-                        foreach (ProductCategory category in Enum.GetValues(typeof(ProductCategory)))
-                        {
-                            <option value="@category">@category.GetDisplayName()</option>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Описание</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <textarea class="form-control" asp-for="Description"></textarea>
+                    <span class="text-danger" asp-validation-for="Description"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size: 20px;">Категория продукта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <select asp-for="ProductCategory" class="form-control">
+                        @{
+                            foreach (ProductCategory category in Enum.GetValues(typeof(ProductCategory)))
+                            {
+                                <option value="@category">@category.GetDisplayName()</option>
+                            }
                         }
-                    }
-                </select>
-                <span asp-validation-for="ProductCategory" class="text-danger"></span>
+                    </select>
+                    <span asp-validation-for="ProductCategory" class="text-danger"></span>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Стоимость</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <textarea class="form-control" asp-for="Price"></textarea>
+                    <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+            <div class="col-5 offset-1">
+                <a class="btn-primary btn form-control" asp-action="GetProducts">Вернуться назад</a>
             </div>
-        </form>
+            <div class="col-5">
+                <input type="submit" value="Обновить" class="btn btn-success form-control" />
+            </div>
+        </div>
     </div>
-</div>
-<br />
-<div>
-    <a asp-action="GetProducts">Вернуться назад</a>
-</div>
+</form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }
