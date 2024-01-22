@@ -2,6 +2,6 @@
 {
     public class DeleteProductsDto
     {
-        public IList<string> ProductIds { get; set; }
+        public IList<int> ProductIds { get; set; }
     }
 }
