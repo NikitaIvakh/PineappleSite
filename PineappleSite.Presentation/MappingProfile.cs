@@ -51,11 +51,12 @@ namespace PineappleSite.Presentation
             //CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
             #endregion
 
-            #region
+            #region Product Mapping
             CreateMap<ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<CreateProductDto, CreateProductViewModel>().ReverseMap();
             CreateMap<UpdateProductDto, UpdateProductViewModel>().ReverseMap();
             CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+            CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
