@@ -23,10 +23,11 @@ namespace PineappleSite.Presentation.Controllers
             if (!string.IsNullOrEmpty(searchProduct))
             {
                 products = products.Where(
-                    key => key.Name.Contains(searchProduct) ||
-                    key.Description.Contains(searchProduct) ||
-                    key.ProductCategory.ToString().Contains(searchProduct) ||
-                    key.Price.ToString().Contains(searchProduct)).ToList();
+                    key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.ProductCategory.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                    key.Price.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase))
+                    .ToList();
             }
 
             ViewData["SearchProduct"] = searchProduct;

@@ -2,8 +2,25 @@
 
 @{
     ViewData["Title"] = "Список продуктов";
+    <link rel="stylesheet" href="~/css/products/productList.css" asp-append-version="true" />
 }
 
+<div class="col-12 form-text">
+    <form asp-action="GetProducts" method="get">
+        <div class="form-actions no-color">
+            <p class="mb-0">
+                <label for="searchProduct">Поиск продукта:</label>
+            </p>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary search-button">Поиск</button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
 <form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
