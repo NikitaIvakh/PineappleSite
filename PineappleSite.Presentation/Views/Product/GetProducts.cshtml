@@ -4,14 +4,12 @@
     ViewData["Title"] = "Список продуктов";
 }
 
-<h1>Список продуктов</h1>
-
-<form>
+<form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Список купонов</h1>
+                    <h1 class="text-white">Список продуктов</h1>
                 </div>
             </div>
         </div>
@@ -21,11 +19,16 @@
                 </div>
                 <div class="col-6 text-end">
                     <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Добавить новый продукт</a>
+                    <br />  <br />
+                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
+                    <div class="col-12 form-text">
+                    </div>
                 </div>
             </div>
             <table class="table text-center">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Идентификатор</th>
                         <th>Наименование</th>
                         <th>Описание</th>
@@ -38,9 +41,15 @@
                 </thead>
                 <tbody>
                     @{
+                        int itemCount = 0;
+                    }
+                    @{
                         foreach (var item in Model)
                         {
                             <tr>
+                                <td>
+                                    <input type="checkbox" name="selectedProducts" value="@item.Id" />
+                                </td>
                                 <td>@item.Id</td>
                                 <td>@item.Name</td>
                                 <td>@item.Description</td>
@@ -61,6 +70,7 @@
                                     </form>
                                 </td>
                             </tr>
+                            itemCount++;
                         }
                     }
                 </tbody>
@@ -68,3 +78,6 @@
         </div>
     </div>
 </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="~/js/products/productList.js" asp-append-version="true"></script>

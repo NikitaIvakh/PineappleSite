@@ -135,15 +135,15 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        public async Task<ActionResult> DeleteMultiple(List<int> selectedIds)
+        public async Task<ActionResult> DeleteProductList(List<int> selectedProducts)
         {
-            if (selectedIds is null || selectedIds.Count <= 1)
+            if (selectedProducts is null || selectedProducts.Count <= 1)
             {
                 TempData["error"] = "Выберите хотя бы один продукт для удаления.";
                 return RedirectToAction(nameof(GetProducts));
             }
 
-            var deleteProducts = new DeleteProductsViewModel { ProductIds = selectedIds };
+            var deleteProducts = new DeleteProductsViewModel { ProductIds = selectedProducts };
             ProductAPIViewModel response = await _productService.DeleteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)
