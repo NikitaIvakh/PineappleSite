@@ -17,8 +17,10 @@
     {
         <div class="card col-md-12">
             <div class="card-body">
-                <h5 class="card-title text-center">Добро пожаловать на сайт по автоматизации и учету автомобилей</h5>
-                <p class="card-text">На этом сайте вы сможете выбрать подходящую вам модель автомобиля. Посмотреть характеристики автомобиля.</p>
+                <h5 class="card-title text-center">Добро пожаловать на сайт ресторана «PineApple»</h5>
+                <small class="card-text">Откройте для себя наш уникальный ресторан с неповторимой атмосферой.</small>
+                <small class="card-text">На нашем сайте вы сможете насладиться широким выбором изысканных блюд и напитков, созданных нашими талантливыми шеф-поварами.</small>
+                <small class="card-text">Мы гарантируем, что каждое блюдо приготовлено с любовью и из самых свежих ингредиентов.</small>
                 <p class="card-text"><small class="text-muted">Автор - Nikita Ivakh</small></p>
             </div>
         </div>
@@ -30,16 +32,15 @@
                 {
                     <div class="col">
                         <div class="card h-100">
-                            <img src="https://images.wallpaperscraft.ru/image/single/mashina_noch_dozhd_143166_1280x720.jpg" class="card-img-top card-image" />
+                            <img src="https://eda.yandex/images/3472725/9c63d886b068aa80f2a74180b809bfee-400x400.jpeg" alt="PineApple, Суп Харчо" data-testid="smart-image-img" loading="lazy">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Mercedes</h5>
+                                <h5 class="card-title">Суп Харчо</h5>
                                 <p class="card-text">
-                                    Mercedes-Benz является торговой маркой и производителем легковых автомобилей премиум-класса, грузовиков,
-                                    автобусов и других транспортных средств с одноименным названием.
+                                    Готовится на пряном наваристом говяжьем бульоне с кусочками говядины, томатным соусом, рисом и специями. Самый знаменитый грузинский суп.
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
                             </div>
                         </div>
                     </div>
@@ -48,30 +49,30 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://images.wallpaperscraft.ru/image/single/bmw_fary_avtomobil_124112_1280x720.jpg" class="card-img-top card-image" />
+                    <img src="https://eda.yandex/images/3749380/cb72079ede70127406fd3ab20bd0bf73-400x400.jpeg" alt="PineApple, Соленья" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
-                        <h5 class="card-title">BMW</h5>
+                        <h5 class="card-title">Соленья</h5>
                         <p class="card-text">
-                            BMW AG - немецкий производитель автомобилей.
+                            Маринованные: капуста, огурцы, помидор с чесноком, пряная морковь, опята, черемша, лук.
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
                     </div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://images.wallpaperscraft.ru/image/single/audi_avtomobil_vid_speredi_130942_1280x720.jpg" class="card-img-top card-image" />
+                    <img src="https://eda.yandex/images/3813301/7555fe7919c0c9bef2289681b29d4640-400x400.jpeg" alt="PineApple, Клубнично-банановый смузи" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Audi</h5>
+                        <h5 class="card-title">Клубнично-банановый смузи</h5>
                         <p class="card-text">
-                            Audi AG - немецкая автомобильная компания, входящая в группу Volkswagen, специализирующаяся на производстве автомобилей под брендом Audi.
+                            Смузи из клубники, бананов и клюквенного морса.
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
                     </div>
                 </div>
             </div>
@@ -90,47 +91,12 @@
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список автомобилей</a>
                             </div>
                         </div>
                     </div>
                 }
             }
-        </div>
-
-        <div style="padding: 10px;"></div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Основные типы кузовов</h5>
-                <p class="card-text">
-                    Тип конструкции кузова легко определяется по внешнему виду автомобиля. Каждый класс характеризуется отличительными чертами,
-                    которые легко обнаружить даже при небольшом опыте. Кроме того, способ размещения багажного отделения также играет роль в классификации,
-                    которое может быть объединено с пассажирским салоном или отделено от него.
-                </p>
-                @*<a href="#" class="card-link">Card link</a>
-        <a href="#" class="card-link">Another link</a>*@
-            </div>
-        </div>
-
-        <div style="padding: 10px;"></div>
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">Наибольшим спросом пользуются легковые автомобили со следующими типами кузова</h5>
-            </div>
-            <ul class="list-group list-group-flush" id="ulListId">
-                <li class="list-group-item">Седан - самый распространенный вариант.</li>
-                <li class="list-group-item">Универсал - семейный автомобиль с отличными характеристиками.</li>
-                <li class="list-group-item">Хэтчбек - укороченная версия универсала.</li>
-                <li class="list-group-item">Лифтбек - комбинация универсала и седана.</li>
-                <li class="list-group-item">Купе - автомобиль для ценителей личного пространства.</li>
-                <li class="list-group-item">Лимузин - показная роскошь.</li>
-                <li class="list-group-item">Кабриолет всегда привлекает взгляды.</li>
-                <li class="list-group-item">Внедорожник - повышенная прочность и надежность.</li>
-            </ul>
-            <div class="card-body">
-                <button class="btn btn-danger" id="btnHideId">Скрыть</button>
-                <button class="btn btn-primary" id="btnShowId">Показать</button>
-            </div>
         </div>
     }
 
