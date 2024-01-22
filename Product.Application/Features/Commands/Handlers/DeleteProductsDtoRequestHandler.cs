@@ -34,7 +34,7 @@ namespace Product.Application.Features.Commands.Handlers
                     await _context.SaveChangesAsync(cancellationToken);
 
                     _productAPIResponse.IsSuccess = true;
-                    _productAPIResponse.Message = "Продукты успешн удалены";
+                    _productAPIResponse.Message = "Продукты успешно удалены";
 
                     return _productAPIResponse;
                 }

@@ -12,6 +12,7 @@ namespace Product.Test.Common
         protected ICreateProductDtoValidator CreateValidator;
         protected IUpdateProductDtoValidator UpdateValidator;
         protected IDeleteProductDtoValidator DeleteValidator;
+        protected IDeleteProductsDtoValidator DeleteProductsValidator;
 
         public TestCommandHandler()
         {
@@ -19,6 +20,7 @@ namespace Product.Test.Common
             CreateValidator = new ICreateProductDtoValidator();
             UpdateValidator = new IUpdateProductDtoValidator();
             DeleteValidator = new IDeleteProductDtoValidator();
+            DeleteProductsValidator = new IDeleteProductsDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
