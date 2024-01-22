@@ -53,5 +53,13 @@ namespace Product.API.Controllers
             var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
             return Ok(command);
         }
+
+        // DELETE api/<ProductController>/
+        [HttpDelete]
+        public async Task<ActionResult<ProductAPIResponse>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
+        {
+            var command = await _mediator.Send(new DeleteProductsDtoRequest { DeleteProducts = deleteProductsDto });
+            return Ok(command);
+        }
     }
 }
