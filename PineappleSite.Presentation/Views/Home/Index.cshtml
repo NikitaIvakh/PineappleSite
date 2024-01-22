@@ -1,8 +1,204 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Главная стираница";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+    .custom-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+
+<div style="padding: 10px;"></div>
+
+@{
+    if (User.Identity.IsAuthenticated)
+    {
+        <div class="card col-md-12">
+            <div class="card-body">
+                <h5 class="card-title text-center">Добро пожаловать на сайт по автоматизации и учету автомобилей</h5>
+                <p class="card-text">На этом сайте вы сможете выбрать подходящую вам модель автомобиля. Посмотреть характеристики автомобиля.</p>
+                <p class="card-text"><small class="text-muted">Автор - Nikita Ivakh</small></p>
+            </div>
+        </div>
+
+        <div style="padding: 10px;"></div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            @{
+                if (User.IsInRole("Administrator"))
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://images.wallpaperscraft.ru/image/single/mashina_noch_dozhd_143166_1280x720.jpg" class="card-img-top card-image" />
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Mercedes</h5>
+                                <p class="card-text">
+                                    Mercedes-Benz является торговой маркой и производителем легковых автомобилей премиум-класса, грузовиков,
+                                    автобусов и других транспортных средств с одноименным названием.
+                                </p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://images.wallpaperscraft.ru/image/single/bmw_fary_avtomobil_124112_1280x720.jpg" class="card-img-top card-image" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title">BMW</h5>
+                        <p class="card-text">
+                            BMW AG - немецкий производитель автомобилей.
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://images.wallpaperscraft.ru/image/single/audi_avtomobil_vid_speredi_130942_1280x720.jpg" class="card-img-top card-image" />
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Audi</h5>
+                        <p class="card-text">
+                            Audi AG - немецкая автомобильная компания, входящая в группу Volkswagen, специализирующаяся на производстве автомобилей под брендом Audi.
+                        </p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                    </div>
+                </div>
+            </div>
+
+            @{
+                if (User.IsInRole("Employee"))
+                {
+                    <div class="col">
+                        <div class="card h-100">
+                            <img src="https://images.wallpaperscraft.ru/image/single/mashina_noch_dozhd_143166_1280x720.jpg" class="card-img-top card-image" />
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Mercedes</h5>
+                                <p class="card-text">
+                                    Mercedes-Benz является торговой маркой и производителем легковых автомобилей премиум-класса, грузовиков,
+                                    автобусов и других транспортных средств с одноименным названием.
+                                </p>
+                            </div>
+                            <div class="card-footer text-center">
+                                <a asp-controller="Home" asp-action="GetCars" class="card-link">Список автомобилей</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+
+        <div style="padding: 10px;"></div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Основные типы кузовов</h5>
+                <p class="card-text">
+                    Тип конструкции кузова легко определяется по внешнему виду автомобиля. Каждый класс характеризуется отличительными чертами,
+                    которые легко обнаружить даже при небольшом опыте. Кроме того, способ размещения багажного отделения также играет роль в классификации,
+                    которое может быть объединено с пассажирским салоном или отделено от него.
+                </p>
+                @*<a href="#" class="card-link">Card link</a>
+        <a href="#" class="card-link">Another link</a>*@
+            </div>
+        </div>
+
+        <div style="padding: 10px;"></div>
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Наибольшим спросом пользуются легковые автомобили со следующими типами кузова</h5>
+            </div>
+            <ul class="list-group list-group-flush" id="ulListId">
+                <li class="list-group-item">Седан - самый распространенный вариант.</li>
+                <li class="list-group-item">Универсал - семейный автомобиль с отличными характеристиками.</li>
+                <li class="list-group-item">Хэтчбек - укороченная версия универсала.</li>
+                <li class="list-group-item">Лифтбек - комбинация универсала и седана.</li>
+                <li class="list-group-item">Купе - автомобиль для ценителей личного пространства.</li>
+                <li class="list-group-item">Лимузин - показная роскошь.</li>
+                <li class="list-group-item">Кабриолет всегда привлекает взгляды.</li>
+                <li class="list-group-item">Внедорожник - повышенная прочность и надежность.</li>
+            </ul>
+            <div class="card-body">
+                <button class="btn btn-danger" id="btnHideId">Скрыть</button>
+                <button class="btn btn-primary" id="btnShowId">Показать</button>
+            </div>
+        </div>
+    }
+
+    else
+    {
+        <div class="card">
+            <div class="card-header">
+                Вы не вошли в аккаунт
+            </div>
+            <div class="card-body">
+                <blockquote class="blockquote mb-0">
+                    <p>Чтобы увидеть весь контент, Вам необходимо зарегистрироваться.</p>
+                </blockquote>
+            </div>
+        </div>
+
+        <div style="padding: 10px;"></div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://eda.yandex/images/3504598/5397bebd78c66a5ccdd0d042411d145f-400x400.jpeg" alt="PineApple, Жареный картофель с грибами и яйцом" data-testid="smart-image-img" loading="lazy">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Недоступно</h5>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Жареный картофель с грибами и яйцом</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://eda.yandex/images/3595513/360fe75e8b8e4c148ec5da89a3d38933-400x400.jpeg" alt="PineApple, Ассорти из колбас с хреном" data-testid="smart-image-img" loading="lazy">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Недоступно</h5>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Ассорти из колбас с хреном</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100">
+                    <img src="https://eda.yandex/images/3595513/360fe75e8b8e4c148ec5da89a3d38933-400x400.jpeg" alt="PineApple, Ассорти из колбас с домашней аджикой" data-testid="smart-image-img" loading="lazy">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Недоступно</h5>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">Ассорти из колбас с домашней аджикой</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}
+
+@section Scripts
+{
+    <script>
+
+        $('#btnHideId').click(function () {
+            $('#ulListId').hide(2000);
+        });
+
+        $('#btnShowId').click(function () {
+            $('#ulListId').show(2000);
+        });
+    </script>
+}
