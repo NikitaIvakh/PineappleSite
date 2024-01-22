@@ -14,5 +14,7 @@ namespace PineappleSite.Presentation.Contracts
         Task<ProductAPIViewModel> UpdateProductAsync(int id, UpdateProductViewModel product);
 
         Task<ProductAPIViewModel> DeleteProductAsync(int id, DeleteProductViewModel product);
+
+        Task<ProductAPIViewModel> DeleteProductsAsync(DeleteProductsViewModel product);
     }
 }

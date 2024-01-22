@@ -93,7 +93,7 @@ namespace PineappleSite.Presentation.Services
             {
                 ProductAPIViewModel response = new();
                 DeleteProductDto deleteProductDto = _mapper.Map<DeleteProductDto>(product);
-                ProductAPIResponse apiResponse = await _productClient.ProductDELETEAsync(deleteProductDto.Id.ToString(), deleteProductDto);
+                ProductAPIResponse apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id.ToString(), deleteProductDto);
 
                 if (apiResponse.IsSuccess)
                 {
@@ -107,6 +107,38 @@ namespace PineappleSite.Presentation.Services
                     foreach (string error in apiResponse.ValidationErrors)
                     {
                         response.Message += error + Environment.NewLine;
+                    }
+                }
+
+                return response;
+            }
+
+            catch (ProductExceptions exception)
+            {
+                return ConvertProductException(exception);
+            }
+        }
+
+        public async Task<ProductAPIViewModel> DeleteProductsAsync(DeleteProductsViewModel product)
+        {
+            try
+            {
+                ProductAPIViewModel response = new();
+                DeleteProductsDto deleteProductsDto = _mapper.Map<DeleteProductsDto>(product);
+                ProductAPIResponse apiResponse = await _productClient.ProductDELETEAsync(deleteProductsDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    response.IsSuccess = true;
+                    response.Message = apiResponse.Message;
+                    response.Id = apiResponse.Id;
+                }
+
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        response.ValidationErrors += error + Environment.NewLine;
                     }
                 }
 

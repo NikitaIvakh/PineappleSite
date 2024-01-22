@@ -134,5 +134,29 @@ namespace PineappleSite.Presentation.Controllers
                 return View(deleteProductViewModel);
             }
         }
+
+        public async Task<ActionResult> DeleteMultiple(List<int> selectedIds)
+        {
+            if (selectedIds is null || selectedIds.Count <= 1)
+            {
+                TempData["error"] = "Выберите хотя бы один продукт для удаления.";
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            var deleteProducts = new DeleteProductsViewModel { ProductIds = selectedIds };
+            ProductAPIViewModel response = await _productService.DeleteProductsAsync(deleteProducts);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.Message;
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            else
+            {
+                TempData["error"] = response.ValidationErrors;
+                return RedirectToAction(nameof(GetProducts));
+            }
+        }
     }
 }
