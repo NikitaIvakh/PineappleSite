@@ -1,4 +1,5 @@
-﻿@model IEnumerable<PineappleSite.Presentation.Models.Products.ProductViewModel>
+﻿@using PineappleSite.Presentation.Models.Paginated
+@model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
     ViewData["Title"] = "Список продуктов";
@@ -92,6 +93,28 @@
                     }
                 </tbody>
             </table>
+            <div class="pagination">
+                @if (Model.HasPreviosPage)
+                {
+                    <a asp-action="GetProducts"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-searchUser="@ViewData["SearchUser"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="page-item">
+                        <span>&laquo; Назад</span>
+                    </a>
+                }
+                @if (Model.HasNextPage)
+                {
+                    <a asp-action="GetProducts"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-searchUser="@ViewData["SearchUser"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="page-item">
+                        <span>Вперед &raquo;</span>
+                    </a>
+                }
+            </div>
         </div>
     </div>
 </form>

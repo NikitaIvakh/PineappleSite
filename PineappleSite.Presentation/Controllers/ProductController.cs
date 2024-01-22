@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Products;
@@ -16,7 +17,7 @@ namespace PineappleSite.Presentation.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetProducts(string searchProduct)
+        public async Task<ActionResult> GetProducts(string searchProduct, string currentFilter, int? pageNumber)
         {
             var products = await _productService.GetAllProductsAsync();
 
@@ -31,7 +32,13 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             ViewData["SearchProduct"] = searchProduct;
-            return View(products);
+            ViewData["CurrentFilter"] = currentFilter;
+
+            int pageSize = 10;
+            var filteredProducts = products.AsQueryable();
+            var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
+
+            return View(paginatedProducts);
         }
 
         // GET: ProductController/Details/5

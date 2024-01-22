@@ -18,7 +18,7 @@
             if (pageIndex > totalPages)
                 pageIndex = totalPages;
 
-            else if (pageIndex <= 0)
+            else if (pageIndex <= 1)
                 pageIndex = 1;
 
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
