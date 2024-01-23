@@ -58,6 +58,7 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                     }
                 }
 
+                _shoppingCartAPIResponse.IsSuccess = true;
                 _shoppingCartAPIResponse.Data = cartDto;
                 return _shoppingCartAPIResponse;
             }

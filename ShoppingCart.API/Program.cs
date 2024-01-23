@@ -14,6 +14,7 @@ applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureShoppingCartService(applicationBuilder.Configuration);
 
 applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:ProductAPI"]));
+applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:CouponAPI"]));
 
 WebApplication webApplication = applicationBuilder.Build();
 
