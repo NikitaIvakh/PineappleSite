@@ -27,7 +27,9 @@ namespace ShoppingCart.Application.Features.Commands.Queries
 
                 if (cartHeader is null)
                 {
+                    _shoppingCartAPIResponse.IsSuccess = true;
                     _shoppingCartAPIResponse.Data = new CartDto();
+
                     return _shoppingCartAPIResponse;
                 }
 
@@ -71,6 +73,7 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                 _shoppingCartAPIResponse.Message = ex.Message;
             }
 
+            _shoppingCartAPIResponse.IsSuccess = true;
             return _shoppingCartAPIResponse;
         }
     }

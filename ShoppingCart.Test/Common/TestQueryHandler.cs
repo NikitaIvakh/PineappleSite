@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using Moq;
 using ShoppingCart.Application.Profiles;
+using ShoppingCart.Application.Services.IServices;
 using ShoppingCart.Infrastructure;
 using Xunit;
 
@@ -9,9 +11,17 @@ namespace ShoppingCart.Test.Common
     {
         protected ShoppingCartDbContext Context;
         protected IMapper Mapper;
+        protected IProductService ProductService;
+        protected ICouponService CouponService;
 
         public TestQueryHandler()
         {
+            var productServiceMock = new Mock<IProductService>();
+            var couponServiceMock = new Mock<ICouponService>();
+
+            ProductService = productServiceMock.Object;
+            CouponService = couponServiceMock.Object;
+
             Context = ShoppingCartDbContextFactory.Create();
 
             var mapperConfiguration = new MapperConfiguration(config =>
