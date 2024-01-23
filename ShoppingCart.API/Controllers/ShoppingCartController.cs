@@ -19,22 +19,9 @@ namespace ShoppingCart.API.Controllers
             return Ok(cart);
         }
 
-        //// GET api/<ShoppingCartController>/5
-        //[HttpGet("{id}")]
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
         // POST api/<ShoppingCartController>
         [HttpPost]
         public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<ShoppingCartController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
         {
         }
 
