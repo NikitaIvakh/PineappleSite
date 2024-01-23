@@ -17,6 +17,13 @@ namespace ShoppingCart.Infrastructure
             services.AddScoped<ICartHeaderDbContext, ShoppingCartDbContext>();
             services.AddScoped<ICartDetailsDbContext, ShoppingCartDbContext>();
 
+            var scope = services.BuildServiceProvider();
+            using (var serviceProvider = scope.CreateScope())
+            {
+                var db = serviceProvider.ServiceProvider.GetRequiredService<ShoppingCartDbContext>();
+                db.Database.Migrate();
+            }
+
             return services;
         }
     }
