@@ -16,4 +16,11 @@
     <ProjectReference Include="..\ShoppingCart.Core\ShoppingCart.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Commands\Handlers\" />
+    <Folder Include="Features\Commands\Queries\" />
+    <Folder Include="Features\Requests\Handlers\" />
+    <Folder Include="Features\Requests\Queries\" />
+  </ItemGroup>
+
 </Project>
