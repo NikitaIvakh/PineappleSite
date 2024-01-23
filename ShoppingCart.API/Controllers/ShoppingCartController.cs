@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.Application.DTOs.Cart;
+using ShoppingCart.Application.Features.Requests.Handlers;
 using ShoppingCart.Application.Features.Requests.Queries;
 using ShoppingCart.Application.Response;
 
@@ -12,8 +14,8 @@ namespace ShoppingCart.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         // GET: api/<ShoppingCartController>
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> Get(string userId)
+        [HttpGet("GetCart/{userId}")]
+        public async Task<ActionResult<ShoppingCartAPIResponse>> GetCart(string userId)
         {
             var cart = await _mediator.Send(new GetShoppingCartRequest { UserId = userId });
             return Ok(cart);
@@ -21,8 +23,10 @@ namespace ShoppingCart.API.Controllers
 
         // POST api/<ShoppingCartController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult> Post([FromBody] CartDto cartDto)
         {
+            var comnand = await _mediator.Send(new CartUpsertRequest { CartDto = cartDto });
+            return Ok(comnand);
         }
 
         // DELETE api/<ShoppingCartController>/5
