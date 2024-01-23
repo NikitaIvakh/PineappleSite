@@ -1,3 +1,4 @@
+using ShoppingCart.Application;
 using ShoppingCart.Infrastructure;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
+applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureShoppingCartService(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
