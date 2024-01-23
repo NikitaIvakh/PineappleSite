@@ -10,6 +10,7 @@ namespace ShoppingCart.Infrastructure.Configuration
         {
             builder.HasKey(x => x.Id);
             builder.Ignore(key => key.Product);
+            builder.HasOne(cd => cd.CartHeader).WithMany().HasForeignKey(cd => cd.CartHeaderId);
         }
     }
 }
