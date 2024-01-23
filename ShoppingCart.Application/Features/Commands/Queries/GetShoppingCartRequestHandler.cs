@@ -59,6 +59,7 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                 }
 
                 _shoppingCartAPIResponse.IsSuccess = true;
+                _shoppingCartAPIResponse.Message = "Купон успешно применен";
                 _shoppingCartAPIResponse.Data = cartDto;
 
                 return _shoppingCartAPIResponse;
