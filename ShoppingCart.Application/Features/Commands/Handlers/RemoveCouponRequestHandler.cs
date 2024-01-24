@@ -26,7 +26,7 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
             {
                 CartHeader cartHeaderFromDb = await _cartHeaderContext.CartHeaders.FirstAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
                 cartHeaderFromDb.CouponCode = string.Empty;
-                _cartHeaderContext.CartHeaders.Update(cartHeaderFromDb);
+                _cartHeaderContext.CartHeaders.Remove(cartHeaderFromDb);
                 await _cartHeaderContext.SaveChangesAsync(cancellationToken);
 
                 _response.IsSuccess = true;
