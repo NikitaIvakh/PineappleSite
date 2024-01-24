@@ -11,7 +11,7 @@ namespace ShoppingCart.Application.Services
         public async Task<CouponDto> GetCouponAsync(string couponCode)
         {
             HttpClient httpClient = _httpClientFactory.CreateClient("Coupon");
-            var response = await httpClient.GetAsync($"/api/Coupon/{couponCode}");
+            var response = await httpClient.GetAsync($"/api/Coupon/GetCouponByCode/{couponCode}");
             if (response.IsSuccessStatusCode)
             {
                 using var stream = await response.Content.ReadAsStreamAsync();
