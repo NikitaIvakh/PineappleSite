@@ -35,6 +35,16 @@ namespace Coupon.API.Controllers
             return Ok(query);
         }
 
+        [HttpGet("GetCouponByCode/{couponCode}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public async Task<ActionResult<CouponDto>> GetCouponByCode(string couponCode)
+        {
+            var query = await _mediator.Send(new GetCouponDetailsByCouponNameRequest { CouponCode = couponCode });
+            return Ok(query);
+        }
+
         // POST api/<CouponController>
         [HttpPost]
         [ProducesResponseType(StatusCodes.Status200OK)]

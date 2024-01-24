@@ -15,7 +15,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
         public async Task<CouponDto> Handle(GetCouponDetailsByCouponNameRequest request, CancellationToken cancellationToken)
         {
-            var coupon = await _context.Coupons.FirstOrDefaultAsync(key => key.CouponCode == request.CouponCode, cancellationToken) ??
+            var coupon = await _context.Coupons.FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken) ??
                 throw new NotFoundException($"Купон с названием: ", request.CouponCode);
 
             return _mapper.Map<CouponDto>(coupon);
