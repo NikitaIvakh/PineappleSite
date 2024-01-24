@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.DTOs.Cart;
+using ShoppingCart.Application.Exceptions;
 using ShoppingCart.Application.Features.Requests.Queries;
 using ShoppingCart.Application.Interfaces;
 using ShoppingCart.Application.Response;
@@ -23,7 +24,8 @@ namespace ShoppingCart.Application.Features.Commands.Queries
         {
             try
             {
-                var cartHeader = await _cartContext.CartHeaders.FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken);
+                var cartHeader = await _cartContext.CartHeaders.FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken) ??
+                    throw new NotFoundException($"Корзины пользователя:", request.UserId);
 
                 if (cartHeader is null)
                 {
