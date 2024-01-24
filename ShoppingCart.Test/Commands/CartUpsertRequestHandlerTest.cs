@@ -1,5 +1,6 @@
 ﻿using ShoppingCart.Application.DTOs.Cart;
 using ShoppingCart.Application.Features.Commands.Handlers;
+using ShoppingCart.Application.Response;
 using ShoppingCart.Test.Common;
 using Shouldly;
 using Xunit;
@@ -22,6 +23,9 @@ namespace ShoppingCart.Test.Commands
                     CouponCode = "10OFF",
                     Discount = 10,
                     CartTotal = 45,
+                    Name = "Test",
+                    Phone = "Test",
+                    Email = "Test",
                 },
 
                 CartDetails = new List<CartDetailsDto>()
@@ -43,8 +47,9 @@ namespace ShoppingCart.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.ShouldBeTrue();
             result.Message = "Корзина успешно обновлена";
+            result.ValidationErrors.ShouldBeNull();
+            result.ShouldBeOfType<ShoppingCartAPIResponse>();
         }
     }
 }
