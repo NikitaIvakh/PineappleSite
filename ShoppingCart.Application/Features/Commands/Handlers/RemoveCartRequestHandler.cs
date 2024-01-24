@@ -31,6 +31,13 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
 
                 await _cartDetailsContext.SaveChangesAsync(cancellationToken);
                 await _cartHeaderContext.SaveChangesAsync(cancellationToken);
+
+                _response.IsSuccess = true;
+                _response.Message = "Продукт из корзины успешно удален";
+                _response.Id = request.CartDetailsId;
+                _response.Data = request.CartDetailsId;
+
+                return _response;
             }
 
             catch (Exception exception)
