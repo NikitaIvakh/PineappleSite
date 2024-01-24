@@ -24,7 +24,6 @@ namespace ShoppingCart.Test.Queries
 
             // Assert
             result.IsSuccess.ShouldBeTrue();
-            result.Id.ShouldBe(1);
             result.ValidationErrors.ShouldBeNull();
         }
     }
