@@ -44,9 +44,11 @@ namespace ShoppingCart.API.Controllers
         }
 
         // DELETE api/<ShoppingCartController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{cartDerailsId}")]
+        public async Task<ActionResult<ShoppingCartAPIResponse>> Delete([FromBody] int cartDerailsId)
         {
+            var command = await _mediator.Send(new RemoveCartRequest { CartDetailsId = cartDerailsId });
+            return Ok(command);
         }
     }
 }
