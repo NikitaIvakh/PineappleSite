@@ -26,6 +26,13 @@ namespace PineappleSite.Presentation.Services
             return _mapper.Map<CouponViewModel>(coupon);
         }
 
+        public async Task<CouponViewModel> GetCouponAsync(string couponCode)
+        {
+            AddBearerToken();
+            var coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
+            return _mapper.Map<CouponViewModel>(coupon);
+        }
+
         public async Task<ResponseViewModel> CreateCouponAsync(CreateCouponViewModel createCoupon)
         {
             AddBearerToken();
