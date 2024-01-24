@@ -6,6 +6,7 @@ using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
+using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation
 {
@@ -61,6 +62,7 @@ namespace PineappleSite.Presentation
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
             CreateMap<ProductAPIResponse, ProductAPIViewModel>().ReverseMap();
+            CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
         }
     }
 }
