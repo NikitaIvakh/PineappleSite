@@ -2,6 +2,7 @@
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
@@ -58,6 +59,12 @@ namespace PineappleSite.Presentation
             CreateMap<UpdateProductDto, UpdateProductViewModel>().ReverseMap();
             CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
             CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
+            #endregion
+
+            #region
+            CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
+            CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
+            CreateMap<CartDto, CartViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
