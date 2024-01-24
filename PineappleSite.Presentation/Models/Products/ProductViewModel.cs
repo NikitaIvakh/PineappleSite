@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Models.Products.Enum;
+using System.ComponentModel.DataAnnotations;
 
 namespace PineappleSite.Presentation.Models.Products
 {
@@ -13,5 +14,8 @@ namespace PineappleSite.Presentation.Models.Products
         public ProductCategory ProductCategory { get; set; }
 
         public double Price { get; set; }
+
+        [Range(1, 10)]
+        public int Count { get; set; } = 1;
     }
 }
