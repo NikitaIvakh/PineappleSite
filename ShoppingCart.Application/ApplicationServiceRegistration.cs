@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using ShoppingCart.Application.Services;
 using ShoppingCart.Application.Services.IServices;
 using System.Reflection;
@@ -11,6 +12,7 @@ namespace ShoppingCart.Application
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
+            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
 
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICouponService, CouponService>();
