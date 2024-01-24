@@ -14,6 +14,12 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
         private readonly IMapper _mapper;
         private readonly ShoppingCartAPIResponse _response = new();
 
+        public RemoveCouponRequestHandler(ICartHeaderDbContext cartHeaderContext, IMapper mapper)
+        {
+            _cartHeaderContext = cartHeaderContext;
+            _mapper = mapper;
+        }
+
         public async Task<ShoppingCartAPIResponse> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
         {
             try
@@ -22,6 +28,13 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                 cartHeaderFromDb.CouponCode = string.Empty;
                 _cartHeaderContext.CartHeaders.Update(cartHeaderFromDb);
                 await _cartHeaderContext.SaveChangesAsync(cancellationToken);
+
+                _response.IsSuccess = true;
+                _response.Message = "Купон успешно удален";
+                _response.Id = cartHeaderFromDb.Id;
+                _response.Data = cartHeaderFromDb;
+
+                return _response;
             }
 
             catch (Exception exception)
