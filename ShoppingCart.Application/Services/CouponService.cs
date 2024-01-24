@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using ShoppingCart.Application.DTOs.Cart;
-using ShoppingCart.Application.Response;
+﻿using ShoppingCart.Application.DTOs.Cart;
 using ShoppingCart.Application.Services.IServices;
+using System.Text.Json;
 
 namespace ShoppingCart.Application.Services
 {
@@ -12,13 +11,17 @@ namespace ShoppingCart.Application.Services
         public async Task<CouponDto> GetCouponAsync(string couponCode)
         {
             HttpClient httpClient = _httpClientFactory.CreateClient("Coupon");
-            var response = await httpClient.GetAsync($"api/Coupon/{couponCode}");
-            var apiContent = await response.Content.ReadAsStringAsync();
-            var apiResponse = JsonConvert.DeserializeObject<ShoppingCartAPIResponse>(apiContent);
-
-            if (apiResponse is not null && apiResponse.IsSuccess)
+            var response = await httpClient.GetAsync($"/api/Coupon/{couponCode}");
+            if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(apiResponse.Data));
+                using var stream = await response.Content.ReadAsStreamAsync();
+                JsonSerializerOptions jsonSerializerOptions = new()
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var options = jsonSerializerOptions;
+                return await JsonSerializer.DeserializeAsync<CouponDto>(stream, options);
             }
 
             return new CouponDto();

@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
-using ShoppingCart.Application.DTOs.Cart;
-using ShoppingCart.Application.Response;
+﻿using ShoppingCart.Application.DTOs.Cart;
 using ShoppingCart.Application.Services.IServices;
+using System.Text.Json;
 
 namespace ShoppingCart.Application.Services
 {
@@ -11,14 +10,19 @@ namespace ShoppingCart.Application.Services
 
         public async Task<IEnumerable<ProductDto>> GetProductsAsync()
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient("Product");
-            var response = await httpClient.GetAsync($"api/Product");
-            var apiContent = await response.Content.ReadAsStringAsync();
-            var responce = JsonConvert.DeserializeObject<ShoppingCartAPIResponse>(apiContent);
+            HttpClient client = _httpClientFactory.CreateClient("Product");
+            var response = await client.GetAsync("/api/Product");
 
-            if (responce.IsSuccess)
+            if (response.IsSuccessStatusCode)
             {
-                return JsonConvert.DeserializeObject<IEnumerable<ProductDto>>(Convert.ToString(responce.Data));
+                using var stream = await response.Content.ReadAsStreamAsync();
+                JsonSerializerOptions jsonSerializerOptions = new()
+                {
+                    PropertyNameCaseInsensitive = true
+                };
+
+                var options = jsonSerializerOptions;
+                return await JsonSerializer.DeserializeAsync<IReadOnlyCollection<ProductDto>>(stream, options);
             }
 
             return new List<ProductDto>();

@@ -13,8 +13,8 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureShoppingCartService(applicationBuilder.Configuration);
 
-applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:ProductAPI"]));
-applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:CouponAPI"]));
+applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]));
+applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]));
 
 WebApplication webApplication = applicationBuilder.Build();
 
