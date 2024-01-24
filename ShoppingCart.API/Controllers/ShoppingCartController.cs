@@ -29,6 +29,14 @@ namespace ShoppingCart.API.Controllers
             return Ok(comnand);
         }
 
+        [HttpPost("ApplyCoupon")]
+        public async Task<ActionResult<ShoppingCartAPIResponse>> ApplyCoupon([FromBody] CartDto cartDto)
+        {
+            var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
+            return Ok(command);
+        }
+
+
         // DELETE api/<ShoppingCartController>/5
         [HttpDelete("{id}")]
         public void Delete(int id)
