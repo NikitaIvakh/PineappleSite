@@ -1,5 +1,6 @@
 ﻿using ShoppingCart.Application.Features.Commands.Queries;
 using ShoppingCart.Application.Features.Requests.Queries;
+using ShoppingCart.Core.Entities.Cart;
 using ShoppingCart.Test.Common;
 using Shouldly;
 using Xunit;
@@ -25,6 +26,23 @@ namespace ShoppingCart.Test.Queries
             // Assert
             result.IsSuccess.ShouldBeTrue();
             result.ValidationErrors.ShouldBeNull();
+        }
+
+        [Fact]
+        public async Task GetShoppingCartRequestHandlerTest_UnknownUserId()
+        {
+            // Arrange
+            var handler = new GetShoppingCartRequestHandler(Context, Context, Mapper, ProductService, CouponService);
+            var userId = "testu23243ак45не65рн6р76";
+
+            // Act
+            var result = await handler.Handle(new GetShoppingCartRequest
+            {
+                UserId = userId,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.ShouldBeTrue();
         }
     }
 }
