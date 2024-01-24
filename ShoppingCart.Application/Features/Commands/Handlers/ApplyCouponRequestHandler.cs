@@ -22,6 +22,13 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                 cartHeaderFromDb.CouponCode = request.CartDto.CartHeader.CouponCode;
                 _cartHeaderContext.CartHeaders.Update(cartHeaderFromDb);
                 await _cartHeaderContext.SaveChangesAsync(cancellationToken);
+
+                _response.IsSuccess = true;
+                _response.Message = "Купон успешно применен";
+                _response.Id = cartHeaderFromDb.Id;
+                _response.Data = cartHeaderFromDb;
+
+                return _response;
             }
 
             catch (Exception exception)
