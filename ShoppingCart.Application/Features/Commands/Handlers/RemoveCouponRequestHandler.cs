@@ -8,17 +8,11 @@ using ShoppingCart.Core.Entities.Cart;
 
 namespace ShoppingCart.Application.Features.Commands.Handlers
 {
-    public class RemoveCouponRequestHandler : IRequestHandler<RemoveCouponRequest, ShoppingCartAPIResponse>
+    public class RemoveCouponRequestHandler(ICartHeaderDbContext cartHeaderContext, IMapper mapper) : IRequestHandler<RemoveCouponRequest, ShoppingCartAPIResponse>
     {
-        private readonly ICartHeaderDbContext _cartHeaderContext;
-        private readonly IMapper _mapper;
+        private readonly ICartHeaderDbContext _cartHeaderContext = cartHeaderContext;
+        private readonly IMapper _mapper = mapper;
         private readonly ShoppingCartAPIResponse _response = new();
-
-        public RemoveCouponRequestHandler(ICartHeaderDbContext cartHeaderContext, IMapper mapper)
-        {
-            _cartHeaderContext = cartHeaderContext;
-            _mapper = mapper;
-        }
 
         public async Task<ShoppingCartAPIResponse> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
         {

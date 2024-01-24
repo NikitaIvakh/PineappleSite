@@ -23,7 +23,7 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                 int totalCartRemoveItems = _cartDetailsContext.CartDetails.Where(key => key.CartHeaderId == cartDetails.CartHeaderId).Count();
                 _cartDetailsContext.CartDetails.Remove(cartDetails);
 
-                if (cartDetails.CartHeaderId == 1)
+                if (totalCartRemoveItems == 1)
                 {
                     CartHeader cartHeader = await _cartHeaderContext.CartHeaders.FirstOrDefaultAsync(key => key.Id == cartDetails.CartHeaderId);
                     _cartHeaderContext.CartHeaders.Remove(cartHeader);
