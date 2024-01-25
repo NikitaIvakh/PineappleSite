@@ -13,7 +13,7 @@ namespace Product.Application.Profiles
                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
                 .ReverseMap();
             CreateMap<ProductEntity, CreateProductDto>()
-                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
+                .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))
                 .ReverseMap();
             CreateMap<ProductEntity, UpdateProductDto>()
                 .ForMember(key => key.ProductCategory, opt => opt.MapFrom(key => key.ProductCategory))

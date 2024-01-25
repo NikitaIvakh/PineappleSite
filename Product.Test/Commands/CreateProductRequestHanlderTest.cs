@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
@@ -10,13 +11,13 @@ using Xunit;
 
 namespace Product.Test.Commands
 {
-    public class CreateProductRequestHanlderTest : TestCommandHandler
+    public class CreateProductRequestHanlderTest(IHttpContextAccessor httpContextAccessor) : TestCommandHandler(httpContextAccessor)
     {
         [Fact]
         public async Task CreateProductRequestHanlderTest_Success()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator, HttpContextAccessor);
             var createProductDto = new CreateProductDto
             {
                 Name = "name",
@@ -49,7 +50,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidName()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator, HttpContextAccessor);
             var createProductDto = new CreateProductDto
             {
                 Name = "na",
@@ -75,7 +76,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidDescription()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator, HttpContextAccessor);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",
@@ -107,7 +108,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidPrice()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator);
+            var handler = new CreateProductDtoRequestHandler(Context, Mapper, CreateValidator, HttpContextAccessor);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",

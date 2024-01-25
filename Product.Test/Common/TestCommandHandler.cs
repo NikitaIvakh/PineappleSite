@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Product.Application.DTOs.Validator;
 using Product.Application.Profiles;
 using Product.Infrastructure;
@@ -13,9 +14,11 @@ namespace Product.Test.Common
         protected IUpdateProductDtoValidator UpdateValidator;
         protected IDeleteProductDtoValidator DeleteValidator;
         protected IDeleteProductsDtoValidator DeleteProductsValidator;
+        protected IHttpContextAccessor HttpContextAccessor;
 
-        public TestCommandHandler()
+        public TestCommandHandler(IHttpContextAccessor httpContextAccessor)
         {
+            HttpContextAccessor = httpContextAccessor;
             Context = ProductDbContextFactory.Create();
             CreateValidator = new ICreateProductDtoValidator();
             UpdateValidator = new IUpdateProductDtoValidator();

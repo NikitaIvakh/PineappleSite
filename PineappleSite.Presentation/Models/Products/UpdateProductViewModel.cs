@@ -13,5 +13,7 @@ namespace PineappleSite.Presentation.Models.Products
         public ProductCategory ProductCategory { get; set; }
 
         public double Price { get; set; }
+
+        public IFormFile? Avatar { get; set; }
     }
 }

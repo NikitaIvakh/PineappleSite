@@ -40,7 +40,7 @@ namespace Product.Application.Features.Commands.Handlers
                     if (request.CreateProduct.Avatar is not null)
                     {
                         string fileName = product.Id + Path.GetExtension(request.CreateProduct.Avatar.FileName);
-                        string filePath = Path.Combine("wwwroot", "ProductImages", fileName);
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
                         var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
                         FileInfo fileInfo = new(directoryLocation);
@@ -48,7 +48,7 @@ namespace Product.Application.Features.Commands.Handlers
                         if (fileInfo.Exists)
                             fileInfo.Delete();
 
-                        var fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+                        var fileDirectory = Path.Combine(filePath, fileName);
                         using (FileStream fileStream = new(fileDirectory, FileMode.Create))
                         {
                             request.CreateProduct.Avatar.CopyTo(fileStream);

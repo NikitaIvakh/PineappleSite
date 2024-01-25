@@ -11,6 +11,15 @@ applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddSwaggerGen();
 
+applicationBuilder.Services.AddCors(key =>
+{
+    key.AddPolicy("CorsPolicy",
+        applicationBuilder => applicationBuilder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
+
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService();
 
@@ -23,7 +32,15 @@ if (webApplication.Environment.IsDevelopment())
     webApplication.UseSwaggerUI();
 }
 
+webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
+webApplication.UseRouting();
 webApplication.UseAuthorization();
-webApplication.MapControllers();
+webApplication.UseCors();
+webApplication.UseStaticFiles();
+webApplication.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
+
 webApplication.Run();

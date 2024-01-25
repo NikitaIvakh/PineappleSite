@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
@@ -11,6 +12,10 @@ namespace Product.Test.Commands
 {
     public class DeleteProductDtoRequestHandlerTest : TestCommandHandler
     {
+        public DeleteProductDtoRequestHandlerTest(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
+
         [Fact]
         public async Task DeleteProductDtoRequestHandlerTest_Success()
         {

@@ -6,7 +6,7 @@
     ViewData["Title"] = "Обновить продукт";
 }
 
-<form class="container col-7" asp-action="Edit">
+<form class="container col-7" asp-action="Edit" enctype="multipart/form-data">
     <br />
     <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
@@ -68,6 +68,15 @@
                 <div class="col-6 pb-3">
                     <textarea class="form-control" asp-for="Price"></textarea>
                     <span class="text-danger" asp-validation-for="Price"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Картинка</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input asp-for="Avatar" class="form-control" />
+                    <span asp-validation-for="Avatar" class="text-danger"></span>
                 </div>
             </div>
             <div class="col-5 offset-1">

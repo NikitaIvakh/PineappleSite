@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
@@ -13,11 +14,15 @@ namespace Product.Test.Commands
 {
     public class UpdateProductDtoRequestHandlerTest : TestCommandHandler
     {
+        public UpdateProductDtoRequestHandlerTest(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
+
         [Fact]
         public async Task UpdateProductDtoRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator);
+            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator, HttpContextAccessor);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,
@@ -52,7 +57,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator);
+            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator, HttpContextAccessor);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 999,
@@ -78,7 +83,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongInputValidName()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator);
+            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator, HttpContextAccessor);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,
@@ -106,7 +111,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongInputValidDescription()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator);
+            var handler = new UpdateProductDtoRequestHandler(Context, Mapper, UpdateValidator, HttpContextAccessor);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,

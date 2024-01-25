@@ -25,6 +25,7 @@ namespace Product.Infrastructure.Configurations
                     Description = "Самый вкусный суп.",
                     ProductCategory = ProductCategory.Soups,
                     Price = 10,
+                    ImageUrl = "https://placehold.co/600x400",
                 },
 
                 new ProductEntity
@@ -34,6 +35,7 @@ namespace Product.Infrastructure.Configurations
                     Description = "Сырные шарики с крабовыми палочками.",
                     ProductCategory = ProductCategory.Snacks,
                     Price = 15,
+                    ImageUrl = "https://placehold.co/601x401",
                 },
 
                 new ProductEntity
@@ -43,6 +45,7 @@ namespace Product.Infrastructure.Configurations
                     Description = "Газированный напиток.",
                     ProductCategory = ProductCategory.Drinks,
                     Price = 5,
+                    ImageUrl = "https://placehold.co/602x402",
                 });
         }
     }

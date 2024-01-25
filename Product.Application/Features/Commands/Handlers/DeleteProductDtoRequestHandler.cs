@@ -31,6 +31,17 @@ namespace Product.Application.Features.Commands.Handlers
                     var product = await _context.Products.FindAsync(new object[] { request.DeleteProduct.Id }, cancellationToken)
                         ?? throw new NotFoundException($"Продукта c идентификатором:", request.DeleteProduct.Id);
 
+                    if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                    {
+                        string fileName = product.Id + ".jpg";
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath, fileName);
+
+                        if (File.Exists(filePath))
+                        {
+                            File.Delete(filePath);
+                        }
+                    }
+
                     _context.Products.Remove(product);
                     await _context.SaveChangesAsync(cancellationToken);
 

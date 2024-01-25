@@ -17,5 +17,9 @@ namespace PineappleSite.Presentation.Models.Products
 
         [Range(1, 10)]
         public int Count { get; set; } = 1;
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }

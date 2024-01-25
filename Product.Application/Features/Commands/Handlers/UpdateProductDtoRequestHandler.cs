@@ -51,11 +51,21 @@ namespace Product.Application.Features.Commands.Handlers
                                 fileInfo.Delete();
                         }
 
-                        string fileName = product.Id + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
-                        string filePath = Path.Combine("wwwroot", "ProductImages", fileName);
+                        Random random = new();
+                        int randomNumber = random.Next(1, 120001);
+
+                        string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
                         string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
-                        using (FileStream fileStream = new(fileDirectory, FileMode.Create))
+                        if (!Directory.Exists(filePath))
+                        {
+                            Directory.CreateDirectory(filePath);
+                        }
+
+                        var fileFullPath = Path.Combine(fileDirectory, fileName);
+
+                        using (FileStream fileStream = new(fileFullPath, FileMode.Create))
                         {
                             request.UpdateProduct.Avatar.CopyTo(fileStream);
                         };
@@ -78,8 +88,6 @@ namespace Product.Application.Features.Commands.Handlers
 
                         product.ImageUrl = null;
                         product.ImageLocalPath = null;
-                        request.UpdateProduct.ImageUrl = product.ImageUrl;
-                        request.UpdateProduct.ImageLocalPath = product.ImageLocalPath;
                     }
 
                     _context.Products.Update(product);

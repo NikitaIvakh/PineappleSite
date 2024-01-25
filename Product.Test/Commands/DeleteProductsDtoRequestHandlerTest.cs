@@ -1,4 +1,5 @@
-﻿using Product.Application.DTOs.Products;
+﻿using Microsoft.AspNetCore.Http;
+using Product.Application.DTOs.Products;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Test.Common;
@@ -9,6 +10,10 @@ namespace Product.Test.Commands
 {
     public class DeleteProductsDtoRequestHandlerTest : TestCommandHandler
     {
+        public DeleteProductsDtoRequestHandlerTest(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        {
+        }
+
         [Fact]
         public async Task DeleteProductsDtoRequestHandlerTest_Success()
         {

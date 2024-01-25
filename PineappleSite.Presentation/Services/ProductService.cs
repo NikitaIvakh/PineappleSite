@@ -28,8 +28,19 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 ProductAPIViewModel response = new();
-                CreateProductDto createProductDto = _mapper.Map<CreateProductDto>(product);
-                ProductAPIResponse apiREsponse = await _productClient.ProductPOSTAsync(createProductDto);
+
+                FileParameter avatarFileParameter = null;
+                if (product.Avatar is not null)
+                {
+                    avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
+                }
+
+                ProductAPIResponse apiREsponse = await _productClient.ProductPOSTAsync(
+                    product.Name,
+                    product.Description,
+                    (ProductCategory?)product.ProductCategory,
+                    product.Price,
+                    avatarFileParameter);
 
                 if (apiREsponse.IsSuccess)
                 {
@@ -60,8 +71,21 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 ProductAPIViewModel response = new();
-                UpdateProductDto updateProductDto = _mapper.Map<UpdateProductDto>(product);
-                ProductAPIResponse apiResponse = await _productClient.ProductPUTAsync(updateProductDto.Id.ToString(), updateProductDto);
+
+                FileParameter avatarFileParameter = null;
+                if (product.Avatar is not null)
+                {
+                    avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
+                }
+
+                ProductAPIResponse apiResponse = await _productClient.ProductPUTAsync(
+                    id.ToString(),
+                    product.Id,
+                    product.Name,
+                    product.Description,
+                    (ProductCategory?)product.ProductCategory,
+                    product.Price,
+                    avatarFileParameter);
 
                 if (apiResponse.IsSuccess)
                 {
@@ -85,6 +109,7 @@ namespace PineappleSite.Presentation.Services
             {
                 return ConvertProductException(exception);
             }
+            //throw new NotImplementedException();
         }
 
         public async Task<ProductAPIViewModel> DeleteProductAsync(int id, DeleteProductViewModel product)
