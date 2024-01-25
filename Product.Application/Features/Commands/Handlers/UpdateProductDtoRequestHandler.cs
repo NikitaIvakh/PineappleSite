@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Validator;
 using Product.Application.Exceptions;
@@ -9,12 +10,13 @@ using Product.Application.Response;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class UpdateProductDtoRequestHandler(IProductDbContext context, IMapper mapper, IUpdateProductDtoValidator updateValidator) : IRequestHandler<UpdateProductDtoRequest, ProductAPIResponse>
+    public class UpdateProductDtoRequestHandler(IProductDbContext context, IMapper mapper, IUpdateProductDtoValidator updateValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<UpdateProductDtoRequest, ProductAPIResponse>
     {
         private readonly IProductDbContext _context = context;
         private readonly IMapper _mapper = mapper;
         private readonly IUpdateProductDtoValidator _updateValidator = updateValidator;
-        private readonly ProductAPIResponse _productAPIResponse = new ProductAPIResponse();
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly ProductAPIResponse _productAPIResponse = new();
 
         public async Task<ProductAPIResponse> Handle(UpdateProductDtoRequest request, CancellationToken cancellationToken)
         {
@@ -35,6 +37,51 @@ namespace Product.Application.Features.Commands.Handlers
                         throw new NotFoundException($"У продукта ({request.UpdateProduct.Name}) не существует идкетификатора: ", request.UpdateProduct.Id);
 
                     _mapper.Map(request.UpdateProduct, product);
+                    _context.Products.Update(product);
+                    await _context.SaveChangesAsync(cancellationToken);
+
+                    if (request.UpdateProduct.Avatar is not null)
+                    {
+                        if (!string.IsNullOrEmpty(product.ImageLocalPath) || !string.IsNullOrEmpty(product.ImageUrl))
+                        {
+                            var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                            FileInfo fileInfo = new(oldFilePasthDirectory);
+
+                            if (fileInfo.Exists)
+                                fileInfo.Delete();
+                        }
+
+                        string fileName = product.Id + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                        string filePath = Path.Combine("wwwroot", "ProductImages", fileName);
+                        string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                        using (FileStream fileStream = new(fileDirectory, FileMode.Create))
+                        {
+                            request.UpdateProduct.Avatar.CopyTo(fileStream);
+                        };
+
+                        var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
+                        product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
+                        product.ImageLocalPath = filePath;
+                    }
+
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                        {
+                            var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                            FileInfo fileInfo = new(oldFilePasthDirectory);
+
+                            if (fileInfo.Exists)
+                                fileInfo.Delete();
+                        }
+
+                        product.ImageUrl = null;
+                        product.ImageLocalPath = null;
+                        request.UpdateProduct.ImageUrl = product.ImageUrl;
+                        request.UpdateProduct.ImageLocalPath = product.ImageLocalPath;
+                    }
+
                     _context.Products.Update(product);
                     await _context.SaveChangesAsync(cancellationToken);
 
