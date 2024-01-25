@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Moq;
 using Product.Application.DTOs.Validator;
 using Product.Application.Profiles;
 using Product.Infrastructure;
@@ -16,9 +17,11 @@ namespace Product.Test.Common
         protected IDeleteProductsDtoValidator DeleteProductsValidator;
         protected IHttpContextAccessor HttpContextAccessor;
 
-        public TestCommandHandler(IHttpContextAccessor httpContextAccessor)
+        public TestCommandHandler()
         {
-            HttpContextAccessor = httpContextAccessor;
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
+            HttpContextAccessor = httpContextAccessor.Object;
+
             Context = ProductDbContextFactory.Create();
             CreateValidator = new ICreateProductDtoValidator();
             UpdateValidator = new IUpdateProductDtoValidator();

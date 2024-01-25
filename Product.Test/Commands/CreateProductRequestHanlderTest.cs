@@ -11,7 +11,7 @@ using Xunit;
 
 namespace Product.Test.Commands
 {
-    public class CreateProductRequestHanlderTest(IHttpContextAccessor httpContextAccessor) : TestCommandHandler(httpContextAccessor)
+    public class CreateProductRequestHanlderTest : TestCommandHandler
     {
         [Fact]
         public async Task CreateProductRequestHanlderTest_Success()

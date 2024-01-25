@@ -14,10 +14,6 @@ namespace Product.Test.Commands
 {
     public class UpdateProductDtoRequestHandlerTest : TestCommandHandler
     {
-        public UpdateProductDtoRequestHandlerTest(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-        {
-        }
-
         [Fact]
         public async Task UpdateProductDtoRequestHandlerTest_Success()
         {

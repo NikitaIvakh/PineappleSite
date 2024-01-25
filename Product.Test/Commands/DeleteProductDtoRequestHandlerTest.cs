@@ -12,10 +12,6 @@ namespace Product.Test.Commands
 {
     public class DeleteProductDtoRequestHandlerTest : TestCommandHandler
     {
-        public DeleteProductDtoRequestHandlerTest(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
-        {
-        }
-
         [Fact]
         public async Task DeleteProductDtoRequestHandlerTest_Success()
         {
