@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Product.Application.DTOs.Products;
-using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 using Product.Application.Response;
@@ -32,7 +31,7 @@ namespace Product.API.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
-        public async Task<ActionResult<ProductAPIResponse>> Post([FromBody] CreateProductDto createProductDto)
+        public async Task<ActionResult<ProductAPIResponse>> Post([FromForm] CreateProductDto createProductDto)
         {
             var command = await _mediator.Send(new CreateProductDtoRequest { CreateProduct = createProductDto });
             return Ok(command);

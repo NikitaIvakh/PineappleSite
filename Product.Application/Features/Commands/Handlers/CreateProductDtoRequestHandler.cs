@@ -40,7 +40,7 @@ namespace Product.Application.Features.Commands.Handlers
                     if (request.CreateProduct.Avatar is not null)
                     {
                         string fileName = product.Id + Path.GetExtension(request.CreateProduct.Avatar.FileName);
-                        string filePath = Path.Combine("wwwroot", "ProducImages", fileName);
+                        string filePath = Path.Combine("wwwroot", "ProductImages", fileName);
                         var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
                         FileInfo fileInfo = new(directoryLocation);
@@ -55,7 +55,7 @@ namespace Product.Application.Features.Commands.Handlers
                         }
 
                         var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
-                        product.ImageUrl = Path.Combine(baseUrl, "ProducImages", fileName);
+                        product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
                         product.ImageLocalPath = filePath;
                     }
 
@@ -63,6 +63,9 @@ namespace Product.Application.Features.Commands.Handlers
                     {
                         product.ImageUrl = "https://placehold.co/600x400";
                     }
+
+                    _context.Products.Update(product);
+                    await _context.SaveChangesAsync(cancellationToken);
 
                     _productAPIResponse.IsSuccess = true;
                     _productAPIResponse.Message = "Продукт успешно добавлен";
