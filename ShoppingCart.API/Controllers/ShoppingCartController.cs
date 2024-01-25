@@ -22,8 +22,8 @@ namespace ShoppingCart.API.Controllers
         }
 
         // POST api/<ShoppingCartController>
-        [HttpPost]
-        public async Task<ActionResult> Post([FromBody] CartDto cartDto)
+        [HttpPost("CartUpsert")]
+        public async Task<ActionResult<ShoppingCartAPIResponse>> CartUpsert([FromBody] CartDto cartDto)
         {
             var comnand = await _mediator.Send(new CartUpsertRequest { CartDto = cartDto });
             return Ok(comnand);
@@ -44,8 +44,8 @@ namespace ShoppingCart.API.Controllers
         }
 
         // DELETE api/<ShoppingCartController>/5
-        [HttpDelete("{cartDerailsId}")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> Delete([FromBody] int cartDerailsId)
+        [HttpDelete("RemoveCart/{cartDerailsId}")]
+        public async Task<ActionResult<ShoppingCartAPIResponse>> RemoveCart([FromBody] int cartDerailsId)
         {
             var command = await _mediator.Send(new RemoveCartRequest { CartDetailsId = cartDerailsId });
             return Ok(command);
