@@ -27,7 +27,7 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                     await _cartHeaderContext.CartHeaders.AddAsync(cartHeader, cancellationToken);
                     await _cartHeaderContext.SaveChangesAsync(cancellationToken);
 
-                    request.CartDto.CartDetails.First().Id = cartHeader.Id;
+                    request.CartDto.CartDetails.First().CartHeaderId = cartHeader.Id;
                     await _cartDetailsContext.CartDetails.AddAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()), cancellationToken);
                     await _cartDetailsContext.SaveChangesAsync(cancellationToken);
                 }
@@ -39,7 +39,7 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
 
                     if (cartDetailsFromDb is null || cartDetailsFromDb.Count == 0)
                     {
-                        request.CartDto.CartDetails.First().Id = cartHeaderFromDb.Id;
+                        request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.Id;
                         await _cartDetailsContext.CartDetails.AddAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()), cancellationToken);
                         await _cartDetailsContext.SaveChangesAsync(cancellationToken);
                     }
@@ -47,7 +47,7 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                     else
                     {
                         request.CartDto.CartDetails.First().Id = cartDetailsFromDb.Id;
-                        request.CartDto.CartDetails.First().Count = cartDetailsFromDb.Count;
+                        request.CartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
                         request.CartDto.CartDetails.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
 
                         _cartDetailsContext.CartDetails.Update(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));

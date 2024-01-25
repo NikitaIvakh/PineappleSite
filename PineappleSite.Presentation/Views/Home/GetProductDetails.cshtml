@@ -41,6 +41,10 @@
                                 <div class="col-12">
                                     <span class="badge bg-success text-white p-3 border">@Model.ProductCategory.GetDisplayName()</span>
                                     <p class="text-secondary">Описание: @Html.Raw(Model.Description)</p>
+                                    <div class="row mx-0">
+                                        <input class="form-control" asp-for="Count" />
+                                        <span class="text-danger" asp-validation-for="Count"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -53,7 +57,7 @@
                 <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" style="height:50px;">Вернуться к продуктам</a>
             </div>
             <div class="col-12 col-md-6 ">
-                <button type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;" disabled>Добавить в корзину</button>
+                <button asp-action="GetProductDetails" asp-controller="Home" type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">Добавить в корзину</button>
             </div>
         </div>
     </div>

@@ -73,7 +73,7 @@
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">Order Total : @Model.CartHeader.CartTotal Br<br /></span>
+                                <span class="text-danger" style="font-size:21px;">Общая стоимость : @Model.CartHeader.CartTotal Br<br /></span>
                                 @{
                                     if (Model.CartHeader.Discount > 0)
                                     {
@@ -85,10 +85,10 @@
                     </div>
                     <div class="card-footer row">
                         <div class="col-6 col-md-3 ">
-                            <button type="submit" class="btn btn-outline-danger form-control" disabled>Отправка по почте</button>
+                            <button disabled readobly type="submit" class="btn btn-outline-danger form-control">Отправка по почте</button>
                         </div>
                         <div class="col-6 col-md-3 offset-md-6">
-                            <a asp-action="Checkout" class="btn btn-success form-control" disabled>Дальше</a>
+                            <button disabled readobly asp-action="Checkout" class="btn btn-success form-control">Дальше</button>
                         </div>
                     </div>
                 </div>
