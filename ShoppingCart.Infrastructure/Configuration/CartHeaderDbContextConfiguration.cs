@@ -11,6 +11,9 @@ namespace ShoppingCart.Infrastructure.Configuration
             builder.HasKey(x => x.Id);
             builder.Property(key => key.UserId).IsRequired(false);
             builder.Property(key => key.CouponCode).IsRequired(false);
+
+            builder.Ignore(key => key.Discount);
+            builder.Ignore(key => key.CartTotal);
         }
     }
 }
