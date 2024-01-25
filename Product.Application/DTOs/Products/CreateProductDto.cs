@@ -1,4 +1,5 @@
-﻿using Product.Core.Entities.Enum;
+﻿using Microsoft.AspNetCore.Http;
+using Product.Core.Entities.Enum;
 
 namespace Product.Application.DTOs.Products
 {
@@ -11,5 +12,11 @@ namespace Product.Application.DTOs.Products
         public ProductCategory ProductCategory { get; set; }
 
         public double Price { get; set; }
+
+        public IFormFile? Avatar { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }
