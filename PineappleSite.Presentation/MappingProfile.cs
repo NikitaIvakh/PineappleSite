@@ -54,11 +54,18 @@ namespace PineappleSite.Presentation
             #endregion
 
             #region Product Mapping
-            CreateMap<ProductDto, ProductViewModel>().ReverseMap();
+            CreateMap<Services.Products.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<CreateProductDto, CreateProductViewModel>().ReverseMap();
             CreateMap<UpdateProductDto, UpdateProductViewModel>().ReverseMap();
             CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
             CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
+            #endregion
+
+            #region
+            CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
+            CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
+            CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
+            CreateMap<CartDto, CartViewModel>().ReverseMap();
             #endregion
 
             #region
