@@ -45,8 +45,30 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ShoppingCartController/Create
-        public ActionResult Create()
+        public async Task<ActionResult> RemoveCoupon(CartViewModel cartViewModel)
         {
+            try
+            {
+                ShoppingCartResponseViewModel response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+            }
+
             return View();
         }
 
