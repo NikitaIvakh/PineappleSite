@@ -11,6 +11,7 @@ namespace ShoppingCart.Application.Profiles
             #region
             CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
             CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
+            CreateMap<Core.Entities.DTOs.ProductDto, ProductDto>().ReverseMap();
             #endregion
         }
     }

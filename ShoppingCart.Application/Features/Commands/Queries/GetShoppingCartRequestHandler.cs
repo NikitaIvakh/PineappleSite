@@ -43,10 +43,13 @@ namespace ShoppingCart.Application.Features.Commands.Queries
 
                 IEnumerable<ProductDto> productDtos = await _productService.GetProductsAsync();
 
-                foreach (var item in cartDto.CartDetails)
+                if (productDtos is not null)
                 {
-                    item.Product = productDtos.FirstOrDefault(key => key.Id == item.ProductId);
-                    cartDto.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    foreach (var item in cartDto.CartDetails)
+                    {
+                        item.Product = productDtos.FirstOrDefault(key => key.Id == item.ProductId);
+                        cartDto.CartHeader.CartTotal += (item.Count * item.Product?.Price ?? 0);
+                    }
                 }
 
                 if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
@@ -73,6 +76,7 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                 _shoppingCartAPIResponse.Message = exception.Message;
             }
 
+            _shoppingCartAPIResponse.IsSuccess = true;
             return _shoppingCartAPIResponse;
         }
     }

@@ -60,6 +60,7 @@ namespace PineappleSite.Presentation
             #endregion
 
             #region ShoppingCart Mapping
+            CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
             CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
             CreateMap<CartDto, CartViewModel>().ReverseMap();

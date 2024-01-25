@@ -13,5 +13,9 @@ namespace ShoppingCart.Application.DTOs.Cart
         public ProductCategory ProductCategory { get; set; }
 
         public double Price { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }
