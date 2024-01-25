@@ -11,19 +11,19 @@
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
                         <div class="col-6">
-                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
+                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Корзина</h3>
                         </div>
                         <div class="col-6 text-end">
-                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Continue Shopping</a>
+                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Вернуться к продуктам</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
                             <div class="row text-info">
                                 <div class="col-lg-2"></div>
-                                <div class="col-lg-5">Product Details</div>
-                                <div class="col-lg-2">Price</div>
-                                <div class="col-lg-2">Count</div>
+                                <div class="col-lg-5">Детали продукта</div>
+                                <div class="col-lg-2">Стоимость</div>
+                                <div class="col-lg-2">Количество</div>
                                 <div class="col-lg-1"></div>
                             </div>
                         </div>
@@ -40,7 +40,7 @@
                                         <div style="font-size:11px;">@Html.Raw(cartObj?.Product?.Description)</div>
                                     </div>
                                     <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
-                                        <span style="font-size:17px;">@cartObj?.Product?.Price Byn</span>
+                                        <span style="font-size:17px;">@cartObj?.Product?.Price Br</span>
                                     </div>
                                     <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
                                         <span style="font-size:17px;">@cartObj?.Count</span>
@@ -59,16 +59,16 @@
                                 @{
                                     if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
                                     {
-                                        <span>Coupon:</span>
+                                        <span>Купон:</span>
                                         <input asp-for="CartHeader.CouponCode" />
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Apply</button>
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Применить</button>
                                     }
 
                                     else
                                     {
-                                        <span>Coupon:</span>
+                                        <span>Купон:</span>
                                         <input asp-for="CartHeader.CouponCode" disabled />
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">Remove</button>
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">Удалить</button>
                                     }
                                 }
                             </div>
@@ -77,7 +77,7 @@
                                 @{
                                     if (Model.CartHeader.Discount > 0)
                                     {
-                                        <span class="text-success"> Order Discount : @Model.CartHeader.Discount Byn</span>
+                                        <span class="text-success"> Сумма заказа : @Model.CartHeader.Discount Byn</span>
                                     }
                                 }
                             </div>
@@ -85,7 +85,7 @@
                     </div>
                     <div class="card-footer row">
                         <div class="col-6 col-md-3 ">
-                            <button type="submit" class="btn btn-outline-danger form-control" disabled>Email Cart</button>
+                            <button type="submit" class="btn btn-outline-danger form-control" disabled>Отправка по почте</button>
                         </div>
                         <div class="col-6 col-md-3 offset-md-6">
                             <a asp-action="Checkout" class="btn btn-success form-control" disabled>Дальше</a>
@@ -100,8 +100,8 @@
     {
         <div class="text-center">
             <h1 class="text-white pt-4">Корзина пустая.</h1>
-            <p class="text-white pb-3">Добавьте продукты</p>
-            <img src="/images/Empty_Cart.png" width="45%" />
+            <p class="text-white pb-3">Добавьте продукты.</p>
+            @* <img src="/images/Empty_Cart.png" width="45%" /> *@
         </div>
     }
 }
