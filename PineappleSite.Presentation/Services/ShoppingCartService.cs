@@ -13,6 +13,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ShoppingCartResponseViewModel> GetShoppingCartAsync(string userId)
         {
+            AddBearerToken();
             var shoppingCart = await _shoppingCartClient.GetCartAsync(userId);
             return _mapper.Map<ShoppingCartResponseViewModel>(shoppingCart);
         }
@@ -21,6 +22,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
+                AddBearerToken();
                 ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
                 ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.CartUpsertAsync(cartDto);
@@ -54,6 +56,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
+                AddBearerToken();
                 ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
                 ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.ApplyCouponAsync(cartDto);
@@ -87,6 +90,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
+                AddBearerToken();
                 ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
                 ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.RemoveCouponAsync(cartDto);
@@ -120,6 +124,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
+                AddBearerToken();
                 ShoppingCartResponseViewModel response = new();
                 ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.RemoveCartAsync(cartDEtailsId.ToString(), cartDEtailsId);
 
