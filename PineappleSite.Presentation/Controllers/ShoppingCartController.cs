@@ -17,9 +17,31 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ShoppingCartController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> ApplyCoupon(CartViewModel cartViewModel)
         {
-            return View();
+            try
+            {
+                ShoppingCartResponseViewModel response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+            }
+
+            return View(cartViewModel);
         }
 
         // GET: ShoppingCartController/Create
