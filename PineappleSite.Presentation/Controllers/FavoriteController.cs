@@ -18,25 +18,35 @@ namespace PineappleSite.Presentation.Controllers
             return View(await GetFavotiteItemsAfterAuthenticate());
         }
 
-        // GET: FavotiteController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
         // POST: FavotiteController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> RemoveDetails(int detailsId)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                FavoritesResponseViewModel response = await _favoriteService.DeleteFavoriteDetails(detailsId);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.Message;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ValidationErrors;
+                    return RedirectToAction(nameof(Index));
+                }
+
             }
-            catch
+
+            catch (Exception exception)
             {
-                return View();
+                ModelState.AddModelError(string.Empty, exception.Message);
             }
+
+            return View();
         }
 
         private async Task<FavouritesViewModel> GetFavotiteItemsAfterAuthenticate()
