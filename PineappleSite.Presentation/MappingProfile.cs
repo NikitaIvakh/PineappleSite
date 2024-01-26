@@ -78,7 +78,7 @@ namespace PineappleSite.Presentation
             CreateMap<Services.Favorites.ProductDto, ProductAPIViewModel>().ReverseMap();
             CreateMap<FavouritesHeader, FavoriteHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
-            CreateMap<FavouritesDto, FavoritesViewModel>().ReverseMap();
+            CreateMap<FavouritesDto, FavoritesResponseViewModel>().ReverseMap();
             #endregion
 
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();

@@ -8,21 +8,21 @@ namespace PineappleSite.Presentation.Services.Favorites
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IFavoritesClient _favoritesClient = favoritesClient;
 
-        protected FavoritesViewModel ConvertFavoriteExceptions(FavoritesExceptions favoritesExceptions)
+        protected FavoritesResponseViewModel ConvertFavoriteExceptions(FavoritesExceptions favoritesExceptions)
         {
             if (favoritesExceptions.StatusCode == 400)
             {
-                return new FavoritesViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = favoritesExceptions.Response, IsSuccess = false };
+                return new FavoritesResponseViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = favoritesExceptions.Response, IsSuccess = false };
             }
 
             else if (favoritesExceptions.StatusCode == 404)
             {
-                return new FavoritesViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new FavoritesResponseViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
             }
 
             else
             {
-                return new FavoritesViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new FavoritesResponseViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace PineappleSite.Presentation.Services.Favorites
 {
-    public class FavoritesViewModel
+    public class FavoritesResponseViewModel
     {
         public int Id { get; set; }
 
