@@ -7,7 +7,7 @@ namespace Favourites.Infrastructure
 {
     public static class RegisterApplicationDbContext
     {
-        public static IServiceCollection ConfigureApplicationService(this IServiceCollection services, IConfiguration configuration)
+        public static IServiceCollection ConfigureInfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(config =>
             {

@@ -1,3 +1,4 @@
+using Favourites.Application;
 using Favourites.Infrastructure;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,8 @@ applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
-applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
+applicationBuilder.Services.ConfigureApplicationService();
+applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
 
