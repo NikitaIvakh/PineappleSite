@@ -23,7 +23,7 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                 if (favouriteHeaderFromDb is null)
                 {
-                    FavouritesHeader favouritesHeader = _mapper.Map<FavouritesHeader>(favouriteHeaderFromDb);
+                    FavouritesHeader favouritesHeader = _mapper.Map<FavouritesHeader>(request.Favourites.FavoutiteHeader);
                     await _favoutiteHeaderDbContext.FavouritesHeaders.AddAsync(favouritesHeader, cancellationToken);
                     await _favoutiteHeaderDbContext.SaveChangesAsync(cancellationToken);
 

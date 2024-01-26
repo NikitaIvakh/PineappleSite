@@ -1,4 +1,6 @@
-﻿using Favourites.Application.Features.Requests.Queries;
+﻿using Favourites.Application.DTOs;
+using Favourites.Application.Features.Requests.Handlers;
+using Favourites.Application.Features.Requests.Queries;
 using Favourites.Application.Response;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -23,8 +25,10 @@ namespace Favourites.API.Controllers
 
         // POST api/<FavouriteController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<FavouriteAPIResponse>> Post([FromBody] FavouritesDto favouritesDto)
         {
+            var command = await _mediator.Send(new FavoutiteUpsertRequest { Favourites = favouritesDto });
+            return Ok(command);
         }
 
         // DELETE api/<FavouriteController>/5
