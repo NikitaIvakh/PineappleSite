@@ -16,16 +16,16 @@ namespace Favourites.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         // GET api/<FavouriteController>/5
-        [HttpGet("{userId}")]
-        public async Task<ActionResult<FavouriteAPIResponse>> Get(string userId)
+        [HttpGet("GetFavourite/{userId}")]
+        public async Task<ActionResult<FavouriteAPIResponse>> GetFavourite(string userId)
         {
             var query = await _mediator.Send(new GetFavouriteProductsRequest { UserId = userId });
             return Ok(query);
         }
 
         // POST api/<FavouriteController>
-        [HttpPost]
-        public async Task<ActionResult<FavouriteAPIResponse>> Post([FromBody] FavouritesDto favouritesDto)
+        [HttpPost("FavouriteUpsert")]
+        public async Task<ActionResult<FavouriteAPIResponse>> FavouriteUpsert([FromBody] FavouritesDto favouritesDto)
         {
             var command = await _mediator.Send(new FavoutiteUpsertRequest { Favourites = favouritesDto });
             return Ok(command);
