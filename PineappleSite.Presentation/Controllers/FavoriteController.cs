@@ -8,7 +8,7 @@ using PineappleSite.Presentation.Services.Favorites;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class FavotiteController(IFavoriteService favoriteService) : Controller
+    public class FavoriteController(IFavoriteService favoriteService) : Controller
     {
         private readonly IFavoriteService _favoriteService = favoriteService;
 

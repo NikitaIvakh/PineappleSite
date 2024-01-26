@@ -84,6 +84,7 @@ namespace PineappleSite.Presentation
             CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
             CreateMap<ProductAPIResponse, ProductAPIViewModel>().ReverseMap();
             CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
+            CreateMap<FavouriteAPIResponse, FavoritesResponseViewModel>().ReverseMap();
         }
     }
 }
