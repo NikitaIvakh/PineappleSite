@@ -2,8 +2,8 @@
 {
     public class FavouritesHeader
     {
-        public int Id { get; set; }
+        public int FavouritesHeaderId { get; set; }
 
-        public string UserId { get; set; }
+        public string? UserId { get; set; }
     }
 }
