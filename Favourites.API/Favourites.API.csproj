@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Favourites.Application\Favourites.Application.csproj" />
     <ProjectReference Include="..\Favourites.Infrastructure\Favourites.Infrastructure.csproj" />
   </ItemGroup>
