@@ -18,9 +18,6 @@ namespace PineappleSite.Presentation.Controllers
             return View(await GetFavotiteItemsAfterAuthenticate());
         }
 
-        // POST: FavotiteController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<ActionResult> RemoveDetails(int detailsId)
         {
             try

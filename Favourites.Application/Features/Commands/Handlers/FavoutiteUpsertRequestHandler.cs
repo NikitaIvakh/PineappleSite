@@ -58,6 +58,8 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                 _response.IsSuccess = true;
                 _response.Data = request.Favourites;
+                _response.Message = "Продукт успешно добавлен в избранное";
+                _response.Id = request.Favourites.FavoutiteHeader.FavouritesHeaderId;
 
                 return _response;
             }

@@ -1,18 +1,21 @@
 using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
+using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
+using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger, IProductService productService, IShoppingCartService shoppingCartService) : Controller
+    public class HomeController(ILogger<HomeController> logger, IProductService productService, IShoppingCartService shoppingCartService, IFavoriteService favoriteService) : Controller
     {
         private readonly ILogger<HomeController> _logger = logger;
         private readonly IProductService _productService = productService;
         private readonly IShoppingCartService _shoppingCartService = shoppingCartService;
+        private readonly IFavoriteService _favoriteService = favoriteService;
 
         [HttpGet]
         public async Task<IActionResult> Index()
@@ -35,8 +38,8 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         [HttpPost]
-        [ActionName("GetProductDetails")]
-        public async Task<IActionResult> GetProductDetails(ProductViewModel productViewModel)
+        [ActionName("AddToCart")]
+        public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
         {
             CartViewModel cartViewModel = new()
             {
@@ -69,6 +72,43 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             return View(cartViewModel);
+        }
+
+        [HttpPost]
+        [ActionName("AddToFavorites")]
+        public async Task<IActionResult> AddToFavorites(ProductViewModel productViewModel)
+        {
+            FavouritesViewModel favouritesViewModel = new()
+            {
+                FavoutiteHeader = new FavoriteHeaderViewModel
+                {
+                    UserId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value,
+                },
+            };
+
+            FavoriteDetailsViewModel favoriteDetailsViewModel = new()
+            {
+                ProductId = productViewModel.Id,
+            };
+
+            List<FavoriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
+            favouritesViewModel.FavouritesDetails = favoriteDetailsViewModels;
+
+            FavoritesResponseViewModel response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.Message;
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            else
+            {
+                TempData["error"] = response.ValidationErrors;
+
+            }
+
+            return View(favouritesViewModel);
         }
 
         public IActionResult Privacy()
