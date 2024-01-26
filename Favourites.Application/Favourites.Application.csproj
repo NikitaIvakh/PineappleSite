@@ -18,9 +18,4 @@
     <ProjectReference Include="..\Favourites.Domain\Favourites.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Commands\Handlers\" />
-    <Folder Include="Features\Requests\Handlers\" />
-  </ItemGroup>
-
 </Project>
