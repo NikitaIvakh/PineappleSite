@@ -10,8 +10,9 @@ namespace Favourites.Application
         public static IServiceCollection ConfigureApplicationService(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddScoped<IProductService, ProductService>();
+            services.AddMediatR(config => config.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]));
 
+            services.AddScoped<IProductService, ProductService>();
             return services;
         }
     }

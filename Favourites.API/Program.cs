@@ -13,6 +13,8 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 
+applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]));
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.

@@ -29,6 +29,8 @@ namespace Favourites.Application.Features.Commands.Queries
                 {
                     _response.IsSuccess = true;
                     _response.Data = new FavouritesHeader();
+
+                    return _response;
                 }
 
                 var favouritesDetails = await _favoutiteDetailsDbContext.FavouritesDetails.Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToListAsync(cancellationToken);
