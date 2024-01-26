@@ -17,22 +17,25 @@ namespace Favourites.Application.Features.Commands.Handlers
         {
             try
             {
-                FavouritesDetails favouritesDetails = await _favoutiteDetailsDbContext.FavouritesDetails.FirstOrDefaultAsync(key => key.FavouritesDetailsId == request.FavouriteDetailId, cancellationToken);
-                int removeProduct = _favoutiteDetailsDbContext.FavouritesDetails.Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).Count();
+                FavouritesDetails? favouritesDetails = await _favoutiteDetailsDbContext.FavouritesDetails.FirstOrDefaultAsync(key => key.FavouritesDetailsId == request.FavouriteDetailId, cancellationToken);
+                int removeProduct = await _favoutiteDetailsDbContext.FavouritesDetails.Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
                 _favoutiteDetailsDbContext.FavouritesDetails.Remove(favouritesDetails);
 
                 if (removeProduct == 1)
                 {
-                    FavouritesHeader favouritesHeader = await _favoutiteHeaderDbContext.FavouritesHeaders.FirstOrDefaultAsync(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId, cancellationToken);
-                    _favoutiteHeaderDbContext.FavouritesHeaders.Remove(favouritesHeader);
+                    FavouritesHeader? favouritesHeader = await _favoutiteHeaderDbContext.FavouritesHeaders.FirstOrDefaultAsync(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId, cancellationToken);
+
+                    if (favouritesHeader is not null)
+                        _favoutiteHeaderDbContext.FavouritesHeaders.Remove(favouritesHeader);
                 }
 
-                await _favoutiteHeaderDbContext.SaveChangesAsync(cancellationToken);
                 await _favoutiteDetailsDbContext.SaveChangesAsync(cancellationToken);
+                await _favoutiteHeaderDbContext.SaveChangesAsync(cancellationToken);
 
                 _response.IsSuccess = true;
                 _response.Id = request.FavouriteDetailId;
                 _response.Data = request.FavouriteDetailId;
+                _response.Message = "Продукт успешно удален";
 
                 return _response;
             }

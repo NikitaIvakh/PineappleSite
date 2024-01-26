@@ -32,9 +32,11 @@ namespace Favourites.API.Controllers
         }
 
         // DELETE api/<FavouriteController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("RemoveDetails/{favouriteDetailsId}")]
+        public async Task<ActionResult<FavouriteAPIResponse>> RemoveDetails([FromBody] int favouriteDetailsId)
         {
+            var command = await _mediator.Send(new RemoveFavoriteRequest { FavouriteDetailId = favouriteDetailsId });
+            return Ok(command);
         }
     }
 }
