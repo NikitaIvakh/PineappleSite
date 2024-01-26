@@ -1,21 +1,17 @@
-﻿using Favourites.Application.DTOs.Enum;
+﻿using Favourites.Domain.Entities.Favourite;
 
 namespace Favourites.Application.DTOs
 {
     public class FavouritesDetailsDto
     {
-        public int Id { get; set; }
+        public int FavouritesDetailsId { get; set; }
 
-        public string Name { get; set; }
+        public FavouritesHeader FavouritesHeader { get; set; }
 
-        public string Description { get; set; }
+        public int FavouritesHeaderId { get; set; }
 
-        public ProductCategory ProductCategory { get; set; }
+        public ProductDto Product { get; set; }
 
-        public double Price { get; set; }
-
-        public string? ImageUrl { get; set; }
-
-        public string? ImageLocalPath { get; set; }
+        public int ProductId { get; set; }
     }
 }
