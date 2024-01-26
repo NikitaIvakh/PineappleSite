@@ -6,6 +6,7 @@ using PineappleSite.Presentation.Services.Identities;
 using System.Reflection;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
+using PineappleSite.Presentation.Services.Favorites;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7149"));
 applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient => identityClient.BaseAddress = new Uri("https://localhost:7133"));
 applicationBuilder.Services.AddHttpClient<IProductClient, ProductClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7100"));
-applicationBuilder.Services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7152"));
+applicationBuilder.Services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(shoppingCart => shoppingCart.BaseAddress = new Uri("https://localhost:7152"));
+applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7269"));
 
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
