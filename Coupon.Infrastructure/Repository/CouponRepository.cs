@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure.Repository
 {
-    public class CouponRepository(ApplicationDbContext context) : ICouponRepository
+    public class CouponRepository(ApplicationDbContext context) : IBaseRepository
     {
         private readonly ApplicationDbContext _context = context;
 

@@ -17,7 +17,7 @@ namespace Coupon.Infrastructure
                 options.UseNpgsql(configuration.GetConnectionString("CouponConnectionString"));
             });
 
-            services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddScoped<IBaseRepository, CouponRepository>();
             services.AddScoped<ICouponDbContext, ApplicationDbContext>();
 
             var score = services.BuildServiceProvider();
