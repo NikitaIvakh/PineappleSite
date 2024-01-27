@@ -1,29 +1,51 @@
-﻿//using AutoMapper;
-//using Coupon.Application.Mapping;
-//using Coupon.Infrastructure;
+﻿using AutoMapper;
+using Coupon.Application.Features.Coupons.Handlers.Commands;
+using Coupon.Application.Mapping;
+using Coupon.Application.Validations;
+using Coupon.Domain.Entities;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Infrastructure;
+using Moq;
+using Serilog;
 
-//namespace Coupon.Test.Common
-//{
-//    public class TestCommandHandler : IDisposable
-//    {
-//        protected ApplicationDbContext Context;
-//        protected IMapper Mapper;
+namespace Coupon.Test.Common
+{
+    public class TestCommandHandler : IDisposable
+    {
+        protected ApplicationDbContext Context; 
+        protected CreateValidator CreateValidator;
+        protected UpdateValidator UpdateValidator;
+        protected DeleteValidator DeleteValidator;
+        protected DeleteListValidator DeleteListValidator;
+        protected IBaseRepository<CouponEntity> Repository;
+        protected ILogger Logger;
+        protected IMapper Mapper;
 
-//        public TestCommandHandler()
-//        {
-//            Context = CouponRepositoryContextFactory.Create();
+        public TestCommandHandler()
+        {
+            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
 
-//            var configurationProvider = new MapperConfiguration(key =>
-//            {
-//                key.AddProfile<MappingProfile>();
-//            });
+            Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
+            Repository = repositoryMock.Object;
 
-//            Mapper = configurationProvider.CreateMapper();
-//        }
+            CreateValidator = new CreateValidator();
+            UpdateValidator = new UpdateValidator();
+            DeleteValidator = new DeleteValidator(Context);
+            DeleteListValidator = new DeleteListValidator();
 
-//        public void Dispose()
-//        {
-//            CouponRepositoryContextFactory.DestroyDatabase(Context);
-//        }
-//    }
-//}
+            Context = CouponRepositoryContextFactory.Create(Repository);
+
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
+
+            Mapper = configurationProvider.CreateMapper();
+        }
+
+        public void Dispose()
+        {
+            CouponRepositoryContextFactory.DestroyDatabase(Context);
+        }
+    }
+}

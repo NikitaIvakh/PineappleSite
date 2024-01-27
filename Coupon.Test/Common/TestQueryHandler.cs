@@ -1,34 +1,46 @@
-﻿//using AutoMapper;
-//using Coupon.Application.Profiles;
-//using Coupon.Infrastructure;
-//using PineappleSite.Coupon.Core.Interfaces;
-//using Xunit;
+﻿using AutoMapper;
+using Coupon.Infrastructure;
+using Coupon.Application.Mapping;
+using Xunit;
+using Coupon.Domain.Entities;
+using Coupon.Domain.Interfaces.Repositories;
+using Serilog;
+using Coupon.Application.Features.Coupons.Handlers.Commands;
+using Coupon.Application.Validations;
+using Moq;
 
-//namespace Coupon.Test.Common
-//{
-//    public class TestQueryHandler : IDisposable
-//    {
-//        public ApplicationDbContext Context;
-//        public IMapper Mapper;
+namespace Coupon.Test.Common
+{
+    public class TestQueryHandler : IDisposable
+    {
+        public ApplicationDbContext Context;
+        protected IBaseRepository<CouponEntity> Repository;
+        protected ILogger Logger;
+        protected IMapper Mapper;
 
-//        public TestQueryHandler()
-//        {
-//            Context = CouponRepositoryContextFactory.Create();
+        public TestQueryHandler()
+        {
+            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
 
-//            var configuration = new MapperConfiguration(key =>
-//            {
-//                key.AddProfile<MappingProfile>();
-//            });
+            Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
+            Repository = repositoryMock.Object;
 
-//            Mapper = configuration.CreateMapper();
-//        }
+            Context = CouponRepositoryContextFactory.Create(Repository);
 
-//        public void Dispose()
-//        {
-//            CouponRepositoryContextFactory.DestroyDatabase(Context);
-//        }
-//    }
+            var configurationProvider = new MapperConfiguration(cfg =>
+            {
+                cfg.AddProfile<MappingProfile>();
+            });
 
-//    [CollectionDefinition("QueryCollection")]
-//    public class QueryCollection : ICollectionFixture<TestQueryHandler> { }
-//}
+            Mapper = configurationProvider.CreateMapper();
+        }
+
+        public void Dispose()
+        {
+            CouponRepositoryContextFactory.DestroyDatabase(Context);
+        }
+    }
+
+    [CollectionDefinition("QueryCollection")]
+    public class QueryCollection : ICollectionFixture<TestQueryHandler> { }
+}

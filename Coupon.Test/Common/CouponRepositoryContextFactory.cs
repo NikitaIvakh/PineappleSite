@@ -1,51 +1,48 @@
-﻿//using AutoMapper;
-//using Coupon.Core.Entities;
-//using Coupon.Infrastructure;
-//using Coupon.Infrastructure.Repository;
-//using Microsoft.EntityFrameworkCore;
-//using PineappleSite.Coupon.Core.Interfaces;
+﻿using Coupon.Domain.Entities;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
-//namespace Coupon.Test.Common
-//{
-//    public static class CouponRepositoryContextFactory
-//    {
-//        public static ApplicationDbContext Create()
-//        {
-//            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-//            var context = new ApplicationDbContext(options);
-//            context.Database.EnsureCreated();
-//            context.Coupons.AddRange(new CouponEntity
-//            { 
-//                CouponId = 3,
-//                CouponCode = "10OFF",
-//                DiscountAmount = 10,
-//                MinAmount = 20,
-//            },
+namespace Coupon.Test.Common
+{
+    public static class CouponRepositoryContextFactory
+    {
+        public static ApplicationDbContext Create(IBaseRepository<CouponEntity> repository)
+        {
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            var context = new ApplicationDbContext(options);
+            context.Database.EnsureCreated();
+            repository.CreateAsync(new CouponEntity
+            {
+                CouponId = 3,
+                CouponCode = "10OFF",
+                DiscountAmount = 10,
+                MinAmount = 20,
+            }).GetAwaiter().GetResult();
 
-//            new CouponEntity
-//            {
-//                CouponId = 4,
-//                CouponCode = "20OFF",
-//                DiscountAmount = 20,
-//                MinAmount = 30,
-//            },
+            repository.CreateAsync(new CouponEntity
+            {
+                CouponId = 4,
+                CouponCode = "20OFF",
+                DiscountAmount = 20,
+                MinAmount = 30,
+            }).GetAwaiter().GetResult();
 
-//            new CouponEntity
-//            {
-//                CouponId = 5,
-//                CouponCode = "30OFF",
-//                DiscountAmount = 30,
-//                MinAmount = 40,
-//            });
+            repository.CreateAsync(new CouponEntity
+            {
+                CouponId = 5,
+                CouponCode = "30OFF",
+                DiscountAmount = 30,
+                MinAmount = 40,
+            }).GetAwaiter().GetResult();
 
-//            context.SaveChanges();
-//            return context;
-//        }
+            return context;
+        }
 
-//        public static void DestroyDatabase(this ApplicationDbContext context)
-//        {
-//            context.Database.EnsureDeleted();
-//            context.Dispose();
-//        }
-//    }
-//}
+        public static void DestroyDatabase(ApplicationDbContext context)
+        {
+            context.Database.EnsureDeleted();
+            context.Dispose();
+        }
+    }
+}

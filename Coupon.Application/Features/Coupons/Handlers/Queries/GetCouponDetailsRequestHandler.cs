@@ -18,7 +18,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsRequest request, CancellationToken cancellationToken)
         {
-            CouponDto coupon;
+            CouponDto? coupon;
 
             try
             {
@@ -28,7 +28,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     CouponCode = key.CouponCode,
                     DiscountAmount = key.DiscountAmount,
                     MinAmount = key.MinAmount,
-                }).FirstAsync(key => key.CouponId == request.Id, cancellationToken);
+                }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
             }
 
             catch (Exception exception)
@@ -43,7 +43,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
             if (coupon is null)
             {
-                _logger.Warning("Купон с {id} не найден", request.Id);
+                _logger.Warning($"Купон с {request.Id} не найден");
                 return new Result<CouponDto>
                 {
                     ErrorMessage = ErrorMessage.CouponNotFound,
