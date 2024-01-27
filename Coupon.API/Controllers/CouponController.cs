@@ -1,7 +1,7 @@
-﻿using Coupon.Application.DTOs;
-using Coupon.Application.Features.Coupons.Requests.Commands;
+﻿using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Response;
+using Coupon.Domain.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

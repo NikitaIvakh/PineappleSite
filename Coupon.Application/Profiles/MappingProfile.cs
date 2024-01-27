@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Coupon.Application.DTOs;
+using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
 
 namespace Coupon.Application.Profiles

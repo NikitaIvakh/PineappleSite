@@ -1,6 +1,6 @@
-﻿using Coupon.Application.DTOs;
-using Coupon.Application.Features.Coupons.Handlers.Queries;
+﻿using Coupon.Application.Features.Coupons.Handlers.Queries;
 using Coupon.Application.Features.Coupons.Requests.Queries;
+using Coupon.Domain.DTOs;
 using Coupon.Test.Common;
 using Xunit;
 

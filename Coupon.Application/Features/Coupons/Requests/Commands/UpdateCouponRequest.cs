@@ -1,5 +1,5 @@
-﻿using Coupon.Application.DTOs;
-using Coupon.Application.Response;
+﻿using Coupon.Application.Response;
+using Coupon.Domain.DTOs;
 using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands

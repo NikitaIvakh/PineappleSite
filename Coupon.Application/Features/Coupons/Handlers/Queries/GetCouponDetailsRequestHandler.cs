@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Coupon.Application.DTOs;
 using Coupon.Application.Exceptions;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Interfaces;
+using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;

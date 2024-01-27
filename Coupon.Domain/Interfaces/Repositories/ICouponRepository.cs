@@ -1,6 +1,6 @@
 ﻿using Coupon.Domain.Entities;
 
-namespace PineappleSite.Coupon.Core.Interfaces
+namespace Coupon.Domain.Interfaces.Repositories
 {
     public interface ICouponRepository
     {

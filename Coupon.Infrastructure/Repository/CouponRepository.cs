@@ -1,7 +1,7 @@
 ﻿using AutoMapper.QueryableExtensions;
 using Coupon.Domain.Entities;
+using Coupon.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
-using PineappleSite.Coupon.Core.Interfaces;
 
 namespace Coupon.Infrastructure.Repository
 {

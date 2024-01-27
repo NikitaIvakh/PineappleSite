@@ -1,9 +1,10 @@
 ﻿using Coupon.Application.Interfaces;
+using Coupon.Domain.Interfaces.Database;
+using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PineappleSite.Coupon.Core.Interfaces;
 
 namespace Coupon.Infrastructure
 {

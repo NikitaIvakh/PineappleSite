@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Coupon.Application.DTOs;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Interfaces;
+using Coupon.Domain.DTOs;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
