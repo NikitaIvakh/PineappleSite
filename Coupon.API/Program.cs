@@ -1,5 +1,5 @@
 using Coupon.Application;
-using Coupon.Infrastructure;
+using Coupon.Infrastructure.DependencyInjection;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 

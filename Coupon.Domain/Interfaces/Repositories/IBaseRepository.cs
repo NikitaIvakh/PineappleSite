@@ -2,7 +2,7 @@
 {
     public interface IBaseRepository<TEntity>
     {
-        Task<IQueryable<TEntity>> GetAllAsync();
+        IQueryable<TEntity> GetAllAsync();
 
         Task<TEntity> CreateAsync(TEntity entity);
 
