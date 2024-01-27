@@ -1,54 +1,62 @@
-﻿using Coupon.Application.DTOs.Validator;
+﻿using AutoMapper;
 using Coupon.Application.Features.Coupons.Requests.Commands;
-using Coupon.Application.Interfaces;
-using Coupon.Application.Response;
-using FluentValidation;
+using Coupon.Application.Resources;
+using Coupon.Application.Validations;
+using Coupon.Domain.DTOs;
+using Coupon.Domain.Entities;
+using Coupon.Domain.Enum;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class DeleteCouponListRequestHandler(ICouponDbContext repository, DeleteCouponListDtoValidator validator) : IRequestHandler<DeleteCouponListRequest, BaseCommandResponse>
+    public class DeleteCouponListRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, DeleteListValidator validationRules) : IRequestHandler<DeleteCouponListRequest, Result<List<CouponDto>>>
     {
-        private readonly ICouponDbContext _repository = repository;
-        private readonly DeleteCouponListDtoValidator _validator = validator;
+        private readonly IBaseRepository<CouponEntity> _repository = repository;
+        private readonly ILogger _logger = logger;
+        private readonly IMapper _mapper = mapper;
+        private readonly DeleteListValidator _validator = validationRules;
 
-        public async Task<BaseCommandResponse> Handle(DeleteCouponListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<List<CouponDto>>> Handle(DeleteCouponListRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseCommandResponse();
-
             try
             {
-                var validationResult = await _validator.ValidateAsync(request.DeleteCoupon, cancellationToken);
+                var coupons = await _repository.GetAllAsync().Where(key => request.DeleteCoupon.CouponIds.Contains(key.CouponId)).ToListAsync(cancellationToken);
+                var result = await _validator.ValidateAsync(request.DeleteCoupon, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (!result.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка удаления";
-                    response.ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<List<CouponDto>>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
+                        ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var coupons = await _repository.Coupons.Where(key => request.DeleteCoupon.CouponIds.Contains(key.CouponId)).ToListAsync(cancellationToken);
-
-                    _repository.Coupons.RemoveRange(coupons);
-                    await _repository.SaveChangesAsync(cancellationToken);
-
-                    response.IsSuccess = true;
-                    response.Message = "Купоны успешно удалены";
-
-                    return response;
+                    await _repository.DeleteListAsync(coupons);
+                    return new Result<List<CouponDto>>
+                    {
+                        SuccessMessage = "Купоны успешно удалены",
+                        Data = _mapper.Map<List<CouponDto>>(coupons),
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Error(exception, exception.Message);
+                return new Result<List<CouponDto>>
+                {
+                    ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
+                    ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                };
             }
-
-            return response;
         }
     }
 }

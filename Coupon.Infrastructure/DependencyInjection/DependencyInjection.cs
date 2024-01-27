@@ -1,4 +1,5 @@
-﻿using Coupon.Domain.Entities;
+﻿using Coupon.Domain.DTOs;
+using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;

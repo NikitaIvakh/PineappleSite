@@ -1,5 +1,6 @@
-using Coupon.Application;
+using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
+using Serilog;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
+applicationBuilder.Host.UseSerilog((context, configuration) => configuration.ReadFrom.Configuration(context.Configuration));
 
 WebApplication webApplication = applicationBuilder.Build();
 
@@ -23,6 +25,7 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
+webApplication.UseSerilogRequestLogging();
 webApplication.UseAuthorization();
 webApplication.MapControllers();
 webApplication.Run();

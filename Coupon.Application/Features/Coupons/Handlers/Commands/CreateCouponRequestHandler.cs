@@ -1,56 +1,70 @@
 ﻿using AutoMapper;
-using Coupon.Application.DTOs.Validator;
 using Coupon.Application.Features.Coupons.Requests.Commands;
-using Coupon.Application.Interfaces;
-using Coupon.Application.Response;
+using Coupon.Application.Resources;
+using Coupon.Application.Validations;
+using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
+using Coupon.Domain.Enum;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(ICouponDbContext couponDbContext, IMapper mapper, CreateCouponDtoValidator createCouponValidator) : IRequestHandler<CreateCouponRequest, BaseCommandResponse>
+    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
     {
-        private readonly ICouponDbContext _repository = couponDbContext;
+        private readonly IBaseRepository<CouponEntity> _repository = repository;
+        private readonly ILogger _logger = logger.ForContext<CreateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
-        private readonly CreateCouponDtoValidator _createCouponValidator = createCouponValidator;
+        private readonly CreateValidator _createValidator = createValidator;
 
-        public async Task<BaseCommandResponse> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CouponDto>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseCommandResponse();
-
             try
             {
-                var validationResult = await _createCouponValidator.ValidateAsync(request.CreateCouponDto, cancellationToken);
+                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponCode == request.CreateCoupon.CouponCode, cancellationToken);
+                var result = await _createValidator.ValidateAsync(request.CreateCoupon, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (!result.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка при создании купона";
-                    response.ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<CouponDto>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotCreated,
+                        ErrorCode = (int)ErrorCodes.CouponNotCreated,
+                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var coupon = _mapper.Map<CouponEntity>(request.CreateCouponDto);
+                    coupon = new CouponEntity
+                    {
+                        CouponCode = request.CreateCoupon.CouponCode,
+                        DiscountAmount = request.CreateCoupon.DiscountAmount,
+                        MinAmount = request.CreateCoupon.MinAmount,
+                    };
 
-                    await _repository.Coupons.AddAsync(coupon, cancellationToken);
-                    await _repository.SaveChangesAsync(cancellationToken);
+                    await _repository.CreateAsync(coupon);
 
-                    response.IsSuccess = true;
-                    response.Message = "Купон успешно создан";
-                    response.Id = coupon.CouponId;
-
-                    return response;
+                    return new Result<CouponDto>
+                    {
+                        Data = _mapper.Map<CouponDto>(coupon),
+                        SuccessMessage = "Купон успешно создан",
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Error(exception, exception.Message);
+                return new Result<CouponDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

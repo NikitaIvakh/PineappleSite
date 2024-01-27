@@ -15,7 +15,7 @@ namespace Coupon.Infrastructure.Repository
         {
             if (entity is null)
             {
-                throw new ArgumentNullException("Сущность пустая");
+                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
             }
 
             _context.Add(entity);
@@ -28,7 +28,7 @@ namespace Coupon.Infrastructure.Repository
         {
             if (entity is null)
             {
-                throw new ArgumentNullException("Сущность пустая");
+                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
             }
 
             _context.Update(entity);
@@ -41,13 +41,26 @@ namespace Coupon.Infrastructure.Repository
         {
             if (entity is null)
             {
-                throw new ArgumentNullException("Сущность пустая");
+                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
             }
 
             _context.Remove(entity);
             _context.SaveChanges();
 
             return Task.FromResult(entity);
+        }
+
+        public Task DeleteListAsync(IList<TEntity> entities)
+        {
+            if (entities is null)
+            {
+                throw new ArgumentNullException(nameof(entities), "Список сущностей пуст.");
+            }
+
+            _context.RemoveRange(entities);
+            _context.SaveChanges();
+
+            return Task.FromResult(entities);
         }
     }
 }

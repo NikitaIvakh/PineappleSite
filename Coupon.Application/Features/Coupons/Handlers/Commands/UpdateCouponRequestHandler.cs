@@ -1,60 +1,67 @@
 ﻿using AutoMapper;
-using Coupon.Application.DTOs.Validator;
-using Coupon.Application.Exceptions;
 using Coupon.Application.Features.Coupons.Requests.Commands;
-using Coupon.Application.Interfaces;
-using Coupon.Application.Response;
+using Coupon.Application.Resources;
+using Coupon.Application.Validations;
+using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
+using Coupon.Domain.Enum;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class UpdateCouponRequestHandler(ICouponDbContext couponDbContext, IMapper mapper, UpdateCouponDtoValidator validator) : IRequestHandler<UpdateCouponRequest, BaseCommandResponse>
+    public class UpdateCouponRequestHandler(IBaseRepository<CouponEntity> repository, UpdateValidator updateValidator, ILogger logger, IMapper mapper) : IRequestHandler<UpdateCouponRequest, Result<CouponDto>>
     {
-        private readonly ICouponDbContext _repository = couponDbContext;
+        private readonly IBaseRepository<CouponEntity> _repository = repository;
+        private readonly UpdateValidator _updateValidator = updateValidator;
+        private readonly ILogger _logger = logger.ForContext<UpdateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
-        private readonly UpdateCouponDtoValidator _validator = validator;
 
-        public async Task<BaseCommandResponse> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CouponDto>> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseCommandResponse();
-
             try
             {
-                var validationResult = await _validator.ValidateAsync(request.UpdateCoupon, cancellationToken);
+                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.UpdateCoupon.CouponId, cancellationToken);
+                var result = await _updateValidator.ValidateAsync(request.UpdateCoupon, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (!result.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка при обновлении купона";
-                    response.ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<CouponDto>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotUpdated,
+                        ErrorCode = (int)ErrorCodes.CouponNotUpdated,
+                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var coupon = await _repository.Coupons.FirstAsync(key => key.CouponId == request.UpdateCoupon.CouponId, cancellationToken: cancellationToken) ??
-                        throw new NotFoundException(nameof(CouponEntity), request.UpdateCoupon.CouponId);
+                    coupon.CouponCode = request.UpdateCoupon.CouponCode;
+                    coupon.DiscountAmount = request.UpdateCoupon.DiscountAmount;
+                    coupon.MinAmount = request.UpdateCoupon.MinAmount;
 
-                    _mapper.Map(request.UpdateCoupon, coupon);
-                    _repository.Coupons.Update(coupon);
-                    await _repository.SaveChangesAsync(cancellationToken);
+                    await _repository.UpdateAsync(coupon);
 
-                    response.IsSuccess = true;
-                    response.Message = "Купон успешно обновлен";
-                    response.Id = coupon.CouponId;
-
-                    return response;
+                    return new Result<CouponDto>
+                    {
+                        Data = _mapper.Map<CouponDto>(coupon),
+                        SuccessMessage = "Купон успешно обновлен",
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Error(exception, exception.Message);
+                return new Result<CouponDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

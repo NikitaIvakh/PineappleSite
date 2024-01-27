@@ -1,29 +1,29 @@
-﻿using AutoMapper;
-using Coupon.Application.Profiles;
-using Coupon.Infrastructure;
+﻿//using AutoMapper;
+//using Coupon.Application.Mapping;
+//using Coupon.Infrastructure;
 
-namespace Coupon.Test.Common
-{
-    public class TestCommandHandler : IDisposable
-    {
-        protected ApplicationDbContext Context;
-        protected IMapper Mapper;
+//namespace Coupon.Test.Common
+//{
+//    public class TestCommandHandler : IDisposable
+//    {
+//        protected ApplicationDbContext Context;
+//        protected IMapper Mapper;
 
-        public TestCommandHandler()
-        {
-            Context = CouponRepositoryContextFactory.Create();
+//        public TestCommandHandler()
+//        {
+//            Context = CouponRepositoryContextFactory.Create();
 
-            var configurationProvider = new MapperConfiguration(key =>
-            {
-                key.AddProfile<MappingProfile>();
-            });
+//            var configurationProvider = new MapperConfiguration(key =>
+//            {
+//                key.AddProfile<MappingProfile>();
+//            });
 
-            Mapper = configurationProvider.CreateMapper();
-        }
+//            Mapper = configurationProvider.CreateMapper();
+//        }
 
-        public void Dispose()
-        {
-            CouponRepositoryContextFactory.DestroyDatabase(Context);
-        }
-    }
-}
+//        public void Dispose()
+//        {
+//            CouponRepositoryContextFactory.DestroyDatabase(Context);
+//        }
+//    }
+//}

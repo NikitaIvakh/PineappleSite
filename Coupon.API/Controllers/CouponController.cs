@@ -1,7 +1,7 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Features.Coupons.Requests.Queries;
-using Coupon.Application.Response;
 using Coupon.Domain.DTOs;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,76 +14,100 @@ namespace Coupon.API.Controllers
         private readonly IMediator _mediator = mediator;
 
         // GET: api/<CouponController>
-        [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<IEnumerable<CouponDto>>> Get()
+        [HttpGet("Coupons")]
+        public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query.ErrorCode);
         }
 
         // GET api/<CouponController>/5
         [HttpGet("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CouponDto>> Get(int id)
+        public async Task<ActionResult<Result<CouponDto>>> GetCoupon(int id)
         {
             var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query);
         }
 
         [HttpGet("GetCouponByCode/{couponCode}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<CouponDto>> GetCouponByCode(string couponCode)
+        public async Task<ActionResult<Result<CouponDto>>> GetCouponByCode(string couponCode)
         {
             var query = await _mediator.Send(new GetCouponDetailsByCouponNameRequest { CouponCode = couponCode });
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query);
         }
 
         // POST api/<CouponController>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseCommandResponse>> Post([FromBody] CreateCouponDto createCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Post([FromBody] CreateCouponDto createCouponDto)
         {
-            var command = await _mediator.Send(new CreateCouponRequest { CreateCouponDto = createCouponDto });
-            return Ok(command);
+            var command = await _mediator.Send(new CreateCouponRequest { CreateCoupon = createCouponDto });
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command);
         }
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status304NotModified)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseCommandResponse>> Put([FromBody] UpdateCouponDto updateCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Put([FromBody] UpdateCouponDto updateCouponDto)
         {
             var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command);
         }
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseCommandResponse>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
         {
             var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command);
         }
 
         // DELETE api/<CouponController>/5
-        [HttpDelete()]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<BaseCommandResponse>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
+        [HttpDelete]
+        public async Task<ActionResult<Result<CouponDto>>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
         {
             var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command);
         }
     }
 }

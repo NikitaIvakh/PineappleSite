@@ -14,6 +14,8 @@
 
         CouponNotDeleted = 6,
 
-        InternalServerError = 7,
+        CouponNotUpdated = 7,
+
+        InternalServerError = 8,
     }
 }

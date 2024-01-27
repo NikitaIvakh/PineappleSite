@@ -1,56 +1,62 @@
-﻿using Coupon.Application.DTOs.Validator;
-using Coupon.Application.Exceptions;
+﻿using AutoMapper;
 using Coupon.Application.Features.Coupons.Requests.Commands;
-using Coupon.Application.Interfaces;
-using Coupon.Application.Response;
+using Coupon.Application.Resources;
+using Coupon.Application.Validations;
+using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
+using Coupon.Domain.Enum;
+using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class DeleteCouponRequestHandler(ICouponDbContext couponDbContext, DeleteCouponDtoValidator validator) : IRequestHandler<DeleteCouponRequest, BaseCommandResponse>
+    public class DeleteCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, DeleteValidator validator) : IRequestHandler<DeleteCouponRequest, Result<CouponDto>>
     {
-        private readonly ICouponDbContext _repository = couponDbContext;
-        private readonly DeleteCouponDtoValidator _validator = validator;
+        private readonly IBaseRepository<CouponEntity> _repository = repository;
+        private readonly ILogger _logger = logger.ForContext<DeleteCouponRequestHandler>();
+        private readonly IMapper _mapper = mapper;
+        private readonly DeleteValidator _validator = validator;
 
-        public async Task<BaseCommandResponse> Handle(DeleteCouponRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CouponDto>> Handle(DeleteCouponRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseCommandResponse();
-
             try
             {
-                var validationResult = await _validator.ValidateAsync(request.DeleteCoupon, cancellationToken);
+                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.DeleteCoupon.Id, cancellationToken);
+                var result = await _validator.ValidateAsync(request.DeleteCoupon, cancellationToken);
 
-                if (!validationResult.IsValid)
+                if (!result.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка удаления купона";
-                    response.ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<CouponDto>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotDeleted,
+                        ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var coupon = await _repository.Coupons.FindAsync(new object[] { request.DeleteCoupon.Id }, cancellationToken) ??
-                        throw new NotFoundException(nameof(CouponEntity), request.DeleteCoupon.Id);
-
-                    _repository.Coupons.Remove(coupon);
-                    await _repository.SaveChangesAsync(cancellationToken);
-
-                    response.IsSuccess = true;
-                    response.Message = "Купон успешно удален";
-                    response.Id = coupon.CouponId;
-
-                    return response;
+                    await _repository.DeleteAsync(coupon);
+                    return new Result<CouponDto>
+                    {
+                        Data = _mapper.Map<CouponDto>(coupon),
+                        SuccessMessage = "Купон успешно удален",
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Error(exception, exception.Message);
+                return new Result<CouponDto>
+                {
+                    ErrorMessage = ErrorMessage.CouponNotDeletedCatch,
+                    ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                };
             }
-
-            return response;
         }
     }
 }

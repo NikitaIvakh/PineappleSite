@@ -1,11 +1,11 @@
-﻿using Coupon.Application.Response;
-using Coupon.Domain.DTOs;
+﻿using Coupon.Domain.DTOs;
+using Coupon.Domain.ResultCoupon;
 using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands
 {
-    public class CreateCouponRequest : IRequest<BaseCommandResponse>
+    public class CreateCouponRequest : IRequest<Result<CouponDto>>
     {
-        public CreateCouponDto CreateCouponDto { get; set; }
+        public CreateCouponDto CreateCoupon { get; set; }
     }
 }
