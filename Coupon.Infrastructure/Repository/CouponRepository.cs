@@ -1,5 +1,5 @@
 ﻿using AutoMapper.QueryableExtensions;
-using Coupon.Core.Entities;
+using Coupon.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using PineappleSite.Coupon.Core.Interfaces;
 

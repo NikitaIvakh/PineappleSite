@@ -1,4 +1,4 @@
-﻿using Coupon.Core.Entities;
+﻿using Coupon.Domain.Entities;
 
 namespace PineappleSite.Coupon.Core.Interfaces
 {

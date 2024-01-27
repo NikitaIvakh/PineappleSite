@@ -4,7 +4,7 @@ using Coupon.Application.Exceptions;
 using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Interfaces;
 using Coupon.Application.Response;
-using Coupon.Core.Entities;
+using Coupon.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

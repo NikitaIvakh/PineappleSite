@@ -1,5 +1,5 @@
 ﻿using Coupon.Application.Interfaces;
-using Coupon.Core.Entities;
+using Coupon.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure

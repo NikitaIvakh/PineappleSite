@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Coupon.Core\Coupon.Core.csproj" />
+    <ProjectReference Include="..\Coupon.Domain\Coupon.Domain.csproj" />
   </ItemGroup>
 
 </Project>

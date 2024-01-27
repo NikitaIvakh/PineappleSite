@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Coupon.Application\Coupon.Application.csproj" />
-    <ProjectReference Include="..\Coupon.Core\Coupon.Core.csproj" />
   </ItemGroup>
 
 </Project>

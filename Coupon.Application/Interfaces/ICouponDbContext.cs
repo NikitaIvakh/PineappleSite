@@ -1,4 +1,4 @@
-﻿using Coupon.Core.Entities;
+﻿using Coupon.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Application.Interfaces

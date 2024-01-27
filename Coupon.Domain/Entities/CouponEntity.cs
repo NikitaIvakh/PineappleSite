@@ -1,4 +1,4 @@
-﻿namespace Coupon.Core.Entities
+﻿namespace Coupon.Domain.Entities
 {
     public class CouponEntity
     {
