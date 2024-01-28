@@ -133,6 +133,15 @@ namespace Coupon.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Такого купона не существует.
+        /// </summary>
+        internal static string CouponNotUpdatedNull {
+            get {
+                return ResourceManager.GetString("CouponNotUpdatedNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Купоны не найдены.
         /// </summary>
         internal static string CouponsNotFound {

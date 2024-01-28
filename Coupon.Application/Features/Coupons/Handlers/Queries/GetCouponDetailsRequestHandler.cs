@@ -18,17 +18,33 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsRequest request, CancellationToken cancellationToken)
         {
-            CouponDto? coupon;
-
             try
             {
-                coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                var coupon = await _repository.GetAllAsync().Select(key => new CouponDto
                 {
                     CouponId = key.CouponId,
                     CouponCode = key.CouponCode,
                     DiscountAmount = key.DiscountAmount,
                     MinAmount = key.MinAmount,
                 }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
+
+                if (coupon is null)
+                {
+                    _logger.Warning($"Купон с {request.Id} не найден");
+                    return new Result<CouponDto>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotFound,
+                        ErrorCode = (int)ErrorCodes.CouponNotFound,
+                    };
+                }
+
+                else
+                {
+                    return new Result<CouponDto>
+                    {
+                        Data = coupon,
+                    };
+                }
             }
 
             catch (Exception exception)
@@ -40,21 +56,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     ErrorCode = (int)ErrorCodes.InternalServerError,
                 };
             }
-
-            if (coupon is null)
-            {
-                _logger.Warning($"Купон с {request.Id} не найден");
-                return new Result<CouponDto>
-                {
-                    ErrorMessage = ErrorMessage.CouponNotFound,
-                    ErrorCode = (int)ErrorCodes.CouponNotFound1,
-                };
-            }
-
-            return new Result<CouponDto>
-            {
-                Data = coupon,
-            };
         }
     }
 }

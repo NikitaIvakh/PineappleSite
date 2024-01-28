@@ -24,7 +24,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
         {
             try
             {
-                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponCode == request.CreateCoupon.CouponCode, cancellationToken);
                 var result = await _createValidator.ValidateAsync(request.CreateCoupon, cancellationToken);
 
                 if (!result.IsValid)
@@ -39,6 +38,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 else
                 {
+                    var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponCode == request.CreateCoupon.CouponCode, cancellationToken);
+
                     if (coupon is not null)
                     {
                         return new Result<CouponDto>

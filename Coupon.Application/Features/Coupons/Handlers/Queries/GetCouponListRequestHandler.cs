@@ -18,17 +18,34 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
         public async Task<CollectionResult<CouponDto>> Handle(GetCouponListRequest request, CancellationToken cancellationToken)
         {
-            CouponDto[] coupons;
-
             try
             {
-                coupons = await _couponRepository.GetAllAsync().Select(key => new CouponDto
-                {
+                IReadOnlyCollection<CouponDto> coupons = await _couponRepository.GetAllAsync().Select(key => new CouponDto
+                { 
                     CouponId = key.CouponId,
                     CouponCode = key.CouponCode,
                     DiscountAmount = key.DiscountAmount,
                     MinAmount = key.MinAmount,
-                }).ToArrayAsync(cancellationToken);
+                }).ToListAsync(cancellationToken);
+
+                if (coupons.Count == 0)
+                {
+                    _logger.Warning(ErrorMessage.CouponsNotFound, coupons.Count);
+                    return new CollectionResult<CouponDto>()
+                    {
+                        ErrorMessage = ErrorMessage.CouponsNotFound,
+                        ErrorCode = (int)ErrorCodes.CouponsNotFound,
+                    };
+                }
+
+                else
+                {
+                    return new CollectionResult<CouponDto>
+                    {
+                        Data = coupons,
+                        Count = coupons.Count
+                    };
+                }
             }
 
             catch (Exception exception)
@@ -40,22 +57,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     ErrorCode = (int)ErrorCodes.InternalServerError,
                 };
             }
-
-            if (coupons.Length == 0)
-            {
-                _logger.Warning(ErrorMessage.CouponsNotFound, coupons.Length);
-                return new CollectionResult<CouponDto>()
-                {
-                    ErrorMessage = ErrorMessage.CouponsNotFound,
-                    ErrorCode = (int)ErrorCodes.CouponsNotFound,
-                };
-            }
-
-            return new CollectionResult<CouponDto>
-            {
-                Data = coupons,
-                Count = coupons.Length
-            };
         }
     }
 }

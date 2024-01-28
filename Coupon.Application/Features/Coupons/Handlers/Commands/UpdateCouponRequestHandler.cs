@@ -24,7 +24,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
         {
             try
             {
-                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.UpdateCoupon.CouponId, cancellationToken);
                 var result = await _updateValidator.ValidateAsync(request.UpdateCoupon, cancellationToken);
 
                 if (!result.IsValid)
@@ -39,17 +38,31 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 else
                 {
-                    coupon.CouponCode = request.UpdateCoupon.CouponCode;
-                    coupon.DiscountAmount = request.UpdateCoupon.DiscountAmount;
-                    coupon.MinAmount = request.UpdateCoupon.MinAmount;
+                    var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.UpdateCoupon.CouponId, cancellationToken);
 
-                    await _repository.UpdateAsync(coupon);
-
-                    return new Result<CouponDto>
+                    if (coupon is null)
                     {
-                        Data = _mapper.Map<CouponDto>(coupon),
-                        SuccessMessage = "Купон успешно обновлен",
-                    };
+                        return new Result<CouponDto>
+                        {
+                            ErrorMessage = ErrorMessage.CouponNotUpdatedNull,
+                            ErrorCode = (int)ErrorCodes.CouponNotUpdatedNull,
+                        };
+                    }
+
+                    else
+                    {
+                        coupon.CouponCode = request.UpdateCoupon.CouponCode;
+                        coupon.DiscountAmount = request.UpdateCoupon.DiscountAmount;
+                        coupon.MinAmount = request.UpdateCoupon.MinAmount;
+
+                        await _repository.UpdateAsync(coupon);
+
+                        return new Result<CouponDto>
+                        {
+                            Data = _mapper.Map<CouponDto>(coupon),
+                            SuccessMessage = "Купон успешно обновлен",
+                        };
+                    }
                 }
             }
 

@@ -18,17 +18,33 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsByCouponNameRequest request, CancellationToken cancellationToken)
         {
-            CouponDto coupon;
-
             try
             {
-                coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                var coupon = await _repository.GetAllAsync().Select(key => new CouponDto
                 {
                     CouponId = key.CouponId,
                     CouponCode = key.CouponCode,
                     DiscountAmount = key.DiscountAmount,
                     MinAmount = key.MinAmount,
-                }).FirstAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
+                }).FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
+
+                if (coupon is null)
+                {
+                    _logger.Warning($"Купон с {request.CouponCode} не найден");
+                    return new Result<CouponDto>
+                    {
+                        ErrorMessage = ErrorMessage.CouponNotFound,
+                        ErrorCode = (int)ErrorCodes.CouponNotFound,
+                    };
+                }
+
+                else
+                {
+                    return new Result<CouponDto>
+                    {
+                        Data = coupon,
+                    };
+                }
             }
 
             catch (Exception exception)
@@ -40,21 +56,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     ErrorCode = (int)ErrorCodes.InternalServerError,
                 };
             }
-
-            if (coupon is null)
-            {
-                _logger.Warning("Купон с {CouponCode} не найден", request.CouponCode);
-                return new Result<CouponDto>
-                {
-                    ErrorMessage = ErrorMessage.CouponNotFound,
-                    ErrorCode = (int)ErrorCodes.CouponNotFound1,
-                };
-            }
-
-            return new Result<CouponDto>
-            {
-                Data = coupon,
-            };
         }
     }
 }

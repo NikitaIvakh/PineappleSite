@@ -24,7 +24,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
         {
             try
             {
-                var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.DeleteCoupon.Id, cancellationToken);
                 var result = await _validator.ValidateAsync(request.DeleteCoupon, cancellationToken);
 
                 if (!result.IsValid)
@@ -39,12 +38,26 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 else
                 {
-                    await _repository.DeleteAsync(coupon);
-                    return new Result<CouponDto>
+                    var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == request.DeleteCoupon.Id, cancellationToken);
+
+                    if (coupon is null)
                     {
-                        Data = _mapper.Map<CouponDto>(coupon),
-                        SuccessMessage = "Купон успешно удален",
-                    };
+                        return new Result<CouponDto>
+                        {
+                            ErrorMessage = ErrorMessage.CouponNotFound,
+                            ErrorCode = (int)ErrorCodes.CouponNotFound,
+                        };
+                    }
+
+                    else
+                    {
+                        await _repository.DeleteAsync(coupon);
+                        return new Result<CouponDto>
+                        {
+                            Data = _mapper.Map<CouponDto>(coupon),
+                            SuccessMessage = "Купон успешно удален",
+                        };
+                    }
                 }
             }
 

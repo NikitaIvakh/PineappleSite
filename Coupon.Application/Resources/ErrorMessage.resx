@@ -141,6 +141,9 @@
   <data name="CouponNotUpdated" xml:space="preserve">
     <value>Купон не может быть обновлен</value>
   </data>
+  <data name="CouponNotUpdatedNull" xml:space="preserve">
+    <value>Такого купона не существует</value>
+  </data>
   <data name="CouponsNotFound" xml:space="preserve">
     <value>Купоны не найдены</value>
   </data>
