@@ -2,20 +2,11 @@
 {
     public enum ErrorCodes
     {
-        CouponNotFound1 = 1,
-
-        CouponNotFound2 = 2,
-
-        CouponsNotFound = 3,
-
-        CouponAlreadyExists = 4,
-
-        CouponNotCreated = 5,
-
-        CouponNotDeleted = 6,
-
-        CouponNotUpdated = 7,
-
-        InternalServerError = 8,
+        CouponAlreadyExists = 403,
+        CouponNotFound = 404,
+        CouponNotDeleted = 405,
+        CouponNotCreated = 406,
+        CouponNotUpdated = 304,
+        InternalServerError = 500,
     }
 }

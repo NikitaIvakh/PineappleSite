@@ -39,20 +39,32 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 else
                 {
-                    coupon = new CouponEntity
+                    if (coupon is not null)
                     {
-                        CouponCode = request.CreateCoupon.CouponCode,
-                        DiscountAmount = request.CreateCoupon.DiscountAmount,
-                        MinAmount = request.CreateCoupon.MinAmount,
-                    };
+                        return new Result<CouponDto>
+                        {
+                            ErrorMessage = ErrorMessage.CouponAlreadyExists,
+                            ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
+                        };
+                    }
 
-                    await _repository.CreateAsync(coupon);
-
-                    return new Result<CouponDto>
+                    else
                     {
-                        Data = _mapper.Map<CouponDto>(coupon),
-                        SuccessMessage = "Купон успешно создан",
-                    };
+                        coupon = new CouponEntity
+                        {
+                            CouponCode = request.CreateCoupon.CouponCode,
+                            DiscountAmount = request.CreateCoupon.DiscountAmount,
+                            MinAmount = request.CreateCoupon.MinAmount,
+                        };
+
+                        await _repository.CreateAsync(coupon);
+
+                        return new Result<CouponDto>
+                        {
+                            Data = _mapper.Map<CouponDto>(coupon),
+                            SuccessMessage = "Купон успешно создан",
+                        };
+                    }
                 }
             }
 
