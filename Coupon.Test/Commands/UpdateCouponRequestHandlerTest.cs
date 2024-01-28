@@ -78,7 +78,7 @@ namespace Coupon.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.ValidationErrors.Should().BeNull();
+            result.SuccessMessage.Should().BeNull();
         }
     }
 }
