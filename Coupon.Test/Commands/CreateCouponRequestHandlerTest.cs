@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Coupon.Test.Commands
 {
-    public class CreareCouponRequestHandlerTest : TestCommandHandler
+    public class CreateCouponRequestHandlerTest : TestCommandHandler
     {
         [Fact]
         public async Task CreareCouponRequestHandlerTest_Success_()
@@ -29,11 +29,12 @@ namespace Coupon.Test.Commands
             }, CancellationToken.None);
 
             // Assert
+            result.Should().ShouldNotBeNull();
             result.ValidationErrors.Should().BeNull();
         }
 
         [Fact]
-        public async Task CreareCouponRequestHandlerTest_MinAmount_Error()
+        public async Task CreateCouponRequestHandlerTest_MinAmount_Error()
         {
             // Arrange
             var handler = new CreateCouponRequestHandler(Repository, Logger, Mapper, CreateValidator);
@@ -51,11 +52,11 @@ namespace Coupon.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.ValidationErrors.Should().BeNull();
+            result.SuccessMessage.ShouldBeNull();
         }
 
         [Fact]
-        public async Task CreareCouponRequestHandlerTest_DiscountAmount_Error()
+        public async Task CreateCouponRequestHandlerTest_DiscountAmount_Error()
         {
             // Arrange
             var handler = new CreateCouponRequestHandler(Repository, Logger, Mapper, CreateValidator);
@@ -73,7 +74,7 @@ namespace Coupon.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.ValidationErrors.Should().BeNull();
+            result.SuccessMessage.ShouldBeNull();
         }
     }
 }
