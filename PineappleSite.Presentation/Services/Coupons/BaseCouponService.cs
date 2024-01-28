@@ -8,21 +8,21 @@ namespace PineappleSite.Presentation.Services.Coupons
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly ICouponClient _couponClient = couponClient;
 
-        protected ResponseViewModel ConvertCouponExceptions(CouponExceptions couponExceptions)
+        protected ResultViewModel<CouponDto> ConvertCouponExceptions(CouponExceptions couponExceptions)
         {
             if (couponExceptions.StatusCode == 400)
             {
-                return new ResponseViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = couponExceptions.Response, IsSuccess = false };
+                return new ResultViewModel<CouponDto>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = couponExceptions.Response,  };
             }
 
             else if (couponExceptions.StatusCode == 404)
             {
-                return new ResponseViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new ResultViewModel<CouponDto>() { ErrorMessage = "Требуемый элемент не удалось найти.", ErrorCode = 404 };
             }
 
             else
             {
-                return new ResponseViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new ResultViewModel<CouponDto>() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", ErrorCode = 500 };
             }
         }
 

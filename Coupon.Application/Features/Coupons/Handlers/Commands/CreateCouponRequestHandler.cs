@@ -30,7 +30,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     return new Result<CouponDto>
                     {
-                        ErrorMessage = ErrorMessage.CouponNotCreated,
+                        ErrorMessage = ErrorMessage.DiscountAmountNotValid,
                         ErrorCode = (int)ErrorCodes.CouponNotCreated,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
@@ -46,6 +46,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         {
                             ErrorMessage = ErrorMessage.CouponAlreadyExists,
                             ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
+                            Data = null,
                         };
                     }
 

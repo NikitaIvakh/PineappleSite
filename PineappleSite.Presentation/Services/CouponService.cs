@@ -2,7 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
-using System;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -12,156 +11,193 @@ namespace PineappleSite.Presentation.Services
         private readonly ICouponClient _couponClient = couponClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<IEnumerable<CouponViewModel>> GetAllCouponsAsync()
+        public async Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync()
         {
             AddBearerToken();
-            var coupons = await _couponClient.CouponAllAsync();
-            return _mapper.Map<IEnumerable<CouponViewModel>>(coupons);
+            CouponDtoCollectionResult coupons = await _couponClient.CouponsAsync();
+            return _mapper.Map<CollectionResultViewModel<CouponViewModel>>(coupons);
         }
 
         public async Task<CouponViewModel> GetCouponAsync(int couponId)
         {
             AddBearerToken();
-            var coupon = await _couponClient.CouponGETAsync(couponId);
-            return _mapper.Map<CouponViewModel>(coupon);
+            CouponDtoResult coupon = await _couponClient.CouponGETAsync(couponId);
+            return _mapper.Map<CouponViewModel>(coupon.Data);
         }
 
-        public async Task<CouponViewModel> GetCouponAsync(string couponCode)
+        public async Task<ResultViewModel<CouponViewModel>> GetCouponAsync(string couponCode)
         {
             AddBearerToken();
-            var coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
-            return _mapper.Map<CouponViewModel>(coupon);
+            CouponDtoResult coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
+            return _mapper.Map<ResultViewModel<CouponViewModel>>(coupon.Data);
         }
 
-        public async Task<ResponseViewModel> CreateCouponAsync(CreateCouponViewModel createCoupon)
+        public async Task<ResultViewModel<CouponViewModel>> CreateCouponAsync(CreateCouponViewModel createCoupon)
         {
             AddBearerToken();
             try
             {
-                ResponseViewModel responseView = new();
                 CreateCouponDto createCouponDto = _mapper.Map<CreateCouponDto>(createCoupon);
-                BaseCommandResponse apiResponse = await _couponClient.CouponPOSTAsync(createCouponDto);
+                CouponDtoResult apiResponse = await _couponClient.CouponPOSTAsync(createCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    responseView.IsSuccess = true;
-                    responseView.Id = apiResponse.Id;
-                    responseView.Message = apiResponse.Message;
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        responseView.ValidationErrors += error + Environment.NewLine;
+                        return new ResultViewModel<CouponViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                            ErrorCode = 407,
+                        };
                     }
                 }
 
-                return responseView;
+                return new ResultViewModel<CouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
-                return ConvertCouponExceptions(exceptions);
+                return new ResultViewModel<CouponViewModel>
+                {
+                    ErrorCode = 500,
+                    ErrorMessage = exceptions.Response,
+                };
             }
         }
 
-        public async Task<ResponseViewModel> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon)
+        public async Task<ResultViewModel<CouponViewModel>> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon)
         {
             AddBearerToken();
             try
             {
-                ResponseViewModel responseView = new();
                 UpdateCouponDto updateCouponDto = _mapper.Map<UpdateCouponDto>(updateCoupon);
-                BaseCommandResponse apiResponse = await _couponClient.CouponPUTAsync(updateCouponDto.CouponId.ToString(), updateCouponDto);
+                CouponDtoResult apiResponse = await _couponClient.CouponPUTAsync(updateCouponDto.CouponId.ToString(), updateCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    responseView.IsSuccess = true;
-                    responseView.Id = apiResponse.Id;
-                    responseView.Message = apiResponse.Message;
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        responseView.ValidationErrors += error + Environment.NewLine;
+                        return new ResultViewModel<CouponViewModel>
+                        {
+                            ErrorMessage = error,
+                            ErrorCode = 407,
+                        };
                     }
                 }
 
-                return responseView;
+                return new ResultViewModel<CouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
-                return ConvertCouponExceptions(exceptions);
+                return new ResultViewModel<CouponViewModel>
+                {
+                    ErrorCode = 500,
+                    ErrorMessage = exceptions.Response,
+                };
             }
         }
 
-        public async Task<ResponseViewModel> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon)
+        public async Task<ResultViewModel<CouponViewModel>> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon)
         {
             AddBearerToken();
             try
             {
-                ResponseViewModel responseView = new();
                 DeleteCouponDto deleteCouponDto = _mapper.Map<DeleteCouponDto>(deleteCoupon);
-                BaseCommandResponse apiResponse = await _couponClient.CouponDELETE2Async(deleteCouponDto.Id.ToString(), deleteCouponDto);
+                CouponDtoResult apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponDto.Id.ToString(), deleteCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    responseView.IsSuccess = true;
-                    responseView.Id = apiResponse.Id;
-                    responseView.Message = apiResponse.Message;
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        responseView.ValidationErrors += error + Environment.NewLine;
+                        return new ResultViewModel<CouponViewModel>
+                        {
+                            ErrorMessage = error,
+                            ErrorCode = 407,
+                        };
                     }
                 }
 
-                return responseView;
+                return new ResultViewModel<CouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
-                return ConvertCouponExceptions(exceptions);
+                return new ResultViewModel<CouponViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = 500,
+                };
             }
         }
 
-        public async Task<ResponseViewModel> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
+        public async Task<CollectionResultViewModel<CouponViewModel>> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
         {
             AddBearerToken();
             try
             {
-                ResponseViewModel response = new();
                 DeleteCouponListDto deleteCouponListDto = _mapper.Map<DeleteCouponListDto>(deleteCouponList);
-                BaseCommandResponse apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponListDto);
+                CouponDtoCollectionResult apiResponse = await _couponClient.CouponDELETE2Async(deleteCouponListDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Id = apiResponse.Id;
-                    response.Message = apiResponse.Message;
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<IReadOnlyCollection<CouponViewModel>>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new CollectionResultViewModel<CouponViewModel>
+                        {
+                            ErrorMessage = error,
+                            ErrorCode = 407,
+                        };
                     }
                 }
 
-                return response;
+                return new CollectionResultViewModel<CouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
-                return ConvertCouponExceptions(exceptions);
+                return new CollectionResultViewModel<CouponViewModel>
+                {
+                    ErrorCode = 500,
+                    ErrorMessage = exceptions.Response,
+                };
             }
         }
     }

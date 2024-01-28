@@ -46,6 +46,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         {
                             ErrorMessage = ErrorMessage.CouponNotFound,
                             ErrorCode = (int)ErrorCodes.CouponNotFound,
+                            Data = null,
                         };
                     }
 

@@ -26,7 +26,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     CouponCode = key.CouponCode,
                     DiscountAmount = key.DiscountAmount,
                     MinAmount = key.MinAmount,
-                }).ToListAsync(cancellationToken);
+                }).OrderBy(key => key.CouponId).ToListAsync(cancellationToken);
 
                 if (coupons.Count == 0)
                 {

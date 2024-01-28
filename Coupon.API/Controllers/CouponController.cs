@@ -26,7 +26,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения купонов");
-            return BadRequest(query.ErrorCode);
+            return BadRequest(query.ErrorMessage);
         }
 
         // GET api/<CouponController>/5
@@ -42,7 +42,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения купона");
-            return BadRequest(query);
+            return BadRequest(query.ErrorMessage);
         }
 
         [HttpGet("GetCouponByCode/{couponCode}")]
@@ -57,7 +57,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения купона");
-            return BadRequest(query);
+            return BadRequest(query.ErrorMessage);
         }
 
         // POST api/<CouponController>
@@ -73,7 +73,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка создания купона");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // PUT api/<CouponController>/5
@@ -89,7 +89,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка обновления купона");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<CouponController>/5
@@ -105,12 +105,12 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка удаления купона");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<CouponController>/5
         [HttpDelete]
-        public async Task<ActionResult<Result<CouponDto>>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
+        public async Task<ActionResult<CollectionResult<CouponDto>>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
         {
             var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });
 
@@ -121,7 +121,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка удаления купонов");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
     }
 }

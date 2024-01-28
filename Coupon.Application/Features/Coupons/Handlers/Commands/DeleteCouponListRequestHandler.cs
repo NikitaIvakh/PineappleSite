@@ -13,14 +13,14 @@ using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class DeleteCouponListRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, DeleteListValidator validationRules) : IRequestHandler<DeleteCouponListRequest, Result<List<CouponDto>>>
+    public class DeleteCouponListRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, DeleteListValidator validationRules) : IRequestHandler<DeleteCouponListRequest, CollectionResult<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger;
         private readonly IMapper _mapper = mapper;
         private readonly DeleteListValidator _validator = validationRules;
 
-        public async Task<Result<List<CouponDto>>> Handle(DeleteCouponListRequest request, CancellationToken cancellationToken)
+        public async Task<CollectionResult<CouponDto>> Handle(DeleteCouponListRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -28,7 +28,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 if (!result.IsValid)
                 {
-                    return new Result<List<CouponDto>>
+                    return new CollectionResult<CouponDto>
                     {
                         ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
                         ErrorCode = (int)ErrorCodes.CouponNotDeleted,
@@ -42,7 +42,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                     if (coupons.Count == 0)
                     {
-                        return new Result<List<CouponDto>>
+                        return new CollectionResult<CouponDto>
                         {
                             ErrorMessage = ErrorMessage.CouponsNotFound,
                             ErrorCode = (int)ErrorCodes.CouponsNotFound,
@@ -53,10 +53,10 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         await _repository.DeleteListAsync(coupons);
 
-                        return new Result<List<CouponDto>>
+                        return new CollectionResult<CouponDto>
                         {
                             SuccessMessage = "Купоны успешно удалены",
-                            Data = _mapper.Map<List<CouponDto>>(coupons),
+                            Data = _mapper.Map<IReadOnlyCollection<CouponDto>>(coupons),
                         };
                     }
                 }
@@ -65,7 +65,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
             catch (Exception exception)
             {
                 _logger.Error(exception, exception.Message);
-                return new Result<List<CouponDto>>
+                return new CollectionResult<CouponDto>
                 {
                     ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
                     ErrorCode = (int)ErrorCodes.CouponNotDeleted,

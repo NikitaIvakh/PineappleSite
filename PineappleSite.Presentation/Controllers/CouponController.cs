@@ -14,11 +14,11 @@ namespace PineappleSite.Presentation.Controllers
         // GET: CouponController
         public async Task<ActionResult> Index(string searchCode, string currentFilter, int? pageNumber)
         {
-            var coupons = await _couponService.GetAllCouponsAsync();
+            CollectionResultViewModel<CouponViewModel> coupons = await _couponService.GetAllCouponsAsync();
 
             if (!string.IsNullOrEmpty(searchCode))
             {
-                coupons = coupons.Where(
+                coupons = (CollectionResultViewModel<CouponViewModel>)coupons.Data.Where(
                     key => key.CouponCode.Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
                     key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
                     key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase));
@@ -28,7 +28,7 @@ namespace PineappleSite.Presentation.Controllers
             ViewData["CurrentFilter"] = currentFilter;
 
             int pageSize = 10;
-            var filteredCoupons = coupons.AsQueryable();
+            var filteredCoupons = coupons.Data.AsQueryable();
             var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
 
             return View(paginatedCoupons);
@@ -54,17 +54,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ResponseViewModel response = await _couponService.CreateCouponAsync(couponViewModel);
+                ResultViewModel response = await _couponService.CreateCouponAsync(couponViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Create));
                 }
             }
@@ -89,17 +89,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ResponseViewModel response = await _couponService.UpdateCouponAsync(id, updateCoupon);
+                ResultViewModel response = await _couponService.UpdateCouponAsync(id, updateCoupon);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Edit));
                 }
             }
@@ -117,17 +117,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ResponseViewModel response = await _couponService.DeleteCouponAsync(id, deleteCoupon);
+                ResultViewModel response = await _couponService.DeleteCouponAsync(id, deleteCoupon);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -146,18 +146,18 @@ namespace PineappleSite.Presentation.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var deleteCouponList = new DeleteCouponListViewModel { CouponIds = selectedCoupons };
-            var response = await _couponService.DeleteCouponsAsync(deleteCouponList);
+            DeleteCouponListViewModel deleteCouponList = new() { CouponIds = selectedCoupons };
+            CollectionResultViewModel<CouponViewModel> response = await _couponService.DeleteCouponsAsync(deleteCouponList);
 
             if (response.IsSuccess)
             {
-                TempData["success"] = response.Message;
+                TempData["success"] = response.SuccessMessage;
                 return RedirectToAction(nameof(Index));
             }
 
             else
             {
-                TempData["error"] = response.ValidationErrors;
+                TempData["error"] = response.ErrorMessage;
                 return RedirectToAction(nameof(Index));
             }
         }

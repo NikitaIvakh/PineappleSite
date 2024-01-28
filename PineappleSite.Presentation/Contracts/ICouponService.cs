@@ -5,18 +5,18 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface ICouponService
     {
-        Task<IEnumerable<CouponViewModel>> GetAllCouponsAsync();
+        Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync();
 
         Task<CouponViewModel> GetCouponAsync(int couponId);
 
-        Task<CouponViewModel> GetCouponAsync(string couponCode);
+        Task<ResultViewModel<CouponViewModel>> GetCouponAsync(string couponCode);
 
-        Task<ResponseViewModel> CreateCouponAsync(CreateCouponViewModel createCoupon);
+        Task<ResultViewModel<CouponViewModel>> CreateCouponAsync(CreateCouponViewModel createCoupon);
 
-        Task<ResponseViewModel> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon);
+        Task<ResultViewModel<CouponViewModel>> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon);
 
-        Task<ResponseViewModel> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon);
+        Task<ResultViewModel<CouponViewModel>> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon);
 
-        Task<ResponseViewModel> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList);
+        Task<CollectionResultViewModel<CouponViewModel>> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList);
     }
 }

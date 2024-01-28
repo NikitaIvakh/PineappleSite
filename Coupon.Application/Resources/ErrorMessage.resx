@@ -148,7 +148,7 @@
     <value>Купоны не найдены</value>
   </data>
   <data name="DiscountAmountNotValid" xml:space="preserve">
-    <value>Сумма скидки купона не валидна</value>
+    <value>Сумма скидки купона не может превышать стоимость продукта</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Внутренняя проблема сервера</value>

@@ -19,6 +19,7 @@ namespace PineappleSite.Presentation
         {
             #region Coupon Mapping
             CreateMap<CouponDto, CouponViewModel>().ReverseMap();
+            CreateMap<CouponDtoResult, CouponViewModel>().ReverseMap();
             CreateMap<CreateCouponDto, CreateCouponViewModel>().ReverseMap();
             CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
@@ -81,7 +82,9 @@ namespace PineappleSite.Presentation
             CreateMap<FavouritesDto, FavouritesViewModel>().ReverseMap();
             #endregion
 
-            CreateMap<BaseCommandResponse, ResponseViewModel>().ReverseMap();
+            CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
+            CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
+
             CreateMap<ProductAPIResponse, ProductAPIViewModel>().ReverseMap();
             CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
             CreateMap<FavouriteAPIResponse, FavoritesResponseViewModel>().ReverseMap();

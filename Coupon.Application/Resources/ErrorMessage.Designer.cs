@@ -151,7 +151,7 @@ namespace Coupon.Application.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Сумма скидки купона не валидна.
+        ///   Ищет локализованную строку, похожую на Сумма скидки купона не может превышать стоимость продукта.
         /// </summary>
         internal static string DiscountAmountNotValid {
             get {

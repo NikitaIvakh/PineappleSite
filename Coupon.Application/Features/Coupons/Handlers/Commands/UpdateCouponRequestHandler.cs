@@ -30,7 +30,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     return new Result<CouponDto>
                     {
-                        ErrorMessage = ErrorMessage.CouponNotUpdated,
+                        ErrorMessage = ErrorMessage.DiscountAmountNotValid,
                         ErrorCode = (int)ErrorCodes.CouponNotUpdated,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
