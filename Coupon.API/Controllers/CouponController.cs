@@ -9,21 +9,23 @@ namespace Coupon.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CouponController(IMediator mediator) : ControllerBase
+    public class CouponController(IMediator mediator, ILogger<CouponDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<CouponDto> _logger = logger;
 
         // GET: api/<CouponController>
         [HttpGet("Coupons")]
         public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
-
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купоны успешно получены");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения купонов");
             return BadRequest(query.ErrorCode);
         }
 
@@ -35,9 +37,11 @@ namespace Coupon.API.Controllers
 
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно получен");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения купона");
             return BadRequest(query);
         }
 
@@ -48,9 +52,11 @@ namespace Coupon.API.Controllers
 
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно получен");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения купона");
             return BadRequest(query);
         }
 
@@ -62,9 +68,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно создан");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка создания купона");
             return BadRequest(command);
         }
 
@@ -76,9 +84,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно обновлен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления купона");
             return BadRequest(command);
         }
 
@@ -90,9 +100,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно удылен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления купона");
             return BadRequest(command);
         }
 
@@ -104,9 +116,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купоны успешно удалены");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления купонов");
             return BadRequest(command);
         }
     }
