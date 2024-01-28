@@ -18,10 +18,15 @@ namespace PineappleSite.Presentation.Controllers
 
             if (!string.IsNullOrEmpty(searchCode))
             {
-                coupons = (CollectionResultViewModel<CouponViewModel>)coupons.Data.Where(
+                var filteredCouponsList = coupons.Data.Where(
                     key => key.CouponCode.Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
                     key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase));
+                    key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                coupons = new CollectionResultViewModel<CouponViewModel>
+                {
+                    Data = filteredCouponsList
+                };
             }
 
             ViewData["SearchCode"] = searchCode;
