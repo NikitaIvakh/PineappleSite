@@ -1,3 +1,4 @@
+using Coupon.API;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
 using Serilog;
@@ -14,6 +15,8 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
 applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+
+applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();
 
