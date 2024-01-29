@@ -2,7 +2,6 @@
 using Favourites.Domain.Interfaces.Repositories;
 using Favourites.Infrastructure;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace Favourites.Test.Common
 {
