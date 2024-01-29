@@ -1,5 +1,6 @@
-﻿using Favourites.Application.DTOs;
-using Favourites.Application.Services.IServices;
+﻿using Favourites.Domain.DTOs;
+using Favourites.Domain.Interfaces.Services;
+using Favourites.Domain.ResultFavourites;
 using System.Text.Json;
 
 namespace Favourites.Application.Services

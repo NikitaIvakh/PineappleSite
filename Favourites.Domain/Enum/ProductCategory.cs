@@ -1,4 +1,4 @@
-﻿namespace Favourites.Domain.Entities.DTOs.Enum
+﻿namespace Favourites.Domain.Enum
 {
     public enum ProductCategory
     {

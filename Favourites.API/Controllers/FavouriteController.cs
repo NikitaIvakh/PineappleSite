@@ -1,7 +1,7 @@
-﻿using Favourites.Application.DTOs;
-using Favourites.Application.Features.Requests.Handlers;
+﻿using Favourites.Application.Features.Requests.Handlers;
 using Favourites.Application.Features.Requests.Queries;
-using Favourites.Application.Response;
+using Favourites.Domain.DTOs;
+using Favourites.Domain.ResultFavourites;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,26 +17,44 @@ namespace Favourites.API.Controllers
 
         // GET api/<FavouriteController>/5
         [HttpGet("GetFavourite/{userId}")]
-        public async Task<ActionResult<FavouriteAPIResponse>> GetFavourite(string userId)
+        public async Task<ActionResult<Result<FavouritesDto>>> GetFavourite(string userId)
         {
             var query = await _mediator.Send(new GetFavouriteProductsRequest { UserId = userId });
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query.ErrorMessage);
         }
 
         // POST api/<FavouriteController>
         [HttpPost("FavouriteUpsert")]
-        public async Task<ActionResult<FavouriteAPIResponse>> FavouriteUpsert([FromBody] FavouritesDto favouritesDto)
+        public async Task<ActionResult<Result<FavouritesDto>>> FavouriteUpsert([FromBody] FavouritesDto favouritesDto)
         {
             var command = await _mediator.Send(new FavoutiteUpsertRequest { Favourites = favouritesDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<FavouriteController>/5
-        [HttpDelete("RemoveDetails/{favouriteDetailsId}")]
-        public async Task<ActionResult<FavouriteAPIResponse>> RemoveDetails([FromBody] int favouriteDetailsId)
+        [HttpDelete("RemoveFavouriteDetails/{favouriteDetailsId}")]
+        public async Task<ActionResult<Result<FavouritesDto>>> RemoveFavouriteDetails([FromBody] int favouriteDetailsId)
         {
             var command = await _mediator.Send(new RemoveFavoriteRequest { FavouriteDetailId = favouriteDetailsId });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
     }
 }

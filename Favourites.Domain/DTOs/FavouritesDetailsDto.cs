@@ -1,6 +1,6 @@
 ﻿using Favourites.Domain.Entities.Favourite;
 
-namespace Favourites.Application.DTOs
+namespace Favourites.Domain.DTOs
 {
     public class FavouritesDetailsDto
     {

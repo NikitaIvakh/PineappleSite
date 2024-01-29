@@ -1,49 +1,50 @@
 ﻿using AutoMapper;
 using Favourites.Application.Features.Requests.Handlers;
-using Favourites.Application.Interfaces;
-using Favourites.Application.Response;
+using Favourites.Application.Resources;
+using Favourites.Domain.DTOs;
 using Favourites.Domain.Entities.Favourite;
+using Favourites.Domain.Enum;
+using Favourites.Domain.Interfaces.Repositories;
+using Favourites.Domain.ResultFavourites;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Favourites.Application.Features.Commands.Handlers
 {
-    public class FavoutiteUpsertRequestHandler(IFavoutiteHeaderDbContext favoutiteHeaderDbContext, IFavoutiteDetailsDbContext favoutiteDetailsDbContext, IMapper mapper) : IRequestHandler<FavoutiteUpsertRequest, FavouriteAPIResponse>
+    public class FavoutiteUpsertRequestHandler(IBaseRepository<FavouritesHeader> favouriteHeader, IBaseRepository<FavouritesDetails> favouriteDetails, IMapper mapper, ILogger logger) : IRequestHandler<FavoutiteUpsertRequest, Result<FavouritesDto>>
     {
-        private readonly IFavoutiteHeaderDbContext _favoutiteHeaderDbContext = favoutiteHeaderDbContext;
-        private readonly IFavoutiteDetailsDbContext _favoutiteDetailsDbContext = favoutiteDetailsDbContext;
+        private readonly IBaseRepository<FavouritesHeader> _favouriteHeader = favouriteHeader;
+        private readonly IBaseRepository<FavouritesDetails> _favouriteDetails = favouriteDetails;
         private readonly IMapper _mapper = mapper;
-        private readonly FavouriteAPIResponse _response = new();
+        private readonly ILogger _logger = logger;
 
-        public async Task<FavouriteAPIResponse> Handle(FavoutiteUpsertRequest request, CancellationToken cancellationToken)
+        public async Task<Result<FavouritesDto>> Handle(FavoutiteUpsertRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var favouriteHeaderFromDb = await _favoutiteHeaderDbContext.FavouritesHeaders.AsNoTracking().FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
+                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
 
                 if (favouriteHeaderFromDb is null)
                 {
                     FavouritesHeader favouritesHeader = _mapper.Map<FavouritesHeader>(request.Favourites.FavoutiteHeader);
-                    await _favoutiteHeaderDbContext.FavouritesHeaders.AddAsync(favouritesHeader, cancellationToken);
-                    await _favoutiteHeaderDbContext.SaveChangesAsync(cancellationToken);
+                    await _favouriteHeader.CreateAsync(favouritesHeader);
 
                     request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouritesHeader.FavouritesHeaderId;
-                    await _favoutiteDetailsDbContext.FavouritesDetails.AddAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()), cancellationToken);
-                    await _favoutiteDetailsDbContext.SaveChangesAsync(cancellationToken);
+                    await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
                 }
 
                 else
                 {
-                    var favouriteDetails = await _favoutiteDetailsDbContext.FavouritesDetails
-                        .AsNoTracking()
+                    var favouriteDetails = await _favouriteDetails
+                        .GetAll()
                         .FirstOrDefaultAsync(key => key.ProductId == request.Favourites.FavouritesDetails
                         .First().ProductId && key.FavouritesHeaderId == favouriteHeaderFromDb.FavouritesHeaderId, cancellationToken);
 
                     if (favouriteDetails is null)
                     {
                         request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouriteHeaderFromDb.FavouritesHeaderId;
-                        await _favoutiteDetailsDbContext.FavouritesDetails.AddAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()), cancellationToken);
-                        await _favoutiteDetailsDbContext.SaveChangesAsync(cancellationToken);
+                        await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
                     }
 
                     else
@@ -51,26 +52,26 @@ namespace Favourites.Application.Features.Commands.Handlers
                         request.Favourites.FavouritesDetails.First().FavouritesDetailsId = favouriteDetails.FavouritesDetailsId;
                         request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouriteDetails.FavouritesHeaderId;
 
-                        _favoutiteDetailsDbContext.FavouritesDetails.Update(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
-                        await _favoutiteDetailsDbContext.SaveChangesAsync(cancellationToken);
+                        await _favouriteDetails.UpdateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
                     }
                 }
 
-                _response.IsSuccess = true;
-                _response.Data = request.Favourites;
-                _response.Message = "Продукт успешно добавлен в избранное";
-                _response.Id = request.Favourites.FavoutiteHeader.FavouritesHeaderId;
-
-                return _response;
+                return new Result<FavouritesDto>
+                {
+                    Data = request.Favourites,
+                    SuccessMessage = "Продукт успешно добавлен в избранное",
+                };
             }
 
             catch (Exception exception)
             {
-                _response.IsSuccess = false;
-                _response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<FavouritesDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _response;
         }
     }
 }

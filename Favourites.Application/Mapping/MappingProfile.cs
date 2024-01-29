@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Favourites.Application.DTOs;
+using Favourites.Domain.DTOs;
 using Favourites.Domain.Entities.Favourite;
 
 namespace Favourites.Application.Profiles
@@ -10,7 +10,7 @@ namespace Favourites.Application.Profiles
         {
             CreateMap<FavouritesHeader, FavoutiteHeaderDto>().ReverseMap();
             CreateMap<FavouritesDetails, FavouritesDetailsDto>().ReverseMap();
-            CreateMap<Domain.Entities.DTOs.ProductDto, ProductDto>().ReverseMap();
+            CreateMap<ProductDto, ProductDto>().ReverseMap();
         }
     }
 }

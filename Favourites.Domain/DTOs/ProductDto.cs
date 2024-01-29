@@ -1,6 +1,6 @@
-﻿using Favourites.Domain.Entities.DTOs.Enum;
+﻿using Favourites.Domain.Enum;
 
-namespace Favourites.Domain.Entities.DTOs
+namespace Favourites.Domain.DTOs
 {
     public class ProductDto
     {

@@ -1,4 +1,4 @@
-﻿using Favourites.Domain.Entities.DTOs;
+﻿using Favourites.Domain.DTOs;
 
 namespace Favourites.Domain.Entities.Favourite
 {

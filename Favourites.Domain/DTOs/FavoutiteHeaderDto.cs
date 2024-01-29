@@ -1,4 +1,4 @@
-﻿namespace Favourites.Application.DTOs
+﻿namespace Favourites.Domain.DTOs
 {
     public class FavoutiteHeaderDto
     {

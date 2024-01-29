@@ -1,6 +1,6 @@
-﻿using Favourites.Application.DTOs;
+﻿using Favourites.Domain.DTOs;
 
-namespace Favourites.Application.Services.IServices
+namespace Favourites.Domain.Interfaces.Services
 {
     public interface IProductService
     {

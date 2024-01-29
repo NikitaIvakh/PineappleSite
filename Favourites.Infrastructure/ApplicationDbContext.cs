@@ -1,10 +1,9 @@
-﻿using Favourites.Application.Interfaces;
-using Favourites.Domain.Entities.Favourite;
+﻿using Favourites.Domain.Entities.Favourite;
 using Microsoft.EntityFrameworkCore;
 
 namespace Favourites.Infrastructure
 {
-    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options), IFavoutiteHeaderDbContext, IFavoutiteDetailsDbContext
+    public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : DbContext(options)
     {
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
