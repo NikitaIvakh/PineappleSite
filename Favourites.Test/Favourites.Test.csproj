@@ -30,8 +30,4 @@
     <ProjectReference Include="..\Favourites.Infrastructure\Favourites.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Queries\" />
-  </ItemGroup>
-
 </Project>
