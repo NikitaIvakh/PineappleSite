@@ -4,7 +4,6 @@ using Favourites.Domain.Entities.Favourite;
 using Favourites.Domain.Interfaces.Repositories;
 using Favourites.Infrastructure;
 using Favourites.Application.Profiles;
-using Moq;
 using Serilog;
 using Favourites.Application.Features.Commands.Handlers;
 using Favourites.Infrastructure.Repositories;
@@ -15,7 +14,8 @@ namespace Favourites.Test.Common
     {
         protected ApplicationDbContext Context;
         protected IMapper Mapper;
-        protected ILogger Logger;
+        protected ILogger UpsertLogger;
+        protected ILogger RemoveLogger;
         protected IBaseRepository<FavouritesHeader> HeaderRepository;
         protected IBaseRepository<FavouritesDetails> DetailsRepository;
         protected IBaseRepository<FavouritesDto> FavouroteRepository;
@@ -27,15 +27,8 @@ namespace Favourites.Test.Common
             DetailsRepository = new BaseRepository<FavouritesDetails>(Context);
             FavouroteRepository = new BaseRepository<FavouritesDto>(Context);
 
-            //var headerRepository = new Mock<IBaseRepository<FavouritesHeader>>();
-            //var detailsRepository = new Mock<IBaseRepository<FavouritesDetails>>();
-            //var favouroteRepository = new Mock<IBaseRepository<FavouritesDto>>();
-
-            Logger = Log.ForContext<FavoutiteUpsertRequestHandler>();
-
-            //HeaderRepository = headerRepository.Object;
-            //DetailsRepository = detailsRepository.Object;
-            //FavouroteRepository = favouroteRepository.Object;
+            UpsertLogger = Log.ForContext<FavoutiteUpsertRequestHandler>();
+            RemoveLogger = Log.ForContext<RemoveFavoriteRequestHandler>();
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {

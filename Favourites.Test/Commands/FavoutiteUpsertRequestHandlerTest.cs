@@ -13,7 +13,7 @@ namespace Favourites.Test.Commands
         public async Task FavoutiteUpsertRequestHandlerTest_Success_Empty()
         {
             // Arrange
-            var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, Logger);
+            var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, UpsertLogger);
             var favouritesDto = new FavouritesDto
             {
                 FavoutiteHeader = new FavoutiteHeaderDto
@@ -47,7 +47,7 @@ namespace Favourites.Test.Commands
         public async Task FavoutiteUpsertRequestHandlerTest_Success_NotEmpty()
         {
             // Arrange
-            var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, Logger);
+            var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, UpsertLogger);
             var favouritesDto = new FavouritesDto
             {
                 FavoutiteHeader = new FavoutiteHeaderDto
