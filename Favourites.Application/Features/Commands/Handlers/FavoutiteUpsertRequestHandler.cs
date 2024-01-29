@@ -23,7 +23,11 @@ namespace Favourites.Application.Features.Commands.Handlers
         {
             try
             {
-                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
+                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().Select(key => new FavoutiteHeaderDto
+                {
+                    FavouritesHeaderId = key.FavouritesHeaderId,
+                    UserId = key.UserId,
+                }).FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
 
                 if (favouriteHeaderFromDb is null)
                 {

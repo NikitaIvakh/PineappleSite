@@ -26,7 +26,11 @@ namespace Favourites.Application.Features.Commands.Queries
         {
             try
             {
-                FavouritesHeader favouritesHeader = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken);
+                var favouritesHeader = await _favouriteHeader.GetAll().Select(key => new FavoutiteHeaderDto
+                {
+                    FavouritesHeaderId = key.FavouritesHeaderId,
+                    UserId = key.UserId,
+                }).FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken);
 
                 if (favouritesHeader is null)
                 {
@@ -37,7 +41,14 @@ namespace Favourites.Application.Features.Commands.Queries
                     };
                 }
 
-                var favouritesDetails = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToListAsync(cancellationToken);
+                var favouritesDetails = await _favouriteDetails.GetAll().Select(key => new FavouritesDetailsDto
+                {
+                    FavouritesDetailsId = key.FavouritesDetailsId,
+                    FavouritesHeader = key.FavouritesHeader,
+                    FavouritesHeaderId = key.FavouritesHeaderId,
+                    Product = key.Product,
+                    ProductId = key.ProductId,
+                }).Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToListAsync(cancellationToken);
 
                 FavouritesDto favouritesDto = new()
                 {

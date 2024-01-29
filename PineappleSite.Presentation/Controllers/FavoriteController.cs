@@ -22,17 +22,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                FavoritesResponseViewModel response = await _favoriteService.DeleteFavoriteDetails(detailsId);
+                FavouriteResultViewModel response = await _favoriteService.DeleteFavoriteDetails(detailsId);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
@@ -48,16 +48,24 @@ namespace PineappleSite.Presentation.Controllers
 
         private async Task<FavouritesViewModel> GetFavotiteItemsAfterAuthenticate()
         {
-            var userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
-            FavoritesResponseViewModel response = await _favoriteService.GetFavoritesAsync(userId);
+            string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+            var response = await _favoriteService.GetFavoritesAsync(userId);
 
-            if (response.IsSuccess)
-            {
-                FavouritesViewModel favouritesViewModel = JsonConvert.DeserializeObject<FavouritesViewModel>(Convert.ToString(response.Data));
-                return favouritesViewModel;
-            }
+            //if (response.IsSuccess)
+            //{
+            //    FavouriteResultViewModel<FavouritesViewModel> favouritesViewModel = new()
+            //    {
+            //        Data = new 
+            //        ErrorMessage = response.ErrorMessage,
+            //        ErrorCode = response.ErrorCode,
+            //        SuccessMessage = response.SuccessMessage,
+            //        ValidationErrors = response.ValidationErrors
+            //    };
 
-            return new FavouritesViewModel();
+            //    return favouritesViewModel;
+            //}
+
+            return response;
         }
     }
 }

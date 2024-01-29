@@ -24,30 +24,30 @@ namespace PineappleSite.Presentation.Services.Favorites
     {
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> GetFavouriteAsync(string userId);
+        System.Threading.Tasks.Task<FavouritesDtoResult> GetFavouriteAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> GetFavouriteAsync(string userId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FavouritesDtoResult> GetFavouriteAsync(string userId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> FavouriteUpsertAsync(FavouritesDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> FavouriteUpsertAsync(FavouritesDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> RemoveDetailsAsync(string favouriteDetailsId, int? body);
+        System.Threading.Tasks.Task<FavouritesDtoResult> FavouriteUpsertAsync(FavouritesDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<FavouriteAPIResponse> RemoveDetailsAsync(string favouriteDetailsId, int? body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<FavouritesDtoResult> FavouriteUpsertAsync(FavouritesDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FavouritesDtoResult> RemoveFavouriteDetailsAsync(string favouriteDetailsId, int? body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<FavouritesDtoResult> RemoveFavouriteDetailsAsync(string favouriteDetailsId, int? body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -79,7 +79,7 @@ namespace PineappleSite.Presentation.Services.Favorites
 
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FavouriteAPIResponse> GetFavouriteAsync(string userId)
+        public virtual System.Threading.Tasks.Task<FavouritesDtoResult> GetFavouriteAsync(string userId)
         {
             return GetFavouriteAsync(userId, System.Threading.CancellationToken.None);
         }
@@ -87,7 +87,7 @@ namespace PineappleSite.Presentation.Services.Favorites
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FavouriteAPIResponse> GetFavouriteAsync(string userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FavouritesDtoResult> GetFavouriteAsync(string userId, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -134,7 +134,7 @@ namespace PineappleSite.Presentation.Services.Favorites
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<FavouriteAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<FavouritesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new FavoritesExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -163,7 +163,7 @@ namespace PineappleSite.Presentation.Services.Favorites
 
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FavouriteAPIResponse> FavouriteUpsertAsync(FavouritesDto body)
+        public virtual System.Threading.Tasks.Task<FavouritesDtoResult> FavouriteUpsertAsync(FavouritesDto body)
         {
             return FavouriteUpsertAsync(body, System.Threading.CancellationToken.None);
         }
@@ -171,7 +171,7 @@ namespace PineappleSite.Presentation.Services.Favorites
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FavouriteAPIResponse> FavouriteUpsertAsync(FavouritesDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FavouritesDtoResult> FavouriteUpsertAsync(FavouritesDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -217,7 +217,7 @@ namespace PineappleSite.Presentation.Services.Favorites
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<FavouriteAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<FavouritesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new FavoritesExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -246,15 +246,15 @@ namespace PineappleSite.Presentation.Services.Favorites
 
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<FavouriteAPIResponse> RemoveDetailsAsync(string favouriteDetailsId, int? body)
+        public virtual System.Threading.Tasks.Task<FavouritesDtoResult> RemoveFavouriteDetailsAsync(string favouriteDetailsId, int? body)
         {
-            return RemoveDetailsAsync(favouriteDetailsId, body, System.Threading.CancellationToken.None);
+            return RemoveFavouriteDetailsAsync(favouriteDetailsId, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="FavoritesExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<FavouriteAPIResponse> RemoveDetailsAsync(string favouriteDetailsId, int? body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<FavouritesDtoResult> RemoveFavouriteDetailsAsync(string favouriteDetailsId, int? body, System.Threading.CancellationToken cancellationToken)
         {
             if (favouriteDetailsId == null)
                 throw new System.ArgumentNullException("favouriteDetailsId");
@@ -278,7 +278,7 @@ namespace PineappleSite.Presentation.Services.Favorites
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Favourite");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("RemoveDetails");
+                    urlBuilder_.Append("RemoveFavouriteDetails");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(favouriteDetailsId, System.Globalization.CultureInfo.InvariantCulture)));
 
@@ -305,7 +305,7 @@ namespace PineappleSite.Presentation.Services.Favorites
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<FavouriteAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<FavouritesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new FavoritesExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -436,26 +436,6 @@ namespace PineappleSite.Presentation.Services.Favorites
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class FavouriteAPIResponse
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public object Data { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class FavouritesDetailsDto
     {
         [Newtonsoft.Json.JsonProperty("favouritesDetailsId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -483,6 +463,29 @@ namespace PineappleSite.Presentation.Services.Favorites
 
         [Newtonsoft.Json.JsonProperty("favouritesDetails", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<FavouritesDetailsDto> FavouritesDetails { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class FavouritesDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public FavouritesDto Data { get; set; }
 
     }
 

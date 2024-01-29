@@ -77,17 +77,21 @@ namespace PineappleSite.Presentation
 
             #region Favorite Mapping
             CreateMap<Services.Favorites.ProductDto, ProductAPIViewModel>().ReverseMap();
+            CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<FavoutiteHeaderDto, FavoriteHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
+
             CreateMap<FavouritesDto, FavouritesViewModel>().ReverseMap();
+            CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
+            CreateMap<FavouritesDtoResult, FavouriteResultViewModel>().ReverseMap();
             #endregion
 
             CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
             CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
 
+
             CreateMap<ProductAPIResponse, ProductAPIViewModel>().ReverseMap();
             CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
-            CreateMap<FavouriteAPIResponse, FavoritesResponseViewModel>().ReverseMap();
         }
     }
 }

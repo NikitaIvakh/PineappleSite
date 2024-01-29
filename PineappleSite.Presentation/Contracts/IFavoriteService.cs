@@ -5,10 +5,10 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface IFavoriteService
     {
-        Task<FavoritesResponseViewModel> GetFavoritesAsync(string userId);
+        Task<FavouritesViewModel> GetFavoritesAsync(string userId);
 
-        Task<FavoritesResponseViewModel> FavoritesUpsertAsync(FavouritesViewModel viewModel);
+        Task<FavouriteResultViewModel<FavouritesViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel);
 
-        Task<FavoritesResponseViewModel> DeleteFavoriteDetails(int favoriteId);
+        Task<FavouriteResultViewModel<FavouritesViewModel>> DeleteFavoriteDetails(int favoriteId);
     }
 }

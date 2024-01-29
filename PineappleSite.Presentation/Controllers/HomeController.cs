@@ -94,17 +94,17 @@ namespace PineappleSite.Presentation.Controllers
             List<FavoriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
             favouritesViewModel.FavouritesDetails = favoriteDetailsViewModels;
 
-            FavoritesResponseViewModel response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
+            FavouriteResultViewModel response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
 
             if (response.IsSuccess)
             {
-                TempData["success"] = response.Message;
+                TempData["success"] = response.SuccessMessage;
                 return RedirectToAction(nameof(GetProducts));
             }
 
             else
             {
-                TempData["error"] = response.ValidationErrors;
+                TempData["error"] = response.ErrorMessage;
 
             }
 

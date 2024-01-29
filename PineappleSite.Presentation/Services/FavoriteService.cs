@@ -11,72 +11,93 @@ namespace PineappleSite.Presentation.Services
         private readonly IFavoritesClient _favoritesClient = favoritesClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<FavoritesResponseViewModel> GetFavoritesAsync(string userId)
+        public async Task<FavouritesViewModel> GetFavoritesAsync(string userId)
         {
-            var favorites = await _favoritesClient.GetFavouriteAsync(userId);
-            return _mapper.Map<FavoritesResponseViewModel>(favorites);
+            AddBearerToken();
+            FavouritesDtoResult favorites = await _favoritesClient.GetFavouriteAsync(userId);
+            return _mapper.Map<FavouritesViewModel>(favorites);
         }
 
-        public async Task<FavoritesResponseViewModel> FavoritesUpsertAsync(FavouritesViewModel viewModel)
+        public async Task<FavouriteResultViewModel<FavouritesViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel)
         {
             try
             {
-                FavoritesResponseViewModel response = new();
                 FavouritesDto favouritesDto = _mapper.Map<FavouritesDto>(viewModel);
-                FavouriteAPIResponse apiResponse = await _favoritesClient.FavouriteUpsertAsync(favouritesDto);
+                FavouritesDtoResult apiResponse = await _favoritesClient.FavouriteUpsertAsync(favouritesDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
+                    return new FavouriteResultViewModel<FavouritesViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<FavouritesViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new FavouriteResultViewModel<FavouritesViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new FavouriteResultViewModel<FavouritesViewModel>();
             }
 
             catch (FavoritesExceptions exception)
             {
-                return ConvertFavoriteExceptions(exception);
+                return new FavouriteResultViewModel<FavouritesViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                    ValidationErrors = exception.Message,
+                };
             }
         }
 
-        public async Task<FavoritesResponseViewModel> DeleteFavoriteDetails(int favoriteId)
+        public async Task<FavouriteResultViewModel<FavouritesViewModel>> DeleteFavoriteDetails(int favoriteId)
         {
             try
             {
-                FavoritesResponseViewModel response = new();
-                FavouriteAPIResponse apiResponse = await _favoritesClient.RemoveDetailsAsync(favoriteId.ToString(), favoriteId);
+                FavouritesDtoResult apiResponse = await _favoritesClient.RemoveFavouriteDetailsAsync(favoriteId.ToString(), favoriteId);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
+                    return new FavouriteResultViewModel<FavouritesViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<FavouritesViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new FavouriteResultViewModel<FavouritesViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new FavouriteResultViewModel<FavouritesViewModel>();
             }
 
             catch (FavoritesExceptions exception)
             {
-                return ConvertFavoriteExceptions(exception);
+                return new FavouriteResultViewModel<FavouritesViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                    ValidationErrors = exception.Message,
+                };
             }
         }
     }

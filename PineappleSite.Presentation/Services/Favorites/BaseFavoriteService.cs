@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Favorites;
 using System.Net.Http.Headers;
 
 namespace PineappleSite.Presentation.Services.Favorites
@@ -8,21 +9,21 @@ namespace PineappleSite.Presentation.Services.Favorites
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IFavoritesClient _favoritesClient = favoritesClient;
 
-        protected FavoritesResponseViewModel ConvertFavoriteExceptions(FavoritesExceptions favoritesExceptions)
+        protected FavouriteResultViewModel<FavouritesViewModel> ConvertFavoriteExceptions(FavoritesExceptions favoritesExceptions)
         {
             if (favoritesExceptions.StatusCode == 400)
             {
-                return new FavoritesResponseViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = favoritesExceptions.Response, IsSuccess = false };
+                return new FavouriteResultViewModel<FavouritesViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = favoritesExceptions.Response };
             }
 
             else if (favoritesExceptions.StatusCode == 404)
             {
-                return new FavoritesResponseViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new FavouriteResultViewModel<FavouritesViewModel>() { ErrorMessage = "Требуемый элемент не удалось найти." };
             }
 
             else
             {
-                return new FavoritesResponseViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new FavouriteResultViewModel<FavouritesViewModel>() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз." };
             }
         }
 
