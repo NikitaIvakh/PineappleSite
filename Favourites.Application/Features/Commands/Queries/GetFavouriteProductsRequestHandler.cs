@@ -19,7 +19,7 @@ namespace Favourites.Application.Features.Commands.Queries
         private readonly IBaseRepository<FavouritesHeader> _favouriteHeader = favouriteHeader;
         private readonly IBaseRepository<FavouritesDetails> _favouriteDetails = favouriteDetails;
         private readonly IMapper _mapper = mapper;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger _logger = logger.ForContext<GetFavouriteProductsRequestHandler>();
         private readonly IProductService _productService = productService;
 
         public async Task<Result<FavouritesDto>> Handle(GetFavouriteProductsRequest request, CancellationToken cancellationToken)

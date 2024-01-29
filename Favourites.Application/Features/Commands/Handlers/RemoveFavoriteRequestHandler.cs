@@ -14,7 +14,7 @@ namespace Favourites.Application.Features.Commands.Handlers
     {
         private readonly IBaseRepository<FavouritesHeader> _favouriteHeader = favouriteHeader;
         private readonly IBaseRepository<FavouritesDetails> _favouriteDetails = favouriteDetails;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger _logger = logger.ForContext<RemoveFavoriteRequestHandler>();
 
         public async Task<Result<FavouritesDetails>> Handle(RemoveFavoriteRequest request, CancellationToken cancellationToken)
         {
