@@ -5,15 +5,14 @@ using Favourites.Domain.ResultFavourites;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace Favourites.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FavouriteController(IMediator mediator) : ControllerBase
+    public class FavouriteController(IMediator mediator, ILogger<FavouritesDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<FavouritesDto> _logger = logger;
 
         // GET api/<FavouriteController>/5
         [HttpGet("GetFavourite/{userId}")]
@@ -23,9 +22,11 @@ namespace Favourites.API.Controllers
 
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранные товары получены");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения избранных товаров");
             return BadRequest(query.ErrorMessage);
         }
 
@@ -37,9 +38,11 @@ namespace Favourites.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранные товары обновлены");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления избранных товаров");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -51,9 +54,11 @@ namespace Favourites.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранные товары удалены");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления избранных товаров");
             return BadRequest(command.ErrorMessage);
         }
     }
