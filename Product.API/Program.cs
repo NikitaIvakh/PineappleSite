@@ -1,3 +1,4 @@
+using Product.API;
 using Product.Application.DependencyInjection;
 using Product.Infrastructure.DependencyInjection;
 using Serilog;
@@ -24,6 +25,7 @@ applicationBuilder.Services.AddCors(key =>
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();
 
