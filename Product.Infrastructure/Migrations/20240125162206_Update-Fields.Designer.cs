@@ -10,7 +10,7 @@ using Product.Infrastructure;
 
 namespace Product.Infrastructure.Migrations
 {
-    [DbContext(typeof(PineAppleProductsDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240125162206_Update-Fields")]
     partial class UpdateFields
     {

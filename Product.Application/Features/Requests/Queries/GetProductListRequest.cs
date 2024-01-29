@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using Product.Application.DTOs.Products;
+using Product.Domain.DTOs;
+using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Requests.Queries
 {
-    public class GetProductListRequest : IRequest<IReadOnlyCollection<ProductDto>>
+    public class GetProductListRequest : IRequest<CollectionResult<ProductDto>>
     {
 
     }

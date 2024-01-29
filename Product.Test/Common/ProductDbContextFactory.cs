@@ -7,10 +7,10 @@ namespace Product.Test.Common
 {
     public static class ProductDbContextFactory
     {
-        public static PineAppleProductsDbContext Create()
+        public static ApplicationDbContext Create()
         {
-            var options = new DbContextOptionsBuilder<PineAppleProductsDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new PineAppleProductsDbContext(options);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            var context = new ApplicationDbContext(options);
             context.Database.EnsureCreated();
             context.AddRange(
                 new ProductEntity
@@ -44,7 +44,7 @@ namespace Product.Test.Common
             return context;
         }
 
-        public static void Destroy(PineAppleProductsDbContext context)
+        public static void Destroy(ApplicationDbContext context)
         {
             context.Database.EnsureDeleted();
             context.Dispose();

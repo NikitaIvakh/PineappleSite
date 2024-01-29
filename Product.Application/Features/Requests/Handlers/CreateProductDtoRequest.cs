@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Product.Application.DTOs.Products;
-using Product.Application.Response;
+using Product.Domain.DTOs;
+using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Requests.Handlers
 {
-    public class CreateProductDtoRequest : IRequest<ProductAPIResponse>
+    public class CreateProductDtoRequest : IRequest<Result<ProductDto>>
     {
         public CreateProductDto CreateProduct { get; set; }
     }

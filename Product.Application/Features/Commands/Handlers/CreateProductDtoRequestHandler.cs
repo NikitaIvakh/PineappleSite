@@ -1,23 +1,28 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Validator;
 using Product.Application.Features.Requests.Handlers;
-using Product.Application.Interfaces;
-using Product.Application.Response;
-using Product.Core.Entities.Producrs;
+using Product.Application.Resources;
+using Product.Domain.DTOs;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Enum;
+using Product.Domain.Interfaces;
+using Product.Domain.ResultProduct;
+using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class CreateProductDtoRequestHandler(IProductDbContext context, IMapper mapper, ICreateProductDtoValidator createValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<CreateProductDtoRequest, ProductAPIResponse>
+    public class CreateProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMapper mapper, ICreateProductDtoValidator createValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<CreateProductDtoRequest, Result<ProductDto>>
     {
-        private readonly IProductDbContext _context = context;
+        private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly IMapper _mapper = mapper;
+        private readonly ILogger _logger = logger.ForContext<CreateProductDtoRequestHandler>();
         private readonly ICreateProductDtoValidator _createValidator = createValidator;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly ProductAPIResponse _productAPIResponse = new();
 
-        public async Task<ProductAPIResponse> Handle(CreateProductDtoRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductDto>> Handle(CreateProductDtoRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -25,63 +30,88 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
-                    _productAPIResponse.IsSuccess = false;
-                    _productAPIResponse.Message = "Ошибка создания продукта";
-                    _productAPIResponse.ValidationErrors = validator.Errors.Select(e => e.ErrorMessage).ToList();
+                    _logger.Warning("Ошибка валидации");
+                    return new Result<ProductDto>
+                    {
+                        ErrorMessage = ErrorMessage.ProductNotCreated,
+                        ErrorCode = (int)ErrorCodes.ProductNotCreated,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var product = _mapper.Map<ProductEntity>(request.CreateProduct);
+                    var product = await _repository.GetAll().FirstOrDefaultAsync(key => key.Name == request.CreateProduct.Name, cancellationToken);
 
-                    await _context.Products.AddAsync(product, cancellationToken);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    if (request.CreateProduct.Avatar is not null)
+                    if (product is not null)
                     {
-                        string fileName = product.Id + Path.GetExtension(request.CreateProduct.Avatar.FileName);
-                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
-                        var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-
-                        FileInfo fileInfo = new(directoryLocation);
-
-                        if (fileInfo.Exists)
-                            fileInfo.Delete();
-
-                        var fileDirectory = Path.Combine(filePath, fileName);
-                        using (FileStream fileStream = new(fileDirectory, FileMode.Create))
+                        return new Result<ProductDto>
                         {
-                            request.CreateProduct.Avatar.CopyTo(fileStream);
-                        }
-
-                        var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
-                        product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
-                        product.ImageLocalPath = filePath;
+                            ErrorMessage = ErrorMessage.ProductAlreadyExists,
+                            ErrorCode = (int)ErrorCodes.ProductAlreadyExists,
+                        };
                     }
 
                     else
                     {
-                        product.ImageUrl = "https://placehold.co/600x400";
+                        product = new ProductEntity
+                        {
+                            Name = request.CreateProduct.Name,
+                            Description = request.CreateProduct.Description,
+                            ProductCategory = request.CreateProduct.ProductCategory,
+                            Price = request.CreateProduct.Price,
+                        };
+
+                        await _repository.CreateAsync(product);
+
+                        if (request.CreateProduct.Avatar is not null)
+                        {
+                            string fileName = product.Id + Path.GetExtension(request.CreateProduct.Avatar.FileName);
+                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
+                            var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                            FileInfo fileInfo = new(directoryLocation);
+
+                            if (fileInfo.Exists)
+                                fileInfo.Delete();
+
+                            var fileDirectory = Path.Combine(filePath, fileName);
+                            using (FileStream fileStream = new(fileDirectory, FileMode.Create))
+                            {
+                                request.CreateProduct.Avatar.CopyTo(fileStream);
+                            }
+
+                            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
+                            product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
+                            product.ImageLocalPath = filePath;
+                        }
+
+                        else
+                        {
+                            product.ImageUrl = "https://placehold.co/600x400";
+                        }
+
+                        await _repository.UpdateAsync(product);
+
+                        return new Result<ProductDto>
+                        {
+                            SuccessMessage = "Продукт успешно добавлен",
+                            Data = _mapper.Map<ProductDto>(product),
+                        };
                     }
-
-                    _context.Products.Update(product);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    _productAPIResponse.IsSuccess = true;
-                    _productAPIResponse.Message = "Продукт успешно добавлен";
-                    _productAPIResponse.Id = product.Id;
-
-                    return _productAPIResponse;
                 }
             }
 
             catch (Exception exception)
             {
-                _productAPIResponse.IsSuccess = false;
-                _productAPIResponse.Message = exception.Message;
-            }
+                _logger.Warning(exception, exception.Message);
 
-            return _productAPIResponse;
+                return new Result<ProductDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
+            }
         }
     }
 }

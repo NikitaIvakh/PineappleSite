@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using Product.Application.DTOs.Products;
-using Product.Application.Response;
+using Product.Domain.DTOs;
+using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Requests.Handlers
 {
-    public class DeleteProductsDtoRequest : IRequest<ProductAPIResponse>
+    public class DeleteProductsDtoRequest : IRequest<CollectionResult<ProductDto>>
     {
         public DeleteProductsDto DeleteProducts { get; set; }
     }

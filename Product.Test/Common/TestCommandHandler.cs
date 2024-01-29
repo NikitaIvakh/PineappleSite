@@ -9,7 +9,7 @@ namespace Product.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
-        protected PineAppleProductsDbContext Context;
+        protected ApplicationDbContext Context;
         protected IMapper Mapper;
         protected ICreateProductDtoValidator CreateValidator;
         protected IUpdateProductDtoValidator UpdateValidator;

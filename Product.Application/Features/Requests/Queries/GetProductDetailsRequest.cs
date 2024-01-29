@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using Product.Application.DTOs.Products;
+using Product.Domain.DTOs;
+using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Requests.Queries
 {
-    public class GetProductDetailsRequest : IRequest<ProductDto>
+    public class GetProductDetailsRequest : IRequest<Result<ProductDto>>
     {
         public int Id { get; set; }
     }

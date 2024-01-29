@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Product.Application.DTOs.Products;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
-using Product.Application.Response;
+using Product.Domain.DTOs;
+using Product.Domain.ResultProduct;
 
 namespace Product.API.Controllers
 {
@@ -15,50 +15,86 @@ namespace Product.API.Controllers
 
         // GET: api/<ProductController>
         [HttpGet]
-        public async Task<ActionResult<IReadOnlyCollection<ProductDto>>> Get()
+        public async Task<ActionResult<CollectionResult<ProductDto>>> Get()
         {
             var query = await _mediator.Send(new GetProductListRequest());
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query.ErrorMessage);
         }
 
         // GET api/<ProductController>/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ProductDto>> Get(int id)
+        public async Task<ActionResult<Result<ProductDto>>> Get(int id)
         {
             var query = await _mediator.Send(new GetProductDetailsRequest { Id = id });
-            return Ok(query);
+
+            if (query.IsSuccess)
+            {
+                return Ok(query);
+            }
+
+            return BadRequest(query.ErrorMessage);
         }
 
         // POST api/<ProductController>
         [HttpPost]
-        public async Task<ActionResult<ProductAPIResponse>> Post([FromForm] CreateProductDto createProductDto)
+        public async Task<ActionResult<Result<ProductDto>>> Post([FromForm] CreateProductDto createProductDto)
         {
             var command = await _mediator.Send(new CreateProductDtoRequest { CreateProduct = createProductDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // PUT api/<ProductController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<ProductAPIResponse>> Put([FromForm] UpdateProductDto updateProductDto)
+        public async Task<ActionResult<Result<ProductDto>>> Put([FromForm] UpdateProductDto updateProductDto)
         {
             var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<ProductAPIResponse>> Delete([FromBody] DeleteProductDto deleteProductDto)
+        public async Task<ActionResult<Result<ProductDto>>> Delete([FromBody] DeleteProductDto deleteProductDto)
         {
             var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ProductController>/
         [HttpDelete]
-        public async Task<ActionResult<ProductAPIResponse>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
+        public async Task<ActionResult<Result<ProductDto>>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
         {
             var command = await _mediator.Send(new DeleteProductsDtoRequest { DeleteProducts = deleteProductsDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
     }
 }

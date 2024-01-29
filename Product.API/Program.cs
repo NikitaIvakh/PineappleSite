@@ -1,5 +1,6 @@
-using Product.Application;
-using Product.Infrastructure;
+using Product.Application.DependencyInjection;
+using Product.Infrastructure.DependencyInjection;
+using Serilog;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ applicationBuilder.Services.AddCors(key =>
 
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService();
+applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
 
 WebApplication webApplication = applicationBuilder.Build();
 
@@ -38,9 +40,6 @@ webApplication.UseRouting();
 webApplication.UseAuthorization();
 webApplication.UseCors();
 webApplication.UseStaticFiles();
-webApplication.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+webApplication.MapControllers();
 
 webApplication.Run();

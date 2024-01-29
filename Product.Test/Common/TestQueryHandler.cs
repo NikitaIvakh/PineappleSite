@@ -7,7 +7,7 @@ namespace Product.Test.Common
 {
     public class TestQueryHandler : IDisposable
     {
-        protected PineAppleProductsDbContext Context;
+        protected ApplicationDbContext Context;
         protected IMapper Mapper;
 
         public TestQueryHandler()

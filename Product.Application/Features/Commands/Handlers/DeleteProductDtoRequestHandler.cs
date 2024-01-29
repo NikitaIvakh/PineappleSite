@@ -1,19 +1,26 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Validator;
-using Product.Application.Exceptions;
 using Product.Application.Features.Requests.Handlers;
-using Product.Application.Interfaces;
-using Product.Application.Response;
+using Product.Application.Resources;
+using Product.Domain.DTOs;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Enum;
+using Product.Domain.Interfaces;
+using Product.Domain.ResultProduct;
+using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class DeleteProductDtoRequestHandler(IProductDbContext context, IDeleteProductDtoValidator deleteValidator) : IRequestHandler<DeleteProductDtoRequest, ProductAPIResponse>
+    public class DeleteProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, IDeleteProductDtoValidator deleteValidator, ILogger logger, IMapper mapper) : IRequestHandler<DeleteProductDtoRequest, Result<ProductDto>>
     {
-        private readonly IProductDbContext _context = context;
+        private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly IDeleteProductDtoValidator _deleteValidator = deleteValidator;
-        private readonly ProductAPIResponse _productAPIResponse = new ProductAPIResponse();
+        private readonly ILogger _logger = logger.ForContext<DeleteProductDtoRequestHandler>();
+        private readonly IMapper _mapper = mapper;
 
-        public async Task<ProductAPIResponse> Handle(DeleteProductDtoRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductDto>> Handle(DeleteProductDtoRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -21,45 +28,63 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
-                    _productAPIResponse.IsSuccess = false;
-                    _productAPIResponse.Message = "Ошибка удаления продукта";
-                    _productAPIResponse.ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList();
+                    _logger.Warning($"Ошибка валидации");
+                    return new Result<ProductDto>
+                    {
+                        ErrorMessage = ErrorMessage.ProductNotDeleted,
+                        ErrorCode = (int)ErrorCodes.ProductNotDeleted,
+                    };
                 }
 
                 else
                 {
-                    var product = await _context.Products.FindAsync(new object[] { request.DeleteProduct.Id }, cancellationToken)
-                        ?? throw new NotFoundException($"Продукта c идентификатором:", request.DeleteProduct.Id);
+                    var product = await _repository.GetAll().FirstOrDefaultAsync(key => key.Id == request.DeleteProduct.Id, cancellationToken);
 
-                    if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                    if (product is null)
                     {
-                        string fileName = product.Id + ".jpg";
-                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath, fileName);
-
-                        if (File.Exists(filePath))
+                        return new Result<ProductDto>
                         {
-                            File.Delete(filePath);
+                            ErrorMessage = ErrorMessage.ProductNotFound,
+                            ErrorCode = (int)ErrorCodes.ProductNotFound,
+                        };
+                    }
+
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                        {
+                            string fileName = product.Id + ".jpg";
+                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath, fileName);
+
+                            if (File.Exists(filePath))
+                            {
+                                File.Delete(filePath);
+                            }
+                        }
+
+                        else
+                        {
+                            await _repository.DeleteAsync(product);
                         }
                     }
 
-                    _context.Products.Remove(product);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    _productAPIResponse.IsSuccess = true;
-                    _productAPIResponse.Message = "Продукт успешно удален";
-                    _productAPIResponse.Id = product.Id;
-
-                    return _productAPIResponse;
+                    return new Result<ProductDto>
+                    {
+                        Data = _mapper.Map<ProductDto>(product),
+                        SuccessMessage = "Продукт успешно удален",
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                _productAPIResponse.IsSuccess = false;
-                _productAPIResponse.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<ProductDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _productAPIResponse;
         }
     }
 }

@@ -9,7 +9,7 @@ using Product.Infrastructure;
 
 namespace Product.Infrastructure.Migrations
 {
-    [DbContext(typeof(PineAppleProductsDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class PineAppleProductsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

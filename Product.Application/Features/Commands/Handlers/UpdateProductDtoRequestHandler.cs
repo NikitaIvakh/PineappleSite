@@ -3,22 +3,26 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Product.Application.DTOs.Validator;
-using Product.Application.Exceptions;
 using Product.Application.Features.Requests.Handlers;
-using Product.Application.Interfaces;
-using Product.Application.Response;
+using Product.Application.Resources;
+using Product.Domain.DTOs;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Enum;
+using Product.Domain.Interfaces;
+using Product.Domain.ResultProduct;
+using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class UpdateProductDtoRequestHandler(IProductDbContext context, IMapper mapper, IUpdateProductDtoValidator updateValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<UpdateProductDtoRequest, ProductAPIResponse>
+    public class UpdateProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMapper mapper, IUpdateProductDtoValidator updateValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<UpdateProductDtoRequest, Result<ProductDto>>
     {
-        private readonly IProductDbContext _context = context;
+        private readonly IBaseRepository<ProductEntity> _repository = repository;
+        private readonly ILogger _logger = logger.ForContext<UpdateProductDtoRequestHandler>();
         private readonly IMapper _mapper = mapper;
         private readonly IUpdateProductDtoValidator _updateValidator = updateValidator;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly ProductAPIResponse _productAPIResponse = new();
 
-        public async Task<ProductAPIResponse> Handle(UpdateProductDtoRequest request, CancellationToken cancellationToken)
+        public async Task<Result<ProductDto>> Handle(UpdateProductDtoRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -26,88 +30,108 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
-                    _productAPIResponse.IsSuccess = false;
-                    _productAPIResponse.Message = "Ошибка обновления продукта";
-                    _productAPIResponse.ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList();
+                    return new Result<ProductDto>
+                    {
+                        ErrorMessage = ErrorMessage.ProductNotUpdated,
+                        ErrorCode = (int)ErrorCodes.ProductNotUpdated,
+                        ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var product = await _context.Products.FirstOrDefaultAsync(key => key.Id == request.UpdateProduct.Id, cancellationToken) ??
-                        throw new NotFoundException($"У продукта ({request.UpdateProduct.Name}) не существует идкетификатора: ", request.UpdateProduct.Id);
+                    var product = await _repository.GetAll().FirstOrDefaultAsync(key => key.Id == request.UpdateProduct.Id, cancellationToken);
 
-                    _mapper.Map(request.UpdateProduct, product);
-                    _context.Products.Update(product);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    if (request.UpdateProduct.Avatar is not null)
+                    if (product is null)
                     {
-                        if (!string.IsNullOrEmpty(product.ImageLocalPath) || !string.IsNullOrEmpty(product.ImageUrl))
+                        return new Result<ProductDto>
                         {
-                            var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                            FileInfo fileInfo = new(oldFilePasthDirectory);
-
-                            if (fileInfo.Exists)
-                                fileInfo.Delete();
-                        }
-
-                        Random random = new();
-                        int randomNumber = random.Next(1, 120001);
-
-                        string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
-                        string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
-                        string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-
-                        if (!Directory.Exists(filePath))
-                        {
-                            Directory.CreateDirectory(filePath);
-                        }
-
-                        var fileFullPath = Path.Combine(fileDirectory, fileName);
-
-                        using (FileStream fileStream = new(fileFullPath, FileMode.Create))
-                        {
-                            request.UpdateProduct.Avatar.CopyTo(fileStream);
+                            ErrorMessage = ErrorMessage.ProductNotUpdatedNull,
+                            ErrorCode = (int)ErrorCodes.ProductNotUpdatedNull,
                         };
-
-                        var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
-                        product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
-                        product.ImageLocalPath = filePath;
                     }
 
                     else
                     {
-                        if (!string.IsNullOrEmpty(product.ImageLocalPath))
-                        {
-                            var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                            FileInfo fileInfo = new(oldFilePasthDirectory);
+                        product.Name = request.UpdateProduct.Name;
+                        product.Description = request.UpdateProduct.Description;
+                        product.ProductCategory = request.UpdateProduct.ProductCategory;
+                        product.Price = request.UpdateProduct.Price;
 
-                            if (fileInfo.Exists)
-                                fileInfo.Delete();
+                        await _repository.UpdateAsync(product);
+
+                        if (request.UpdateProduct.Avatar is not null)
+                        {
+                            if (!string.IsNullOrEmpty(product.ImageLocalPath) || !string.IsNullOrEmpty(product.ImageUrl))
+                            {
+                                var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                                FileInfo fileInfo = new(oldFilePasthDirectory);
+
+                                if (fileInfo.Exists)
+                                    fileInfo.Delete();
+                            }
+
+                            Random random = new();
+                            int randomNumber = random.Next(1, 120001);
+
+                            string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
+                            string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                            if (!Directory.Exists(filePath))
+                            {
+                                Directory.CreateDirectory(filePath);
+                            }
+
+                            var fileFullPath = Path.Combine(fileDirectory, fileName);
+
+                            using (FileStream fileStream = new(fileFullPath, FileMode.Create))
+                            {
+                                request.UpdateProduct.Avatar.CopyTo(fileStream);
+                            };
+
+                            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
+                            product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
+                            product.ImageLocalPath = filePath;
+
+                            await _repository.UpdateAsync(product);
                         }
 
-                        product.ImageUrl = null;
-                        product.ImageLocalPath = null;
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                            {
+                                var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                                FileInfo fileInfo = new(oldFilePasthDirectory);
+
+                                if (fileInfo.Exists)
+                                    fileInfo.Delete();
+                            }
+
+                            product.ImageUrl = null;
+                            product.ImageLocalPath = null;
+
+                            await _repository.UpdateAsync(product);
+                        }
+
+                        return new Result<ProductDto>
+                        {
+                            SuccessMessage = "Продукт успешно обновлен",
+                            Data = _mapper.Map<ProductDto>(product),
+                        };
                     }
-
-                    _context.Products.Update(product);
-                    await _context.SaveChangesAsync(cancellationToken);
-
-                    _productAPIResponse.IsSuccess = true;
-                    _productAPIResponse.Message = "Продукт успешно обновлен";
-                    _productAPIResponse.Id = product.Id;
-
-                    return _productAPIResponse;
                 }
             }
 
             catch (Exception exception)
             {
-                _productAPIResponse.IsSuccess = false;
-                _productAPIResponse.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<ProductDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _productAPIResponse;
         }
     }
 }

@@ -1,22 +1,65 @@
-﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Product.Application.DTOs.Products;
 using Product.Application.Features.Requests.Queries;
-using Product.Application.Interfaces;
+using Product.Application.Resources;
+using Product.Domain.DTOs;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Enum;
+using Product.Domain.Interfaces;
+using Product.Domain.ResultProduct;
+using Serilog;
 
 namespace Product.Application.Features.Commands.Queries
 {
-    public class GetProductListRequestHandler(IProductDbContext context, IMapper mapper) : IRequestHandler<GetProductListRequest, IReadOnlyCollection<ProductDto>>
+    public class GetProductListRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger) : IRequestHandler<GetProductListRequest, CollectionResult<ProductDto>>
     {
-        private readonly IProductDbContext _context = context;
-        private readonly IMapper _mapper = mapper;
+        private readonly IBaseRepository<ProductEntity> _repository = repository;
+        private readonly ILogger _logger = logger.ForContext<GetProductListRequestHandler>();
 
-        public async Task<IReadOnlyCollection<ProductDto>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
+        public async Task<CollectionResult<ProductDto>> Handle(GetProductListRequest request, CancellationToken cancellationToken)
         {
-            var products = await _context.Products.OrderBy(key => key.Id).ProjectTo<ProductDto>(_mapper.ConfigurationProvider).ToListAsync(cancellationToken);
-            return _mapper.Map<IReadOnlyCollection<ProductDto>>(products);
+            try
+            {
+                IReadOnlyCollection<ProductDto> products = await _repository.GetAll().Select(key => new ProductDto
+                {
+                    Id = key.Id,
+                    Name = key.Name,
+                    Description = key.Description,
+                    ProductCategory = key.ProductCategory,
+                    Price = key.Price,
+                    ImageUrl = key.ImageUrl,
+                    ImageLocalPath = key.ImageLocalPath,
+                }).OrderBy(key => key.Id).ToListAsync(cancellationToken);
+
+                if (products.Count == 0)
+                {
+                    _logger.Warning(ErrorMessage.ProductsNotFound, products.Count);
+                    return new CollectionResult<ProductDto>
+                    {
+                        ErrorMessage = ErrorMessage.ProductsNotFound,
+                        ErrorCode = (int)ErrorCodes.ProductsNotFound,
+                    };
+                }
+
+                else
+                {
+                    return new CollectionResult<ProductDto>
+                    {
+                        Data = products,
+                        Count = products.Count,
+                    };
+                }
+            }
+
+            catch (Exception exception)
+            {
+                _logger.Warning(exception, exception.Message);
+                return new CollectionResult<ProductDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
+            }
         }
     }
 }

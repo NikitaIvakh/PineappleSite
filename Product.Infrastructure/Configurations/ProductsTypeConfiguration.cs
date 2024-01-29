@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Product.Core.Entities.Enum;
-using Product.Core.Entities.Producrs;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Enum;
 
 namespace Product.Infrastructure.Configurations
 {
