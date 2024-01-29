@@ -24,7 +24,7 @@ namespace Product.API.Controllers
                 return Ok(query);
             }
 
-            return BadRequest(query.ErrorMessage);
+            return BadRequest(query);
         }
 
         // GET api/<ProductController>/5
@@ -38,7 +38,7 @@ namespace Product.API.Controllers
                 return Ok(query);
             }
 
-            return BadRequest(query.ErrorMessage);
+            return BadRequest(query);
         }
 
         // POST api/<ProductController>
@@ -52,7 +52,7 @@ namespace Product.API.Controllers
                 return Ok(command);
             }
 
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command);
         }
 
         // PUT api/<ProductController>/5
@@ -66,7 +66,7 @@ namespace Product.API.Controllers
                 return Ok(command);
             }
 
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command);
         }
 
         // DELETE api/<ProductController>/5
@@ -80,7 +80,7 @@ namespace Product.API.Controllers
                 return Ok(command);
             }
 
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command);
         }
 
         // DELETE api/<ProductController>/
@@ -94,7 +94,7 @@ namespace Product.API.Controllers
                 return Ok(command);
             }
 
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command);
         }
     }
 }
