@@ -7,6 +7,7 @@ using Favourites.Application.Profiles;
 using Moq;
 using Serilog;
 using Favourites.Application.Features.Commands.Handlers;
+using Favourites.Infrastructure.Repositories;
 
 namespace Favourites.Test.Common
 {
@@ -21,17 +22,20 @@ namespace Favourites.Test.Common
 
         public TestCommandHandler()
         {
-            Context = FavouritesDbContextFactory.Create(FavouroteRepository);
+            Context = FavouritesDbContextFactory.Create();
+            HeaderRepository = new BaseRepository<FavouritesHeader>(Context);
+            DetailsRepository = new BaseRepository<FavouritesDetails>(Context);
+            FavouroteRepository = new BaseRepository<FavouritesDto>(Context);
 
-            var headerRepository = new Mock<IBaseRepository<FavouritesHeader>>();
-            var detailsRepository = new Mock<IBaseRepository<FavouritesDetails>>();
-            var favouroteRepository = new Mock<IBaseRepository<FavouritesDto>>();
+            //var headerRepository = new Mock<IBaseRepository<FavouritesHeader>>();
+            //var detailsRepository = new Mock<IBaseRepository<FavouritesDetails>>();
+            //var favouroteRepository = new Mock<IBaseRepository<FavouritesDto>>();
 
             Logger = Log.ForContext<FavoutiteUpsertRequestHandler>();
 
-            HeaderRepository = headerRepository.Object;
-            DetailsRepository = detailsRepository.Object;
-            FavouroteRepository = favouroteRepository.Object;
+            //HeaderRepository = headerRepository.Object;
+            //DetailsRepository = detailsRepository.Object;
+            //FavouroteRepository = favouroteRepository.Object;
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {

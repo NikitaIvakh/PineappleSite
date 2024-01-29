@@ -1,5 +1,4 @@
-﻿using Favourites.Domain.DTOs;
-using Favourites.Domain.Interfaces.Repositories;
+﻿using Favourites.Domain.Entities.Favourite;
 using Favourites.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,29 +6,23 @@ namespace Favourites.Test.Common
 {
     public static class FavouritesDbContextFactory
     {
-        public static ApplicationDbContext Create(IBaseRepository<FavouritesDto> repository)
+        public static ApplicationDbContext Create()
         {
             var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
             var context = new ApplicationDbContext(options);
             context.Database.EnsureCreated();
-            repository.CreateAsync(
-                new FavouritesDto()
-                {
-                    FavoutiteHeader = new FavoutiteHeaderDto
-                    {
-                        FavouritesHeaderId = 2,
-                        UserId = "testuserid2"
-                    },
+            context.AddRange(new FavouritesHeader
+            {
+                FavouritesHeaderId = 3,
+                UserId = "testuserid",
+            });
 
-                    FavouritesDetails = new List<FavouritesDetailsDto>
-                    {
-                        new() {
-                            FavouritesDetailsId = 2,
-                            FavouritesHeaderId = 2,
-                            ProductId = 3,
-                        }
-                    }
-                }).GetAwaiter().GetResult();
+            context.AddRange(new FavouritesDetails
+            {
+                FavouritesDetailsId = 3,
+                FavouritesHeaderId = 3,
+                ProductId = 1,
+            });
 
             context.SaveChanges();
             return context;
