@@ -9,9 +9,10 @@ namespace Product.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductController(IMediator mediator) : ControllerBase
+    public class ProductController(IMediator mediator, ILogger<ProductDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<ProductDto> _logger = logger;
 
         // GET: api/<ProductController>
         [HttpGet]
@@ -21,9 +22,11 @@ namespace Product.API.Controllers
 
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукты успешно получены");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения продуктов");
             return BadRequest(query);
         }
 
@@ -35,9 +38,11 @@ namespace Product.API.Controllers
 
             if (query.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукт успешно получен");
                 return Ok(query);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения продукта");
             return BadRequest(query);
         }
 
@@ -49,9 +54,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукт успешно добавлен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка добавления продукта");
             return BadRequest(command);
         }
 
@@ -63,9 +70,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукт успешно обновлен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления продукта");
             return BadRequest(command);
         }
 
@@ -77,9 +86,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукт успешно удален");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления продукта");
             return BadRequest(command);
         }
 
@@ -91,9 +102,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукты успешно удалены");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления продуктов");
             return BadRequest(command);
         }
     }
