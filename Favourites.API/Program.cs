@@ -27,6 +27,7 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
+webApplication.UseSerilogRequestLogging();
 webApplication.UseAuthorization();
 webApplication.MapControllers();
 webApplication.Run();
