@@ -34,29 +34,29 @@ namespace Favourites.Application.Features.Commands.Handlers
                     FavouritesHeader favouritesHeader = _mapper.Map<FavouritesHeader>(request.Favourites.FavoutiteHeader);
                     await _favouriteHeader.CreateAsync(favouritesHeader);
 
-                    request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouritesHeader.FavouritesHeaderId;
-                    await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
+                    request.Favourites.FavouritesDetails.Data.First().FavouritesHeaderId = favouritesHeader.FavouritesHeaderId;
+                    await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.Data.First()));
                 }
 
                 else
                 {
                     var favouriteDetails = await _favouriteDetails
                         .GetAll()
-                        .FirstOrDefaultAsync(key => key.ProductId == request.Favourites.FavouritesDetails
+                        .FirstOrDefaultAsync(key => key.ProductId == request.Favourites.FavouritesDetails.Data
                         .First().ProductId && key.FavouritesHeaderId == favouriteHeaderFromDb.FavouritesHeaderId, cancellationToken);
 
                     if (favouriteDetails is null)
                     {
-                        request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouriteHeaderFromDb.FavouritesHeaderId;
-                        await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
+                        request.Favourites.FavouritesDetails.Data.First().FavouritesHeaderId = favouriteHeaderFromDb.FavouritesHeaderId;
+                        await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.Data.First()));
                     }
 
                     else
                     {
-                        request.Favourites.FavouritesDetails.First().FavouritesDetailsId = favouriteDetails.FavouritesDetailsId;
-                        request.Favourites.FavouritesDetails.First().FavouritesHeaderId = favouriteDetails.FavouritesHeaderId;
+                        request.Favourites.FavouritesDetails.Data.First().FavouritesDetailsId = favouriteDetails.FavouritesDetailsId;
+                        request.Favourites.FavouritesDetails.Data.First().FavouritesHeaderId = favouriteDetails.FavouritesHeaderId;
 
-                        await _favouriteDetails.UpdateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.First()));
+                        await _favouriteDetails.UpdateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.Data.First()));
                     }
                 }
 

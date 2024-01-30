@@ -1,5 +1,6 @@
 ﻿@using PineappleSite.Presentation.Extecsions
-@model IReadOnlyCollection<PineappleSite.Presentation.Models.Products.ProductViewModel>
+@using PineappleSite.Presentation.Services.Products
+@model ProductsCollectionResultViewModel<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
     ViewData["Title"] = "Продукция";
@@ -17,7 +18,7 @@
     <div class="container">
         <div class="row">
             @{
-                foreach (var product in Model)
+                foreach (var product in Model.Data)
                 {
                     <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
                         <div class="p-0 my-3 border rounded">

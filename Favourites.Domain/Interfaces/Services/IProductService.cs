@@ -1,9 +1,10 @@
 ﻿using Favourites.Domain.DTOs;
+using Favourites.Domain.ResultFavourites;
 
 namespace Favourites.Domain.Interfaces.Services
 {
     public interface IProductService
     {
-        Task<IReadOnlyCollection<ProductDto>> GetProductListAsync();
+        Task<CollectionResult<ProductDto>> GetProductListAsync();
     }
 }

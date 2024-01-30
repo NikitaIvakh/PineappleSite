@@ -75,15 +75,21 @@ namespace PineappleSite.Presentation
             CreateMap<CartDto, CartViewModel>().ReverseMap();
             #endregion
 
-            #region Favorite Mapping
             CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<FavoutiteHeaderDto, FavoriteHeaderViewModel>().ReverseMap();
+            CreateMap<FavouritesHeader, FavoriteDetailsViewModel>().ReverseMap();
+            CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
             CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
 
-            CreateMap<FavouritesDto, FavouritesViewModel>().ReverseMap();
+            CreateMap<FavouritesDto, FavouritesViewModel>()
+                .ForMember(dest => dest.FavoutiteHeader, opt => opt.MapFrom(src => src.FavoutiteHeader))
+                .ForMember(dest => dest.FavouritesDetails, opt => opt.MapFrom(src => src.FavouritesDetails.Data))
+                .ReverseMap();
             CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
-            CreateMap<FavouritesDtoResult, FavouriteResultViewModel>().ReverseMap();
-            #endregion
+            CreateMap<FavouritesDtoResult, FavouriteResultViewModel<FavouritesViewModel>>().ReverseMap();
+            CreateMap<FavouritesDetailsDtoCollectionResult, IReadOnlyCollection<FavoriteDetailsViewModel>>().ReverseMap();
+
+
 
             CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
             CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();

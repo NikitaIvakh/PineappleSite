@@ -2,8 +2,8 @@
 {
     public class FavouritesViewModel
     {
-        public FavoriteHeaderViewModel FavoutiteHeader { get; set; }
+        public FavoriteHeaderViewModel? FavoutiteHeader { get; set; }
 
-        public IReadOnlyCollection<FavoriteDetailsViewModel> FavouritesDetails { get; set; }
+        public IReadOnlyCollection<FavoriteDetailsViewModel>? FavouritesDetails { get; set; }
     }
 }

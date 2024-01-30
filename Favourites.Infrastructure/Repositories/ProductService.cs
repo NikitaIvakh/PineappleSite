@@ -9,7 +9,7 @@ namespace Favourites.Application.Services
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
-        public async Task<IReadOnlyCollection<ProductDto>> GetProductListAsync()
+        public async Task<CollectionResult<ProductDto>> GetProductListAsync()
         {
             HttpClient httpClient = _httpClientFactory.CreateClient("Product");
             var response = await httpClient.GetAsync($"/api/Product");
@@ -23,10 +23,10 @@ namespace Favourites.Application.Services
                 };
 
                 var options = jsonSerializerOptions;
-                return await JsonSerializer.DeserializeAsync<IReadOnlyCollection<ProductDto>>(stream, options);
+                return await JsonSerializer.DeserializeAsync<CollectionResult<ProductDto>>(stream, options);
             }
 
-            return new List<ProductDto>();
+            return new CollectionResult<ProductDto>();
         }
     }
 }

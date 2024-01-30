@@ -41,26 +41,31 @@ namespace Favourites.Application.Features.Commands.Queries
                     };
                 }
 
-                var favouritesDetails = await _favouriteDetails.GetAll().Select(key => new FavouritesDetailsDto
+                var favouritesDetails = _favouriteDetails.GetAll().Select(key => new FavouritesDetailsDto
                 {
                     FavouritesDetailsId = key.FavouritesDetailsId,
                     FavouritesHeader = key.FavouritesHeader,
                     FavouritesHeaderId = key.FavouritesHeaderId,
                     Product = key.Product,
                     ProductId = key.ProductId,
-                }).Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToListAsync(cancellationToken);
+                }).Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToList();
 
                 FavouritesDto favouritesDto = new()
                 {
                     FavoutiteHeader = _mapper.Map<FavoutiteHeaderDto>(favouritesHeader),
-                    FavouritesDetails = _mapper.Map<IReadOnlyCollection<FavouritesDetailsDto>>(favouritesDetails),
+                    FavouritesDetails = new CollectionResult<FavouritesDetailsDto>
+                    {
+                        Count = favouritesDetails.Count,
+                        Data = favouritesDetails,
+                        SuccessMessage = "Ваши избранные товары",
+                    },
                 };
 
-                IReadOnlyCollection<ProductDto> productDtos = await _productService.GetProductListAsync();
+                CollectionResult<ProductDto> productDtos = await _productService.GetProductListAsync();
 
-                foreach (var item in favouritesDto.FavouritesDetails)
+                foreach (var item in favouritesDto.FavouritesDetails.Data)
                 {
-                    item.Product = productDtos.FirstOrDefault(key => key.Id == item.ProductId);
+                    item.Product = productDtos.Data.FirstOrDefault(key => key.Id == item.ProductId);
                 }
 
                 return new Result<FavouritesDto>

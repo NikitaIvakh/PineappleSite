@@ -1,4 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Favorites
+﻿using IdentityModel;
+
+namespace PineappleSite.Presentation.Services.Favorites
 {
     public class FavouriteResultViewModel
     {

@@ -1,12 +1,13 @@
-﻿@model PineappleSite.Presentation.Models.Favorites.FavouritesViewModel
+﻿@using PineappleSite.Presentation.Models.Favorites
+@model PineappleSite.Presentation.Services.Favorites.FavouriteResultViewModel<FavouritesViewModel>
 
 @{
-    if (Model.FavoutiteHeader is not null && Model.FavouritesDetails?.Count() > 0)
+    if (Model.Data.FavoutiteHeader is not null && Model.Data.FavouritesDetails?.Count() > 0)
     {
         <form method="post">
             <br />
-            <input asp-for="FavoutiteHeader.UserId" hidden />
-            <input asp-for="FavoutiteHeader.FavouritesHeaderId" hidden />
+            <input asp-for="Data.FavoutiteHeader.UserId" hidden />
+            <input asp-for="Data.FavoutiteHeader.FavouritesHeaderId" hidden />
             <div class="">
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
@@ -29,7 +30,7 @@
                         </div>
                         <hr />
                         @{
-                            foreach (var cartObj in Model.FavouritesDetails)
+                            foreach (var cartObj in Model.Data.FavouritesDetails)
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">

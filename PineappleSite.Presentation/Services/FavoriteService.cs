@@ -11,11 +11,19 @@ namespace PineappleSite.Presentation.Services
         private readonly IFavoritesClient _favoritesClient = favoritesClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<FavouritesViewModel> GetFavoritesAsync(string userId)
+        public async Task<FavouriteResultViewModel<FavouritesViewModel>> GetFavoritesAsync(string userId)
         {
             AddBearerToken();
             FavouritesDtoResult favorites = await _favoritesClient.GetFavouriteAsync(userId);
-            return _mapper.Map<FavouritesViewModel>(favorites);
+            FavouriteResultViewModel<FavouritesViewModel> resultViewModel = new()
+            {
+                Data = _mapper.Map<FavouritesViewModel>(favorites.Data),
+                ErrorMessage = favorites.ErrorMessage,
+                ErrorCode = favorites.ErrorCode,
+                SuccessMessage = favorites.SuccessMessage,
+            };
+
+            return resultViewModel;
         }
 
         public async Task<FavouriteResultViewModel<FavouritesViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel)

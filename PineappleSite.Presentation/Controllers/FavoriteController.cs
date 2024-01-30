@@ -46,24 +46,25 @@ namespace PineappleSite.Presentation.Controllers
             return View();
         }
 
-        private async Task<FavouritesViewModel> GetFavotiteItemsAfterAuthenticate()
+        private async Task<FavouriteResultViewModel<FavouritesViewModel>> GetFavotiteItemsAfterAuthenticate()
         {
             string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
-            var response = await _favoriteService.GetFavoritesAsync(userId);
+            FavouriteResultViewModel<FavouritesViewModel> response = await _favoriteService.GetFavoritesAsync(userId);
 
-            //if (response.IsSuccess)
-            //{
-            //    FavouriteResultViewModel<FavouritesViewModel> favouritesViewModel = new()
-            //    {
-            //        Data = new 
-            //        ErrorMessage = response.ErrorMessage,
-            //        ErrorCode = response.ErrorCode,
-            //        SuccessMessage = response.SuccessMessage,
-            //        ValidationErrors = response.ValidationErrors
-            //    };
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                FavouriteResultViewModel<FavouritesViewModel> favouritesViewModel = new()
+                { 
+                    Data = response.Data,
+                    ErrorMessage = response.ErrorMessage,
+                    ErrorCode = response.ErrorCode,
+                    SuccessMessage = response.SuccessMessage,
+                    ValidationErrors = response.ValidationErrors,
+                };
 
-            //    return favouritesViewModel;
-            //}
+                return favouritesViewModel;
+            }
 
             return response;
         }
