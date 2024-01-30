@@ -10,6 +10,7 @@ using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
+using System.Collections.Generic;
 
 namespace PineappleSite.Presentation
 {
@@ -71,14 +72,17 @@ namespace PineappleSite.Presentation
 
             #region Favourite Mapping
             CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
-            CreateMap<FavouritesHeaderDto, FavoriteHeaderViewModel>().ReverseMap();
+            CreateMap<FavouritesHeaderDto, FavouritesHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesHeader, FavoriteDetailsViewModel>().ReverseMap();
             CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
+            CreateMap<List<FavoriteDetailsViewModel>, FavouritesDetailsDtoCollectionResult>().ReverseMap();
+            CreateMap<FavouritesViewModel, FavouritesDto>().ReverseMap();
 
             CreateMap<FavouritesDto, FavouritesViewModel>()
                 .ForMember(dest => dest.FavoutiteHeader, opt => opt.MapFrom(src => src.FavoutiteHeader))
                 .ForMember(dest => dest.FavouritesDetails, opt => opt.MapFrom(src => src.FavouritesDetails.Data))
                 .ReverseMap();
+            CreateMap<FavouritesDto, FavouritesHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouriteResultViewModel<FavouritesViewModel>>().ReverseMap();
             #endregion

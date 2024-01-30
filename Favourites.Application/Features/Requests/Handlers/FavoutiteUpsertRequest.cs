@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Favourites.Application.Features.Requests.Handlers
 {
-    public class FavoutiteUpsertRequest : IRequest<Result<FavouritesDto>>
+    public class FavoutiteUpsertRequest : IRequest<Result<FavouritesHeaderDto>>
     {
         public FavouritesDto Favourites { get; set; }
     }

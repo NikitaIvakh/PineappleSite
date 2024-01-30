@@ -53,7 +53,6 @@ namespace PineappleSite.Presentation.Controllers
 
             if (response.IsSuccess)
             {
-                TempData["success"] = response.SuccessMessage;
                 FavouriteResultViewModel<FavouritesViewModel> favouritesViewModel = new()
                 { 
                     Data = response.Data,

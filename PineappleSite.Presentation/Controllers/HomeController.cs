@@ -80,7 +80,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             FavouritesViewModel favouritesViewModel = new()
             {
-                FavoutiteHeader = new FavoriteHeaderViewModel
+                FavoutiteHeader = new FavouritesHeaderViewModel
                 {
                     UserId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value,
                 },
@@ -94,7 +94,7 @@ namespace PineappleSite.Presentation.Controllers
             List<FavoriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
             favouritesViewModel.FavouritesDetails = favoriteDetailsViewModels;
 
-            FavouriteResultViewModel response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
+            FavouriteResultViewModel<FavouritesHeaderViewModel> response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
 
             if (response.IsSuccess)
             {

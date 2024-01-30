@@ -26,7 +26,7 @@ namespace PineappleSite.Presentation.Services
             return resultViewModel;
         }
 
-        public async Task<FavouriteResultViewModel<FavouritesViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel)
+        public async Task<FavouriteResultViewModel<FavouritesHeaderViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel)
         {
             try
             {
@@ -35,10 +35,10 @@ namespace PineappleSite.Presentation.Services
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new FavouriteResultViewModel<FavouritesViewModel>
+                    return new FavouriteResultViewModel<FavouritesHeaderViewModel>
                     {
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<FavouritesViewModel>(apiResponse.Data),
+                        Data = _mapper.Map<FavouritesHeaderViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -46,7 +46,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new FavouriteResultViewModel<FavouritesViewModel>
+                        return new FavouriteResultViewModel<FavouritesHeaderViewModel>
                         {
                             ErrorMessage = error,
                             ValidationErrors = error + Environment.NewLine,
@@ -54,12 +54,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new FavouriteResultViewModel<FavouritesViewModel>();
+                return new FavouriteResultViewModel<FavouritesHeaderViewModel>();
             }
 
             catch (FavoritesExceptions exception)
             {
-                return new FavouriteResultViewModel<FavouritesViewModel>
+                return new FavouriteResultViewModel<FavouritesHeaderViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,

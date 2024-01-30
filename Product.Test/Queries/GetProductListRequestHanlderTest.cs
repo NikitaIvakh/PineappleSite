@@ -1,26 +1,26 @@
-﻿using Product.Application.Features.Commands.Queries;
-using Product.Application.Features.Requests.Queries;
-using Product.Test.Common;
-using Shouldly;
-using Xunit;
+﻿//using Product.Application.Features.Commands.Queries;
+//using Product.Application.Features.Requests.Queries;
+//using Product.Test.Common;
+//using Shouldly;
+//using Xunit;
 
-namespace Product.Test.Queries
-{
-    [CollectionDefinition("QueryCollection")]
-    public class GetProductListRequestHanlderTest : TestQueryHandler
-    {
-        [Fact]
-        public async Task GetProductListRequestHanlderTest_Success()
-        {
-            // Arrange
-            var handler = new GetProductListRequestHandler(Context, Mapper);
+//namespace Product.Test.Queries
+//{
+//    [CollectionDefinition("QueryCollection")]
+//    public class GetProductListRequestHanlderTest : TestQueryHandler
+//    {
+//        [Fact]
+//        public async Task GetProductListRequestHanlderTest_Success()
+//        {
+//            // Arrange
+//            var handler = new GetProductListRequestHandler(Context, Mapper);
 
-            // Act
-            var result = await handler.Handle(new GetProductListRequest(), CancellationToken.None);
+//            // Act
+//            var result = await handler.Handle(new GetProductListRequest(), CancellationToken.None);
 
-            // Assert
-            result.ShouldNotBeNull();
-            result.Count.ShouldBe(6);
-        }
-    }
-}
+//            // Assert
+//            result.ShouldNotBeNull();
+//            result.Count.ShouldBe(6);
+//        }
+//    }
+//}

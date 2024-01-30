@@ -1,6 +1,6 @@
 ﻿namespace PineappleSite.Presentation.Models.Favorites
 {
-    public class FavoriteHeaderViewModel
+    public class FavouritesHeaderViewModel
     {
         public int FavouritesHeaderId { get; set; }
 

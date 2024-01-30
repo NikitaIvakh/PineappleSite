@@ -1,9 +1,11 @@
-﻿namespace PineappleSite.Presentation.Models.Favorites
+﻿using PineappleSite.Presentation.Services.Favorites;
+
+namespace PineappleSite.Presentation.Models.Favorites
 {
     public class FavouritesViewModel
     {
-        public FavoriteHeaderViewModel? FavoutiteHeader { get; set; }
+        public FavouritesHeaderViewModel FavoutiteHeader { get; set; }
 
-        public IReadOnlyCollection<FavoriteDetailsViewModel>? FavouritesDetails { get; set; }
+        public IReadOnlyCollection<FavoriteDetailsViewModel> FavouritesDetails { get; set; }
     }
 }

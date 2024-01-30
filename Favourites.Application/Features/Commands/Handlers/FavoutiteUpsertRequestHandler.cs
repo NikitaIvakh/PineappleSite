@@ -12,14 +12,14 @@ using Serilog;
 
 namespace Favourites.Application.Features.Commands.Handlers
 {
-    public class FavoutiteUpsertRequestHandler(IBaseRepository<FavouritesHeader> favouriteHeader, IBaseRepository<FavouritesDetails> favouriteDetails, IMapper mapper, ILogger logger) : IRequestHandler<FavoutiteUpsertRequest, Result<FavouritesDto>>
+    public class FavoutiteUpsertRequestHandler(IBaseRepository<FavouritesHeader> favouriteHeader, IBaseRepository<FavouritesDetails> favouriteDetails, IMapper mapper, ILogger logger) : IRequestHandler<FavoutiteUpsertRequest, Result<FavouritesHeaderDto>>
     {
         private readonly IBaseRepository<FavouritesHeader> _favouriteHeader = favouriteHeader;
         private readonly IBaseRepository<FavouritesDetails> _favouriteDetails = favouriteDetails;
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger.ForContext<FavoutiteUpsertRequestHandler>();
 
-        public async Task<Result<FavouritesDto>> Handle(FavoutiteUpsertRequest request, CancellationToken cancellationToken)
+        public async Task<Result<FavouritesHeaderDto>> Handle(FavoutiteUpsertRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -60,9 +60,9 @@ namespace Favourites.Application.Features.Commands.Handlers
                     }
                 }
 
-                return new Result<FavouritesDto>
+                return new Result<FavouritesHeaderDto>
                 {
-                    Data = request.Favourites,
+                    Data = favouriteHeaderFromDb,
                     SuccessMessage = "Продукт успешно добавлен в избранное",
                 };
             }
@@ -70,7 +70,7 @@ namespace Favourites.Application.Features.Commands.Handlers
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
-                return new Result<FavouritesDto>
+                return new Result<FavouritesHeaderDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
