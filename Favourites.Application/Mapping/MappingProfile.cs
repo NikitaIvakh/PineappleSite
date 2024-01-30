@@ -10,7 +10,6 @@ namespace Favourites.Application.Profiles
         {
             CreateMap<FavouritesHeader, FavouritesHeaderDto>().ReverseMap();
             CreateMap<FavouritesDetails, FavouritesDetailsDto>().ReverseMap();
-            CreateMap<ProductDto, ProductDto>().ReverseMap();
         }
     }
 }
