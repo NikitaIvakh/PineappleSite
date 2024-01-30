@@ -41,38 +41,41 @@ namespace Favourites.Application.Features.Commands.Queries
                     };
                 }
 
-                var favouritesDetails = _favouriteDetails.GetAll().Select(key => new FavouritesDetailsDto
+                else
                 {
-                    FavouritesDetailsId = key.FavouritesDetailsId,
-                    FavouritesHeader = key.FavouritesHeader,
-                    FavouritesHeaderId = key.FavouritesHeaderId,
-                    Product = key.Product,
-                    ProductId = key.ProductId,
-                }).Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToList();
-
-                FavouritesDto favouritesDto = new()
-                {
-                    FavoutiteHeader = _mapper.Map<FavouritesHeaderDto>(favouritesHeader),
-                    FavouritesDetails = new CollectionResult<FavouritesDetailsDto>
+                    var favouritesDetails = _favouriteDetails.GetAll().Select(key => new FavouritesDetailsDto
                     {
-                        Count = favouritesDetails.Count,
-                        Data = favouritesDetails,
+                        FavouritesDetailsId = key.FavouritesDetailsId,
+                        FavouritesHeader = key.FavouritesHeader,
+                        FavouritesHeaderId = key.FavouritesHeaderId,
+                        Product = key.Product,
+                        ProductId = key.ProductId,
+                    }).Where(key => key.FavouritesHeaderId == favouritesHeader.FavouritesHeaderId).ToList();
+
+                    FavouritesDto favouritesDto = new()
+                    {
+                        FavoutiteHeader = _mapper.Map<FavouritesHeaderDto>(favouritesHeader),
+                        FavouritesDetails = new CollectionResult<FavouritesDetailsDto>
+                        {
+                            Count = favouritesDetails.Count,
+                            Data = favouritesDetails,
+                            SuccessMessage = "Ваши избранные товары",
+                        },
+                    };
+
+                    CollectionResult<ProductDto> productDtos = await _productService.GetProductListAsync();
+
+                    foreach (var item in favouritesDto.FavouritesDetails.Data)
+                    {
+                        item.Product = productDtos.Data.FirstOrDefault(key => key.Id == item.ProductId);
+                    }
+
+                    return new Result<FavouritesDto>
+                    {
+                        Data = favouritesDto,
                         SuccessMessage = "Ваши избранные товары",
-                    },
-                };
-
-                CollectionResult<ProductDto> productDtos = await _productService.GetProductListAsync();
-
-                foreach (var item in favouritesDto.FavouritesDetails.Data)
-                {
-                    item.Product = productDtos.Data.FirstOrDefault(key => key.Id == item.ProductId);
+                    };
                 }
-
-                return new Result<FavouritesDto>
-                {
-                    Data = favouritesDto,
-                    SuccessMessage = "Ваши избранные товары",
-                };
             }
 
             catch (Exception exception)
