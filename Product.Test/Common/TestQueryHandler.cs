@@ -1,6 +1,11 @@
 ﻿using AutoMapper;
+using Product.Application.Features.Commands.Queries;
 using Product.Application.Profiles;
+using Product.Domain.Entities.Producrs;
+using Product.Domain.Interfaces;
 using Product.Infrastructure;
+using Product.Infrastructure.Repository;
+using Serilog;
 using Xunit;
 
 namespace Product.Test.Common
@@ -9,10 +14,14 @@ namespace Product.Test.Common
     {
         protected ApplicationDbContext Context;
         protected IMapper Mapper;
+        protected IBaseRepository<ProductEntity> Repository;
+        protected ILogger Logger;
 
         public TestQueryHandler()
         {
             Context = ProductDbContextFactory.Create();
+            Repository = new BaseRepository<ProductEntity>(Context);
+            Logger = Log.ForContext<GetProductListRequestHandler>();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
