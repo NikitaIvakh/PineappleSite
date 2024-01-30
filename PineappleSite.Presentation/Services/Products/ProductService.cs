@@ -24,57 +24,57 @@ namespace PineappleSite.Presentation.Services.Products
     {
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync();
+        System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductGETAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductGETAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETEAsync(DeleteProductsDto body);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETEAsync(DeleteProductsDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDto> ProductGETAsync(int id);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDto> ProductGETAsync(int id, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar);
+        System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductDELETEAsync(DeleteProductsDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductDELETEAsync(DeleteProductsDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETE2Async(string id, DeleteProductDto body);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductGET2Async(int id);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductGET2Async(int id, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ProductExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -106,15 +106,15 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync()
+        public virtual System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductGETAsync()
         {
-            return ProductAllAsync(System.Threading.CancellationToken.None);
+            return ProductGETAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<System.Collections.Generic.ICollection<ProductDto>> ProductAllAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductGETAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -154,7 +154,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<System.Collections.Generic.ICollection<ProductDto>>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -183,7 +183,7 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductAPIResponse> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar)
         {
             return ProductPOSTAsync(name, description, productCategory, price, avatar, System.Threading.CancellationToken.None);
         }
@@ -191,7 +191,7 @@ namespace PineappleSite.Presentation.Services.Products
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductAPIResponse> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPOSTAsync(string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -274,7 +274,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -303,7 +303,7 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETEAsync(DeleteProductsDto body)
+        public virtual System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductDELETEAsync(DeleteProductsDto body)
         {
             return ProductDELETEAsync(body, System.Threading.CancellationToken.None);
         }
@@ -311,7 +311,7 @@ namespace PineappleSite.Presentation.Services.Products
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETEAsync(DeleteProductsDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoCollectionResult> ProductDELETEAsync(DeleteProductsDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -355,7 +355,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -384,15 +384,15 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductDto> ProductGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductGET2Async(int id)
         {
-            return ProductGETAsync(id, System.Threading.CancellationToken.None);
+            return ProductGET2Async(id, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductDto> ProductGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductGET2Async(int id, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -437,7 +437,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductDto>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -466,7 +466,7 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductAPIResponse> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar)
         {
             return ProductPUTAsync(id, productId, name, description, productCategory, price, avatar, System.Threading.CancellationToken.None);
         }
@@ -474,7 +474,7 @@ namespace PineappleSite.Presentation.Services.Products
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductAPIResponse> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -569,7 +569,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -598,7 +598,7 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETE2Async(string id, DeleteProductDto body)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body)
         {
             return ProductDELETE2Async(id, body, System.Threading.CancellationToken.None);
         }
@@ -606,7 +606,7 @@ namespace PineappleSite.Presentation.Services.Products
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductAPIResponse> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -655,7 +655,7 @@ namespace PineappleSite.Presentation.Services.Products
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ProductAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<ProductDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ProductExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -802,23 +802,6 @@ namespace PineappleSite.Presentation.Services.Products
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ProductAPIResponse
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public enum ProductCategory
     {
 
@@ -853,6 +836,55 @@ namespace PineappleSite.Presentation.Services.Products
 
         [Newtonsoft.Json.JsonProperty("imageLocalPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ImageLocalPath { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ProductDtoCollectionResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<ProductDto> Data { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Count { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class ProductDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public ProductDto Data { get; set; }
 
     }
 

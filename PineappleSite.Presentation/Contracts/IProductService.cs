@@ -5,16 +5,16 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface IProductService
     {
-        Task<IReadOnlyCollection<ProductViewModel>> GetAllProductsAsync();
+        Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync();
 
         Task<ProductViewModel> GetProductAsync(int id);
 
-        Task<ProductAPIViewModel> CreateProductAsync(CreateProductViewModel product);
+        Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product);
 
-        Task<ProductAPIViewModel> UpdateProductAsync(int id, UpdateProductViewModel product);
+        Task<ProductResultViewModel<ProductViewModel>> UpdateProductAsync(int id, UpdateProductViewModel product);
 
-        Task<ProductAPIViewModel> DeleteProductAsync(int id, DeleteProductViewModel product);
+        Task<ProductResultViewModel<ProductViewModel>> DeleteProductAsync(int id, DeleteProductViewModel product);
 
-        Task<ProductAPIViewModel> DeleteProductsAsync(DeleteProductsViewModel product);
+        Task<ProductsCollectionResultViewModel<ProductViewModel>> DeleteProductsAsync(DeleteProductsViewModel product);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Products;
 using System.Net.Http.Headers;
 
 namespace PineappleSite.Presentation.Services.Products
@@ -8,21 +9,21 @@ namespace PineappleSite.Presentation.Services.Products
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IProductClient _productClient = productClient;
 
-        protected ProductAPIViewModel ConvertProductException(ProductExceptions productExceptions)
+        protected ProductResultViewModel<ProductViewModel> ConvertProductException(ProductExceptions productExceptions)
         {
             if (productExceptions.StatusCode == 400)
             {
-                return new ProductAPIViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = productExceptions.Response, IsSuccess = false };
+                return new ProductResultViewModel<ProductViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = productExceptions.Response };
             }
 
             else if (productExceptions.StatusCode == 404)
             {
-                return new ProductAPIViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new ProductResultViewModel<ProductViewModel>() { ErrorMessage = "Требуемый элемент не удалось найти." };
             }
 
             else
             {
-                return new ProductAPIViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new ProductResultViewModel<ProductViewModel>() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз." };
             }
         }
 

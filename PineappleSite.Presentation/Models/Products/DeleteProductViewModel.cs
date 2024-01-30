@@ -1,4 +1,4 @@
-﻿namespace PineappleSite.Presentation.Services.Products
+﻿namespace PineappleSite.Presentation.Models.Products
 {
     public class DeleteProductViewModel
     {

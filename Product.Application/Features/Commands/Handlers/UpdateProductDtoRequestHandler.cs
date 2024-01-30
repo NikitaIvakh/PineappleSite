@@ -62,39 +62,44 @@ namespace Product.Application.Features.Commands.Handlers
 
                         if (request.UpdateProduct.Avatar is not null)
                         {
-                            if (!string.IsNullOrEmpty(product.ImageLocalPath) || !string.IsNullOrEmpty(product.ImageUrl))
+                            if (!string.IsNullOrEmpty(product.ImageLocalPath))
                             {
-                                var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                                FileInfo fileInfo = new(oldFilePasthDirectory);
+                                var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
+                                FileInfo fileInfo = new(oldFilePathDirectory);
 
                                 if (fileInfo.Exists)
                                     fileInfo.Delete();
+
+                                await _repository.UpdateAsync(product);
                             }
 
-                            Random random = new();
-                            int randomNumber = random.Next(1, 120001);
-
-                            string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
-                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
-                            string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-
-                            if (!Directory.Exists(filePath))
+                            else
                             {
-                                Directory.CreateDirectory(filePath);
+                                Random random = new();
+                                int randomNumber = random.Next(1, 120001);
+
+                                string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
+                                string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
+
+                                if (!Directory.Exists(filePath))
+                                {
+                                    Directory.CreateDirectory(filePath);
+                                }
+
+                                var fileFullPath = Path.Combine(fileDirectory, fileName);
+
+                                using (FileStream fileStream = new(fileFullPath, FileMode.Create))
+                                {
+                                    request.UpdateProduct.Avatar.CopyTo(fileStream);
+                                };
+
+                                var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
+                                product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
+                                product.ImageLocalPath = filePath;
+
+                                await _repository.UpdateAsync(product);
                             }
-
-                            var fileFullPath = Path.Combine(fileDirectory, fileName);
-
-                            using (FileStream fileStream = new(fileFullPath, FileMode.Create))
-                            {
-                                request.UpdateProduct.Avatar.CopyTo(fileStream);
-                            };
-
-                            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
-                            product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
-                            product.ImageLocalPath = filePath;
-
-                            await _repository.UpdateAsync(product);
                         }
 
                         else

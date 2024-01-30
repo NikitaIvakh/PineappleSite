@@ -23,19 +23,24 @@ namespace PineappleSite.Presentation.Controllers
 
             if (!string.IsNullOrEmpty(searchProduct))
             {
-                products = products.Where(
+                var filtetedProductsList = products.Data.Where(
                     key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                     key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                     key.ProductCategory.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                     key.Price.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase))
                     .ToList();
+
+                products = new ProductsCollectionResultViewModel<ProductViewModel>
+                {
+                    Data = filtetedProductsList,
+                };
             }
 
             ViewData["SearchProduct"] = searchProduct;
             ViewData["CurrentFilter"] = currentFilter;
 
             int pageSize = 10;
-            var filteredProducts = products.AsQueryable();
+            var filteredProducts = products.Data.AsQueryable();
             var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
 
             return View(paginatedProducts);
@@ -61,17 +66,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ProductAPIViewModel response = await _productService.CreateProductAsync(createProductViewModel);
+                ProductResultViewModel response = await _productService.CreateProductAsync(createProductViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(GetProducts));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Create));
                 }
             }
@@ -105,17 +110,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ProductAPIViewModel response = await _productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
+                ProductResultViewModel response = await _productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(GetProducts));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Edit));
                 }
             }
@@ -133,17 +138,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ProductAPIViewModel response = await _productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
+                ProductResultViewModel response = await _productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(GetProducts));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(GetProducts));
                 }
             }
@@ -163,17 +168,17 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             var deleteProducts = new DeleteProductsViewModel { ProductIds = selectedProducts };
-            ProductAPIViewModel response = await _productService.DeleteProductsAsync(deleteProducts);
+            var response = await _productService.DeleteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)
             {
-                TempData["success"] = response.Message;
+                TempData["success"] = response.SuccessMessage;
                 return RedirectToAction(nameof(GetProducts));
             }
 
             else
             {
-                TempData["error"] = response.ValidationErrors;
+                TempData["error"] = response.ErrorMessage;
                 return RedirectToAction(nameof(GetProducts));
             }
         }

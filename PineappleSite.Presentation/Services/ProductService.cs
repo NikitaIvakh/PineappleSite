@@ -11,31 +11,29 @@ namespace PineappleSite.Presentation.Services
         private readonly IProductClient _productClient = productClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<IReadOnlyCollection<ProductViewModel>> GetAllProductsAsync()
+        public async Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync()
         {
-            var products = await _productClient.ProductAllAsync();
-            return _mapper.Map<IReadOnlyCollection<ProductViewModel>>(products);
+            var products = await _productClient.ProductGETAsync();
+            return _mapper.Map<ProductsCollectionResultViewModel<ProductViewModel>>(products);
         }
 
         public async Task<ProductViewModel> GetProductAsync(int id)
         {
-            var product = await _productClient.ProductGETAsync(id);
-            return _mapper.Map<ProductViewModel>(product);
+            var product = await _productClient.ProductGET2Async(id);
+            return _mapper.Map<ProductViewModel>(product.Data);
         }
 
-        public async Task<ProductAPIViewModel> CreateProductAsync(CreateProductViewModel product)
+        public async Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product)
         {
             try
             {
-                ProductAPIViewModel response = new();
-
                 FileParameter avatarFileParameter = null;
                 if (product.Avatar is not null)
                 {
                     avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
                 }
 
-                ProductAPIResponse apiREsponse = await _productClient.ProductPOSTAsync(
+                ProductDtoResult apiREsponse = await _productClient.ProductPOSTAsync(
                     product.Name,
                     product.Description,
                     (ProductCategory?)product.ProductCategory,
@@ -44,41 +42,49 @@ namespace PineappleSite.Presentation.Services
 
                 if (apiREsponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiREsponse.Message;
-                    response.Id = apiREsponse.Id;
+                    return new ProductResultViewModel<ProductViewModel>
+                    {
+                        Data = _mapper.Map<ProductViewModel>(apiREsponse.Data),
+                        SuccessMessage = apiREsponse.SuccessMessage,
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiREsponse.ValidationErrors)
                     {
-                        response.Message += error + Environment.NewLine;
+                        return new ProductResultViewModel<ProductViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine
+                        };
                     }
                 }
 
-                return response;
+                return new ProductResultViewModel<ProductViewModel>();
             }
 
             catch (ProductExceptions exception)
             {
-                return ConvertProductException(exception);
+                return new ProductResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
 
-        public async Task<ProductAPIViewModel> UpdateProductAsync(int id, UpdateProductViewModel product)
+        public async Task<ProductResultViewModel<ProductViewModel>> UpdateProductAsync(int id, UpdateProductViewModel product)
         {
             try
             {
-                ProductAPIViewModel response = new();
-
                 FileParameter avatarFileParameter = null;
                 if (product.Avatar is not null)
                 {
                     avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
                 }
 
-                ProductAPIResponse apiResponse = await _productClient.ProductPUTAsync(
+                ProductDtoResult apiResponse = await _productClient.ProductPUTAsync(
                     id.ToString(),
                     product.Id,
                     product.Name,
@@ -89,90 +95,117 @@ namespace PineappleSite.Presentation.Services
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Id = apiResponse.Id;
+                    return new ProductResultViewModel<ProductViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.Message += error + Environment.NewLine;
+                        return new ProductResultViewModel<ProductViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new ProductResultViewModel<ProductViewModel>();
             }
 
             catch (ProductExceptions exception)
             {
-                return ConvertProductException(exception);
+                return new ProductResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
-            //throw new NotImplementedException();
         }
 
-        public async Task<ProductAPIViewModel> DeleteProductAsync(int id, DeleteProductViewModel product)
+        public async Task<ProductResultViewModel<ProductViewModel>> DeleteProductAsync(int id, DeleteProductViewModel product)
         {
             try
             {
-                ProductAPIViewModel response = new();
                 DeleteProductDto deleteProductDto = _mapper.Map<DeleteProductDto>(product);
-                ProductAPIResponse apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id.ToString(), deleteProductDto);
+                ProductDtoResult apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id.ToString(), deleteProductDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Id = apiResponse.Id;
+                    return new ProductResultViewModel<ProductViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.Message += error + Environment.NewLine;
+                        return new ProductResultViewModel<ProductViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new ProductResultViewModel<ProductViewModel>();
             }
 
             catch (ProductExceptions exception)
             {
-                return ConvertProductException(exception);
+                return new ProductResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
 
-        public async Task<ProductAPIViewModel> DeleteProductsAsync(DeleteProductsViewModel product)
+        public async Task<ProductsCollectionResultViewModel<ProductViewModel>> DeleteProductsAsync(DeleteProductsViewModel product)
         {
             try
             {
-                ProductAPIViewModel response = new();
                 DeleteProductsDto deleteProductsDto = _mapper.Map<DeleteProductsDto>(product);
-                ProductAPIResponse apiResponse = await _productClient.ProductDELETEAsync(deleteProductsDto);
+                ProductDtoCollectionResult apiResponse = await _productClient.ProductDELETEAsync(deleteProductsDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Id = apiResponse.Id;
+                    return new ProductsCollectionResultViewModel<ProductViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<IReadOnlyCollection<ProductViewModel>>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new ProductsCollectionResultViewModel<ProductViewModel>
+                        {
+                            ErrorMessage = error,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new ProductsCollectionResultViewModel<ProductViewModel>();
             }
 
             catch (ProductExceptions exception)
             {
-                return ConvertProductException(exception);
+                return new ProductsCollectionResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
     }

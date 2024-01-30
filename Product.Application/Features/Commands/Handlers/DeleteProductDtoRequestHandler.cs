@@ -60,12 +60,10 @@ namespace Product.Application.Features.Commands.Handlers
                             {
                                 File.Delete(filePath);
                             }
+
                         }
 
-                        else
-                        {
-                            await _repository.DeleteAsync(product);
-                        }
+                        await _repository.DeleteAsync(product);
                     }
 
                     return new Result<ProductDto>

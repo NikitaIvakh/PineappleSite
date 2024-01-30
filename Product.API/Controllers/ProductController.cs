@@ -59,7 +59,7 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка добавления продукта");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // PUT api/<ProductController>/5
@@ -75,7 +75,7 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка обновления продукта");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ProductController>/5
@@ -91,12 +91,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка удаления продукта");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ProductController>/
         [HttpDelete]
-        public async Task<ActionResult<Result<ProductDto>>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
+        public async Task<ActionResult<CollectionResult<ProductDto>>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
         {
             var command = await _mediator.Send(new DeleteProductsDtoRequest { DeleteProducts = deleteProductsDto });
 
@@ -107,7 +107,7 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка удаления продуктов");
-            return BadRequest(command);
+            return BadRequest(command.ErrorMessage);
         }
     }
 }
