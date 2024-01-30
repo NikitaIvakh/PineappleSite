@@ -8,7 +8,7 @@ namespace Favourites.Application.Profiles
     {
         public MappingProfile()
         {
-            CreateMap<FavouritesHeader, FavoutiteHeaderDto>().ReverseMap();
+            CreateMap<FavouritesHeader, FavouritesHeaderDto>().ReverseMap();
             CreateMap<FavouritesDetails, FavouritesDetailsDto>().ReverseMap();
             CreateMap<ProductDto, ProductDto>().ReverseMap();
         }

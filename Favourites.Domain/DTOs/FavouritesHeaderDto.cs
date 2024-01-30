@@ -1,6 +1,6 @@
 ﻿namespace Favourites.Domain.DTOs
 {
-    public class FavoutiteHeaderDto
+    public class FavouritesHeaderDto
     {
         public int FavouritesHeaderId { get; set; }
 

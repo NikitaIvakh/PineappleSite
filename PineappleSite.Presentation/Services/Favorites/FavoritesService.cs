@@ -485,7 +485,7 @@ namespace PineappleSite.Presentation.Services.Favorites
     public partial class FavouritesDto
     {
         [Newtonsoft.Json.JsonProperty("favoutiteHeader", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public FavoutiteHeaderDto FavoutiteHeader { get; set; }
+        public FavouritesHeaderDto FavoutiteHeader { get; set; }
 
         [Newtonsoft.Json.JsonProperty("favouritesDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public FavouritesDetailsDtoCollectionResult FavouritesDetails { get; set; }
@@ -527,7 +527,7 @@ namespace PineappleSite.Presentation.Services.Favorites
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class FavoutiteHeaderDto
+    public partial class FavouritesHeaderDto
     {
         [Newtonsoft.Json.JsonProperty("favouritesHeaderId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int FavouritesHeaderId { get; set; }

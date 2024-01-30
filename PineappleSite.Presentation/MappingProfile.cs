@@ -69,16 +69,10 @@ namespace PineappleSite.Presentation
             CreateMap<CartDto, CartViewModel>().ReverseMap();
             #endregion
 
-            #region 
-            CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
-            CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
-            CreateMap<CartDto, CartViewModel>().ReverseMap();
-            #endregion
-
+            #region Favourite Mapping
             CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
-            CreateMap<FavoutiteHeaderDto, FavoriteHeaderViewModel>().ReverseMap();
+            CreateMap<FavouritesHeaderDto, FavoriteHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesHeader, FavoriteDetailsViewModel>().ReverseMap();
-            CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
             CreateMap<FavouritesDetailsDto, FavoriteDetailsViewModel>().ReverseMap();
 
             CreateMap<FavouritesDto, FavouritesViewModel>()
@@ -87,9 +81,7 @@ namespace PineappleSite.Presentation
                 .ReverseMap();
             CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouriteResultViewModel<FavouritesViewModel>>().ReverseMap();
-            CreateMap<FavouritesDetailsDtoCollectionResult, IReadOnlyCollection<FavoriteDetailsViewModel>>().ReverseMap();
-
-
+            #endregion
 
             CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
             CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
@@ -97,7 +89,6 @@ namespace PineappleSite.Presentation
             CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
             CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
             CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
-
 
             CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
         }

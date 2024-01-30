@@ -26,7 +26,7 @@ namespace Favourites.Application.Features.Commands.Queries
         {
             try
             {
-                var favouritesHeader = await _favouriteHeader.GetAll().Select(key => new FavoutiteHeaderDto
+                var favouritesHeader = await _favouriteHeader.GetAll().Select(key => new FavouritesHeaderDto
                 {
                     FavouritesHeaderId = key.FavouritesHeaderId,
                     UserId = key.UserId,
@@ -52,7 +52,7 @@ namespace Favourites.Application.Features.Commands.Queries
 
                 FavouritesDto favouritesDto = new()
                 {
-                    FavoutiteHeader = _mapper.Map<FavoutiteHeaderDto>(favouritesHeader),
+                    FavoutiteHeader = _mapper.Map<FavouritesHeaderDto>(favouritesHeader),
                     FavouritesDetails = new CollectionResult<FavouritesDetailsDto>
                     {
                         Count = favouritesDetails.Count,

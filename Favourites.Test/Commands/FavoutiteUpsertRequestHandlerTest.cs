@@ -16,7 +16,7 @@ namespace Favourites.Test.Commands
             var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, UpsertLogger);
             var favouritesDto = new FavouritesDto
             {
-                FavoutiteHeader = new FavoutiteHeaderDto
+                FavoutiteHeader = new FavouritesHeaderDto
                 {
                     FavouritesHeaderId = 2,
                     UserId = "tetsuserid31234",
@@ -50,7 +50,7 @@ namespace Favourites.Test.Commands
             var handler = new FavoutiteUpsertRequestHandler(HeaderRepository, DetailsRepository, Mapper, UpsertLogger);
             var favouritesDto = new FavouritesDto
             {
-                FavoutiteHeader = new FavoutiteHeaderDto
+                FavoutiteHeader = new FavouritesHeaderDto
                 {
                     FavouritesHeaderId = 2,
                     UserId = "tetsuserid3",

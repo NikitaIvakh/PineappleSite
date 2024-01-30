@@ -23,7 +23,7 @@ namespace Favourites.Application.Features.Commands.Handlers
         {
             try
             {
-                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().Select(key => new FavoutiteHeaderDto
+                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().Select(key => new FavouritesHeaderDto
                 {
                     FavouritesHeaderId = key.FavouritesHeaderId,
                     UserId = key.UserId,
