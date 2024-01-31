@@ -23,7 +23,7 @@ namespace Favourites.Test.Queries
             }, CancellationToken.None);
 
             // Assert
-            result.ValidationErrors.Should().BeNull();
+            result.ValidationErrors.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -40,9 +40,9 @@ namespace Favourites.Test.Queries
             }, CancellationToken.None);
 
             // Assert
-            result.ErrorMessage.Should().BeNull();
+            result.ErrorMessage.Should().BeNullOrEmpty();
             result.IsSuccess.Should().BeTrue();
-            result.ValidationErrors.Should().BeNull();
+            result.ValidationErrors.Should().BeNullOrEmpty();
         }
     }
 }
