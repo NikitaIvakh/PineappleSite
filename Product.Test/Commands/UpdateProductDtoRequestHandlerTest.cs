@@ -38,14 +38,14 @@ namespace Product.Test.Commands
             result.Data.Id.ShouldBe(4);
             result.IsSuccess.ShouldBeTrue();
             result.SuccessMessage = "Продукт успешно обновлен";
-            result.ValidationErrors.ShouldBeNull();
+            result.ValidationErrors.Should().BeNullOrEmpty();
 
             var updateProduct = await Context.Products.AsNoTracking().FirstOrDefaultAsync(key => key.Id == result.Data.Id);
             updateProduct.Should().NotBeNull();
-            updateProduct?.Name.ShouldBe("Name 1");
-            updateProduct?.Description.ShouldBe("Description 1");
-            updateProduct?.ProductCategory.ShouldBe(ProductCategory.Snacks);
-            updateProduct?.Price.ShouldBe(20);
+            updateProduct?.Name.Should().Be("Name 1");
+            updateProduct?.Description.Should().Be("Description 1");
+            updateProduct?.ProductCategory.Should().Be(ProductCategory.Snacks);
+            updateProduct?.Price.Should().Be(20);
         }
 
         [Fact]
@@ -69,9 +69,9 @@ namespace Product.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Такого продукта не существует");
-            result.ValidationErrors.ShouldBeNull();
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Такого продукта не существует");
+            result.ValidationErrors.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -98,8 +98,7 @@ namespace Product.Test.Commands
             result.ShouldBeOfType<Result<ProductDto>>();
             result.IsSuccess.ShouldBeFalse();
             result.ErrorMessage.ShouldBe("Продукт не может быть обновлен");
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -129,10 +128,9 @@ namespace Product.Test.Commands
             }, CancellationToken.None);
 
             // Asert
-            result.IsSuccess.ShouldBeFalse();
+            result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.ShouldBe("Продукт не может быть обновлен");
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
     }
 }
