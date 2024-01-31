@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Favorites;
+using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Favorites;
 
 namespace PineappleSite.Presentation.Services

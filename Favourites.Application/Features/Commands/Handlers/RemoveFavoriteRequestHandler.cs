@@ -24,14 +24,6 @@ namespace Favourites.Application.Features.Commands.Handlers
                 int removeProduct = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
                 await _favouriteDetails.DeleteAsync(favouritesDetails);
 
-                if (removeProduct == 1)
-                {
-                    FavouritesHeader? favouritesHeader = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId, cancellationToken);
-
-                    if (favouritesHeader is not null)
-                        await _favouriteHeader.DeleteAsync(favouritesHeader);
-                }
-
                 return new Result<FavouritesDetails>
                 {
                     Data = favouritesDetails,

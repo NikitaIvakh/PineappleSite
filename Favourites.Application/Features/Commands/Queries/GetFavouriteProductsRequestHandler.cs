@@ -36,7 +36,12 @@ namespace Favourites.Application.Features.Commands.Queries
                 {
                     return new Result<FavouritesDto>
                     {
-                        Data = new FavouritesDto(),
+                        Data = new FavouritesDto
+                        {
+                            FavoutiteHeader = new FavouritesHeaderDto(),
+                            FavouritesDetails = new CollectionResult<FavouritesDetailsDto>(),
+                        },
+
                         SuccessMessage = "Список избранных товаров пуст",
                     };
                 }
