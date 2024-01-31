@@ -24,9 +24,9 @@ namespace Product.Test.Queries
 
             // Assert
             result.ShouldNotBeNull();
-            result.Data.Name.ShouldBe("Test 1");
-            result.Data.Description.ShouldBe("Test product 1");
-            result.Data.Price.ShouldBe(10);
+            result.Data.Name.Should().Be("Test 1");
+            result.Data.Description.Should().Be("Test product 1");
+            result.Data.Price.Should().Be(10);
         }
 
         [Fact]
