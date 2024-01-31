@@ -12,7 +12,7 @@ namespace Coupon.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
-        protected ApplicationDbContext Context; 
+        protected ApplicationDbContext Context;
         protected CreateValidator CreateValidator;
         protected UpdateValidator UpdateValidator;
         protected DeleteValidator DeleteValidator;
@@ -23,17 +23,16 @@ namespace Coupon.Test.Common
 
         public TestCommandHandler()
         {
-            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
-
+            Context = CouponRepositoryContextFactory.Create();
             Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
+
+            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
             Repository = repositoryMock.Object;
 
             CreateValidator = new CreateValidator();
             UpdateValidator = new UpdateValidator();
             DeleteValidator = new DeleteValidator(Context);
             DeleteListValidator = new DeleteListValidator();
-
-            Context = CouponRepositoryContextFactory.Create(Repository);
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
