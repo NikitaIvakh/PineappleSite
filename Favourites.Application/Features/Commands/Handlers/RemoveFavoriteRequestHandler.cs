@@ -21,14 +21,27 @@ namespace Favourites.Application.Features.Commands.Handlers
             try
             {
                 FavouritesDetails? favouritesDetails = await _favouriteDetails.GetAll().FirstOrDefaultAsync(key => key.FavouritesDetailsId == request.FavouriteDetailId, cancellationToken);
-                int removeProduct = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
-                await _favouriteDetails.DeleteAsync(favouritesDetails);
 
-                return new Result<FavouritesDetails>
+                if (favouritesDetails is null)
                 {
-                    Data = favouritesDetails,
-                    SuccessMessage = "Продукт успешно удален",
-                };
+                    return new Result<FavouritesDetails>
+                    {
+                        ErrorMessage = ErrorMessage.FavouriteDetailsNotFound,
+                        ErrorCode = (int)ErrorCodes.FavouriteDetailsNotFound,
+                    };
+                }
+
+                else
+                {
+                    int removeProduct = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
+                    await _favouriteDetails.DeleteAsync(favouritesDetails);
+
+                    return new Result<FavouritesDetails>
+                    {
+                        Data = favouritesDetails,
+                        SuccessMessage = "Продукт успешно удален",
+                    };
+                }
             }
 
             catch (Exception exception)

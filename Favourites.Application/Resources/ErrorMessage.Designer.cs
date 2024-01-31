@@ -61,6 +61,15 @@ namespace Favourites.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Избранные продукты не найдены.
+        /// </summary>
+        internal static string FavouriteDetailsNotFound {
+            get {
+                return ResourceManager.GetString("FavouriteDetailsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Внутренняя ошибка сервера.
         /// </summary>
         internal static string InternalServerError {
