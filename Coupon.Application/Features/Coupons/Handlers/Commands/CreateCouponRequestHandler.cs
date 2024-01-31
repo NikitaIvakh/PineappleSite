@@ -28,9 +28,29 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 if (!result.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, string>
+                    {
+                        { "CouponCode", ErrorMessage.CouponCodeNotValid },
+                        { "DiscountAmount", ErrorMessage.DiscountAmountNotValid },
+                        { "MinAmount", ErrorMessage.MinAmountNotValid }
+                    };
+
+                    foreach (var error in result.Errors)
+                    {
+                        if (errorMessages.TryGetValue(error.PropertyName, out var errorMessage))
+                        {
+                            return new Result<CouponDto>
+                            {
+                                ErrorMessage = errorMessage,
+                                ErrorCode = (int)ErrorCodes.CouponNotCreated,
+                                ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                            };
+                        }
+                    }
+
                     return new Result<CouponDto>
                     {
-                        ErrorMessage = ErrorMessage.DiscountAmountNotValid,
+                        ErrorMessage = ErrorMessage.CouponNotCreated,
                         ErrorCode = (int)ErrorCodes.CouponNotCreated,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };

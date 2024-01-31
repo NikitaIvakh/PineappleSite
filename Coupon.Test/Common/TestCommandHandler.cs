@@ -5,6 +5,7 @@ using Coupon.Application.Validations;
 using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure;
+using Coupon.Infrastructure.Repository;
 using Moq;
 using Serilog;
 
@@ -18,16 +19,20 @@ namespace Coupon.Test.Common
         protected DeleteValidator DeleteValidator;
         protected DeleteListValidator DeleteListValidator;
         protected IBaseRepository<CouponEntity> Repository;
-        protected ILogger Logger;
+        protected ILogger CreateLogger;
+        protected ILogger UpdateLogger;
+        protected ILogger DeleteLogger;
+        protected ILogger DeleteListLogger;
         protected IMapper Mapper;
 
         public TestCommandHandler()
         {
             Context = CouponRepositoryContextFactory.Create();
-            Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
-
-            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
-            Repository = repositoryMock.Object;
+            Repository = new BaseRepository<CouponEntity>(Context);
+            CreateLogger = Log.ForContext<CreateCouponRequestHandler>();
+            UpdateLogger = Log.ForContext<UpdateCouponRequestHandler>();
+            DeleteLogger = Log.ForContext<DeleteCouponRequestHandler>();
+            DeleteListLogger = Log.ForContext<DeleteCouponListRequestHandler>();
 
             CreateValidator = new CreateValidator();
             UpdateValidator = new UpdateValidator();
