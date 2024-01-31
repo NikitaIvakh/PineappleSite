@@ -41,8 +41,8 @@ namespace Favourites.Test.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.ShouldBe("Внутренняя ошибка сервера");
-            result.ErrorCode.ShouldBe(500);
+            result.ErrorMessage.ShouldBe("Избранный продукт не найден");
+            result.ErrorCode.ShouldBe(404);
         }
     }
 }
