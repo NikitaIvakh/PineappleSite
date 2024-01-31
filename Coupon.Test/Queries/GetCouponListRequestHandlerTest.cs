@@ -1,25 +1,28 @@
-﻿//using Coupon.Application.Features.Coupons.Handlers.Queries;
-//using Coupon.Application.Features.Coupons.Requests.Queries;
-//using Coupon.Domain.DTOs;
-//using Coupon.Test.Common;
-//using Xunit;
+﻿using Coupon.Application.Features.Coupons.Handlers.Queries;
+using Coupon.Application.Features.Coupons.Requests.Queries;
+using Coupon.Test.Common;
+using FluentAssertions;
+using Xunit;
 
-//namespace Coupon.Test.Queries
-//{
-//    [CollectionDefinition("QueryCollection")]
-//    public class GetCouponListRequestHandlerTest : TestQueryHandler
-//    {
-//        [Fact]
-//        public async Task GetCouponListRequestHandlerTest_Success()
-//        {
-//            // Arrange
-//            var handler = new GetCouponListRequestHandler(Repository, Logger);
+namespace Coupon.Test.Queries
+{
+    [CollectionDefinition("QueryCollection")]
+    public class GetCouponListRequestHandlerTest : TestQueryHandler
+    {
+        [Fact]
+        public async Task GetCouponListRequestHandlerTest_Success()
+        {
+            // Arrange
+            var handler = new GetCouponListRequestHandler(Repository, GetListLogger);
 
-//            // Act
-//            var result = await handler.Handle(new GetCouponListRequest(), CancellationToken.None);
+            // Act
+            var result = await handler.Handle(new GetCouponListRequest(), CancellationToken.None);
 
-//            // Assert
-//            Assert.NotNull(result);
-//        }
-//    }
-//}
+            // Assert
+            result.Count.Should().Be(5);
+            result.ErrorMessage.Should().BeNullOrEmpty();
+            result.SuccessMessage.Should().BeNullOrEmpty();
+            result.ValidationErrors.Should().BeNullOrEmpty();
+        }
+    }
+}
