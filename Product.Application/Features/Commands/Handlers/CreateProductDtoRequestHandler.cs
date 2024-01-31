@@ -30,6 +30,27 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, string>
+                    {
+                        {"Name", ErrorMessage.ProductNameNotValid},
+                        {"Description", ErrorMessage.ProductDescriptionNotValid},
+                        {"ProductCategory", ErrorMessage.ProductCategoryNotValid},
+                        {"Price", ErrorMessage.ProductPriceNotValid},
+                    };
+
+                    foreach (var error in validator.Errors)
+                    {
+                        if (errorMessages.TryGetValue(error.PropertyName, out var errorException))
+                        {
+                            return new Result<ProductDto>
+                            {
+                                ErrorMessage = errorException,
+                                ErrorCode = (int)ErrorCodes.ProductNotCreated,
+                                ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                            };
+                        }
+                    }
+
                     _logger.Warning("Ошибка валидации");
                     return new Result<ProductDto>
                     {

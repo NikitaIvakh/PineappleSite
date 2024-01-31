@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Domain.DTOs;
@@ -64,9 +65,8 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Продукт не может быть создан");
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ErrorMessage.Should().Be("Название продукта не валидно");
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -96,9 +96,8 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Продукт не может быть создан");
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ErrorMessage.ShouldBe("Описание продукта не валидно");
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
 
         [Fact]
@@ -122,9 +121,8 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Продукт не может быть создан");
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ErrorMessage.ShouldBe("Стоимость продукта не валидна");
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
     }
 }

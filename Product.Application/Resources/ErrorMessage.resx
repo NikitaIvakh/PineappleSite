@@ -123,6 +123,12 @@
   <data name="ProductAlreadyExists" xml:space="preserve">
     <value>Продукт уже используется</value>
   </data>
+  <data name="ProductCategoryNotValid" xml:space="preserve">
+    <value>Категория продукта не валидна</value>
+  </data>
+  <data name="ProductDescriptionNotValid" xml:space="preserve">
+    <value>Описание продукта не валидна</value>
+  </data>
   <data name="ProductNameNotValid" xml:space="preserve">
     <value>Название продукта не валидно</value>
   </data>
@@ -146,6 +152,9 @@
   </data>
   <data name="ProductNotUpdatedNull" xml:space="preserve">
     <value>Такого продукта не существует</value>
+  </data>
+  <data name="ProductPriceNotValid" xml:space="preserve">
+    <value>Стоимость продукта не валидна</value>
   </data>
   <data name="ProductsNotDeleted" xml:space="preserve">
     <value>Продукты не могут быть удалены</value>

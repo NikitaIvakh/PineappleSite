@@ -79,6 +79,24 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Категория продукта не валидна.
+        /// </summary>
+        internal static string ProductCategoryNotValid {
+            get {
+                return ResourceManager.GetString("ProductCategoryNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Описание продукта не валидна.
+        /// </summary>
+        internal static string ProductDescriptionNotValid {
+            get {
+                return ResourceManager.GetString("ProductDescriptionNotValid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Название продукта не валидно.
         /// </summary>
         internal static string ProductNameNotValid {
@@ -147,6 +165,15 @@ namespace Product.Application.Resources {
         internal static string ProductNotUpdatedNull {
             get {
                 return ResourceManager.GetString("ProductNotUpdatedNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Стоимость продукта не валидна.
+        /// </summary>
+        internal static string ProductPriceNotValid {
+            get {
+                return ResourceManager.GetString("ProductPriceNotValid", resourceCulture);
             }
         }
         
