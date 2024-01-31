@@ -6,7 +6,8 @@ using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Serilog;
 using Coupon.Application.Features.Coupons.Handlers.Commands;
-using Moq;
+using Coupon.Infrastructure.Repository;
+using Coupon.Application.Features.Coupons.Handlers.Queries;
 
 namespace Coupon.Test.Common
 {
@@ -14,16 +15,18 @@ namespace Coupon.Test.Common
     {
         public ApplicationDbContext Context;
         protected IBaseRepository<CouponEntity> Repository;
-        protected ILogger Logger;
+        protected ILogger GetByCodeLogger;
+        protected ILogger GetLogger;
+        protected ILogger GetListLogger;
         protected IMapper Mapper;
 
         public TestQueryHandler()
         {
             Context = CouponRepositoryContextFactory.Create();
-            Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
-
-            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
-            Repository = repositoryMock.Object;
+            GetByCodeLogger = Log.ForContext<GetCouponDetailsByCouponNameRequestHandler>();
+            GetLogger = Log.ForContext<GetCouponDetailsRequestHandler>();
+            GetListLogger = Log.ForContext<GetCouponListRequestHandler>();
+            Repository = new BaseRepository<CouponEntity>(Context);
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {

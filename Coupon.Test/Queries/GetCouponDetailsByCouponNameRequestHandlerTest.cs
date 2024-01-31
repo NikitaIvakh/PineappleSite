@@ -1,6 +1,7 @@
 ﻿using Coupon.Application.Features.Coupons.Handlers.Queries;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Test.Common;
+using FluentAssertions;
 using Shouldly;
 using Xunit;
 
@@ -12,7 +13,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponDetailsByCouponNameRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, Logger);
+            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger);
             var couponCode = "10OFF";
 
             // Act
@@ -22,15 +23,16 @@ namespace Coupon.Test.Queries
             }, CancellationToken.None);
 
             // Assert
-            result.ValidationErrors.ShouldBeNull();
-
+            result.IsSuccess.Should().BeTrue();
+            result.ErrorMessage.Should().BeNullOrEmpty(); 
+            result.ValidationErrors.Should().BeNullOrEmpty(); 
         }
 
         [Fact]
         public async Task GetCouponDetailsByCouponNameRequestHandlerTest_FailOrWrongCouponCode()
         {
             // Arrange
-            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, Logger);
+            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger);
             var couponCode = "101OFF";
 
             // Act
@@ -40,6 +42,9 @@ namespace Coupon.Test.Queries
             }, CancellationToken.None);
 
             // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Купон не найден");
+            result.SuccessMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.ShouldBeNull();
         }
     }
