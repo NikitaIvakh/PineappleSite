@@ -3,6 +3,7 @@ using Favourites.Application.Features.Requests.Handlers;
 using Favourites.Domain.DTOs;
 using Favourites.Domain.ResultFavourites;
 using Favourites.Test.Common;
+using FluentAssertions;
 using Shouldly;
 using Xunit;
 
@@ -40,7 +41,9 @@ namespace Favourites.Test.Commands
             }, CancellationToken.None);
 
             // Assert
+            result.IsSuccess.Should().BeTrue();
             result.SuccessMessage.ShouldNotBeNull();
+            result.ErrorMessage.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -73,6 +76,8 @@ namespace Favourites.Test.Commands
             }, CancellationToken.None);
 
             // Assert
+            result.IsSuccess.Should().BeTrue();
+            result.ErrorMessage.Should().BeNullOrEmpty();
             result.SuccessMessage.ShouldBe("Продукт успешно добавлен в избранное");
         }
     }
