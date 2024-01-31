@@ -1,4 +1,5 @@
-﻿using Product.Application.Features.Commands.Handlers;
+﻿using FluentAssertions;
+using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Domain.DTOs;
 using Product.Domain.ResultProduct;
@@ -29,7 +30,7 @@ namespace Product.Test.Commands
             // Assert
             result.ShouldBeOfType<Result<ProductDto>>();
             result.IsSuccess.ShouldBeTrue();
-            result.SuccessMessage.ShouldBe("Продукт успешно удален");
+            result.SuccessMessage.Should().Be("Продукт успешно удален");
             result.ValidationErrors.ShouldBeNull();
         }
 
@@ -50,8 +51,8 @@ namespace Product.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Продукт не найден");
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Продукт не найден");
             result.ValidationErrors.ShouldBeNull();
         }
     }
