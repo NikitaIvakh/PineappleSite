@@ -1,4 +1,5 @@
-﻿using Product.Application.Features.Commands.Handlers;
+﻿using FluentAssertions;
+using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Domain.DTOs;
 using Product.Test.Common;
@@ -26,9 +27,9 @@ namespace Product.Test.Commands
             }, CancellationToken.None);
 
             // Assert
-            result.IsSuccess.ShouldBeTrue();
-            result.SuccessMessage.ShouldBe("Продукты успешно удалены");
-            result.ValidationErrors.ShouldBeNull();
+            result.IsSuccess.Should().BeTrue();
+            result.SuccessMessage.Should().Be("Продукты успешно удалены");
+            result.ValidationErrors.Should().BeNullOrEmpty();
         }
 
         [Fact]
@@ -50,8 +51,7 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ValidationErrors.ShouldNotBeEmpty();
-            result.ValidationErrors.ShouldNotBeNull();
+            result.ValidationErrors.Should().NotBeNullOrEmpty();
         }
     }
 }
