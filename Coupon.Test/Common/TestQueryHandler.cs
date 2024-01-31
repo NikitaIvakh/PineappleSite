@@ -6,7 +6,6 @@ using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Serilog;
 using Coupon.Application.Features.Coupons.Handlers.Commands;
-using Coupon.Application.Validations;
 using Moq;
 
 namespace Coupon.Test.Common
@@ -20,12 +19,11 @@ namespace Coupon.Test.Common
 
         public TestQueryHandler()
         {
-            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
-
+            Context = CouponRepositoryContextFactory.Create();
             Logger = Log.ForContext<CreateCouponRequestHandler>(); ;
-            Repository = repositoryMock.Object;
 
-            Context = CouponRepositoryContextFactory.Create(Repository);
+            var repositoryMock = new Mock<IBaseRepository<CouponEntity>>();
+            Repository = repositoryMock.Object;
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
