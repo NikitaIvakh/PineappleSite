@@ -1,4 +1,5 @@
-﻿using Product.Application.Features.Commands.Queries;
+﻿using FluentAssertions;
+using Product.Application.Features.Commands.Queries;
 using Product.Application.Features.Requests.Queries;
 using Product.Test.Common;
 using Shouldly;
@@ -20,7 +21,7 @@ namespace Product.Test.Queries
 
             // Assert
             result.ShouldNotBeNull();
-            result.Count.ShouldBe(6);
+            result.Count.Should().Be(6);
         }
     }
 }
