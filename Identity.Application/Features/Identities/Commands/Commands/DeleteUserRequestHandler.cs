@@ -1,55 +1,85 @@
-﻿using Identity.Application.DTOs.Identities;
-using Identity.Application.DTOs.Validators;
-using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Response;
-using Identity.Core.Entities.User;
+﻿using Serilog;
 using MediatR;
+using Identity.Domain.Enum;
+using Identity.Application.Resources;
+using Identity.Application.Validators;
+using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
+using Identity.Domain.ResultIdentity;
 using Microsoft.AspNetCore.Identity;
+using Identity.Application.Features.Identities.Requests.Commands;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator) : IRequestHandler<DeleteUserRequest, BaseIdentityResponse<DeleteUserDto>>
+    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserRequest, Result<DeleteUserDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly ILogger _logger = logger.ForContext<DeleteUserRequestHandler>();
         private readonly IDeleteUserDtoValidator _deleteValidator = deleteValidator;
 
-        public async Task<BaseIdentityResponse<DeleteUserDto>> Handle(DeleteUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<DeleteUserDto>> Handle(DeleteUserRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<DeleteUserDto>();
-
             try
             {
                 var validator = await _deleteValidator.ValidateAsync(request.DeleteUser, cancellationToken);
 
                 if (!validator.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка удаления";
-                    response.ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList();
+                    return new Result<DeleteUserDto>
+                    {
+                        ErrorMessage = ErrorMessage.UserCanNotDeleted,
+                        ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var user = await _userManager.FindByIdAsync(request.DeleteUser.Id) ??
-                        throw new Exception($"Такого пользователя не существует");
+                    var user = await _userManager.FindByIdAsync(request.DeleteUser.Id);
 
-                    var result = await _userManager.DeleteAsync(user);
+                    if (user is null)
+                    {
+                        return new Result<DeleteUserDto>
+                        {
+                            ErrorMessage = ErrorMessage.UserNotFound,
+                            ErrorCode = (int)ErrorCodes.UserNotFound,
+                        };
+                    }
 
-                    response.IsSuccess = true;
-                    response.Data = request.DeleteUser;
-                    response.Message = "Пользователь успешно удален";
+                    else
+                    {
+                        var result = await _userManager.DeleteAsync(user);
 
-                    return response;
+                        if (!result.Succeeded)
+                        {
+                            return new Result<DeleteUserDto>
+                            {
+                                ErrorMessage = ErrorMessage.UserCanNotDeleted,
+                                ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
+                            };
+                        }
+
+                        else
+                        {
+                            return new Result<DeleteUserDto>
+                            {
+                                Data = request.DeleteUser,
+                                SuccessMessage = "Пользователь успешно удален",
+                            };
+                        }
+                    }
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<DeleteUserDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

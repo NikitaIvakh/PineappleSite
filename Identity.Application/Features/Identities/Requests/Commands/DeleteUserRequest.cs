@@ -1,10 +1,10 @@
-﻿using Identity.Application.DTOs.Identities;
-using Identity.Application.Response;
+﻿using Identity.Domain.DTOs.Identities;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 
 namespace Identity.Application.Features.Identities.Requests.Commands
 {
-    public class DeleteUserRequest : IRequest<BaseIdentityResponse<DeleteUserDto>>
+    public class DeleteUserRequest : IRequest<Result<DeleteUserDto>>
     {
         public DeleteUserDto DeleteUser { get; set; }
     }

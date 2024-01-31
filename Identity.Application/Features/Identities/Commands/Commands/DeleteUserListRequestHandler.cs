@@ -1,69 +1,89 @@
 ﻿using AutoMapper;
-using Identity.Application.DTOs.Identities;
-using Identity.Application.DTOs.Validators;
+using FluentValidation;
 using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Response;
-using Identity.Core.Entities.User;
-using Identity.Core.Entities.Users;
+using Identity.Application.Resources;
+using Identity.Application.Validators;
+using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
+using Identity.Domain.Enum;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager,
-        IDeleteUserListDtoValidator deleteValidator) : IRequestHandler<DeleteUserListRequest, BaseIdentityResponse<DeleteUserListDto>>
+    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger, IMapper mapper) : IRequestHandler<DeleteUserListRequest, CollectionResult<DeleteUserListDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly ILogger _logger = logger.ForContext<DeleteUserListRequestHandler>();
+        private readonly IMapper _mapper = mapper;
         private readonly IDeleteUserListDtoValidator _deleteValidator = deleteValidator;
 
-        public async Task<BaseIdentityResponse<DeleteUserListDto>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
+        public async Task<CollectionResult<DeleteUserListDto>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<DeleteUserListDto>();
-
             try
             {
                 var validator = await _deleteValidator.ValidateAsync(request.DeleteUserList, cancellationToken);
 
                 if (!validator.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка удаления";
-                    response.ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new CollectionResult<DeleteUserListDto>
+                    {
+                        ErrorMessage = ErrorMessage.UsersConNotDeleted,
+                        ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var users = await _userManager.Users.Where(key => request.DeleteUserList.UserIds.Contains(key.Id)).ToListAsync(cancellationToken) ??
-                        throw new Exception("Пользователи не найдены");
+                    var users = await _userManager.Users.Where(key => request.DeleteUserList.UserIds.Contains(key.Id)).ToListAsync(cancellationToken);
 
-                    foreach (var user in users)
+                    if (users is null)
                     {
-                        var result = await _userManager.DeleteAsync(user);
-
-                        if (!result.Succeeded)
+                        return new CollectionResult<DeleteUserListDto>
                         {
-                            response.IsSuccess = false;
-                            response.Message = "Ошибка удаления";
-                            response.ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList();
-
-                            return response;
-                        }
+                            ErrorMessage = ErrorMessage.UsersNotFound,
+                            ErrorCode = (int)ErrorCodes.UsersNotFound,
+                        };
                     }
 
-                    response.IsSuccess = true;
-                    response.Data = request.DeleteUserList;
-                    response.Message = "Пользователи успешно удалены";
+                    else
+                    {
+                        foreach (var user in users)
+                        {
+                            var result = await _userManager.DeleteAsync(user);
+
+                            if (!result.Succeeded)
+                            {
+                                return new CollectionResult<DeleteUserListDto>
+                                {
+                                    ErrorMessage = ErrorMessage.UsersConNotDeleted,
+                                    ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
+                                };
+                            }
+                        }
+
+                        return new CollectionResult<DeleteUserListDto>
+                        {
+                            Data = _mapper.Map<IReadOnlyCollection<DeleteUserListDto>>(request.DeleteUserList),
+                            SuccessMessage = "Пользователи успешно удалены"
+                        };
+                    }
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new CollectionResult<DeleteUserListDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

@@ -1,5 +1,6 @@
-using Identity.Infrastructure;
 using Identity.Application;
+using Identity.Infrastructure.DependencyInjection;
+using Serilog;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +14,7 @@ applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
+applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
 
 applicationBuilder.Services.AddCors(key =>
 {
@@ -34,13 +36,12 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
+
 webApplication.UseRouting();
 webApplication.UseAuthorization();
+
 webApplication.UseCors();
 webApplication.UseStaticFiles();
-webApplication.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-});
+webApplication.MapControllers();
 
 webApplication.Run();

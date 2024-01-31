@@ -1,11 +1,10 @@
-﻿using Identity.Application.DTOs.Identities;
-using Identity.Application.Response;
-using Identity.Core.Entities.Users;
+﻿using Identity.Domain.DTOs.Identities;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 
 namespace Identity.Application.Features.Identities.Requests.Commands
 {
-    public class UpdateUserProfileRequest : IRequest<BaseIdentityResponse<UserWithRoles>>
+    public class UpdateUserProfileRequest : IRequest<Result<UserWithRolesDto>>
     {
         public UpdateUserProfileDto UpdateUserProfile { get; set; }
     }

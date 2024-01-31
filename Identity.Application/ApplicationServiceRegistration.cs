@@ -1,8 +1,5 @@
 ﻿using FluentValidation;
-using Identity.Application.DTOs.Authentications;
-using Identity.Application.Features.Identities.Commands.Commands;
-using Identity.Application.Services;
-using Identity.Application.Services.IServices;
+using Identity.Domain.DTOs.Authentications;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
@@ -18,25 +15,39 @@ namespace Identity.Application
 {
     public static class ApplicationServiceRegistration
     {
-        public static IServiceCollection ConfigureApplicationService(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureApplicationService(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.RegisterServices(configuration);
+            services.RegisterInts();
+            services.RegisterAuthentication(configuration);
+        }
+
+        private static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
+            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
+        }
+
+        private static void RegisterInts(this IServiceCollection services)
         {
             services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
+        }
 
-            services.Configure<JwtSettings>(configuration.GetSection("JwtSettings"));
-            services.AddScoped<ITokenProvider, TokenProvider>();
-
+        private static void RegisterAuthentication(this IServiceCollection services, IConfiguration configuration)
+        {
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                .AddCookie(options =>
                {
-                   options.ExpireTimeSpan = TimeSpan.FromHours(10);
+                   options.ExpireTimeSpan = TimeSpan.FromHours(1);
                    options.LoginPath = "/Identity/Login";
                    options.AccessDeniedPath = "/Identity/AccessDenied";
                    options.Cookie.Name = "JWTToken";
                    options.Cookie.HttpOnly = true;
                    options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-                   options.ExpireTimeSpan = TimeSpan.FromDays(1);
+                   options.ExpireTimeSpan = TimeSpan.FromHours(1);
                });
 
             services.AddAuthentication(options =>
@@ -57,10 +68,6 @@ namespace Identity.Application
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
                 };
             });
-
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton<IUrlHelperFactory, UrlHelperFactory>();
-            return services;
         }
     }
 }

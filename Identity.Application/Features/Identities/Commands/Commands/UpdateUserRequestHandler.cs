@@ -1,78 +1,101 @@
-﻿using Identity.Application.DTOs.Authentications;
-using Identity.Application.DTOs.Validators;
-using Identity.Application.Extecsions;
+﻿using Identity.Application.Extecsions;
 using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Response;
-using Identity.Core.Entities.User;
+using Identity.Application.Resources;
+using Identity.Application.Validators;
+using Identity.Domain.DTOs.Authentications;
+using Identity.Domain.Entities.Users;
+using Identity.Domain.Enum;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules) : IRequestHandler<UpdateUserRequest, BaseIdentityResponse<RegisterResponseDto>>
+    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger) : IRequestHandler<UpdateUserRequest, Result<RegisterResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
+        private readonly ILogger _logger = logger.ForContext<UpdateUserRequest>();
 
-        public async Task<BaseIdentityResponse<RegisterResponseDto>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<RegisterResponseDto>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<RegisterResponseDto>();
-
             try
             {
                 var validator = await _updateValidator.ValidateAsync(request.UpdateUser, cancellationToken);
 
                 if (!validator.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка обновления пользователя";
-                    response.ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList();
+                    return new Result<RegisterResponseDto>
+                    {
+                        ErrorMessage = ErrorMessage.UserUpdateError,
+                        ErrorCode = (int)ErrorCodes.UserUpdateError,
+                        ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var user = await _userManager.FindByIdAsync(request.UpdateUser.Id) ?? throw new Exception($"Пользователь не найден");
+                    var user = await _userManager.FindByIdAsync(request.UpdateUser.Id);
 
-                    user.FirstName = request.UpdateUser.FirstName;
-                    user.LastName = request.UpdateUser.LastName;
-                    user.Email = request.UpdateUser.EmailAddress;
-                    user.UserName = request.UpdateUser.UserName;
-
-                    var result = await _userManager.UpdateAsync(user);
-
-                    if (result.Succeeded)
+                    if (user is null)
                     {
-                        var existsRoles = await _userManager.GetRolesAsync(user);
-                        await _userManager.RemoveFromRolesAsync(user, existsRoles);
-
-                        var roleNames = request.UpdateUser.UserRoles.GetDisplayName();
-                        await _userManager.AddToRoleAsync(user, roleNames);
-                        RegisterResponseDto updateResponse = new()
+                        return new Result<RegisterResponseDto>
                         {
-                            UserId = user.Id
+                            ErrorMessage = ErrorMessage.UserNotFound,
+                            ErrorCode = (int)ErrorCodes.UserNotFound,
                         };
-
-                        response.IsSuccess = true;
-                        response.Message = "Успешное обновление пользователя";
-                        response.Data = updateResponse;
-
-                        return response;
                     }
 
                     else
                     {
-                        throw new Exception($"{result.Errors}");
+                        user.FirstName = request.UpdateUser.FirstName;
+                        user.LastName = request.UpdateUser.LastName;
+                        user.Email = request.UpdateUser.EmailAddress;
+                        user.UserName = request.UpdateUser.UserName;
+
+                        var result = await _userManager.UpdateAsync(user);
+
+                        if (result.Succeeded)
+                        {
+                            var existsRoles = await _userManager.GetRolesAsync(user);
+                            await _userManager.RemoveFromRolesAsync(user, existsRoles);
+
+                            var roleNames = request.UpdateUser.UserRoles.GetDisplayName();
+                            await _userManager.AddToRoleAsync(user, roleNames);
+                            RegisterResponseDto updateResponse = new()
+                            {
+                                UserId = user.Id
+                            };
+
+                            return new Result<RegisterResponseDto>
+                            {
+                                Data = updateResponse,
+                                SuccessMessage = "Успешное обновление пользователя",
+                            };
+                        }
+
+                        else
+                        {
+                            return new Result<RegisterResponseDto>
+                            {
+                                ErrorMessage = ErrorMessage.UserUpdateError,
+                                ErrorCode = (int)ErrorCodes.UserUpdateError,
+                            };
+                        }
                     }
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<RegisterResponseDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

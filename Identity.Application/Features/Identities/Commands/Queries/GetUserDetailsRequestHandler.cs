@@ -1,32 +1,64 @@
 ﻿using AutoMapper;
-using Identity.Application.DTOs.Identities;
 using Identity.Application.Features.Identities.Requests.Queries;
-using Identity.Core.Entities.User;
-using Identity.Core.Entities.Users;
+using Identity.Application.Resources;
+using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
+using Identity.Domain.Enum;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
-    public class GetUserDetailsRequestHandler(UserManager<ApplicationUser> userManager, IMapper mapper) : IRequestHandler<GetUserDetailsRequest, UserWithRolesDto>
+    public class GetUserDetailsRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMapper mapper) : IRequestHandler<GetUserDetailsRequest, Result<UserWithRolesDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly ILogger _logger = logger.ForContext<GetUserDetailsRequestHandler>();
         private readonly IMapper _mapper = mapper;
 
-        public async Task<UserWithRolesDto> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<UserWithRolesDto>> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
         {
-            var user = await _userManager.Users.FirstOrDefaultAsync(key => key.Id == request.Id) ??
-                throw new Exception("Такого пользователя нет");
-
-            var roles = await _userManager.GetRolesAsync(user);
-            var userWithRolesDto = new UserWithRoles
+            try
             {
-                User = user,
-                Roles = roles.ToList()
-            };
+                var user = await _userManager.Users.FirstOrDefaultAsync(key => key.Id == request.Id, cancellationToken);
 
-            return _mapper.Map<UserWithRolesDto>(userWithRolesDto);
+                if (user is null)
+                {
+                    return new Result<UserWithRolesDto>
+                    {
+                        ErrorMessage = ErrorMessage.UserNotFound,
+                        ErrorCode = (int)ErrorCodes.UserNotFound,
+                    };
+                }
+
+                else
+                {
+                    var roles = await _userManager.GetRolesAsync(user);
+                    var userWithRolesDto = new UserWithRoles
+                    {
+                        User = user,
+                        Roles = roles.ToList()
+                    };
+
+                    return new Result<UserWithRolesDto>
+                    {
+                        Data = _mapper.Map<UserWithRolesDto>(userWithRolesDto),
+
+                    };
+                }
+            }
+
+            catch (Exception exception)
+            {
+                _logger.Warning(exception, exception.Message);
+                return new Result<UserWithRolesDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
+            }
         }
     }
 }

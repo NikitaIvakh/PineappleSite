@@ -1,32 +1,37 @@
-﻿using Identity.Application.DTOs.Identities;
-using Identity.Application.DTOs.Validators;
-using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Response;
-using Identity.Application.Services.IServices;
+﻿using Identity.Application.Features.Identities.Requests.Commands;
+using Identity.Application.Resources;
+using Identity.Application.Validators;
+using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Enum;
+using Identity.Domain.Interface;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LogoutUserRequestHandler(ITokenProvider tokenProvider, IHttpContextAccessor httpContextAccessor, ILogoutUserDtoValidator validator) : IRequestHandler<LogoutUserRequest, BaseIdentityResponse<LogoutUserDto>>
+    public class LogoutUserRequestHandler(ITokenProvider tokenProvider, IHttpContextAccessor httpContextAccessor, ILogoutUserDtoValidator validator, ILogger logger) : IRequestHandler<LogoutUserRequest, Result<LogoutUserDto>>
     {
         private readonly ITokenProvider _tokenProvider = tokenProvider;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogoutUserDtoValidator _logoutUserValidator = validator;
+        private readonly ILogger _logger = logger.ForContext<LogoutUserRequestHandler>();
 
-        public async Task<BaseIdentityResponse<LogoutUserDto>> Handle(LogoutUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<LogoutUserDto>> Handle(LogoutUserRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<LogoutUserDto>();
-
             try
             {
                 var validator = await _logoutUserValidator.ValidateAsync(request.LogoutUser, cancellationToken);
 
                 if (!validator.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка выхода из аккаунта";
-                    response.ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<LogoutUserDto>
+                    {
+                        ErrorMessage = ErrorMessage.ErrorLoggingOutOfTheAccount,
+                        ErrorCode = (int)ErrorCodes.ErrorLoggingOutOfTheAccount,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList()
+                    };
                 }
 
                 else
@@ -39,21 +44,23 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         UserId = request.LogoutUser.UserId,
                     };
 
-                    response.IsSuccess = true;
-                    response.Message = "Вы успешно вышли из аккаунта";
-                    response.Data = logoutUserDto;
-
-                    return response;
+                    return new Result<LogoutUserDto>
+                    {
+                        Data = logoutUserDto,
+                        SuccessMessage = "Вы успешно вышли из аккаунта",
+                    };
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<LogoutUserDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
     }
 }

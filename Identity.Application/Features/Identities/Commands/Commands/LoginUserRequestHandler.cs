@@ -1,9 +1,11 @@
-﻿using Identity.Application.DTOs.Authentications;
-using Identity.Application.DTOs.Validators;
-using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Response;
-using Identity.Application.Services.IServices;
-using Identity.Core.Entities.User;
+﻿using Identity.Application.Features.Identities.Requests.Commands;
+using Identity.Application.Resources;
+using Identity.Application.Validators;
+using Identity.Domain.DTOs.Authentications;
+using Identity.Domain.Entities.Users;
+using Identity.Domain.Enum;
+using Identity.Domain.Interface;
+using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -11,15 +13,15 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LoginUserRequestHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> options,
-        IAuthRequestDtoValidator authValidator, ITokenProvider tokenProvider,
-        IHttpContextAccessor httpContextAccessor) : IRequestHandler<LoginUserRequest, BaseIdentityResponse<AuthResponseDto>>
+    public class LoginUserRequestHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> options, IAuthRequestDtoValidator authValidator, ITokenProvider tokenProvider,
+        IHttpContextAccessor httpContextAccessor, ILogger logger) : IRequestHandler<LoginUserRequest, Result<AuthResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
@@ -27,65 +29,85 @@ namespace Identity.Application.Features.Identities.Commands.Commands
         private readonly IAuthRequestDtoValidator _authValidator = authValidator;
         private readonly ITokenProvider _tokenProvider = tokenProvider;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly ILogger _logger = logger.ForContext<LoginUserRequestHandler>();
 
-        public async Task<BaseIdentityResponse<AuthResponseDto>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<AuthResponseDto>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
         {
-            var response = new BaseIdentityResponse<AuthResponseDto>();
-
             try
             {
                 var validator = await _authValidator.ValidateAsync(request.AuthRequest, cancellationToken);
 
                 if (!validator.IsValid)
                 {
-                    response.IsSuccess = false;
-                    response.Message = "Ошибка входа в аккаунт";
-                    response.ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList();
+                    return new Result<AuthResponseDto>
+                    {
+                        ErrorMessage = ErrorMessage.AccountLoginError,
+                        ErrorCode = (int)ErrorCodes.AccountLoginError,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                    };
                 }
 
                 else
                 {
-                    var user = await _userManager.FindByEmailAsync(request.AuthRequest.Email) ?? throw new Exception($"Пользователь с почтой ({nameof(request.AuthRequest.Email)}) не найден");
-                    var result = await _signInManager.CheckPasswordSignInAsync(user, request.AuthRequest.Password, false);
+                    var user = await _userManager.FindByEmailAsync(request.AuthRequest.Email);
 
-                    if (!result.Succeeded)
+                    if (user is null)
                     {
-                        response.IsSuccess = false;
-                        response.Message = "Неверно введен логин или пароль";
-                        response.Data = new AuthResponseDto();
-                        response.ValidationErrors = validator.Errors.Select(_ => _.ErrorMessage).ToList();
+                        return new Result<AuthResponseDto>
+                        {
+                            ErrorMessage = ErrorMessage.UserNotFound,
+                            ErrorCode = (int)ErrorCodes.UserNotFound,
+                        };
                     }
 
                     else
                     {
-                        JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
-                        AuthResponseDto authResponse = new()
+                        var result = await _signInManager.CheckPasswordSignInAsync(user, request.AuthRequest.Password, false);
+
+                        if (!result.Succeeded)
                         {
-                            Id = user.Id,
-                            Email = user.Email,
-                            UserName = user.UserName,
-                            Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                        };
+                            return new Result<AuthResponseDto>
+                            {
+                                ErrorMessage = ErrorMessage.AccountLoginError,
+                                ErrorCode = (int)ErrorCodes.InternalServerError,
+                                ValidationErrors = validator.Errors.Select(_ => _.ErrorMessage).ToList(),
+                            };
+                        }
 
-                        SingInUserAsync(authResponse);
-                        _tokenProvider.SetToken(authResponse.Token);
+                        else
+                        {
+                            JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
+                            AuthResponseDto authResponse = new()
+                            {
+                                Id = user.Id,
+                                Email = user.Email,
+                                UserName = user.UserName,
+                                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
+                            };
 
-                        response.IsSuccess = true;
-                        response.Message = "Уcпешный вход";
-                        response.Data = authResponse;
+                            SingInUserAsync(authResponse);
+                            _tokenProvider.SetToken(authResponse.Token);
 
-                        return response;
+                            return new Result<AuthResponseDto>
+                            {
+                                Data = authResponse,
+                                SuccessMessage = "Уcпешный вход в аккаунт",
+                            };
+                        }
                     }
+
                 }
             }
 
             catch (Exception exception)
             {
-                response.IsSuccess = false;
-                response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<AuthResponseDto>
+                {
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return response;
         }
 
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
@@ -114,7 +136,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
             issuer: _jwtSettings.Issuer,
                 audience: _jwtSettings.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(_jwtSettings.DurationMinutes),
+                expires: DateTime.Now.AddMinutes(_jwtSettings.DurationMinutes),
                 signingCredentials: signingCredintials);
 
             return jwtSecurityToken;
@@ -132,8 +154,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                 HttpOnly = true,
                 Secure = false, // Измените на true в продакшн среде, если используется HTTPS
                 Expires = DateTime.UtcNow.AddDays(1),
-                SameSite = SameSiteMode.None, 
-                Path = "/" 
+                SameSite = SameSiteMode.None,
+                Path = "/"
             });
 
             identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Sub).Value));
