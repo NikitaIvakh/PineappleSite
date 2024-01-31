@@ -33,7 +33,6 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                 else
                 {
-                    int removeProduct = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
                     await _favouriteDetails.DeleteAsync(favouritesDetails);
 
                     return new Result<FavouritesDetails>

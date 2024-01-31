@@ -61,7 +61,7 @@ namespace Favourites.Application.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Избранные продукты не найдены.
+        ///   Ищет локализованную строку, похожую на Избранный продукт не найден.
         /// </summary>
         internal static string FavouriteDetailsNotFound {
             get {
