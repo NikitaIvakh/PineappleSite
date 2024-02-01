@@ -35,5 +35,24 @@ namespace Identity.Test.Queries
             result.Data.User.Description.Should().Be("Test_Test");
             result.Data.User.Age.Should().Be(24);
         }
+
+        [Fact]
+        public async Task GetUserDetailsRequestHandlerTest_FailOrWrongId()
+        {
+            // Arrange
+            var handler = new GetUserDetailsRequestHandler(UserManager, GetUserLogger, Mapper);
+            var userId = "3B189631-D179-4200-B77C-B8FC0FD280372334345555555555";
+
+            // Act
+            var result = await handler.Handle(new GetUserDetailsRequest
+            {
+                Id = userId,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Такого пользователя не существует");
+            result.ErrorCode.Should().Be(404);
+        }
     }
 }
