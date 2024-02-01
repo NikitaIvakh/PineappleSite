@@ -39,7 +39,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                 {
                     var users = await _userManager.Users.Where(key => request.DeleteUserList.UserIds.Contains(key.Id)).ToListAsync(cancellationToken);
 
-                    if (users is null)
+                    if (users is null || users.Count == 0)
                     {
                         return new CollectionResult<DeleteUserListDto>
                         {
