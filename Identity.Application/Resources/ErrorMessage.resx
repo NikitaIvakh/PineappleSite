@@ -120,11 +120,23 @@
   <data name="AccountLoginError" xml:space="preserve">
     <value>Ошибка входа в аккаунт</value>
   </data>
+  <data name="EmailAddressError" xml:space="preserve">
+    <value>Почтовый адрес введен неверно</value>
+  </data>
   <data name="ErrorLoggingOutOfTheAccount" xml:space="preserve">
     <value>Ошибка выхода из аккаунта</value>
   </data>
+  <data name="FirstNameError" xml:space="preserve">
+    <value>Ваше имя введено некорректно</value>
+  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Ошибка на стороне сервера</value>
+  </data>
+  <data name="LastNameError" xml:space="preserve">
+    <value>Ваша фамилия введена некорректно</value>
+  </data>
+  <data name="PasswordError" xml:space="preserve">
+    <value>Пароль введен неверно</value>
   </data>
   <data name="RegistrationLoginError" xml:space="preserve">
     <value>Ошибка регистрации</value>
@@ -140,6 +152,9 @@
   </data>
   <data name="UserCanNotDeleted" xml:space="preserve">
     <value>Пользователь не может быть удален</value>
+  </data>
+  <data name="UserNameError" xml:space="preserve">
+    <value>Отображаемое имя на сайте введено неверно</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
     <value>Такого пользователя не существует</value>

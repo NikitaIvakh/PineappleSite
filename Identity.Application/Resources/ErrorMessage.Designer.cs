@@ -70,6 +70,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Почтовый адрес введен неверно.
+        /// </summary>
+        internal static string EmailAddressError {
+            get {
+                return ResourceManager.GetString("EmailAddressError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка выхода из аккаунта.
         /// </summary>
         internal static string ErrorLoggingOutOfTheAccount {
@@ -79,11 +88,38 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Ваше имя введено некорректно.
+        /// </summary>
+        internal static string FirstNameError {
+            get {
+                return ResourceManager.GetString("FirstNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка на стороне сервера.
         /// </summary>
         internal static string InternalServerError {
             get {
                 return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ваша фамилия введена некорректно.
+        /// </summary>
+        internal static string LastNameError {
+            get {
+                return ResourceManager.GetString("LastNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пароль введен неверно.
+        /// </summary>
+        internal static string PasswordError {
+            get {
+                return ResourceManager.GetString("PasswordError", resourceCulture);
             }
         }
         
@@ -129,6 +165,15 @@ namespace Identity.Application.Resources {
         internal static string UserCanNotDeleted {
             get {
                 return ResourceManager.GetString("UserCanNotDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Отображаемое имя на сайте введено неверно.
+        /// </summary>
+        internal static string UserNameError {
+            get {
+                return ResourceManager.GetString("UserNameError", resourceCulture);
             }
         }
         
