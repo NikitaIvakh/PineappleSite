@@ -1,6 +1,4 @@
 ﻿using MediatR;
-using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Application.Utilities;
 using Identity.Domain.DTOs.Identities;
@@ -14,11 +12,10 @@ using Identity.Domain.Enum;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
-    public class GetUserListRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMapper mapper) : IRequestHandler<GetUserListRequest, CollectionResult<UserWithRolesDto>>
+    public class GetUserListRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger) : IRequestHandler<GetUserListRequest, CollectionResult<UserWithRolesDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<GetUserListRequest>();
-        private readonly IMapper _mapper = mapper;
 
         public async Task<CollectionResult<UserWithRolesDto>> Handle(GetUserListRequest request, CancellationToken cancellationToken)
         {
@@ -35,10 +32,22 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                     {
                         var users = await _userManager.Users.ToListAsync(cancellationToken);
 
-                        foreach (var user in users)
+                        if (users is null || users.Count == 0)
                         {
-                            var role = await _userManager.GetRolesAsync(user);
-                            usersWithRoles.Add(new UserWithRolesDto { User = user, Roles = role });
+                            return new CollectionResult<UserWithRolesDto>
+                            {
+                                ErrorMessage = ErrorMessage.UsersNotFound,
+                                ErrorCode = (int)ErrorCodes.UsersNotFound,
+                            };
+                        }
+
+                        else
+                        {
+                            foreach (var user in users)
+                            {
+                                var role = await _userManager.GetRolesAsync(user);
+                                usersWithRoles.Add(new UserWithRolesDto { User = user, Roles = role });
+                            }
                         }
                     }
 
