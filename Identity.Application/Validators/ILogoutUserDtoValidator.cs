@@ -7,7 +7,8 @@ namespace Identity.Application.Validators
     {
         public ILogoutUserDtoValidator()
         {
-            RuleFor(key => key.UserId).NotNull().NotEmpty();
+            RuleFor(key => key.UserId)
+                .NotNull().NotEmpty().WithMessage("Идентификатор пользователя не может быть пустым");
         }
     }
 }

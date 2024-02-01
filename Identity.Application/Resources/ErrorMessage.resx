@@ -135,6 +135,9 @@
   <data name="LastNameError" xml:space="preserve">
     <value>Ваша фамилия введена некорректно</value>
   </data>
+  <data name="LogoutError" xml:space="preserve">
+    <value>Ошибка выхода из аккаунта</value>
+  </data>
   <data name="PasswordError" xml:space="preserve">
     <value>Пароль введен неверно</value>
   </data>

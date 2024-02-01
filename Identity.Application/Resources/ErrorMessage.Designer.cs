@@ -115,6 +115,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Ошибка выхода из аккаунта.
+        /// </summary>
+        internal static string LogoutError {
+            get {
+                return ResourceManager.GetString("LogoutError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Пароль введен неверно.
         /// </summary>
         internal static string PasswordError {

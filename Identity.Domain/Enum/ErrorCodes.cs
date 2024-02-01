@@ -14,5 +14,6 @@
         RegistrationLoginError = 503,
         UserAlreadyExists = 504,
         ThisEmailAddressIsAlreadyExists = 505,
+        LogoutError = 506,
     }
 }

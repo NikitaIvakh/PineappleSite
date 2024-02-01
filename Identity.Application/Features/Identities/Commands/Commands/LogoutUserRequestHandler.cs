@@ -2,17 +2,20 @@
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.Interface;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LogoutUserRequestHandler(ITokenProvider tokenProvider, IHttpContextAccessor httpContextAccessor, ILogoutUserDtoValidator validator, ILogger logger) : IRequestHandler<LogoutUserRequest, Result<LogoutUserDto>>
+    public class LogoutUserRequestHandler(UserManager<ApplicationUser> userManager, ITokenProvider tokenProvider, IHttpContextAccessor httpContextAccessor, ILogoutUserDtoValidator validator, ILogger logger) : IRequestHandler<LogoutUserRequest, Result<LogoutUserDto>>
     {
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ITokenProvider _tokenProvider = tokenProvider;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogoutUserDtoValidator _logoutUserValidator = validator;
@@ -36,19 +39,27 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 else
                 {
-                    string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == "uid")?.Value;
-                    _tokenProvider.ClearToken();
+                    var user = await _userManager.FindByIdAsync(request.LogoutUser.UserId);
 
-                    var logoutUserDto = new LogoutUserDto
+                    if (user is null)
                     {
-                        UserId = request.LogoutUser.UserId,
-                    };
+                        return new Result<LogoutUserDto>
+                        {
+                            Data = null,
+                            ErrorMessage = ErrorMessage.UserNotFound,
+                            ErrorCode = (int)ErrorCodes.UserNotFound,
+                        };
+                    }
 
-                    return new Result<LogoutUserDto>
+                    else
                     {
-                        Data = logoutUserDto,
-                        SuccessMessage = "Вы успешно вышли из аккаунта",
-                    };
+                        _tokenProvider.ClearToken();
+                        return new Result<LogoutUserDto>
+                        {
+                            Data = new LogoutUserDto { UserId = user.Id },
+                            SuccessMessage = "Вы успешно вышли из аккаунта",
+                        };
+                    }
                 }
             }
 
