@@ -19,10 +19,9 @@ namespace Identity.Test.Common
 
         public TestQueryHandler()
         {
-            var userManagerObject = new Mock<UserManager<ApplicationUser>>();
             Context = IdentityDbContextFactory.Create();
             GetUsersLogger = Log.ForContext<GetUserListRequestHandler>();
-            UserManager = userManagerObject.Object;
+            UserManager = new UserManager<ApplicationUser>(Mock.Of<IUserStore<ApplicationUser>>(), null, null, null, null, null, null, null, null);
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
