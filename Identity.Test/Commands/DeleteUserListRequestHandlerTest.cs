@@ -32,5 +32,27 @@ namespace Identity.Test.Commands
             result.ErrorMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();
         }
+
+        [Fact]
+        public async Task DeleteUserListRequestHandlerTest_Success_FailOrWrongIds()
+        {
+            // Arrange
+            var handler = new DeleteUserListRequestHandler(UserManager, DeleteUsers, DeleteUserListLogger, Mapper);
+            var deleteUserList = new DeleteUserListDto()
+            {
+                UserIds = [],
+            };
+
+            // Act
+            var result = await handler.Handle(new DeleteUserListRequest
+            {
+                DeleteUserList = deleteUserList,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Пользователи не могут быть удалены");
+            result.SuccessMessage.Should().BeNullOrEmpty();
+        }
     }
 }
