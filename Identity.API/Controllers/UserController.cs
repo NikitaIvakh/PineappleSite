@@ -23,7 +23,7 @@ namespace Identity.API.Controllers
 
         // GET api/<UserController>/5
         [HttpGet("GetUserById/{id}")]
-        public async Task<ActionResult<UserWithRolesDto>> GetUserById(string id)
+        public async Task<ActionResult<Result<UserWithRolesDto>>> GetUserById(string id)
         {
             var command = await _mediator.Send(new GetUserDetailsRequest { Id = id });
             return Ok(command);

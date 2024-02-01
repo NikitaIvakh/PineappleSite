@@ -11,9 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.Reflection;
 using System.Text;
 
-namespace Identity.Application
+namespace Identity.Application.DependencyInjection
 {
-    public static class ApplicationServiceRegistration
+    public static class DependencyInjection
     {
         public static void ConfigureApplicationService(this IServiceCollection services, IConfiguration configuration)
         {

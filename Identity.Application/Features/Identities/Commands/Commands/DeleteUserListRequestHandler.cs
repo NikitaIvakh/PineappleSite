@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
@@ -14,11 +13,10 @@ using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger, IMapper mapper) : IRequestHandler<DeleteUserListRequest, CollectionResult<DeleteUserListDto>>
+    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserListRequest, CollectionResult<DeleteUserListDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<DeleteUserListRequestHandler>();
-        private readonly IMapper _mapper = mapper;
         private readonly IDeleteUserListDtoValidator _deleteValidator = deleteValidator;
 
         public async Task<CollectionResult<DeleteUserListDto>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)

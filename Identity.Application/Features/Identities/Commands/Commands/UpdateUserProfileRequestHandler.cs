@@ -63,6 +63,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             user.PasswordHash = newPassword;
                         }
 
+                        await _userManager.UpdateAsync(user);
+
                         if (request.UpdateUserProfile.Avatar is not null)
                         {
                             if (!string.IsNullOrEmpty(user.ImageLocalPath))

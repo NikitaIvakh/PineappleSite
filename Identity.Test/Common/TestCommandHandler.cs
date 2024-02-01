@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
 using Identity.Application.Features.Identities.Commands.Commands;
 using Identity.Application.Profiles;
-using Identity.Application.Services;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Interface;
 using Identity.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -57,7 +57,15 @@ namespace Identity.Test.Common
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
 
-            SignInManager = new(UserManager, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<ApplicationUser>>(), null, null, null, null);
+            SignInManager = new(
+                UserManager, 
+                Mock.Of<IHttpContextAccessor>(), 
+                Mock.Of<IUserClaimsPrincipalFactory<ApplicationUser>>(), 
+                null, 
+                Mock.Of<Microsoft.Extensions.Logging.ILogger<SignInManager<ApplicationUser>>>(),
+                Mock.Of<IAuthenticationSchemeProvider>(), 
+                null);
+
             var jwtSettings = Mock.Of<JwtSettings>();
             JwtSettings = Options.Create(jwtSettings);
             TokenProvider = token.Object;

@@ -19,7 +19,17 @@ namespace Identity.Infrastructure.DependencyInjection
 
         private static void RegisterServices(this IServiceCollection services)
         {
-            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<PineAppleIdentityDbContext>().AddDefaultTokenProviders();
+            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequiredLength = 5;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireLowercase = false;
+            })
+                .AddEntityFrameworkStores<PineAppleIdentityDbContext>()
+                .AddDefaultTokenProviders();
+
             services.AddScoped<RoleManager<IdentityRole>>();
             services.AddScoped<ITokenProvider, TokenProvider>();
         }

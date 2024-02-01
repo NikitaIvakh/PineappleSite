@@ -28,7 +28,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpPost("Logout/{userId}")]
-        public async Task<ActionResult<Result<bool>>> Logout([FromBody] LogoutUserDto logoutUser)
+        public async Task<ActionResult<Result<LogoutUserDto>>> Logout([FromBody] LogoutUserDto logoutUser)
         {
             var command = await _mediator.Send(new LogoutUserRequest { LogoutUser = logoutUser });
             return Ok(command);

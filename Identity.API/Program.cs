@@ -1,4 +1,4 @@
-using Identity.Application;
+using Identity.Application.DependencyInjection;
 using Identity.Infrastructure.DependencyInjection;
 using Serilog;
 
