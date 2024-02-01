@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
 using Identity.Application.Features.Identities.Commands.Commands;
 using Identity.Application.Profiles;
+using Identity.Application.Services;
 using Identity.Application.Validators;
+using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
+using Identity.Domain.Interface;
 using Identity.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 using Serilog;
 
@@ -16,22 +21,31 @@ namespace Identity.Test.Common
         #region Validators
         protected IDeleteUserListDtoValidator DeleteUsers;
         protected IDeleteUserDtoValidator DeleteUser;
+        protected IAuthRequestDtoValidator AuthRequest;
         #endregion
 
         #region
         protected ILogger DeleteUserListLogger;
         protected ILogger DeleteUserLogger;
+        protected ILogger AuthUserLogger;
         #endregion
 
         protected IMapper Mapper;
         protected PineAppleIdentityDbContext Context;
         protected UserManager<ApplicationUser> UserManager;
+        protected SignInManager<ApplicationUser> SignInManager;
+        protected IOptions<JwtSettings> JwtSettings;
+        protected ITokenProvider TokenProvider;
+        protected IHttpContextAccessor HttpContextAccessor;
 
         public TestCommandHandler()
         {
+            var token = new Mock<ITokenProvider>();
+            var httpContextAccessor = new Mock<IHttpContextAccessor>();
             Context = IdentityDbContextFactory.Create();
             DeleteUserListLogger = Log.ForContext<DeleteUserListRequestHandler>();
             DeleteUserLogger = Log.ForContext<DeleteUserRequestHandler>();
+            AuthUserLogger = Log.ForContext<LoginUserRequestHandler>();
             UserManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(Context),
                 null,
@@ -43,8 +57,15 @@ namespace Identity.Test.Common
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
 
+            SignInManager = new(UserManager, Mock.Of<IHttpContextAccessor>(), Mock.Of<IUserClaimsPrincipalFactory<ApplicationUser>>(), null, null, null, null);
+            var jwtSettings = Mock.Of<JwtSettings>();
+            JwtSettings = Options.Create(jwtSettings);
+            TokenProvider = token.Object;
+            HttpContextAccessor = httpContextAccessor.Object;
+
             DeleteUsers = new IDeleteUserListDtoValidator();
             DeleteUser = new IDeleteUserDtoValidator();
+            AuthRequest = new IAuthRequestDtoValidator(Context);
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
