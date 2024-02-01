@@ -24,6 +24,7 @@ namespace Identity.Test.Queries
             }, CancellationToken.None);
 
             // Assert
+            result.Count.Should().Be(3);
             result.IsSuccess.Should().BeTrue();
             result.ErrorMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();
