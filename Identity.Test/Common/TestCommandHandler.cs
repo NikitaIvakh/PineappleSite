@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Identity.Application.Features.Identities.Commands.Commands;
 using Identity.Application.Profiles;
+using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
 using Identity.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,10 @@ namespace Identity.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
+        #region Validators
+        protected IDeleteUserListDtoValidator DeleteUsers;
+        #endregion
+
         protected PineAppleIdentityDbContext Context;
         protected IMapper Mapper;
         protected ILogger DeleteUserListLogger;
@@ -31,6 +36,8 @@ namespace Identity.Test.Common
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
+
+            DeleteUsers = new IDeleteUserListDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

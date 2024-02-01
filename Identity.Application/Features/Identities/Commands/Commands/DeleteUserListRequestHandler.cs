@@ -64,14 +64,17 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                                     ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
                                 };
                             }
-                        }
 
-                        return new CollectionResult<DeleteUserListDto>
-                        {
-                            Data = _mapper.Map<IReadOnlyCollection<DeleteUserListDto>>(request.DeleteUserList),
-                            SuccessMessage = "Пользователи успешно удалены"
-                        };
+                            return new CollectionResult<DeleteUserListDto>
+                            {
+                                Data = null,
+                                Count = users.Count,
+                                SuccessMessage = "Пользователи успешно удалены",
+                            };
+                        }
                     }
+
+                    return new CollectionResult<DeleteUserListDto>();
                 }
             }
 
