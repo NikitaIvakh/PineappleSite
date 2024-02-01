@@ -2,6 +2,7 @@
 using Identity.Application.Features.Identities.Commands.Queries;
 using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
 using Identity.Test.Common;
 using Xunit;
@@ -52,7 +53,7 @@ namespace Identity.Test.Queries
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Такого пользователя не существует");
-            result.ErrorCode.Should().Be(404);
+            result.ErrorCode.Should().Be((int)ErrorCodes.UserNotFound);
         }
     }
 }
