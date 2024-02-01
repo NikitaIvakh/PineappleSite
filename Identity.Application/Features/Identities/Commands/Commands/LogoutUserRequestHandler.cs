@@ -13,11 +13,10 @@ using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LogoutUserRequestHandler(UserManager<ApplicationUser> userManager, ITokenProvider tokenProvider, IHttpContextAccessor httpContextAccessor, ILogoutUserDtoValidator validator, ILogger logger) : IRequestHandler<LogoutUserRequest, Result<LogoutUserDto>>
+    public class LogoutUserRequestHandler(UserManager<ApplicationUser> userManager, ITokenProvider tokenProvider, ILogoutUserDtoValidator validator, ILogger logger) : IRequestHandler<LogoutUserRequest, Result<LogoutUserDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ITokenProvider _tokenProvider = tokenProvider;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogoutUserDtoValidator _logoutUserValidator = validator;
         private readonly ILogger _logger = logger.ForContext<LogoutUserRequestHandler>();
 
