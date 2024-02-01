@@ -39,6 +39,25 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 if (!validator.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, List<string>>()
+                    {
+                        {"Email",  validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                        {"Password",  validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                    };
+
+                    foreach (var error in errorMessages)
+                    {
+                        if (errorMessages.TryGetValue(error.Key, out var message))
+                        {
+                            return new Result<AuthResponseDto>
+                            {
+                                ValidationErrors = message,
+                                ErrorMessage = ErrorMessage.AccountLoginError,
+                                ErrorCode = (int)ErrorCodes.AccountLoginError,
+                            };
+                        }
+                    }
+
                     return new Result<AuthResponseDto>
                     {
                         ErrorMessage = ErrorMessage.AccountLoginError,
@@ -69,7 +88,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             return new Result<AuthResponseDto>
                             {
                                 ErrorMessage = ErrorMessage.AccountLoginError,
-                                ErrorCode = (int)ErrorCodes.InternalServerError,
+                                ErrorCode = (int)ErrorCodes.AccountLoginError,
                                 ValidationErrors = validator.Errors.Select(_ => _.ErrorMessage).ToList(),
                             };
                         }

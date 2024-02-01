@@ -1,30 +1,30 @@
 ﻿using FluentValidation;
 using Identity.Domain.DTOs.Authentications;
-using Identity.Infrastructure;
-using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 namespace Identity.Application.Validators
 {
     public class IAuthRequestDtoValidator : AbstractValidator<AuthRequestDto>
     {
-        private readonly PineAppleIdentityDbContext _context;
-
-        public IAuthRequestDtoValidator(PineAppleIdentityDbContext context)
+        public IAuthRequestDtoValidator()
         {
-            _context = context;
+            RuleFor(key => key.Email)
+                .NotNull().NotEmpty().WithMessage("Адрес электронной почты не может быть пустым")
+                .MinimumLength(2).WithMessage("Адрес электронной почты должен быть более 2 символов")
+                .MaximumLength(50).WithMessage("Адрес электронной почты не может превышать 50 символов")
+                .MustAsync(BeValidEmailAddress).WithMessage("Введите действительный адрес электронной почты");
 
-            RuleFor(key => key.Email).NotEmpty().NotNull().MaximumLength(50);
-            RuleFor(key => key.Password).NotEmpty().NotNull();
+            RuleFor(key => key.Password)
+                .NotNull().NotEmpty().WithMessage("Пароль не может быть пустым")
+                .MinimumLength(5).WithMessage("Пароль должен быть более 5 символов")
+                .MaximumLength(50).WithMessage("Пароль не может превышать 50 символов");
         }
 
-        private async Task<bool> BeQniqueEmailAddress(string emailAddress, CancellationToken token)
+        private Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)
         {
-            var existsEmail = await _context.Users.FirstOrDefaultAsync(key => key.Email == emailAddress, token);
-
-            if (existsEmail is not null)
-                return false;
-
-            return true;
+            string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
+            bool isValid = Regex.IsMatch(emailAddress, emailPattern);
+            return Task.FromResult(isValid);
         }
     }
 }
