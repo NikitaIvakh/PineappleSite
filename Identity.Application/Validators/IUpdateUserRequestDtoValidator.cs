@@ -13,7 +13,9 @@ namespace Identity.Application.Validators
         public IUpdateUserRequestDtoValidator(PineAppleIdentityDbContext context)
         {
             _context = context;
-            RuleFor(key => key.Id).NotNull().NotEmpty();
+
+            RuleFor(key => key.Id)
+                .NotNull().NotEmpty().WithMessage("Идентификатор не может быть пустым");
 
             RuleFor(dto => dto.FirstName)
                 .NotNull().NotEmpty().WithMessage("Имя не может быть пустым")

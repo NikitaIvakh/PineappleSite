@@ -27,6 +27,30 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 if (!validator.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"FirstName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"LastName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"UserName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"EmailAddress",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"Description",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"Age",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"Password",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                    };
+
+                    foreach (var error in errorMessages)
+                    {
+                        if (errorMessages.TryGetValue(error.Key, out var message))
+                        {
+                            return new Result<UserWithRolesDto>
+                            {
+                                ValidationErrors = message,
+                                ErrorMessage = ErrorMessage.UpdateProdileError,
+                                ErrorCode = (int)ErrorCodes.UpdateProdileError,
+                            };
+                        }
+                    }
+
                     return new Result<UserWithRolesDto>
                     {
                         ErrorMessage = ErrorMessage.UpdateProdileError,
@@ -100,6 +124,11 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
                             user.ImageUrl = baseUrl + "/UserImages/" + fileName;
                             user.ImageLocalPath = filePath;
+                        }
+
+                        else
+                        {
+                            user.ImageUrl = "https://placehold.co/600x400";
                         }
 
                         var result = await _userManager.UpdateAsync(user);
