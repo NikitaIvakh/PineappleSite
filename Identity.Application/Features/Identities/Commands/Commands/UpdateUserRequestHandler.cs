@@ -26,6 +26,27 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 if (!validator.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"FirstName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"LastName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"UserName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                        {"EmailAddress",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
+                    };
+
+                    foreach (var error in errorMessages)
+                    {
+                        if (errorMessages.TryGetValue(error.Key, out var message))
+                        {
+                            return new Result<RegisterResponseDto>
+                            {
+                                ValidationErrors = message,
+                                ErrorMessage = ErrorMessage.UserUpdateError,
+                                ErrorCode = (int)ErrorCodes.UserUpdateError,
+                            };
+                        }
+                    }
+
                     return new Result<RegisterResponseDto>
                     {
                         ErrorMessage = ErrorMessage.UserUpdateError,
