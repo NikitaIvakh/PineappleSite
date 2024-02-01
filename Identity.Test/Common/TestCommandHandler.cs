@@ -15,17 +15,23 @@ namespace Identity.Test.Common
     {
         #region Validators
         protected IDeleteUserListDtoValidator DeleteUsers;
+        protected IDeleteUserDtoValidator DeleteUser;
         #endregion
 
-        protected PineAppleIdentityDbContext Context;
-        protected IMapper Mapper;
+        #region
         protected ILogger DeleteUserListLogger;
+        protected ILogger DeleteUserLogger;
+        #endregion
+
+        protected IMapper Mapper;
+        protected PineAppleIdentityDbContext Context;
         protected UserManager<ApplicationUser> UserManager;
 
         public TestCommandHandler()
         {
             Context = IdentityDbContextFactory.Create();
             DeleteUserListLogger = Log.ForContext<DeleteUserListRequestHandler>();
+            DeleteUserLogger = Log.ForContext<DeleteUserRequestHandler>();
             UserManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(Context),
                 null,
@@ -38,6 +44,7 @@ namespace Identity.Test.Common
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
 
             DeleteUsers = new IDeleteUserListDtoValidator();
+            DeleteUser = new IDeleteUserDtoValidator();
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {
