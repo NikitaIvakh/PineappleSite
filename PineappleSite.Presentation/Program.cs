@@ -25,7 +25,7 @@ applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(fav
 
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
-applicationBuilder.Services.AddScoped<IUserService, UserService>();
+//applicationBuilder.Services.AddScoped<IUserService, UserService>();
 applicationBuilder.Services.AddScoped<IProductService, ProductService>();
 applicationBuilder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 applicationBuilder.Services.AddScoped<IFavoriteService, FavoriteService>();

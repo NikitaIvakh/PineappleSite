@@ -32,8 +32,7 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
             CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
             CreateMap<RegisterResponseDto, RegisterResponseViewModel>().ReverseMap();
-            CreateMap<AuthResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
-            CreateMap<RegisterResponseDtoBaseIdentityResponse, IdentityResponseViewModel>().ReverseMap();
+            CreateMap<LogoutUserDto, LogoutUserViewModel>().ReverseMap();
 
             CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>().ReverseMap();
             CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
@@ -89,6 +88,16 @@ namespace PineappleSite.Presentation
 
             CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
             CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
+
+            CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<LogoutUserDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<UserWithRolesDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<LogoutUserDtoResult, LogoutUserViewModel>().ReverseMap();
+            CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
+            CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
+
+            CreateMap<UserWithRolesDtoCollectionResult, IdentityCollectionResult<ApplicationUserViewModel>>().ReverseMap();
 
             CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
             CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();

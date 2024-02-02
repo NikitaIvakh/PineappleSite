@@ -10,7 +10,7 @@ namespace PineappleSite.Presentation.Controllers
         private readonly IIdentityService _identityService = identityService;
 
         [HttpGet]
-        public async Task<ActionResult> Login(string returnUrl = null)
+        public ActionResult Login(string returnUrl = null)
         {
             return View();
         }
@@ -21,17 +21,17 @@ namespace PineappleSite.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 authRequestViewModel.ReturnUrl ??= Url.Content("/");
-                IdentityResponseViewModel response = await _identityService.LoginAsync(authRequestViewModel);
+                IdentityResult<AuthResponseViewModel> response = await _identityService.LoginAsync(authRequestViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return LocalRedirect(authRequestViewModel.ReturnUrl);
                 }
 
                 else
                 {
-                    TempData["error"] = response.Message;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Login));
                 }
             }
@@ -52,17 +52,17 @@ namespace PineappleSite.Presentation.Controllers
             if (ModelState.IsValid)
             {
                 var returnUrl = Url.Content("/");
-                IdentityResponseViewModel response = await _identityService.RegisterAsync(registerRequestViewModel);
+                IdentityResult<RegisterResponseViewModel> response = await _identityService.RegisterAsync(registerRequestViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return LocalRedirect(returnUrl);
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Register));
                 }
             }
@@ -71,12 +71,22 @@ namespace PineappleSite.Presentation.Controllers
             return View(registerRequestViewModel);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Logout(string returnUrl)
+        public async Task<IActionResult> Logout(LogoutUserViewModel logoutUserViewModel)
         {
-            returnUrl ??= Url.Content("/");
-            await _identityService.LogoutAsync();
-            return LocalRedirect(returnUrl);
+            var returnUrl = Url.Content("/");
+            IdentityResult<LogoutUserViewModel> response = await _identityService.LogoutAsync(logoutUserViewModel);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return LocalRedirect(returnUrl);
+            }
+
+            else
+            {
+                TempData["error"] = response.ValidationErrors;
+                return LocalRedirect(returnUrl);
+            }
         }
     }
 }

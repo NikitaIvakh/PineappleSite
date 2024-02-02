@@ -61,7 +61,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Ошибка входа в аккаунт.
+        ///   Ищет локализованную строку, похожую на Неправильно введен логин или пароль.
         /// </summary>
         internal static string AccountLoginError {
             get {
@@ -111,6 +111,15 @@ namespace Identity.Application.Resources {
         internal static string LastNameError {
             get {
                 return ResourceManager.GetString("LastNameError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Неправильно введен логин или пароль.
+        /// </summary>
+        internal static string LoginOrPasswordIsNotValid {
+            get {
+                return ResourceManager.GetString("LoginOrPasswordIsNotValid", resourceCulture);
             }
         }
         

@@ -18,88 +18,200 @@ namespace PineappleSite.Presentation.Services
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new();
 
-        public async Task<IdentityResponseViewModel> LoginAsync(AuthRequestViewModel authRequestViewModel)
+        public async Task<IdentityResult<AuthResponseViewModel>> LoginAsync(AuthRequestViewModel authRequestViewModel)
         {
-            AddBearerToken();
-            IdentityResponseViewModel response = new();
-            AuthRequestDto authRequest = _mapper.Map<AuthRequestDto>(authRequestViewModel);
-            AuthResponseDtoBaseIdentityResponse authResponse = await _identityClient.LoginAsync(authRequest);
-
-            if (authResponse.IsSuccess)
+            try
             {
-                if (authResponse.Data.Token != string.Empty)
+                AddBearerToken();
+                AuthRequestDto authRequest = _mapper.Map<AuthRequestDto>(authRequestViewModel);
+                AuthResponseDtoResult authResponse = await _identityClient.LoginAsync(authRequest);
+
+                if (authResponse.IsSuccess)
                 {
-                    var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.Token);
-                    var claims = ParseClaim(tokenContent);
-                    var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
-                    var login = _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
-                    _localStorageService.SetStorageValue("token", authResponse.Data.Token);
-
-                    response.IsSuccess = true;
-                    response.Data = authResponse;
-                    response.Message = authResponse.Message;
-
-                    return response;
-                }
-            }
-
-            else
-            {
-                foreach (string error in authResponse.ValidationErrors)
-                {
-                    response.ValidationErrors += error + Environment.NewLine;
-                }
-
-                response.Message = authResponse.Message;
-            }
-
-            return response;
-        }
-
-        public async Task<IdentityResponseViewModel> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
-        {
-            AddBearerToken();
-            IdentityResponseViewModel response = new();
-            RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
-            RegisterResponseDtoBaseIdentityResponse registerResponse = await _identityClient.RegisterAsync(registerRequest);
-
-            if (registerResponse.IsSuccess)
-            {
-                if (!string.IsNullOrEmpty(registerResponse.Data.UserId))
-                {
-                    var authRequest = new AuthRequestViewModel
+                    if (authResponse.Data.Token != string.Empty)
                     {
-                        Email = registerRequestViewModel.EmailAddress,
-                        Password = registerRequestViewModel.Password,
-                    };
+                        var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.Token);
+                        var claims = ParseClaim(tokenContent);
+                        var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
+                        var login = _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+                        _localStorageService.SetStorageValue("token", authResponse.Data.Token);
 
-                    await LoginAsync(authRequest);
+                        return new IdentityResult<AuthResponseViewModel>
+                        {
+                            SuccessMessage = authResponse.SuccessMessage,
+                            Data = _mapper.Map<AuthResponseViewModel>(authResponse),
+                        };
+                    }
 
-                    response.IsSuccess = true;
-                    response.Data = authRequest;
-                    response.Message = registerResponse.Message;
-
-                    return response;
+                    else
+                    {
+                        foreach (string error in authResponse.ValidationErrors)
+                        {
+                            return new IdentityResult<AuthResponseViewModel>
+                            {
+                                ErrorCode = authResponse.ErrorCode,
+                                ErrorMessage = authResponse.ErrorMessage,
+                                ValidationErrors = error + Environment.NewLine,
+                            };
+                        }
+                    }
                 }
-            }
 
-            else
-            {
-                foreach (string erro in registerResponse.ValidationErrors)
+                else
                 {
-                    response.ValidationErrors += erro + Environment.NewLine;
+                    foreach (string error in authResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<AuthResponseViewModel>
+                        {
+                            ErrorCode = authResponse.ErrorCode,
+                            ErrorMessage = authResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
                 }
+
+                return new IdentityResult<AuthResponseViewModel>();
             }
 
-            response.IsSuccess = false;
-            return response;
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult<AuthResponseViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
-        public async Task LogoutAsync()
+        public async Task<IdentityResult<RegisterResponseViewModel>> RegisterAsync(RegisterRequestViewModel registerRequestViewModel)
         {
-            AddBearerToken();
-            _localStorageService.ClearStorage(["token"]);
-            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+            try
+            {
+                AddBearerToken();
+                RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
+                RegisterResponseDtoResult registerResponse = await _identityClient.RegisterAsync(registerRequest);
+
+                if (registerResponse.IsSuccess)
+                {
+                    if (!string.IsNullOrEmpty(registerResponse.Data.UserId))
+                    {
+                        var authRequest = new AuthRequestViewModel
+                        {
+                            Email = registerRequestViewModel.EmailAddress,
+                            Password = registerRequestViewModel.Password,
+                        };
+
+                        await LoginAsync(authRequest);
+
+                        return new IdentityResult<RegisterResponseViewModel>
+                        {
+                            SuccessMessage = registerResponse.SuccessMessage,
+                            Data = _mapper.Map<RegisterResponseViewModel>(registerResponse),
+                        };
+                    }
+
+                    else
+                    {
+                        foreach (var errors in registerResponse.ValidationErrors)
+                        {
+                            return new IdentityResult<RegisterResponseViewModel>
+                            {
+                                ErrorCode = registerResponse.ErrorCode,
+                                ErrorMessage = registerResponse.ErrorMessage,
+                                ValidationErrors = errors + Environment.NewLine,
+                            };
+                        }
+                    }
+                }
+
+                else
+                {
+                    foreach (string error in registerResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<RegisterResponseViewModel>
+                        {
+                            ErrorCode = registerResponse.ErrorCode,
+                            ErrorMessage = registerResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityResult<RegisterResponseViewModel>();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult<RegisterResponseViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
+        }
+
+        public async Task<IdentityResult<LogoutUserViewModel>> LogoutAsync(LogoutUserViewModel logoutUserViewModel)
+        {
+            try
+            {
+                AddBearerToken();
+                var userId = _httpContextAccessor.HttpContext.User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
+                logoutUserViewModel.UserId = userId;
+                LogoutUserDto logoutUserDto = _mapper.Map<LogoutUserDto>(logoutUserViewModel);
+                LogoutUserDtoResult logoutResult = await _identityClient.LogoutAsync(userId, logoutUserDto);
+
+                if (logoutResult.IsSuccess)
+                {
+                    if (!string.IsNullOrEmpty(logoutResult.Data.UserId))
+                    {
+                        _localStorageService.ClearStorage(["token"]);
+                        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+                        return new IdentityResult<LogoutUserViewModel>
+                        {
+                            SuccessMessage = logoutResult.SuccessMessage,
+                            Data = _mapper.Map<LogoutUserViewModel>(logoutResult),
+                        };
+                    }
+
+                    else
+                    {
+                        foreach (var error in logoutResult.ValidationErrors)
+                        {
+                            return new IdentityResult<LogoutUserViewModel>
+                            {
+                                ErrorCode = logoutResult.ErrorCode,
+                                ErrorMessage = logoutResult.ErrorMessage,
+                                ValidationErrors = error + Environment.NewLine,
+                            };
+                        }
+                    }
+                }
+
+                else
+                {
+                    foreach (var error in logoutResult.ValidationErrors)
+                    {
+                        return new IdentityResult<LogoutUserViewModel>
+                        {
+                            ErrorCode = logoutResult.ErrorCode,
+                            ErrorMessage = logoutResult.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityResult<LogoutUserViewModel>();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult<LogoutUserViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
         private static IEnumerable<Claim> ParseClaim(JwtSecurityToken tokenContent)

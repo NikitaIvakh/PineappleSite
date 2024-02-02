@@ -8,21 +8,21 @@ namespace PineappleSite.Presentation.Services.Identities
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IIdentityClient _identityClient = identityClient;
 
-        protected IdentityResponseViewModel ConvertIdentityExceptions(IdentityExceptions identityExceptions)
+        protected IdentityResult ConvertIdentityExceptions(IdentityExceptions identityExceptions)
         {
             if (identityExceptions.StatusCode == 400)
             {
-                return new IdentityResponseViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = identityExceptions.Response, IsSuccess = false };
+                return new IdentityResult() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = identityExceptions.Response };
             }
 
             else if (identityExceptions.StatusCode == 404)
             {
-                return new IdentityResponseViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new IdentityResult() { ErrorMessage = "Требуемый элемент не удалось найти." };
             }
 
             else
             {
-                return new IdentityResponseViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new IdentityResult() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз." };
             }
         }
 

@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountLoginError" xml:space="preserve">
-    <value>Ошибка входа в аккаунт</value>
+    <value>Неправильно введен логин или пароль</value>
   </data>
   <data name="EmailAddressError" xml:space="preserve">
     <value>Почтовый адрес введен неверно</value>
@@ -134,6 +134,9 @@
   </data>
   <data name="LastNameError" xml:space="preserve">
     <value>Ваша фамилия введена некорректно</value>
+  </data>
+  <data name="LoginOrPasswordIsNotValid" xml:space="preserve">
+    <value>Неправильно введен логин или пароль</value>
   </data>
   <data name="LogoutError" xml:space="preserve">
     <value>Ошибка выхода из аккаунта</value>

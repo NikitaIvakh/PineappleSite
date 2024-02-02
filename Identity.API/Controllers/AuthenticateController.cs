@@ -1,9 +1,9 @@
-﻿using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Domain.DTOs.Authentications;
-using Identity.Domain.DTOs.Identities;
-using Identity.Domain.ResultIdentity;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Identity.Domain.ResultIdentity;
+using Identity.Domain.DTOs.Identities;
+using Identity.Domain.DTOs.Authentications;
+using Identity.Application.Features.Identities.Requests.Commands;
 
 namespace Identity.API.Controllers
 {
@@ -17,21 +17,39 @@ namespace Identity.API.Controllers
         public async Task<ActionResult<Result<AuthResponseDto>>> Login([FromBody] AuthRequestDto authRequest)
         {
             var login = await _mediator.Send(new LoginUserRequest { AuthRequest = authRequest });
-            return Ok(login);
+
+            if (login.IsSuccess)
+            {
+                return Ok(login);
+            }
+
+            return BadRequest(login.ErrorMessage);
         }
 
         [HttpPost("Register")]
         public async Task<ActionResult<Result<RegisterResponseDto>>> Register([FromBody] RegisterRequestDto registerRequest)
         {
             var register = await _mediator.Send(new RegisterUserRequest { RegisterRequest = registerRequest });
-            return Ok(register);
+
+            if (register.IsSuccess)
+            {
+                return Ok(register);
+            }
+
+            return BadRequest(register.ValidationErrors);
         }
 
         [HttpPost("Logout/{userId}")]
         public async Task<ActionResult<Result<LogoutUserDto>>> Logout([FromBody] LogoutUserDto logoutUser)
         {
             var command = await _mediator.Send(new LogoutUserRequest { LogoutUser = logoutUser });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ValidationErrors);
         }
     }
 }
