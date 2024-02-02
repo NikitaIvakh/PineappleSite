@@ -1,11 +1,10 @@
-﻿using Identity.Domain.DTOs.Identities;
-using Identity.Domain.ResultIdentity;
+﻿using Identity.Domain.ResultIdentity;
 using MediatR;
 
 namespace Identity.Application.Features.Identities.Requests.Commands
 {
-    public class LogoutUserRequest : IRequest<Result<LogoutUserDto>>
+    public class LogoutUserRequest : IRequest<Result<bool>>
     {
-        public LogoutUserDto LogoutUser { get; set; }
+        public bool LogoutUser { get; set; }
     }
 }

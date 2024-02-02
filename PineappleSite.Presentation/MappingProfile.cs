@@ -32,7 +32,6 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
             CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
             CreateMap<RegisterResponseDto, RegisterResponseViewModel>().ReverseMap();
-            CreateMap<LogoutUserDto, LogoutUserViewModel>().ReverseMap();
 
             CreateMap<UserWithRolesDto, UpdateUserProfileViewModel>().ReverseMap();
             CreateMap<UserWithRolesDto, UserWithRolesViewModel>()
@@ -91,9 +90,7 @@ namespace PineappleSite.Presentation
 
             CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
             CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();
-            CreateMap<LogoutUserDtoResult, IdentityResult>().ReverseMap();
             CreateMap<UserWithRolesDtoResult, IdentityResult>().ReverseMap();
-            CreateMap<LogoutUserDtoResult, LogoutUserViewModel>().ReverseMap();
             CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
             CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
 

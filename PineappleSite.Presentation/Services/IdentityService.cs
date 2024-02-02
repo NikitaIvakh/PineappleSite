@@ -150,49 +150,30 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<LogoutUserViewModel>> LogoutAsync(LogoutUserViewModel logoutUserViewModel)
+        public async Task<IdentityResult<bool>> LogoutAsync()
         {
             try
             {
                 AddBearerToken();
-                var userId = _httpContextAccessor.HttpContext.User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
-                logoutUserViewModel.UserId = userId;
-                LogoutUserDto logoutUserDto = _mapper.Map<LogoutUserDto>(logoutUserViewModel);
-                LogoutUserDtoResult logoutResult = await _identityClient.LogoutAsync(userId, logoutUserDto);
+                BooleanResult logoutResult = await _identityClient.LogoutAsync();
 
                 if (logoutResult.IsSuccess)
                 {
-                    if (!string.IsNullOrEmpty(logoutResult.Data.UserId))
-                    {
-                        _localStorageService.ClearStorage(["token"]);
-                        await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    _localStorageService.ClearStorage(["token"]);
+                    await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-                        return new IdentityResult<LogoutUserViewModel>
-                        {
-                            SuccessMessage = logoutResult.SuccessMessage,
-                            Data = _mapper.Map<LogoutUserViewModel>(logoutResult),
-                        };
-                    }
-
-                    else
+                    return new IdentityResult<bool>
                     {
-                        foreach (var error in logoutResult.ValidationErrors)
-                        {
-                            return new IdentityResult<LogoutUserViewModel>
-                            {
-                                ErrorCode = logoutResult.ErrorCode,
-                                ErrorMessage = logoutResult.ErrorMessage,
-                                ValidationErrors = error + Environment.NewLine,
-                            };
-                        }
-                    }
+                        Data = true,
+                        SuccessMessage = logoutResult.SuccessMessage,
+                    };
                 }
 
                 else
                 {
                     foreach (var error in logoutResult.ValidationErrors)
                     {
-                        return new IdentityResult<LogoutUserViewModel>
+                        return new IdentityResult<bool>
                         {
                             ErrorCode = logoutResult.ErrorCode,
                             ErrorMessage = logoutResult.ErrorMessage,
@@ -201,12 +182,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<LogoutUserViewModel>();
+                return new IdentityResult<bool>();
             }
 
             catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<LogoutUserViewModel>
+                return new IdentityResult<bool>
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,

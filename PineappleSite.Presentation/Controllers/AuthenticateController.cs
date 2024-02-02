@@ -71,10 +71,11 @@ namespace PineappleSite.Presentation.Controllers
             return View(registerRequestViewModel);
         }
 
-        public async Task<IActionResult> Logout(LogoutUserViewModel logoutUserViewModel)
+        [HttpPost]
+        public async Task<IActionResult> Logout()
         {
             var returnUrl = Url.Content("/");
-            IdentityResult<LogoutUserViewModel> response = await _identityService.LogoutAsync(logoutUserViewModel);
+            var response = await _identityService.LogoutAsync();
 
             if (response.IsSuccess)
             {
@@ -84,7 +85,7 @@ namespace PineappleSite.Presentation.Controllers
 
             else
             {
-                TempData["error"] = response.ValidationErrors;
+                TempData["error"] = response.ErrorMessage;
                 return LocalRedirect(returnUrl);
             }
         }

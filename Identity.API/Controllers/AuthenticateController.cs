@@ -36,13 +36,13 @@ namespace Identity.API.Controllers
                 return Ok(register);
             }
 
-            return BadRequest(register.ErrorMessage);
+            return BadRequest(register.ValidationErrors);
         }
 
-        [HttpPost("Logout/{userId}")]
-        public async Task<ActionResult<Result<LogoutUserDto>>> Logout([FromBody] LogoutUserDto logoutUser)
+        [HttpPost("Logout")]
+        public async Task<ActionResult<Result<bool>>> Logout()
         {
-            var command = await _mediator.Send(new LogoutUserRequest { LogoutUser = logoutUser });
+            var command = await _mediator.Send(new LogoutUserRequest());
 
             if (command.IsSuccess)
             {

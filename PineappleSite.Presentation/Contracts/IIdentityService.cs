@@ -9,6 +9,6 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<IdentityResult<RegisterResponseViewModel>> RegisterAsync(RegisterRequestViewModel registerRequestViewModel);
 
-        Task<IdentityResult<LogoutUserViewModel>> LogoutAsync(LogoutUserViewModel logoutUserViewModel);
+        Task<IdentityResult<bool>> LogoutAsync();
     }
 }
