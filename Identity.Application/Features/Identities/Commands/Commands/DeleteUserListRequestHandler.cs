@@ -13,13 +13,13 @@ using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserListRequest, CollectionResult<DeleteUserListDto>>
+    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserListRequest, Result<bool>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<DeleteUserListRequestHandler>();
         private readonly IDeleteUserListDtoValidator _deleteValidator = deleteValidator;
 
-        public async Task<CollectionResult<DeleteUserListDto>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<bool>> Handle(DeleteUserListRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -27,7 +27,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 if (!validator.IsValid)
                 {
-                    return new CollectionResult<DeleteUserListDto>
+                    return new Result<bool>
                     {
                         ErrorMessage = ErrorMessage.UsersConNotDeleted,
                         ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
@@ -41,7 +41,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     if (users is null || users.Count == 0)
                     {
-                        return new CollectionResult<DeleteUserListDto>
+                        return new Result<bool>
                         {
                             ErrorMessage = ErrorMessage.UsersNotFound,
                             ErrorCode = (int)ErrorCodes.UsersNotFound,
@@ -56,7 +56,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                             if (!result.Succeeded)
                             {
-                                return new CollectionResult<DeleteUserListDto>
+                                return new Result<bool>
                                 {
                                     ErrorMessage = ErrorMessage.UsersConNotDeleted,
                                     ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
@@ -65,10 +65,9 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         }
                     }
 
-                    return new CollectionResult<DeleteUserListDto>
+                    return new Result<bool>
                     {
-                        Data = null,
-                        Count = users.Count,
+                        Data = true,
                         SuccessMessage = "Пользователи успешно удалены",
                     };
                 }
@@ -77,7 +76,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
-                return new CollectionResult<DeleteUserListDto>
+                return new Result<bool>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,

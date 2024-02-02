@@ -1,209 +1,257 @@
-﻿//using AutoMapper;
-//using PineappleSite.Presentation.Contracts;
-//using PineappleSite.Presentation.Models.Identities;
-//using PineappleSite.Presentation.Models.Users;
-//using PineappleSite.Presentation.Services.Identities;
+﻿using AutoMapper;
+using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Models.Users;
+using PineappleSite.Presentation.Services.Coupons;
+using PineappleSite.Presentation.Services.Identities;
+using System;
 
-//namespace PineappleSite.Presentation.Services
-//{
-//    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IUserService
-//    {
-//        private readonly ILocalStorageService _localStorageService = localStorageService;
-//        private readonly IIdentityClient _identityClient = identityClient;
-//        private readonly IMapper _mapper = mapper;
-//        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+namespace PineappleSite.Presentation.Services
+{
+    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IUserService
+    {
+        private readonly ILocalStorageService _localStorageService = localStorageService;
+        private readonly IIdentityClient _identityClient = identityClient;
+        private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-//        public async Task<IList<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
-//        {
-//            AddBearerToken();
-//            var user = await _identityClient.GetUserByIdAsync(userId);
-//            var users = await _identityClient.GetAllUsersAsync(user.User.Id);
-//            var usersWithRoles = _mapper.Map<IList<UserWithRolesViewModel>>(users);
+        public async Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
+        {
+            AddBearerToken();
+            UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
+            UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
+            return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+        }
 
-//            return usersWithRoles;
-//        }
+        public async Task<UserWithRolesViewModel> GetUserAsync(string id)
+        {
+            AddBearerToken();
+            UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(id);
+            return _mapper.Map<UserWithRolesViewModel>(user.Data);
+        }
 
-//        public async Task<UserWithRolesViewModel> GetUserAsync(string id)
-//        {
-//            AddBearerToken();
-//            var user = await _identityClient.GetUserByIdAsync(id);
-//            var userWithRole = _mapper.Map<UserWithRolesViewModel>(user);
+        public async Task<IdentityResult<RegisterResponseViewModel>> CreateUserAsync(RegisterRequestViewModel register)
+        {
+            AddBearerToken();
+            try
+            {
+                RegisterRequestDto registerRequestDto = _mapper.Map<RegisterRequestDto>(register);
+                RegisterResponseDtoResult apiResponse = await _identityClient.RegisterAsync(registerRequestDto);
 
-//            return userWithRole;
-//        }
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult<RegisterResponseViewModel>
+                    {
+                        Data = _mapper.Map<RegisterResponseViewModel>(apiResponse),
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
 
-//        public async Task<IdentityResponseViewModel> CreateUserAsync(RegisterRequestViewModel register)
-//        {
-//            AddBearerToken();
-//            try
-//            {
-//                IdentityResponseViewModel response = new();
-//                RegisterRequestDto registerRequestDto = _mapper.Map<RegisterRequestDto>(register);
-//                RegisterResponseDtoBaseIdentityResponse apiResoponse = await _identityClient.RegisterAsync(registerRequestDto);
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<RegisterResponseViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
 
-//                if (apiResoponse.IsSuccess)
-//                {
-//                    response.IsSuccess = true;
-//                    response.Data = apiResoponse.Data;
-//                    response.Message = apiResoponse.Message;
-//                }
+                return new IdentityResult<RegisterResponseViewModel>();
+            }
 
-//                else
-//                {
-//                    foreach (string error in apiResoponse.ValidationErrors)
-//                    {
-//                        response.ValidationErrors += error + Environment.NewLine;
-//                    }
-//                }
+            catch (IdentityExceptions exception)
+            {
+                return new IdentityResult<RegisterResponseViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
+        }
 
-//                return response;
-//            }
+        public async Task<IdentityResult<RegisterResponseViewModel>> UpdateUserAsync(UpdateUserViewModel updateUserView)
+        {
+            AddBearerToken();
+            try
+            {
+                UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserView);
+                RegisterResponseDtoResult apiResponse = await _identityClient.UserPUTAsync(updateUserDto.Id, updateUserDto);
 
-//            catch (IdentityExceptions exception)
-//            {
-//                return ConvertIdentityExceptions(exception);
-//            }
-//        }
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult<RegisterResponseViewModel>
+                    {
+                        Data = _mapper.Map<RegisterResponseViewModel>(apiResponse),
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
 
-//        public async Task<IdentityResponseViewModel> UpdateUserAsync(UpdateUserViewModel updateUserView)
-//        {
-//            AddBearerToken();
-//            try
-//            {
-//                IdentityResponseViewModel response = new();
-//                UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserView);
-//                RegisterResponseDtoBaseIdentityResponse apiResponse = await _identityClient.UserPUTAsync(updateUserDto.Id, updateUserDto);
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<RegisterResponseViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
 
-//                if (apiResponse.IsSuccess)
-//                {
-//                    response.IsSuccess = true;
-//                    response.Data = apiResponse.Data;
-//                    response.Message = apiResponse.Message;
-//                }
+                return new IdentityResult<RegisterResponseViewModel>();
+            }
 
-//                else
-//                {
-//                    foreach (string error in apiResponse.ValidationErrors)
-//                    {
-//                        response.ValidationErrors += error + Environment.NewLine;
-//                    }
-//                }
+            catch (IdentityExceptions exception)
+            {
+                return new IdentityResult<RegisterResponseViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
+        }
 
-//                return response;
-//            }
+        public async Task<IdentityResult<UserWithRolesViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
+        {
+            AddBearerToken();
+            try
+            {
+                string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
 
-//            catch (IdentityExceptions exception)
-//            {
-//                return ConvertIdentityExceptions(exception);
-//            }
-//        }
+                FileParameter avatarFileParameter = null;
+                if (updateUserProfile.Avatar is not null)
+                {
+                    avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);
+                }
 
-//        public async Task<IdentityResponseViewModel> DeleteUserAsync(DeleteUserViewModel delete)
-//        {
-//            AddBearerToken();
-//            try
-//            {
-//                IdentityResponseViewModel response = new();
-//                DeleteUserDto deleteUserDto = _mapper.Map<DeleteUserDto>(delete);
-//                DeleteUserDtoBaseIdentityResponse apiResponse = await _identityClient.UserDELETEAsync(deleteUserDto.Id, deleteUserDto);
+                UserWithRolesDtoResult apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfile.Id, updateUserProfile?.FirstName, updateUserProfile?.LastName, updateUserProfile?.EmailAddress,
+                    updateUserProfile?.UserName, updateUserProfile?.Password, updateUserProfile?.Description, updateUserProfile?.Age, avatarFileParameter, updateUserProfile?.ImageUrl, updateUserProfile?.ImageLocalPath
+                );
 
-//                if (apiResponse.IsSuccess)
-//                {
-//                    response.IsSuccess = true;
-//                    response.Data = apiResponse.Data;
-//                    response.Message = apiResponse.Message;
-//                }
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse),
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
 
-//                else
-//                {
-//                    foreach (string error in apiResponse.ValidationErrors)
-//                    {
-//                        response.ValidationErrors += error + Environment.NewLine;
-//                    }
-//                }
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<UserWithRolesViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
 
-//                return response;
-//            }
+                return new IdentityResult<UserWithRolesViewModel>();
+            }
 
-//            catch (IdentityExceptions exception)
-//            {
-//                return ConvertIdentityExceptions(exception);
-//            }
-//        }
+            catch (IdentityExceptions exception)
+            {
+                return new IdentityResult<UserWithRolesViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
+        }
 
-//        public async Task<IdentityResponseViewModel> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
-//        {
-//            AddBearerToken();
-//            try
-//            {
-//                string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
-//                IdentityResponseViewModel response = new();
+        public async Task<IdentityResult<DeleteUserViewModel>> DeleteUserAsync(DeleteUserViewModel delete)
+        {
+            AddBearerToken();
+            try
+            {
+                DeleteUserDto deleteUserDto = _mapper.Map<DeleteUserDto>(delete);
+                DeleteUserDtoResult apiResponse = await _identityClient.UserDELETEAsync(deleteUserDto.Id, deleteUserDto);
 
-//                FileParameter avatarFileParameter = null;
-//                if (updateUserProfile.Avatar is not null)
-//                {
-//                    avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);
-//                }
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult<DeleteUserViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<DeleteUserViewModel>(apiResponse.Data),
+                    };
+                }
 
-//                UserWithRolesBaseIdentityResponse apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfile.Id, updateUserProfile?.FirstName, updateUserProfile?.LastName, updateUserProfile?.EmailAddress,
-//                    updateUserProfile?.UserName, updateUserProfile?.Password, updateUserProfile?.Description, updateUserProfile?.Age, avatarFileParameter, updateUserProfile?.ImageUrl, updateUserProfile?.ImageLocalPath
-//                );
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<DeleteUserViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
 
-//                if (apiResponse.IsSuccess)
-//                {
-//                    response.IsSuccess = true;
-//                    response.Data = apiResponse.Data;
-//                    response.Message = apiResponse.Message;
-//                }
+                return new IdentityResult<DeleteUserViewModel>();
+            }
 
-//                else
-//                {
-//                    foreach (string error in apiResponse.ValidationErrors)
-//                    {
-//                        response.ValidationErrors += error + Environment.NewLine;
-//                    }
-//                }
+            catch (IdentityExceptions exception)
+            {
+                return new IdentityResult<DeleteUserViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
+        }
 
-//                return response;
-//            }
+        public async Task<IdentityResult<bool>> DeleteUsersAsync(DeleteUserListViewModel deleteUsers)
+        {
+            AddBearerToken();
+            try
+            {
+                DeleteUserListDto deleteUserListDto = _mapper.Map<DeleteUserListDto>(deleteUsers);
+                BooleanResult apiResponse = await _identityClient.UserDELETE2Async(deleteUserListDto);
 
-//            catch (IdentityExceptions exception)
-//            {
-//                return ConvertIdentityExceptions(exception);
-//            }
-//        }
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult<bool>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = apiResponse.Data,
+                    };
+                }
 
-//        public async Task<IdentityResponseViewModel> DeleteUsersAsync(DeleteUserListViewModel deleteUsers)
-//        {
-//            AddBearerToken();
-//            try
-//            {
-//                IdentityResponseViewModel response = new();
-//                DeleteUserListDto deleteUserListDto = _mapper.Map<DeleteUserListDto>(deleteUsers);
-//                DeleteUserListDtoBaseIdentityResponse apiResponse = await _identityClient.UserDELETE2Async(deleteUserListDto);
+                else
+                {
+                    foreach (string error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult<bool>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
 
-//                if (apiResponse.IsSuccess)
-//                {
-//                    response.IsSuccess = true;
-//                    response.Data = apiResponse.Data;
-//                    response.Message = apiResponse.Message;
-//                }
+                return new IdentityResult<bool>();
+            }
 
-//                else
-//                {
-//                    foreach (string error in apiResponse.ValidationErrors)
-//                    {
-//                        response.ValidationErrors += error + Environment.NewLine;
-//                    }
-//                }
-
-//                return response;
-//            }
-
-//            catch (IdentityExceptions exceptions)
-//            {
-//                return ConvertIdentityExceptions(exceptions);
-//            }
-//        }
-//    }
-//}
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult<bool>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
+        }
+    }
+}

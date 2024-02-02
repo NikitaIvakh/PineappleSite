@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Identities.Requests.Commands
 {
-    public class DeleteUserListRequest : IRequest<CollectionResult<DeleteUserListDto>>
+    public class DeleteUserListRequest : IRequest<Result<bool>>
     {
         public DeleteUserListDto DeleteUserList { get; set; }
     }

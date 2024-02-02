@@ -54,7 +54,7 @@ namespace Identity.API.Controllers
         }
 
         [HttpDelete()]
-        public async Task<ActionResult<Result<DeleteUserListDto>>> Delete([FromBody] DeleteUserListDto deleteUserListDto)
+        public async Task<ActionResult<Result<bool>>> Delete([FromBody] DeleteUserListDto deleteUserListDto)
         {
             var comamnd = await _mediator.Send(new DeleteUserListRequest { DeleteUserList = deleteUserListDto });
             return Ok(comamnd);

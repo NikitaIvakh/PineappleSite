@@ -94,7 +94,9 @@ namespace PineappleSite.Presentation
             CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
             CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
 
-            CreateMap<UserWithRolesDtoCollectionResult, IdentityCollectionResult<ApplicationUserViewModel>>().ReverseMap();
+            CreateMap<UserWithRolesDtoCollectionResult, IdentityCollectionResult<UserWithRolesViewModel>>().ReverseMap();
+            CreateMap<UserWithRolesDto, IdentityResult<UserWithRolesViewModel>>().ReverseMap();
+            CreateMap<UserWithRolesDtoResult, UserWithRolesViewModel>().ReverseMap();
 
             CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
             CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
