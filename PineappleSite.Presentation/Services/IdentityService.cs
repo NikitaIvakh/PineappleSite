@@ -39,7 +39,7 @@ namespace PineappleSite.Presentation.Services
                         return new IdentityResult<AuthResponseViewModel>
                         {
                             SuccessMessage = authResponse.SuccessMessage,
-                            Data = _mapper.Map<AuthResponseViewModel>(authResponse),
+                            Data = _mapper.Map<AuthResponseViewModel>(authResponse.Data),
                         };
                     }
 
@@ -87,7 +87,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
-                AddBearerToken();
+                //AddBearerToken();
                 RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
                 RegisterResponseDtoResult registerResponse = await _identityClient.RegisterAsync(registerRequest);
 
@@ -154,7 +154,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
-                AddBearerToken();
+                //AddBearerToken();
                 BooleanResult logoutResult = await _identityClient.LogoutAsync();
 
                 if (logoutResult.IsSuccess)
