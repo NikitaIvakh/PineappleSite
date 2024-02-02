@@ -36,7 +36,7 @@ namespace Identity.API.Controllers
                 return Ok(register);
             }
 
-            return BadRequest(register.ValidationErrors);
+            return BadRequest(register.ErrorMessage);
         }
 
         [HttpPost("Logout/{userId}")]
@@ -49,7 +49,7 @@ namespace Identity.API.Controllers
                 return Ok(command);
             }
 
-            return BadRequest(command.ValidationErrors);
+            return BadRequest(command.ErrorMessage);
         }
     }
 }
