@@ -1,3 +1,4 @@
+using Identity.API;
 using Identity.Application.DependencyInjection;
 using Identity.Infrastructure.DependencyInjection;
 using Serilog;
@@ -15,6 +16,8 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
 applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+
+applicationBuilder.Services.AddSwagger();
 
 applicationBuilder.Services.AddCors(key =>
 {
