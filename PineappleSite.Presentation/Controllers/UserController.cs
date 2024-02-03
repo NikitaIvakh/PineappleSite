@@ -66,9 +66,9 @@ namespace PineappleSite.Presentation.Controllers
                 }
             }
 
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                ModelState.AddModelError(string.Empty, exception.Message);
                 return View();
             }
         }
@@ -110,18 +110,37 @@ namespace PineappleSite.Presentation.Controllers
         // GET: UserController/Edit/5
         public async Task<ActionResult> Edit(string id)
         {
-            var userWithRoles = await _userService.GetUserAsync(id);
-            var updateUser = new UpdateUserViewModel
+            try
             {
-                Id = userWithRoles.Data.User.Id,
-                FirstName = userWithRoles.Data.User.FirstName,
-                LastName = userWithRoles.Data.User.LastName,
-                EmailAddress = userWithRoles.Data.User.Email,
-                UserName = userWithRoles.Data.User.UserName,
-                UserRoles = userWithRoles.Data.User.UserRoles,
-            };
+                var userWithRoles = await _userService.GetUserAsync(id);
 
-            return View(updateUser);
+                if (userWithRoles.IsSuccess)
+                {
+                    var updateUser = new UpdateUserViewModel
+                    {
+                        Id = userWithRoles.Data.User.Id,
+                        FirstName = userWithRoles.Data.User.FirstName,
+                        LastName = userWithRoles.Data.User.LastName,
+                        EmailAddress = userWithRoles.Data.User.Email,
+                        UserName = userWithRoles.Data.User.UserName,
+                        UserRoles = userWithRoles.Data.User.UserRoles,
+                    };
+
+                    return View(updateUser);
+                }
+
+                else
+                {
+                    TempData["error"] = userWithRoles.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // POST: UserController/Edit/5
