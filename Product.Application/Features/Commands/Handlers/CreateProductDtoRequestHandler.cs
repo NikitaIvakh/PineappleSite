@@ -30,23 +30,23 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
-                    var errorMessages = new Dictionary<string, string>
+                    var errorMessages = new Dictionary<string, List<string>>
                     {
-                        {"Name", ErrorMessage.ProductNameNotValid},
-                        {"Description", ErrorMessage.ProductDescriptionNotValid},
-                        {"ProductCategory", ErrorMessage.ProductCategoryNotValid},
-                        {"Price", ErrorMessage.ProductPriceNotValid},
+                        {"Name", validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                        {"Description", validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                        {"ProductCategory", validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                        {"Price", validator.Errors.Select(key => key.ErrorMessage).ToList()},
                     };
 
-                    foreach (var error in validator.Errors)
+                    foreach (var error in errorMessages)
                     {
-                        if (errorMessages.TryGetValue(error.PropertyName, out var errorException))
+                        if (errorMessages.TryGetValue(error.Key, out var errorException))
                         {
                             return new Result<ProductDto>
                             {
-                                ErrorMessage = errorException,
+                                ErrorMessage = ErrorMessage.ProductNotCreated,
                                 ErrorCode = (int)ErrorCodes.ProductNotCreated,
-                                ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                                ValidationErrors = errorException,
                             };
                         }
                     }
@@ -110,6 +110,7 @@ namespace Product.Application.Features.Commands.Handlers
                         else
                         {
                             product.ImageUrl = "https://placehold.co/600x400";
+                            product.ImageLocalPath = "https://placehold.co/600x400";
                         }
 
                         await _repository.UpdateAsync(product);
