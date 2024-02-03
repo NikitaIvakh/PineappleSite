@@ -2,9 +2,7 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
-using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
-using System;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -23,11 +21,45 @@ namespace PineappleSite.Presentation.Services
             return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
         }
 
-        public async Task<UserWithRolesViewModel> GetUserAsync(string id)
+        public async Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id)
         {
             AddBearerToken();
-            UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(id);
-            return _mapper.Map<UserWithRolesViewModel>(user.Data);
+            try
+            {
+                UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(id);
+
+                if (user.IsSuccess)
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        Data = _mapper.Map<UserWithRolesViewModel>(user.Data)
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in user.ValidationErrors)
+                    {
+                        return new IdentityResult<UserWithRolesViewModel>
+                        {
+                            ErrorMessage = user.ErrorMessage,
+                            ErrorCode = user.ErrorCode,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityResult<UserWithRolesViewModel>();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult<UserWithRolesViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
         public async Task<IdentityResult<RegisterResponseViewModel>> CreateUserAsync(RegisterRequestViewModel register)

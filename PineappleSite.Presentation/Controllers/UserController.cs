@@ -44,8 +44,33 @@ namespace PineappleSite.Presentation.Controllers
         // GET: UserController/Details/5
         public async Task<ActionResult> Details(string id)
         {
-            var user = await _userService.GetUserAsync(id);
-            return View(user);
+            try
+            {
+                IdentityResult<UserWithRolesViewModel> user = await _userService.GetUserAsync(id);
+
+                if (user.IsSuccess)
+                {
+                    UserWithRolesViewModel userWithRolesViewModel = new()
+                    {
+                        User = user.Data.User,
+                        Roles = user.Data.Roles,
+                    };
+
+                    return View(userWithRolesViewModel);
+                }
+
+                else
+                {
+                    TempData["error"] = user.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
         }
 
         // GET: UserController/Create
@@ -88,12 +113,12 @@ namespace PineappleSite.Presentation.Controllers
             var userWithRoles = await _userService.GetUserAsync(id);
             var updateUser = new UpdateUserViewModel
             {
-                Id = userWithRoles.User.Id,
-                FirstName = userWithRoles.User.FirstName,
-                LastName = userWithRoles.User.LastName,
-                EmailAddress = userWithRoles.User.Email,
-                UserName = userWithRoles.User.UserName,
-                UserRoles = userWithRoles.User.UserRoles,
+                Id = userWithRoles.Data.User.Id,
+                FirstName = userWithRoles.Data.User.FirstName,
+                LastName = userWithRoles.Data.User.LastName,
+                EmailAddress = userWithRoles.Data.User.Email,
+                UserName = userWithRoles.Data.User.UserName,
+                UserRoles = userWithRoles.Data.User.UserRoles,
             };
 
             return View(updateUser);
@@ -162,16 +187,16 @@ namespace PineappleSite.Presentation.Controllers
 
             var updateUserPrifile = new UpdateUserProfileViewModel
             {
-                Id = user.User.Id,
-                FirstName = user.User.FirstName,
-                LastName = user.User.LastName,
-                EmailAddress = user.User.Email,
-                UserName = user.User.UserName,
-                Description = user.User.Description,
-                Age = user.User.Age,
-                Roles = user.Roles,
-                ImageUrl = user.User.ImageUrl,
-                ImageLocalPath = user.User.ImageLocalPath,
+                Id = user.Data.User.Id,
+                FirstName = user.Data.User.FirstName,
+                LastName = user.Data.User.LastName,
+                EmailAddress = user.Data.User.Email,
+                UserName = user.Data.User.UserName,
+                Description = user.Data.User.Description,
+                Age = user.Data.User.Age,
+                Roles = user.Data.Roles,
+                ImageUrl = user.Data.User.ImageUrl,
+                ImageLocalPath = user.Data.User.ImageLocalPath,
             };
 
             return View(updateUserPrifile);

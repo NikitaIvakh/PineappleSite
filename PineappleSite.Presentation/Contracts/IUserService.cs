@@ -8,7 +8,7 @@ namespace PineappleSite.Presentation.Contracts
     {
         Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId);
 
-        Task<UserWithRolesViewModel> GetUserAsync(string id);
+        Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id);
 
         Task<IdentityResult<RegisterResponseViewModel>> CreateUserAsync(RegisterRequestViewModel register);
 
