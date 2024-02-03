@@ -7,7 +7,7 @@ namespace PineappleSite.Presentation.Contracts
     {
         Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync();
 
-        Task<ProductViewModel> GetProductAsync(int id);
+        Task<ProductResultViewModel<ProductViewModel>> GetProductAsync(int id);
 
         Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product);
 

@@ -13,14 +13,79 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync()
         {
-            var products = await _productClient.ProductGETAsync();
-            return _mapper.Map<ProductsCollectionResultViewModel<ProductViewModel>>(products);
+            try
+            {
+                var products = await _productClient.ProductGETAsync();
+
+                if (products.IsSuccess)
+                {
+                    return _mapper.Map<ProductsCollectionResultViewModel<ProductViewModel>>(products);
+                }
+
+                else
+                {
+                    foreach (var error in products.ValidationErrors)
+                    {
+                        return new ProductsCollectionResultViewModel<ProductViewModel>
+                        {
+                            ErrorCode = products.ErrorCode,
+                            ErrorMessage = products.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new ProductsCollectionResultViewModel<ProductViewModel>();
+            }
+
+            catch (ProductExceptions exceptions)
+            {
+                return new ProductsCollectionResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
-        public async Task<ProductViewModel> GetProductAsync(int id)
+        public async Task<ProductResultViewModel<ProductViewModel>> GetProductAsync(int id)
         {
-            var product = await _productClient.ProductGET2Async(id);
-            return _mapper.Map<ProductViewModel>(product.Data);
+            try
+            {
+                var product = await _productClient.ProductGET2Async(id);
+
+                if (product.IsSuccess)
+                {
+                    return new ProductResultViewModel<ProductViewModel>
+                    {
+                        Data = _mapper.Map<ProductViewModel>(product.Data),
+                    };
+                }
+
+                else
+                {
+                    foreach (string error in product.ValidationErrors)
+                    {
+                        return new ProductResultViewModel<ProductViewModel>
+                        {
+                            ErrorCode = product.ErrorCode,
+                            ErrorMessage = product.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new ProductResultViewModel<ProductViewModel>();
+            }
+
+            catch (ProductExceptions exceptions)
+            {
+                return new ProductResultViewModel<ProductViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
         public async Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product)

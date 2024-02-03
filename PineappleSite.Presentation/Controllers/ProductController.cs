@@ -19,38 +19,88 @@ namespace PineappleSite.Presentation.Controllers
 
         public async Task<ActionResult> GetProducts(string searchProduct, string currentFilter, int? pageNumber)
         {
-            var products = await _productService.GetAllProductsAsync();
-
-            if (!string.IsNullOrEmpty(searchProduct))
+            try
             {
-                var filtetedProductsList = products.Data.Where(
-                    key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.ProductCategory.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.Price.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase))
-                    .ToList();
+                var products = await _productService.GetAllProductsAsync();
 
-                products = new ProductsCollectionResultViewModel<ProductViewModel>
+                if (products.IsSuccess)
                 {
-                    Data = filtetedProductsList,
-                };
+                    if (!string.IsNullOrEmpty(searchProduct))
+                    {
+                        var filtetedProductsList = products.Data.Where(
+                            key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.ProductCategory.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Price.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase))
+                            .ToList();
+
+                        products = new ProductsCollectionResultViewModel<ProductViewModel>
+                        {
+                            Data = filtetedProductsList,
+                        };
+                    }
+
+                    ViewData["SearchProduct"] = searchProduct;
+                    ViewData["CurrentFilter"] = currentFilter;
+
+                    int pageSize = 10;
+                    var filteredProducts = products.Data.AsQueryable();
+                    var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
+
+                    return View(paginatedProducts);
+                }
+
+                else
+                {
+                    TempData["error"] = products.ErrorMessage;
+                    return RedirectToAction("Index", "Home");
+                }
+
             }
 
-            ViewData["SearchProduct"] = searchProduct;
-            ViewData["CurrentFilter"] = currentFilter;
-
-            int pageSize = 10;
-            var filteredProducts = products.Data.AsQueryable();
-            var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
-
-            return View(paginatedProducts);
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // GET: ProductController/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            var product = await _productService.GetProductAsync(id);
-            return View(product);
+            try
+            {
+                var product = await _productService.GetProductAsync(id);
+
+                if (product.IsSuccess)
+                {
+                    ProductViewModel productViewModel = new()
+                    {
+                        Id = product.Data.Id,
+                        Name = product.Data.Name,
+                        Description = product.Data.Description,
+                        ProductCategory = product.Data.ProductCategory,
+                        Price = product.Data.Price,
+                        Count = product.Data.Count,
+                        ImageUrl = product.Data.ImageUrl,
+                        ImageLocalPath = product.Data.ImageLocalPath,
+                    };
+
+                    return View(productViewModel);
+                }
+
+                else
+                {
+                    TempData["error"] = product.ErrorMessage;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // GET: ProductController/Create
@@ -90,17 +140,36 @@ namespace PineappleSite.Presentation.Controllers
         // GET: ProductController/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            var user = await _productService.GetProductAsync(id);
-            var updateUserViewModel = new UpdateProductViewModel
+            try
             {
-                Id = user.Id,
-                Name = user.Name,
-                Description = user.Description,
-                ProductCategory = user.ProductCategory,
-                Price = user.Price,
-            };
+                var product = await _productService.GetProductAsync(id);
 
-            return View(updateUserViewModel);
+                if (product.IsSuccess)
+                {
+                    UpdateProductViewModel updateUserViewModel = new()
+                    {
+                        Id = product.Data.Id,
+                        Name = product.Data.Name,
+                        Description = product.Data.Description,
+                        ProductCategory = product.Data.ProductCategory,
+                        Price = product.Data.Price,
+                    };
+
+                    return View(updateUserViewModel);
+                }
+
+                else
+                {
+                    TempData["error"] = product.ErrorMessage;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // POST: ProductController/Edit/5
