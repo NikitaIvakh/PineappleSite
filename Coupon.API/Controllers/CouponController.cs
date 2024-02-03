@@ -73,7 +73,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка создания купона");
-            return BadRequest(command.ValidationErrors);
+            return BadRequest(command.ErrorMessage);
         }
 
         // PUT api/<CouponController>/5
