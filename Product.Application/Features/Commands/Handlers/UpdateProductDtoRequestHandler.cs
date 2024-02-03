@@ -30,6 +30,27 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var errorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"Name", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                        {"Description", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                        {"ProductCategory", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                        {"Price", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    };
+
+                    foreach (var error in errorMessages)
+                    {
+                        if (errorMessages.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new Result<ProductDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.ProductNotUpdated,
+                                ErrorCode = (int)ErrorCodes.ProductNotUpdated,
+                            };
+                        }
+                    }
+
                     return new Result<ProductDto>
                     {
                         ErrorMessage = ErrorMessage.ProductNotUpdated,
