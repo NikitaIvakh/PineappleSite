@@ -16,9 +16,9 @@ namespace Product.Application.DTOs.Validator
                 .MinimumLength(10).WithMessage("Строка должна быть более 10 символов.");
 
             RuleFor(key => key.ProductCategory)
-            .NotEmpty().WithMessage("Категория продукта не может быть пустой.")
-            .NotNull().WithMessage("Категория продукта должна быть.")
-            .IsInEnum().WithMessage("Неверная категория продукта.");
+                .NotEmpty().WithMessage("Категория продукта не может быть пустой.")
+                .NotNull().WithMessage("Категория продукта должна быть.")
+                .IsInEnum().WithMessage("Неверная категория продукта.");
 
             RuleFor(key => key.Price).NotEmpty().NotNull()
                .LessThanOrEqualTo(1000).WithMessage("Стоимость продукта не должна превышать 1000.")
