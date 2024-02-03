@@ -31,9 +31,9 @@ namespace Product.Application.Features.Commands.Queries
                     ImageLocalPath = key.ImageLocalPath,
                 }).OrderBy(key => key.Id).ToListAsync(cancellationToken);
 
-                if (products.Count == 0)
+                if (products is null || products.Count == 0)
                 {
-                    _logger.Warning(ErrorMessage.ProductsNotFound, products.Count);
+                    _logger.Warning(ErrorMessage.ProductsNotFound, ErrorCodes.ProductsNotFound);
                     return new CollectionResult<ProductDto>
                     {
                         ErrorMessage = ErrorMessage.ProductsNotFound,
