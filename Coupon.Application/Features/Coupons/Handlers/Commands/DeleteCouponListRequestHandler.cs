@@ -55,6 +55,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                         return new CollectionResult<CouponDto>
                         {
+                            Count = coupons.Count,
                             SuccessMessage = "Купоны успешно удалены",
                             Data = _mapper.Map<IReadOnlyCollection<CouponDto>>(coupons),
                         };
