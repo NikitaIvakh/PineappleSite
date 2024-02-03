@@ -84,14 +84,10 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                             var roleNames = request.UpdateUser.UserRoles.GetDisplayName();
                             await _userManager.AddToRoleAsync(user, roleNames);
-                            RegisterResponseDto updateResponse = new()
-                            {
-                                UserId = user.Id
-                            };
 
                             return new Result<RegisterResponseDto>
                             {
-                                Data = updateResponse,
+                                Data = new RegisterResponseDto { UserId = user.Id },
                                 SuccessMessage = "Успешное обновление пользователя",
                             };
                         }

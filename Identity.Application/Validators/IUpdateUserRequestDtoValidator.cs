@@ -2,6 +2,7 @@
 using Identity.Domain.DTOs.Identities;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
 using System.Text.RegularExpressions;
 
 namespace Identity.Application.Validators
@@ -42,8 +43,10 @@ namespace Identity.Application.Validators
 
         private async Task<bool> BeUniqueUserName(string userName, CancellationToken token)
         {
-            var existsUserName = await _context.Users
-                .FirstOrDefaultAsync(key => key.UserName == userName, token);
+            if (string.IsNullOrEmpty(userName) || !string.IsNullOrEmpty(userName))
+                return true;
+
+            var existsUserName = await _context.Users.FirstOrDefaultAsync(key => key.UserName == userName, token);
 
             if (existsUserName is not null)
                 return false;
@@ -53,6 +56,9 @@ namespace Identity.Application.Validators
 
         private async Task<bool> BeUniqueEmailAddress(string emailAddress, CancellationToken token)
         {
+            if (string.IsNullOrEmpty(emailAddress) || !string.IsNullOrEmpty(emailAddress))
+                return true;
+
             var existsEmailAddress = await _context.Users.FirstOrDefaultAsync(key => key.Email == emailAddress, token);
 
             if (existsEmailAddress is not null)
