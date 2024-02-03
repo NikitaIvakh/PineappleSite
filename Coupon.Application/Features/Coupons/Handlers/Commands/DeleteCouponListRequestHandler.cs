@@ -31,7 +31,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     return new CollectionResult<CouponDto>
                     {
                         ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                        ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                        ErrorCode = (int)ErrorCodes.CouponNotDeletedListCatch,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
                 }
