@@ -1,6 +1,4 @@
-﻿using PineappleSite.Presentation.Services.Identities;
-
-namespace PineappleSite.Presentation.Models.Users
+﻿namespace PineappleSite.Presentation.Models.Users
 {
     public class DeleteUserViewModel
     {
