@@ -61,7 +61,7 @@ namespace Coupon.Application.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Купон уже используется.
+        ///   Ищет локализованную строку, похожую на Такой купон уже существует.
         /// </summary>
         internal static string CouponAlreadyExists {
             get {

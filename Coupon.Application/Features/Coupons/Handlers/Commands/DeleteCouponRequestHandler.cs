@@ -68,7 +68,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new Result<CouponDto>
                 {
                     ErrorMessage = ErrorMessage.CouponNotDeletedCatch,
-                    ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                    ErrorCode = (int)ErrorCodes.CouponNotDeletedCatch,
                 };
             }
         }

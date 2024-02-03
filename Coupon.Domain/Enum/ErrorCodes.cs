@@ -9,6 +9,7 @@
         CouponNotDeletedListCatch = 407,
         CouponNotCreated = 408,
         CouponNotUpdated = 304,
+        CouponNotDeletedCatch = 305,
         CouponNotUpdatedNull = 305,
         InternalServerError = 500,
     }

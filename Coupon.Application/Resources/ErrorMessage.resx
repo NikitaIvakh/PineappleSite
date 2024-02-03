@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CouponAlreadyExists" xml:space="preserve">
-    <value>Купон уже используется</value>
+    <value>Такой купон уже существует</value>
   </data>
   <data name="CouponCodeNotValid" xml:space="preserve">
     <value>Код купона не валидный</value>
