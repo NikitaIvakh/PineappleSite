@@ -16,9 +16,40 @@ namespace PineappleSite.Presentation.Services
         public async Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
         {
             AddBearerToken();
-            UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
-            UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
-            return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+            try
+            {
+                UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
+                UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
+
+                if (users.IsSuccess || user.IsSuccess)
+                {
+                    return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+                }
+                
+                else
+                {
+                    foreach (var error in users.ValidationErrors)
+                    {
+                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        {
+                            ErrorCode = users.ErrorCode,
+                            ErrorMessage = users.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityCollectionResult<UserWithRolesViewModel>();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityCollectionResult<UserWithRolesViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
         public async Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id)
