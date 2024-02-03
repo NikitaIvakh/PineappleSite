@@ -55,6 +55,7 @@ namespace Product.Application.Features.Commands.Handlers
                         await _repository.DeleteListAsync(products);
                         return new CollectionResult<ProductDto>
                         {
+                            Count = products.Count,
                             SuccessMessage = "Продукты успешно удалены",
                             Data = _mapper.Map<IReadOnlyCollection<ProductDto>>(products),
                         };

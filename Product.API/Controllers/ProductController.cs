@@ -43,7 +43,7 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения продукта");
-            return BadRequest(query);
+            return BadRequest(query.ErrorMessage);
         }
 
         // POST api/<ProductController>
