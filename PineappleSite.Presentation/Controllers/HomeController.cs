@@ -38,15 +38,12 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         [HttpPost]
-        [ActionName("AddToCart")]
-        public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
+        [ActionName("GetProductDetails")]
+        public async Task<IActionResult> GetProductDetails(ProductViewModel productViewModel)
         {
             CartViewModel cartViewModel = new()
             {
-                CartHeader = new CartHeaderViewModel
-                {
-                    UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value,
-                },
+                CartHeader = new CartHeaderViewModel { UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value, },
             };
 
             CartDetailsViewModel cartDetailsViewModel = new()
@@ -58,57 +55,26 @@ namespace PineappleSite.Presentation.Controllers
             List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
             cartViewModel.CartDetails = cartViewModels;
 
-            ShoppingCartResponseViewModel response = await _shoppingCartService.CartUpsertAsync(cartViewModel);
-
-            if (response.IsSuccess)
-            {
-                TempData["success"] = response.Message;
-                return RedirectToAction(nameof(GetProducts));
-            }
-
-            else
-            {
-                TempData["error"] = response.ValidationErrors;
-            }
-
-            return View(cartViewModel);
-        }
-
-        [HttpPost]
-        [ActionName("AddToFavorites")]
-        public async Task<IActionResult> AddToFavorites(ProductViewModel productViewModel)
-        {
             FavouritesViewModel favouritesViewModel = new()
             {
-                FavoutiteHeader = new FavouritesHeaderViewModel
-                {
-                    UserId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value,
-                },
+                FavoutiteHeader = new FavouritesHeaderViewModel { UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value, },
+                FavouritesDetails = new List<FavoriteDetailsViewModel> { new() { ProductId = productViewModel.Id } }
             };
 
-            FavoriteDetailsViewModel favoriteDetailsViewModel = new()
+            ShoppingCartResponseViewModel cartResponse = await _shoppingCartService.CartUpsertAsync(cartViewModel);
+            FavouriteResultViewModel<FavouritesViewModel> favoriteResponse = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
+
+            if (favoriteResponse.IsSuccess)
             {
-                ProductId = productViewModel.Id,
-            };
-
-            List<FavoriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
-            favouritesViewModel.FavouritesDetails = favoriteDetailsViewModels;
-
-            FavouriteResultViewModel<FavouritesHeaderViewModel> response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
-
-            if (response.IsSuccess)
-            {
-                TempData["success"] = response.SuccessMessage;
+                TempData["success"] = favoriteResponse.SuccessMessage;
                 return RedirectToAction(nameof(GetProducts));
             }
 
             else
             {
-                TempData["error"] = response.ErrorMessage;
-
+                TempData["error"] = favoriteResponse.ErrorMessage;
+                return RedirectToAction(nameof(GetProducts));
             }
-
-            return View(favouritesViewModel);
         }
 
         public IActionResult Privacy()

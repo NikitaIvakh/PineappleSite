@@ -23,11 +23,7 @@ namespace Favourites.Application.Features.Commands.Handlers
         {
             try
             {
-                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().Select(key => new FavouritesHeaderDto
-                {
-                    FavouritesHeaderId = key.FavouritesHeaderId,
-                    UserId = key.UserId,
-                }).FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
+                var favouriteHeaderFromDb = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.UserId == request.Favourites.FavoutiteHeader.UserId, cancellationToken);
 
                 if (favouriteHeaderFromDb is null)
                 {
@@ -36,6 +32,12 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                     request.Favourites.FavouritesDetails.Data.First().FavouritesHeaderId = favouritesHeader.FavouritesHeaderId;
                     await _favouriteDetails.CreateAsync(_mapper.Map<FavouritesDetails>(request.Favourites.FavouritesDetails.Data.First()));
+
+                    return new Result<FavouritesHeaderDto>
+                    {
+                        Data = _mapper.Map<FavouritesHeaderDto>(favouritesHeader),
+                        SuccessMessage = "Продукт успешно добавлен в избранное",
+                    };
                 }
 
                 else
@@ -62,7 +64,7 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                 return new Result<FavouritesHeaderDto>
                 {
-                    Data = favouriteHeaderFromDb,
+                    Data = _mapper.Map<FavouritesHeaderDto>(favouriteHeaderFromDb),
                     SuccessMessage = "Продукт успешно добавлен в избранное",
                 };
             }

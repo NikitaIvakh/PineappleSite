@@ -7,7 +7,7 @@ namespace PineappleSite.Presentation.Contracts
     {
         Task<FavouriteResultViewModel<FavouritesViewModel>> GetFavoritesAsync(string userId);
 
-        Task<FavouriteResultViewModel<FavouritesHeaderViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel);
+        Task<FavouriteResultViewModel<FavouritesViewModel>> FavoritesUpsertAsync(FavouritesViewModel viewModel);
 
         Task<FavouriteResultViewModel<FavouritesViewModel>> DeleteFavoriteDetails(int favoriteId);
     }

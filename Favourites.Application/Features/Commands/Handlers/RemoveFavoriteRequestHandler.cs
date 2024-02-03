@@ -1,5 +1,7 @@
-﻿using Favourites.Application.Features.Requests.Handlers;
+﻿using AutoMapper;
+using Favourites.Application.Features.Requests.Handlers;
 using Favourites.Application.Resources;
+using Favourites.Domain.DTOs;
 using Favourites.Domain.Entities.Favourite;
 using Favourites.Domain.Enum;
 using Favourites.Domain.Interfaces.Repositories;
@@ -10,11 +12,12 @@ using Serilog;
 
 namespace Favourites.Application.Features.Commands.Handlers
 {
-    public class RemoveFavoriteRequestHandler(IBaseRepository<FavouritesHeader> favouriteHeader, IBaseRepository<FavouritesDetails> favouriteDetails, ILogger logger) : IRequestHandler<RemoveFavoriteRequest, Result<FavouritesDetails>>
+    public class RemoveFavoriteRequestHandler(IBaseRepository<FavouritesHeader> favouriteHeader, IBaseRepository<FavouritesDetails> favouriteDetails, ILogger logger, IMapper mapper) : IRequestHandler<RemoveFavoriteRequest, Result<FavouritesDetails>>
     {
         private readonly IBaseRepository<FavouritesHeader> _favouriteHeader = favouriteHeader;
         private readonly IBaseRepository<FavouritesDetails> _favouriteDetails = favouriteDetails;
         private readonly ILogger _logger = logger.ForContext<RemoveFavoriteRequestHandler>();
+        private readonly IMapper _mapper = mapper;
 
         public async Task<Result<FavouritesDetails>> Handle(RemoveFavoriteRequest request, CancellationToken cancellationToken)
         {
@@ -33,7 +36,17 @@ namespace Favourites.Application.Features.Commands.Handlers
 
                 else
                 {
+                    int totalCountFavouriteItems = await _favouriteDetails.GetAll().Where(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId).CountAsync(cancellationToken);
                     await _favouriteDetails.DeleteAsync(favouritesDetails);
+
+                    if (totalCountFavouriteItems == 1)
+                    {
+                        FavouritesHeader? favouritesHeader = await _favouriteHeader.GetAll().FirstOrDefaultAsync(key => key.FavouritesHeaderId == favouritesDetails.FavouritesHeaderId, cancellationToken);
+
+                        if (favouritesHeader is not null)
+                            await _favouriteHeader.DeleteAsync(favouritesHeader);
+                    }
+
 
                     return new Result<FavouritesDetails>
                     {
