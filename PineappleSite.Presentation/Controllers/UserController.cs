@@ -65,13 +65,13 @@ namespace PineappleSite.Presentation.Controllers
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = "Пользователь успешно добавлен";
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Create));
                 }
             }
