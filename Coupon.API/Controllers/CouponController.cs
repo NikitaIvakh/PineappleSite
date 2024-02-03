@@ -73,7 +73,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка создания купона");
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command.ValidationErrors);
         }
 
         // PUT api/<CouponController>/5
@@ -89,7 +89,7 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка обновления купона");
-            return BadRequest(command.ErrorMessage);
+            return BadRequest(command.ValidationErrors);
         }
 
         // DELETE api/<CouponController>/5

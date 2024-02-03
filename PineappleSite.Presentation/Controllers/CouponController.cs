@@ -2,7 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Paginated;
-using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers
@@ -14,36 +13,72 @@ namespace PineappleSite.Presentation.Controllers
         // GET: CouponController
         public async Task<ActionResult> Index(string searchCode, string currentFilter, int? pageNumber)
         {
-            CollectionResultViewModel<CouponViewModel> coupons = await _couponService.GetAllCouponsAsync();
-
-            if (!string.IsNullOrEmpty(searchCode))
+            try
             {
-                var filteredCouponsList = coupons.Data.Where(
-                    key => key.CouponCode.Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                CollectionResultViewModel<CouponViewModel> coupons = await _couponService.GetAllCouponsAsync();
 
-                coupons = new CollectionResultViewModel<CouponViewModel>
+                if (coupons.IsSuccess)
                 {
-                    Data = filteredCouponsList
-                };
+                    if (!string.IsNullOrEmpty(searchCode))
+                    {
+                        var filteredCouponsList = coupons.Data.Where(
+                            key => key.CouponCode.Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                        coupons = new CollectionResultViewModel<CouponViewModel>
+                        {
+                            Data = filteredCouponsList
+                        };
+                    }
+
+                    ViewData["SearchCode"] = searchCode;
+                    ViewData["CurrentFilter"] = currentFilter;
+
+                    int pageSize = 10;
+                    var filteredCoupons = coupons.Data.AsQueryable();
+                    var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
+
+                    return View(paginatedCoupons);
+                }
+
+                else
+                {
+                    TempData["error"] = coupons.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
             }
 
-            ViewData["SearchCode"] = searchCode;
-            ViewData["CurrentFilter"] = currentFilter;
-
-            int pageSize = 10;
-            var filteredCoupons = coupons.Data.AsQueryable();
-            var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
-
-            return View(paginatedCoupons);
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // GET: CouponController/Details/5
         public async Task<ActionResult> Details(int id)
         {
             var coupon = await _couponService.GetCouponAsync(id);
-            return View(coupon);
+
+            if (coupon.IsSuccess)
+            {
+                CouponViewModel couponViewModel = new()
+                {
+                    CouponId = coupon.Data.CouponId,
+                    CouponCode = coupon.Data.CouponCode,
+                    DiscountAmount = coupon.Data.DiscountAmount,
+                    MinAmount = coupon.Data.MinAmount,
+                };
+
+                return View(couponViewModel);
+            }
+
+            else
+            {
+                TempData["error"] = coupon.ErrorMessage;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // GET: CouponController/Create
@@ -84,7 +119,25 @@ namespace PineappleSite.Presentation.Controllers
         public async Task<ActionResult> Edit(int id)
         {
             var coupon = await _couponService.GetCouponAsync(id);
-            return View(coupon);
+
+            if (coupon.IsSuccess)
+            {
+                UpdateCouponViewModel couponViewModel = new()
+                { 
+                    CouponId = coupon.Data.CouponId,
+                    CouponCode = coupon.Data.CouponCode,
+                    DiscountAmount = coupon.Data.DiscountAmount,
+                    MinAmount = coupon.Data.MinAmount,
+                };
+
+                return View(couponViewModel);
+            }
+
+            else
+            {
+                TempData["error"] = coupon.ErrorMessage;
+                return RedirectToAction(nameof(Index));
+            }
         }
 
         // POST: CouponController/Edit/5

@@ -25,6 +25,7 @@ namespace PineappleSite.Presentation
             CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponListDto, DeleteCouponListViewModel>().ReverseMap();
+            CreateMap<CouponDto, ResultViewModel>().ReverseMap();
             #endregion
 
             #region Identity && User Mapping

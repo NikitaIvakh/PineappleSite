@@ -7,7 +7,7 @@ namespace PineappleSite.Presentation.Contracts
     {
         Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync();
 
-        Task<CouponViewModel> GetCouponAsync(int couponId);
+        Task<ResultViewModel<CouponViewModel>> GetCouponAsync(int couponId);
 
         Task<ResultViewModel<CouponViewModel>> GetCouponAsync(string couponCode);
 
