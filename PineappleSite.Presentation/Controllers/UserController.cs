@@ -14,31 +14,50 @@ namespace PineappleSite.Presentation.Controllers
         // GET: UserController
         public async Task<ActionResult> Index(string searchUser, string currentFilter, int? pageNumber)
         {
-            string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
-            var users = await _userService.GetAllUsersAsync(userId);
-
-            if (!string.IsNullOrEmpty(searchUser))
+            try
             {
-                var searchUsers = users.Data.Where(
-                    key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                    key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+                var users = await _userService.GetAllUsersAsync(userId);
 
-                users = new IdentityCollectionResult<UserWithRolesViewModel>
+                if (users.IsSuccess)
                 {
-                    Data = searchUsers,
-                };
+                    if (!string.IsNullOrEmpty(searchUser))
+                    {
+                        var searchUsers = users.Data.Where(
+                            key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                        users = new IdentityCollectionResult<UserWithRolesViewModel>
+                        {
+                            Data = searchUsers,
+                        };
+                    }
+
+                    ViewData["SearchUser"] = searchUser;
+                    ViewData["CurrentFilter"] = currentFilter;
+
+                    int pageSize = 10;
+                    var filteredUsers = users.Data.AsQueryable();
+                    var paginatedUsers = PaginatedList<UserWithRolesViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
+
+                    return View(paginatedUsers);
+                }
+
+                else
+                {
+                    TempData["error"] = users.ErrorMessage;
+                    return RedirectToAction("Index", "Home");
+                }
+
             }
 
-            ViewData["SearchUser"] = searchUser;
-            ViewData["CurrentFilter"] = currentFilter;
-
-            int pageSize = 10;
-            var filteredUsers = users.Data.AsQueryable();
-            var paginatedUsers = PaginatedList<UserWithRolesViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
-
-            return View(paginatedUsers);
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         // GET: UserController/Details/5
