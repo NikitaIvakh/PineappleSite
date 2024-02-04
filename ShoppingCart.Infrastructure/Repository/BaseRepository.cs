@@ -1,4 +1,5 @@
-﻿using ShoppingCart.Domain.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Domain.Interfaces;
 
 namespace ShoppingCart.Infrastructure.Services
 {
@@ -8,15 +9,13 @@ namespace ShoppingCart.Infrastructure.Services
 
         public IQueryable<TEntity> GetAll()
         {
-            return _context.Set<TEntity>().AsQueryable();
+            return _context.Set<TEntity>().AsNoTracking();
         }
 
         public Task<TEntity> CreateAsync(TEntity entity)
         {
             if (entity is null)
-            {
                 throw new ArgumentNullException(nameof(entity), "Объект пустой");
-            }
 
             _context.Add(entity);
             _context.SaveChanges();
@@ -27,9 +26,7 @@ namespace ShoppingCart.Infrastructure.Services
         public Task<TEntity> UpdateAsync(TEntity entity)
         {
             if (entity is null)
-            {
                 throw new ArgumentNullException(nameof(entity), "Объект пустой");
-            }
 
             _context.Update(entity);
             _context.SaveChanges();
@@ -37,12 +34,10 @@ namespace ShoppingCart.Infrastructure.Services
             return Task.FromResult(entity);
         }
 
-        public Task<TEntity> DeleteAsync(TEntity entity)
+        public Task DeleteAsync(TEntity entity)
         {
             if (entity is null)
-            {
                 throw new ArgumentNullException(nameof(entity), "Объект пустой");
-            }
 
             _context.Remove(entity);
             _context.SaveChanges();

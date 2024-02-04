@@ -19,10 +19,10 @@ namespace ShoppingCart.Infrastructure
 
         private static void RegisterServices(this IServiceCollection services)
         {
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ICouponService, CouponService>();
             services.AddScoped<IBaseRepository<CartHeader>, BaseRepository<CartHeader>>();
             services.AddScoped<IBaseRepository<CartDetails>, BaseRepository<CartDetails>>();
+            services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICouponService, CouponService>();
         }
 
         private static void RegisterDBConnectionString(this IServiceCollection services, IConfiguration configuration)

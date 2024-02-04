@@ -6,6 +6,6 @@ namespace ShoppingCart.Domain.DTOs
     {
         public CartHeaderDto CartHeader { get; set; }
 
-        public CollectionResult<CartDetailsDto> CartDetails { get; set; }
+        public CollectionResult<CartDetailsDto>? CartDetails { get; set; }
     }
 }

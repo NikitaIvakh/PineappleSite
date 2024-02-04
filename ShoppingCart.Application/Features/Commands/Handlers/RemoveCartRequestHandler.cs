@@ -34,22 +34,25 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
                     };
                 }
 
-                int totalCartRemoveItems = await _cartDetailsRepository.GetAll().Where(key => key.CartHeaderId == cartDetails.CartHeaderId).CountAsync(cancellationToken);
-                await _cartDetailsRepository.DeleteAsync(cartDetails);
-
-                if (totalCartRemoveItems == 1)
+                else
                 {
-                    CartHeader? cartHeader = await _cartHeaderRepository.GetAll().FirstOrDefaultAsync(key => key.Id == cartDetails.CartHeaderId, cancellationToken);
+                    int totalCartRemoveItems = await _cartDetailsRepository.GetAll().Where(key => key.CartHeaderId == cartDetails.CartHeaderId).CountAsync(cancellationToken);
+                    await _cartDetailsRepository.DeleteAsync(cartDetails);
 
-                    if (cartHeader is not null)
-                        await _cartHeaderRepository.DeleteAsync(cartHeader);
+                    if (totalCartRemoveItems == 1)
+                    {
+                        CartHeader? cartHeader = await _cartHeaderRepository.GetAll().FirstOrDefaultAsync(key => key.Id == cartDetails.CartHeaderId, cancellationToken);
+
+                        if (cartHeader is not null)
+                            await _cartHeaderRepository.DeleteAsync(cartHeader);
+                    }
+
+                    return new Result<CartDetailsDto>
+                    {
+                        SuccessMessage = "Продукт из корзины успешно удален",
+                        Data = _mapper.Map<CartDetailsDto>(cartDetails),
+                    };
                 }
-
-                return new Result<CartDetailsDto>
-                {
-                    SuccessMessage = "Продукт из корзины успешно удален",
-                    Data = _mapper.Map<CartDetailsDto>(cartDetails),
-                };
             }
 
             catch (Exception exception)

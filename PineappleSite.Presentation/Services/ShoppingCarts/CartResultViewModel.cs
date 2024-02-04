@@ -13,9 +13,9 @@
         public string? ValidationErrors { get; set; }
     }
 
-    public class CartResultViewModel<Type> : CartResultViewModel
+    public class CartResultViewModel<TEntity> : CartResultViewModel
     {
-        public CartResultViewModel(string? errorMessage, int? errorCode, Type? data)
+        public CartResultViewModel(string? errorMessage, int? errorCode, TEntity? data)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
@@ -34,7 +34,7 @@
             SuccessMessage = successMessage;
         }
 
-        public CartResultViewModel(Type? data)
+        public CartResultViewModel(TEntity? data)
         {
             Data = data;
         }
@@ -44,6 +44,6 @@
 
         }
 
-        public Type? Data { get; set; }
+        public TEntity? Data { get; set; }
     }
 }

@@ -33,7 +33,7 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                     CouponCode = key.CouponCode,
                     Discount = key.Discount,
                     CartTotal = key.CartTotal,
-                }).OrderByDescending(key => key.Id).FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken);
+                }).FirstOrDefaultAsync(key => key.UserId == request.UserId, cancellationToken);
 
                 if (cartHeader is null)
                 {
@@ -54,10 +54,11 @@ namespace ShoppingCart.Application.Features.Commands.Queries
                     var cartDetails = _cartDetailsRepository.GetAll().Select(key => new CartDetailsDto
                     {
                         Id = key.Id,
-                        CartHeaderId = key.CartHeaderId,
                         Count = key.Count,
                         Product = key.Product,
                         ProductId = key.ProductId,
+                        CartHeaderId = key.CartHeaderId,
+                        CartHeader = _mapper.Map<CartHeaderDto>(key.CartHeader),
                     }).Where(key => key.CartHeaderId == cartHeader.Id).ToList();
 
                     CartDto cartDto = new()

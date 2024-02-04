@@ -1,9 +1,8 @@
-﻿@using PineappleSite.Presentation.Extecsions
-@using PineappleSite.Presentation.Models.ShoppingCart
+﻿@using PineappleSite.Presentation.Models.ShoppingCart
 @model PineappleSite.Presentation.Services.ShoppingCarts.CartResultViewModel<CartViewModel>
 
 @{
-    if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count() > 0)
+    if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count > 0)
     {
         <form method="post">
             <br />
@@ -35,7 +34,7 @@
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
-                                        <img src="https://placehold.co/600x400" class="rounded" width="100%" />
+                                        <img src="@cartObj?.Product?.ImageUrl" class="rounded" width="100%" />
                                     </div>
                                     <div class="col-8 col-md-5">
                                         <h5>@cartObj?.Product?.Name</h5>

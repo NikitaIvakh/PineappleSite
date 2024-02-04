@@ -33,65 +33,113 @@ namespace PineappleSite.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GetProductDetails(int id)
         {
-            var product = await _productService.GetProductAsync(id);
-            return View(product);
+            try
+            {
+                var product = await _productService.GetProductAsync(id);
+
+                if (product.IsSuccess)
+                {
+                    ProductViewModel productViewModel = new()
+                    {
+                        Id = product.Data.Id,
+                        Name = product.Data.Name,
+                        Description = product.Data.Description,
+                        ProductCategory = product.Data.ProductCategory,
+                        Price = product.Data.Price,
+                        Count = product.Data.Count,
+                        ImageUrl = product.Data.ImageUrl,
+                        ImageLocalPath = product.Data.ImageLocalPath,
+                    };
+
+                    return View(productViewModel);
+                }
+
+                else
+                {
+                    TempData["error"] = product.ErrorMessage;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         [HttpPost]
-        [ActionName("GetProductDetails")]
-        public async Task<IActionResult> GetProductDetails(ProductViewModel productViewModel, bool addToCart)
+        [ActionName("AddToCart")]
+        public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
         {
-            if (addToCart)
+            CartViewModel cartViewModel = new()
             {
-                CartViewModel cartViewModel = new()
+                CartHeader = new CartHeaderViewModel
                 {
-                    CartHeader = new CartHeaderViewModel { UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value, },
-                };
+                    UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value,
+                },
+            };
 
-                CartDetailsViewModel cartDetailsViewModel = new()
-                {
-                    Count = productViewModel.Count,
-                    ProductId = productViewModel.Id,
-                };
+            CartDetailsViewModel cartDetailsViewModel = new()
+            {
+                Count = productViewModel.Count,
+                ProductId = productViewModel.Id,
+            };
 
-                List<CartDetailsViewModel> cartViewModels = new List<CartDetailsViewModel> { cartDetailsViewModel };
-                cartViewModel.CartDetails = cartViewModels;
+            List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
+            cartViewModel.CartDetails = cartViewModels;
 
-                CartResultViewModel<CartHeaderViewModel> cartResponse = await _shoppingCartService.CartUpsertAsync(cartViewModel);
+            CartResultViewModel<CartViewModel> response = await _shoppingCartService.CartUpsertAsync(cartViewModel);
 
-                if (cartResponse.IsSuccess)
-                {
-                    TempData["success"] = cartResponse.SuccessMessage;
-                    return RedirectToAction(nameof(GetProducts));
-                }
-                else
-                {
-                    TempData["error"] = cartResponse.ErrorMessage;
-                    return RedirectToAction(nameof(GetProducts));
-                }
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetProducts));
             }
 
             else
             {
-                FavouritesViewModel favouritesViewModel = new()
-                {
-                    FavoutiteHeader = new FavouritesHeaderViewModel { UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value, },
-                    FavouritesDetails = new List<FavoriteDetailsViewModel> { new() { ProductId = productViewModel.Id } }
-                };
-
-                FavouriteResultViewModel<FavouritesViewModel> favoriteResponse = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
-
-                if (favoriteResponse.IsSuccess)
-                {
-                    TempData["success"] = favoriteResponse.SuccessMessage;
-                    return RedirectToAction(nameof(GetProducts));
-                }
-                else
-                {
-                    TempData["error"] = favoriteResponse.ErrorMessage;
-                    return RedirectToAction(nameof(GetProducts));
-                }
+                TempData["error"] = response.ErrorMessage;
             }
+
+            return View(cartViewModel);
+        }
+
+        [HttpPost]
+        [ActionName("AddToFavorites")]
+        public async Task<IActionResult> AddToFavorites(ProductViewModel productViewModel)
+        {
+            FavouritesViewModel favouritesViewModel = new()
+            {
+                FavoutiteHeader = new FavouritesHeaderViewModel
+                {
+                    UserId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value,
+                },
+            };
+
+            FavoriteDetailsViewModel favoriteDetailsViewModel = new()
+            {
+                ProductId = productViewModel.Id,
+            };
+
+            List<FavoriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
+            favouritesViewModel.FavouritesDetails = favoriteDetailsViewModels;
+
+            FavouriteResultViewModel<FavouritesViewModel> response = await _favoriteService.FavoritesUpsertAsync(favouritesViewModel);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            else
+            {
+                TempData["error"] = response.ErrorMessage;
+
+            }
+
+            return View(favouritesViewModel);
         }
 
         public IActionResult Privacy()

@@ -4,6 +4,6 @@
     {
         public CartHeaderViewModel CartHeader { get; set; }
 
-        public IReadOnlyCollection<CartDetailsViewModel> CartDetails { get; set; }
+        public IReadOnlyCollection<CartDetailsViewModel>? CartDetails { get; set; }
     }
 }

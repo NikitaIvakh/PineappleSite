@@ -9,13 +9,18 @@ namespace ShoppingCart.Application
         public static void ConfigureApplicationService(this IServiceCollection services)
         {
             services.RegisterInits();
+            services.ServicesInits();
         }
 
         private static void RegisterInits(this IServiceCollection services)
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
-            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
+        }
+
+        private static void ServicesInits(this IServiceCollection services)
+        {
+
         }
     }
 }

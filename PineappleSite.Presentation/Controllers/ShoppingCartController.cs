@@ -21,7 +21,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                CartResultViewModel<CartHeaderViewModel> response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
+                CartResultViewModel<CartViewModel> response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
 
                 if (response.IsSuccess)
                 {
@@ -49,7 +49,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                CartResultViewModel<CartHeaderViewModel> response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
+                CartResultViewModel<CartViewModel> response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
 
                 if (response.IsSuccess)
                 {
@@ -76,8 +76,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                var userId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
-                CartResultViewModel<CartDetailsViewModel> response = await _shoppingCartService.RemoveCartDetailsAsync(productDetailsId);
+                CartResultViewModel<CartViewModel> response = await _shoppingCartService.RemoveCartDetailsAsync(productDetailsId);
 
                 if (response.IsSuccess)
                 {
@@ -105,7 +104,7 @@ namespace PineappleSite.Presentation.Controllers
             string userId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
             CartResultViewModel<CartViewModel> response = await _shoppingCartService.GetShoppingCartAsync(userId);
 
-            if (response.IsSuccess)
+            if (response != null && response.Data != null && response.Data.CartHeader != null)
             {
                 CartResultViewModel<CartViewModel> cartResultViewModel = new()
                 {

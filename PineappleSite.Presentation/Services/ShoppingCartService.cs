@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.ShoppingCart;
+using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation.Services
@@ -13,32 +14,42 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<CartResultViewModel<CartViewModel>> GetShoppingCartAsync(string userId)
         {
-            AddBearerToken();
+            CartDtoResult shoppingCart = await _shoppingCartClient.GetCartAsync(userId);
+            CartResultViewModel<CartViewModel> resultViewModel = new()
+            {
+                Data = _mapper.Map<CartViewModel>(shoppingCart.Data),
+                ErrorMessage = shoppingCart.ErrorMessage,
+                ErrorCode = shoppingCart.ErrorCode,
+                SuccessMessage = shoppingCart.SuccessMessage,
+            };
+
+            return resultViewModel;
+        }
+
+        public async Task<CartResultViewModel<CartViewModel>> CartUpsertAsync(CartViewModel cartViewModel)
+        {
             try
             {
-                CartDtoResult shoppingCart = await _shoppingCartClient.GetCartAsync(userId);
+                CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
+                CartDtoResult apiResponse = await _shoppingCartClient.CartUpsertAsync(cartDto);
 
-                if (shoppingCart.IsSuccess)
+                if (apiResponse.IsSuccess)
                 {
-                    CartResultViewModel<CartViewModel> resultViewModel = new()
+                    return new CartResultViewModel<CartViewModel>
                     {
-                        ErrorCode = shoppingCart.ErrorCode,
-                        ErrorMessage = shoppingCart.ErrorMessage,
-                        SuccessMessage = shoppingCart.SuccessMessage,
-                        Data = _mapper.Map<CartViewModel>(shoppingCart.Data),
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartViewModel>(apiResponse.Data),
                     };
-
-                    return resultViewModel;
                 }
 
                 else
                 {
-                    foreach (var error in shoppingCart.ValidationErrors)
+                    foreach (string error in apiResponse.ValidationErrors)
                     {
                         return new CartResultViewModel<CartViewModel>
                         {
-                            ErrorCode = shoppingCart.ErrorCode,
-                            ErrorMessage = shoppingCart.ErrorMessage,
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                             ValidationErrors = error + Environment.NewLine,
                         };
                     }
@@ -47,52 +58,9 @@ namespace PineappleSite.Presentation.Services
                 return new CartResultViewModel<CartViewModel>();
             }
 
-            catch (ShoppingCartExceptions exceptions)
-            {
-                return new CartResultViewModel<CartViewModel>
-                {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                };
-            }
-        }
-
-        public async Task<CartResultViewModel<CartHeaderViewModel>> CartUpsertAsync(CartViewModel cartViewModel)
-        {
-            try
-            {
-                AddBearerToken();
-                CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
-                CartDtoResult apiResponse = await _shoppingCartClient.CartUpsertAsync(cartDto);
-
-                if (apiResponse.IsSuccess)
-                {
-                    return new CartResultViewModel<CartHeaderViewModel>
-                    {
-                        SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (string error in apiResponse.ValidationErrors)
-                    {
-                        return new CartResultViewModel<CartHeaderViewModel>
-                        {
-                            ErrorCode = apiResponse.ErrorCode,
-                            ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
-                        };
-                    }
-                }
-
-                return new CartResultViewModel<CartHeaderViewModel>();
-            }
-
             catch (ShoppingCartExceptions exception)
             {
-                return new CartResultViewModel<CartHeaderViewModel>
+                return new CartResultViewModel<CartViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
@@ -100,20 +68,19 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CartResultViewModel<CartHeaderViewModel>> ApplyCouponAsync(CartViewModel cartViewModel)
+        public async Task<CartResultViewModel<CartViewModel>> ApplyCouponAsync(CartViewModel cartViewModel)
         {
             try
             {
-                AddBearerToken();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
                 CartDtoResult apiResponse = await _shoppingCartClient.ApplyCouponAsync(cartDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new CartResultViewModel<CartHeaderViewModel>
+                    return new CartResultViewModel<CartViewModel>
                     {
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
+                        Data = _mapper.Map<CartViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -121,7 +88,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new CartResultViewModel<CartHeaderViewModel>
+                        return new CartResultViewModel<CartViewModel>
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -130,12 +97,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new CartResultViewModel<CartHeaderViewModel>();
+                return new CartResultViewModel<CartViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return new CartResultViewModel<CartHeaderViewModel>
+                return new CartResultViewModel<CartViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
@@ -143,20 +110,19 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CartResultViewModel<CartHeaderViewModel>> RemoveCouponAsync(CartViewModel cartViewModel)
+        public async Task<CartResultViewModel<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel)
         {
             try
             {
-                AddBearerToken();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
                 CartDtoResult apiResponse = await _shoppingCartClient.RemoveCouponAsync(cartDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new CartResultViewModel<CartHeaderViewModel>
+                    return new CartResultViewModel<CartViewModel>
                     {
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
+                        Data = _mapper.Map<CartViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -164,7 +130,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new CartResultViewModel<CartHeaderViewModel>
+                        return new CartResultViewModel<CartViewModel>
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -173,12 +139,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new CartResultViewModel<CartHeaderViewModel>();
+                return new CartResultViewModel<CartViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return new CartResultViewModel<CartHeaderViewModel>
+                return new CartResultViewModel<CartViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
@@ -186,19 +152,18 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CartResultViewModel<CartDetailsViewModel>> RemoveCartDetailsAsync(int cartDEtailsId)
+        public async Task<CartResultViewModel<CartViewModel>> RemoveCartDetailsAsync(int cartDetailsId)
         {
             try
             {
-                AddBearerToken();
-                CartDtoResult apiResponse = await _shoppingCartClient.RemoveCartAsync(cartDEtailsId.ToString(), cartDEtailsId);
+                CartDtoResult apiResponse = await _shoppingCartClient.RemoveCartAsync(cartDetailsId.ToString(), cartDetailsId);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new CartResultViewModel<CartDetailsViewModel>
+                    return new CartResultViewModel<CartViewModel>
                     {
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CartDetailsViewModel>(apiResponse.Data),
+                        Data = _mapper.Map<CartViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -206,7 +171,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new CartResultViewModel<CartDetailsViewModel>()
+                        return new CartResultViewModel<CartViewModel>()
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -215,12 +180,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new CartResultViewModel<CartDetailsViewModel>();
+                return new CartResultViewModel<CartViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return new CartResultViewModel<CartDetailsViewModel>
+                return new CartResultViewModel<CartViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,

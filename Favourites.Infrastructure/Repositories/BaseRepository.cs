@@ -34,7 +34,7 @@ namespace Favourites.Infrastructure.Repositories
             return Task.FromResult(entity);
         }
 
-        public Task DeleteAsync(TEntity entity)
+        public Task<TEntity> DeleteAsync(TEntity entity)
         {
             if (entity is null)
                 throw new ArgumentNullException(nameof(entity), "Объект пустой");

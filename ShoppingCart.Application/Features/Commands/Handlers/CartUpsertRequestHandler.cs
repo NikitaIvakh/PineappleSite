@@ -42,8 +42,10 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
 
                 else
                 {
-                    var cartDetailsFromDb = await _cartDetailsRepository.GetAll().FirstOrDefaultAsync(key => key.ProductId == request.CartDto.CartDetails.Data.First().ProductId &&
-                        key.CartHeaderId == cartHeaderFromDb.Id, cancellationToken);
+                    var cartDetailsFromDb = await _cartDetailsRepository
+                        .GetAll()
+                        .FirstOrDefaultAsync(key => key.ProductId == request.CartDto.CartDetails.Data
+                        .First().ProductId && key.CartHeaderId == cartHeaderFromDb.Id, cancellationToken);
 
                     if (cartDetailsFromDb is null || cartDetailsFromDb.Count == 0)
                     {

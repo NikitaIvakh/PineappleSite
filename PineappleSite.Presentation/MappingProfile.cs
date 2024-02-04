@@ -82,11 +82,17 @@ namespace PineappleSite.Presentation
             CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
             CreateMap<List<CartDetailsViewModel>, CartDetailsDtoCollectionResult>().ReverseMap();
             CreateMap<CartDto, CartViewModel>().ReverseMap();
+            CreateMap<CartDto, CartHeaderViewModel>().ReverseMap();
 
             CreateMap<CartDto, CartViewModel>()
                 .ForMember(dest => dest.CartHeader, opt => opt.MapFrom(src => src.CartHeader))
                 .ForMember(dest => dest.CartDetails, opt => opt.MapFrom(src => src.CartDetails.Data))
                 .ReverseMap();
+
+            CreateMap<CartDtoResult, CartHeaderViewModel>().ReverseMap();
+            CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
+            CreateMap<CartDtoResult, CartResultViewModel<CartViewModel>>().ReverseMap();
+            CreateMap<CartHeaderDto, CartDetailsViewModel>().ReverseMap();
             #endregion
 
             #region Favourite Mapping

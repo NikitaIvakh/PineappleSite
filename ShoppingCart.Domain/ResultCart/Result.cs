@@ -13,9 +13,9 @@
         public List<string>? ValidationErrors { get; set; }
     }
 
-    public class Result<Type> : Result
+    public class Result<TEntity> : Result
     {
-        public Result(string? errorMessage, int? errorCode, Type? data)
+        public Result(string? errorMessage, int? errorCode, TEntity? data)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
@@ -34,7 +34,7 @@
             SuccessMessage = successMessage;
         }
 
-        public Result(Type? data)
+        public Result(TEntity? data)
         {
             Data = data;
         }
@@ -44,6 +44,6 @@
 
         }
 
-        public Type? Data { get; set; }
+        public TEntity? Data { get; set; }
     }
 }
