@@ -1,13 +1,14 @@
 ﻿@using PineappleSite.Presentation.Extecsions
-@model PineappleSite.Presentation.Models.ShoppingCart.CartViewModel
+@using PineappleSite.Presentation.Models.ShoppingCart
+@model PineappleSite.Presentation.Services.ShoppingCarts.CartResultViewModel<CartViewModel>
 
 @{
-    if (Model.CartHeader is not null && Model.CartDetails?.Count() > 0)
+    if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count() > 0)
     {
         <form method="post">
             <br />
-            <input asp-for="CartHeader.UserId" hidden />
-            <input asp-for="CartHeader.Id" hidden />
+            <input asp-for="Data.CartHeader.UserId" hidden />
+            <input asp-for="Data.CartHeader.Id" hidden />
             <div class="">
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
@@ -30,7 +31,7 @@
                         </div>
                         <hr />
                         @{
-                            foreach (var cartObj in Model.CartDetails)
+                            foreach (var cartObj in Model.Data.CartDetails)
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
@@ -58,27 +59,27 @@
                         <div class="row">
                             <div class="col-6">
                                 @{
-                                    if (string.IsNullOrEmpty(Model.CartHeader.CouponCode))
+                                    if (string.IsNullOrEmpty(Model.Data.CartHeader.CouponCode))
                                     {
                                         <span>Купон:</span>
-                                        <input asp-for="CartHeader.CouponCode" />
+                                        <input asp-for="Data.CartHeader.CouponCode" />
                                         <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Применить</button>
                                     }
 
                                     else
                                     {
                                         <span>Купон:</span>
-                                        <input asp-for="CartHeader.CouponCode" disabled />
+                                        <input asp-for="Data.CartHeader.CouponCode" disabled />
                                         <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">Удалить</button>
                                     }
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">Общая стоимость : @Model.CartHeader.CartTotal Br<br /></span>
+                                <span class="text-danger" style="font-size:21px;">Общая стоимость : @Model.Data.CartHeader.CartTotal Br<br /></span>
                                 @{
-                                    if (Model.CartHeader.Discount > 0)
+                                    if (Model.Data.CartHeader.Discount > 0)
                                     {
-                                        <span class="text-success"> Сумма скидки : @Model.CartHeader.Discount Br</span>
+                                        <span class="text-success"> Сумма скидки : @Model.Data.CartHeader.Discount Br</span>
                                     }
                                 }
                             </div>

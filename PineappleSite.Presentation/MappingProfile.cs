@@ -10,7 +10,6 @@ using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
-using System.Collections.Generic;
 
 namespace PineappleSite.Presentation
 {
@@ -26,6 +25,9 @@ namespace PineappleSite.Presentation
             CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponListDto, DeleteCouponListViewModel>().ReverseMap();
             CreateMap<CouponDto, ResultViewModel>().ReverseMap();
+
+            CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
+            CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
             #endregion
 
             #region Identity && User Mapping
@@ -53,12 +55,24 @@ namespace PineappleSite.Presentation
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
             CreateMap<DeleteUserListDto, DeleteUserListViewModel>().ReverseMap();
 
-            //CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>().ReverseMap();
+            CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<UserWithRolesDtoResult, IdentityResult>().ReverseMap();
+            CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
+            CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
+
+            CreateMap<UserWithRolesDtoCollectionResult, IdentityCollectionResult<UserWithRolesViewModel>>().ReverseMap();
+            CreateMap<UserWithRolesDto, IdentityResult<UserWithRolesViewModel>>().ReverseMap();
+            CreateMap<UserWithRolesDtoResult, UserWithRolesViewModel>().ReverseMap();
             #endregion
 
             #region Product Mapping
             CreateMap<Services.Products.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+
+            CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
+            CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
+            CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
             CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
             #endregion
 
@@ -66,7 +80,13 @@ namespace PineappleSite.Presentation
             CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
             CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
             CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
+            CreateMap<List<CartDetailsViewModel>, CartDetailsDtoCollectionResult>().ReverseMap();
             CreateMap<CartDto, CartViewModel>().ReverseMap();
+
+            CreateMap<CartDto, CartViewModel>()
+                .ForMember(dest => dest.CartHeader, opt => opt.MapFrom(src => src.CartHeader))
+                .ForMember(dest => dest.CartDetails, opt => opt.MapFrom(src => src.CartDetails.Data))
+                .ReverseMap();
             #endregion
 
             #region Favourite Mapping
@@ -85,25 +105,6 @@ namespace PineappleSite.Presentation
             CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouriteResultViewModel<FavouritesViewModel>>().ReverseMap();
             #endregion
-
-            CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
-            CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
-
-            CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
-            CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();
-            CreateMap<UserWithRolesDtoResult, IdentityResult>().ReverseMap();
-            CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
-            CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
-
-            CreateMap<UserWithRolesDtoCollectionResult, IdentityCollectionResult<UserWithRolesViewModel>>().ReverseMap();
-            CreateMap<UserWithRolesDto, IdentityResult<UserWithRolesViewModel>>().ReverseMap();
-            CreateMap<UserWithRolesDtoResult, UserWithRolesViewModel>().ReverseMap();
-
-            CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
-            CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
-            CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
-
-            CreateMap<ShoppingCartAPIResponse, ShoppingCartResponseViewModel>().ReverseMap();
         }
     }
 }

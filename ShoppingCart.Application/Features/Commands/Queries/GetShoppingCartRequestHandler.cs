@@ -51,15 +51,22 @@ namespace ShoppingCart.Application.Features.Commands.Queries
 
                 else
                 {
-                    var cartDetails = await _cartDetailsRepository.GetAll().Where(key => key.CartHeaderId == cartHeader.Id).ToListAsync(cancellationToken);
+                    var cartDetails = _cartDetailsRepository.GetAll().Select(key => new CartDetailsDto
+                    {
+                        Id = key.Id,
+                        CartHeaderId = key.CartHeaderId,
+                        Count = key.Count,
+                        Product = key.Product,
+                        ProductId = key.ProductId,
+                    }).Where(key => key.CartHeaderId == cartHeader.Id).ToList();
 
                     CartDto cartDto = new()
                     {
-                        CartHeader = cartHeader,
+                        CartHeader = _mapper.Map<CartHeaderDto>(cartHeader),
                         CartDetails = new CollectionResult<CartDetailsDto>
                         {
+                            Data = cartDetails,
                             Count = cartDetails.Count,
-                            Data = _mapper.Map<IReadOnlyCollection<CartDetailsDto>>(cartDetails),
                             SuccessMessage = "Ваши товары в корзине",
                         },
                     };

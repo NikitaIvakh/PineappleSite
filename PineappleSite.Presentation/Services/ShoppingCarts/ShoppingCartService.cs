@@ -24,48 +24,48 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
     {
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> GetCartAsync(string userId);
+        System.Threading.Tasks.Task<CartDtoResult> GetCartAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> GetCartAsync(string userId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CartDtoResult> GetCartAsync(string userId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> CartUpsertAsync(CartDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> CartUpsertAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> ApplyCouponAsync(CartDto body);
+        System.Threading.Tasks.Task<CartDtoResult> CartUpsertAsync(CartDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> ApplyCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CartDtoResult> CartUpsertAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCouponAsync(CartDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCartAsync(string cartDerailsId, int? body);
+        System.Threading.Tasks.Task<CartDtoResult> ApplyCouponAsync(CartDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCartAsync(string cartDerailsId, int? body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CartDtoResult> ApplyCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<CartDtoResult> RemoveCouponAsync(CartDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<CartDtoResult> RemoveCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<CartDtoResult> RemoveCartAsync(string cartDerailsId, int? body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<CartDtoResult> RemoveCartAsync(string cartDerailsId, int? body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -97,7 +97,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ShoppingCartAPIResponse> GetCartAsync(string userId)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> GetCartAsync(string userId)
         {
             return GetCartAsync(userId, System.Threading.CancellationToken.None);
         }
@@ -105,7 +105,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ShoppingCartAPIResponse> GetCartAsync(string userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> GetCartAsync(string userId, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -152,7 +152,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ShoppingCartAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CartDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ShoppingCartExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -181,7 +181,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ShoppingCartAPIResponse> CartUpsertAsync(CartDto body)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> CartUpsertAsync(CartDto body)
         {
             return CartUpsertAsync(body, System.Threading.CancellationToken.None);
         }
@@ -189,7 +189,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ShoppingCartAPIResponse> CartUpsertAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> CartUpsertAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -235,7 +235,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ShoppingCartAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CartDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ShoppingCartExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -264,7 +264,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ShoppingCartAPIResponse> ApplyCouponAsync(CartDto body)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> ApplyCouponAsync(CartDto body)
         {
             return ApplyCouponAsync(body, System.Threading.CancellationToken.None);
         }
@@ -272,7 +272,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ShoppingCartAPIResponse> ApplyCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> ApplyCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -318,7 +318,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ShoppingCartAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CartDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ShoppingCartExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -347,7 +347,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCouponAsync(CartDto body)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> RemoveCouponAsync(CartDto body)
         {
             return RemoveCouponAsync(body, System.Threading.CancellationToken.None);
         }
@@ -355,7 +355,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> RemoveCouponAsync(CartDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -401,7 +401,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ShoppingCartAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CartDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ShoppingCartExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -430,7 +430,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCartAsync(string cartDerailsId, int? body)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> RemoveCartAsync(string cartDerailsId, int? body)
         {
             return RemoveCartAsync(cartDerailsId, body, System.Threading.CancellationToken.None);
         }
@@ -438,7 +438,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ShoppingCartAPIResponse> RemoveCartAsync(string cartDerailsId, int? body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> RemoveCartAsync(string cartDerailsId, int? body, System.Threading.CancellationToken cancellationToken)
         {
             if (cartDerailsId == null)
                 throw new System.ArgumentNullException("cartDerailsId");
@@ -489,7 +489,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<ShoppingCartAPIResponse>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<CartDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new ShoppingCartExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -643,13 +643,62 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CartDetailsDtoCollectionResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<CartDetailsDto> Data { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Count { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CartDto
     {
         [Newtonsoft.Json.JsonProperty("cartHeader", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public CartHeaderDto CartHeader { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("cartDetails", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CartDetailsDto> CartDetails { get; set; }
+        [Newtonsoft.Json.JsonProperty("cartDetails", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public CartDetailsDtoCollectionResult CartDetails { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class CartDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public CartDto Data { get; set; }
 
     }
 
@@ -712,25 +761,11 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         [Newtonsoft.Json.JsonProperty("price", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public double Price { get; set; }
 
-    }
+        [Newtonsoft.Json.JsonProperty("imageUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ImageUrl { get; set; }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ShoppingCartAPIResponse
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public object Data { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("message", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Message { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+        [Newtonsoft.Json.JsonProperty("imageLocalPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ImageLocalPath { get; set; }
 
     }
 

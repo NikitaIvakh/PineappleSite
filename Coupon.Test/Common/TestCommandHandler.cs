@@ -34,8 +34,8 @@ namespace Coupon.Test.Common
             DeleteLogger = Log.ForContext<DeleteCouponRequestHandler>();
             DeleteListLogger = Log.ForContext<DeleteCouponListRequestHandler>();
 
-            CreateValidator = new CreateValidator();
-            UpdateValidator = new UpdateValidator();
+            CreateValidator = new CreateValidator(Context);
+            UpdateValidator = new UpdateValidator(Context);
             DeleteValidator = new DeleteValidator(Context);
             DeleteListValidator = new DeleteListValidator();
 

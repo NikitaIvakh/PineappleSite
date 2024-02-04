@@ -21,17 +21,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ShoppingCartResponseViewModel response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
+                CartResultViewModel<CartHeaderViewModel> response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -49,17 +49,17 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                ShoppingCartResponseViewModel response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
+                CartResultViewModel<CartHeaderViewModel> response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -77,17 +77,17 @@ namespace PineappleSite.Presentation.Controllers
             try
             {
                 var userId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
-                ShoppingCartResponseViewModel response = await _shoppingCartService.RemoveCartDetailsAsync(productDetailsId);
+                CartResultViewModel<CartDetailsViewModel> response = await _shoppingCartService.RemoveCartDetailsAsync(productDetailsId);
 
                 if (response.IsSuccess)
                 {
-                    TempData["success"] = response.Message;
+                    TempData["success"] = response.SuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
 
                 else
                 {
-                    TempData["error"] = response.ValidationErrors;
+                    TempData["error"] = response.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -100,18 +100,26 @@ namespace PineappleSite.Presentation.Controllers
             return View();
         }
 
-        private async Task<CartViewModel> LoadCartViewModelBasedOnLoggedInUser()
+        private async Task<CartResultViewModel<CartViewModel>> LoadCartViewModelBasedOnLoggedInUser()
         {
-            var userId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
-            ShoppingCartResponseViewModel response = await _shoppingCartService.GetShoppingCartAsync(userId);
+            string userId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value;
+            CartResultViewModel<CartViewModel> response = await _shoppingCartService.GetShoppingCartAsync(userId);
 
-            if (response is not null && response.IsSuccess)
+            if (response.IsSuccess)
             {
-                CartViewModel cartViewModel = JsonConvert.DeserializeObject<CartViewModel>(Convert.ToString(response.Data));
-                return cartViewModel;
+                CartResultViewModel<CartViewModel> cartResultViewModel = new()
+                {
+                    Data = response.Data,
+                    ErrorCode = response.ErrorCode,
+                    ErrorMessage = response.ErrorMessage,
+                    SuccessMessage = response.SuccessMessage,
+                    ValidationErrors = response.ValidationErrors,
+                };
+
+                return cartResultViewModel;
             }
 
-            return new CartViewModel();
+            return response;
         }
     }
 }

@@ -11,145 +11,220 @@ namespace PineappleSite.Presentation.Services
         private readonly IShoppingCartClient _shoppingCartClient = shoppingCartClient;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<ShoppingCartResponseViewModel> GetShoppingCartAsync(string userId)
+        public async Task<CartResultViewModel<CartViewModel>> GetShoppingCartAsync(string userId)
         {
             AddBearerToken();
-            var shoppingCart = await _shoppingCartClient.GetCartAsync(userId);
-            return _mapper.Map<ShoppingCartResponseViewModel>(shoppingCart);
+            try
+            {
+                CartDtoResult shoppingCart = await _shoppingCartClient.GetCartAsync(userId);
+
+                if (shoppingCart.IsSuccess)
+                {
+                    CartResultViewModel<CartViewModel> resultViewModel = new()
+                    {
+                        ErrorCode = shoppingCart.ErrorCode,
+                        ErrorMessage = shoppingCart.ErrorMessage,
+                        SuccessMessage = shoppingCart.SuccessMessage,
+                        Data = _mapper.Map<CartViewModel>(shoppingCart.Data),
+                    };
+
+                    return resultViewModel;
+                }
+
+                else
+                {
+                    foreach (var error in shoppingCart.ValidationErrors)
+                    {
+                        return new CartResultViewModel<CartViewModel>
+                        {
+                            ErrorCode = shoppingCart.ErrorCode,
+                            ErrorMessage = shoppingCart.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new CartResultViewModel<CartViewModel>();
+            }
+
+            catch (ShoppingCartExceptions exceptions)
+            {
+                return new CartResultViewModel<CartViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
-        public async Task<ShoppingCartResponseViewModel> CartUpsertAsync(CartViewModel cartViewModel)
+        public async Task<CartResultViewModel<CartHeaderViewModel>> CartUpsertAsync(CartViewModel cartViewModel)
         {
             try
             {
                 AddBearerToken();
-                ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
-                ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.CartUpsertAsync(cartDto);
+                CartDtoResult apiResponse = await _shoppingCartClient.CartUpsertAsync(cartDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
-                    response.Id = apiResponse.Id;
+                    return new CartResultViewModel<CartHeaderViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new CartResultViewModel<CartHeaderViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new CartResultViewModel<CartHeaderViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return ConvertShoppingCartException(exception);
+                return new CartResultViewModel<CartHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
 
-        public async Task<ShoppingCartResponseViewModel> ApplyCouponAsync(CartViewModel cartViewModel)
+        public async Task<CartResultViewModel<CartHeaderViewModel>> ApplyCouponAsync(CartViewModel cartViewModel)
         {
             try
             {
                 AddBearerToken();
-                ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
-                ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.ApplyCouponAsync(cartDto);
+                CartDtoResult apiResponse = await _shoppingCartClient.ApplyCouponAsync(cartDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
-                    response.Id = apiResponse.Id;
+                    return new CartResultViewModel<CartHeaderViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new CartResultViewModel<CartHeaderViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new CartResultViewModel<CartHeaderViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return ConvertShoppingCartException(exception);
+                return new CartResultViewModel<CartHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
 
-        public async Task<ShoppingCartResponseViewModel> RemoveCouponAsync(CartViewModel cartViewModel)
+        public async Task<CartResultViewModel<CartHeaderViewModel>> RemoveCouponAsync(CartViewModel cartViewModel)
         {
             try
             {
                 AddBearerToken();
-                ShoppingCartResponseViewModel response = new();
                 CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
-                ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.RemoveCouponAsync(cartDto);
+                CartDtoResult apiResponse = await _shoppingCartClient.RemoveCouponAsync(cartDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
-                    response.Id = apiResponse.Id;
+                    return new CartResultViewModel<CartHeaderViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartHeaderViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new CartResultViewModel<CartHeaderViewModel>
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new CartResultViewModel<CartHeaderViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return ConvertShoppingCartException(exception);
+                return new CartResultViewModel<CartHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
 
-        public async Task<ShoppingCartResponseViewModel> RemoveCartDetailsAsync(int cartDEtailsId)
+        public async Task<CartResultViewModel<CartDetailsViewModel>> RemoveCartDetailsAsync(int cartDEtailsId)
         {
             try
             {
                 AddBearerToken();
-                ShoppingCartResponseViewModel response = new();
-                ShoppingCartAPIResponse apiResponse = await _shoppingCartClient.RemoveCartAsync(cartDEtailsId.ToString(), cartDEtailsId);
+                CartDtoResult apiResponse = await _shoppingCartClient.RemoveCartAsync(cartDEtailsId.ToString(), cartDEtailsId);
 
                 if (apiResponse.IsSuccess)
                 {
-                    response.IsSuccess = true;
-                    response.Message = apiResponse.Message;
-                    response.Data = apiResponse.Data;
-                    response.Id = apiResponse.Id;
+                    return new CartResultViewModel<CartDetailsViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartDetailsViewModel>(apiResponse.Data),
+                    };
                 }
 
                 else
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        response.ValidationErrors += error + Environment.NewLine;
+                        return new CartResultViewModel<CartDetailsViewModel>()
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
                     }
                 }
 
-                return response;
+                return new CartResultViewModel<CartDetailsViewModel>();
             }
 
             catch (ShoppingCartExceptions exception)
             {
-                return ConvertShoppingCartException(exception);
+                return new CartResultViewModel<CartDetailsViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
             }
         }
     }

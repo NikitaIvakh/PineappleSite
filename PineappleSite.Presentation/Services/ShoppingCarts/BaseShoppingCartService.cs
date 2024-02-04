@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.ShoppingCart;
 using System.Net.Http.Headers;
 
 namespace PineappleSite.Presentation.Services.ShoppingCarts
@@ -8,21 +9,21 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IShoppingCartClient _shoppingCartClient = shoppingCartClient;
 
-        protected ShoppingCartResponseViewModel ConvertShoppingCartException(ShoppingCartExceptions shoppingCartExceptions)
+        protected CartResultViewModel<CartViewModel> ConvertShoppingCartException(ShoppingCartExceptions shoppingCartExceptions)
         {
             if (shoppingCartExceptions.StatusCode == 400)
             {
-                return new ShoppingCartResponseViewModel() { Message = "Произошли ошибки валидации.", ValidationErrors = shoppingCartExceptions.Response, IsSuccess = false };
+                return new CartResultViewModel<CartViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = shoppingCartExceptions.Response };
             }
 
             else if (shoppingCartExceptions.StatusCode == 404)
             {
-                return new ShoppingCartResponseViewModel() { Message = "Требуемый элемент не удалось найти.", IsSuccess = false };
+                return new CartResultViewModel<CartViewModel>() { ErrorMessage = "Требуемый элемент не удалось найти." };
             }
 
             else
             {
-                return new ShoppingCartResponseViewModel() { Message = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", IsSuccess = false };
+                return new CartResultViewModel<CartViewModel>() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз." };
             }
         }
 

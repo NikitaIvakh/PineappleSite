@@ -5,14 +5,14 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface IShoppingCartService
     {
-        Task<ShoppingCartResponseViewModel> GetShoppingCartAsync(string userId);
+        Task<CartResultViewModel<CartViewModel>> GetShoppingCartAsync(string userId);
 
-        Task<ShoppingCartResponseViewModel> CartUpsertAsync(CartViewModel cartViewModel);
+        Task<CartResultViewModel<CartHeaderViewModel>> CartUpsertAsync(CartViewModel cartViewModel);
 
-        Task<ShoppingCartResponseViewModel> ApplyCouponAsync(CartViewModel cartViewModel);
+        Task<CartResultViewModel<CartHeaderViewModel>> ApplyCouponAsync(CartViewModel cartViewModel);
 
-        Task<ShoppingCartResponseViewModel> RemoveCouponAsync(CartViewModel cartViewModel);
+        Task<CartResultViewModel<CartHeaderViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 
-        Task<ShoppingCartResponseViewModel> RemoveCartDetailsAsync(int cartDEtailsId);
+        Task<CartResultViewModel<CartDetailsViewModel>> RemoveCartDetailsAsync(int cartDEtailsId);
     }
 }

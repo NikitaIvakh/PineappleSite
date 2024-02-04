@@ -13,7 +13,7 @@ namespace Favourites.Test.Commands
         public async Task RemoveFavoriteRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new RemoveFavoriteRequestHandler(HeaderRepository, DetailsRepository, RemoveLogger);
+            var handler = new RemoveFavoriteRequestHandler(HeaderRepository, DetailsRepository, RemoveLogger, null);
             var favouriteDetailId = 3;
 
             // Act
@@ -30,7 +30,7 @@ namespace Favourites.Test.Commands
         public async Task RemoveFavoriteRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new RemoveFavoriteRequestHandler(HeaderRepository, DetailsRepository, RemoveLogger);
+            var handler = new RemoveFavoriteRequestHandler(HeaderRepository, DetailsRepository, RemoveLogger, null);
             var favouriteDetailId = 13;
 
             // Act

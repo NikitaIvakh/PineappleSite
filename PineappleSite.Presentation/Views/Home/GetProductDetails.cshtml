@@ -18,7 +18,7 @@
     }
 </style>
 
-<form method="post">
+<form method="post" action="/GetProductDetails">
     <input asp-for="Id" hidden />
 
     <div class="pt-4">
@@ -57,9 +57,10 @@
                     <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" style="height:50px;">Вернуться к продуктам</a>
                 </div>
                 <div class="col-12 col-md-6 text-end">
+                    <input type="hidden" id="addToCart" name="addToCart" value="true">
                     <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary form-control btn-lg me-2" style="height:50px;">Добавить в корзину</button>
-                        <button type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">Добавить в избранное</button>
+                        <button type="submit" class="btn btn-primary form-control btn-lg me-2 addToCartButton" style="height:50px;">Добавить в корзину</button>
+                        <button type="submit" class="btn btn-primary form-control btn-lg addToFavoritesButton" style="height:50px;">Добавить в избранное</button>
                     </div>
                 </div>
             </div>
@@ -70,3 +71,16 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $(".addToCartButton").click(function() {
+            $("#addToCart").val("true");
+        });
+
+        $(".addToFavoritesButton").click(function() {
+            $("#addToCart").val("false");
+        });
+    });
+</script>
