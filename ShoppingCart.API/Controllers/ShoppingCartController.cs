@@ -18,7 +18,13 @@ namespace ShoppingCart.API.Controllers
         public async Task<ActionResult<Result<CartDto>>> GetCart(string userId)
         {
             var cart = await _mediator.Send(new GetShoppingCartRequest { UserId = userId });
-            return Ok(cart);
+
+            if (cart.IsSuccess)
+            {
+                return Ok(cart);
+            }
+
+            return BadRequest(cart.ErrorMessage);
         }
 
         // POST api/<ShoppingCartController>
@@ -26,21 +32,39 @@ namespace ShoppingCart.API.Controllers
         public async Task<ActionResult<Result<CartDto>>> CartUpsert([FromBody] CartDto cartDto)
         {
             var comnand = await _mediator.Send(new CartUpsertRequest { CartDto = cartDto });
-            return Ok(comnand);
+
+            if (comnand.IsSuccess)
+            {
+                return Ok(comnand);
+            }
+
+            return BadRequest(comnand.ErrorMessage);
         }
 
         [HttpPost("ApplyCoupon")]
         public async Task<ActionResult<Result<CartDto>>> ApplyCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         [HttpPost("RemoveCoupon")]
         public async Task<ActionResult<Result<CartDto>>> RemoveCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new RemoveCouponRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ShoppingCartController>/5
@@ -48,7 +72,13 @@ namespace ShoppingCart.API.Controllers
         public async Task<ActionResult<Result<CartDto>>> RemoveCart([FromBody] int cartDerailsId)
         {
             var command = await _mediator.Send(new RemoveCartRequest { CartDetailsId = cartDerailsId });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
     }
 }
