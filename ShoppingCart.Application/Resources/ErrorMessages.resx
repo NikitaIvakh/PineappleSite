@@ -123,4 +123,7 @@
   <data name="InternalServerError" xml:space="preserve">
     <value>Внутренняя проблема сервера</value>
   </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Продукт не найден</value>
+  </data>
 </root>
