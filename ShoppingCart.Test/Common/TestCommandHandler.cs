@@ -6,7 +6,7 @@ namespace ShoppingCart.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
-        protected ShoppingCartDbContext Context;
+        protected ApplicationDbContext Context;
         protected IMapper Mapper;
 
         public TestCommandHandler()

@@ -2,42 +2,46 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Features.Requests.Handlers;
-using ShoppingCart.Application.Interfaces;
-using ShoppingCart.Application.Response;
-using ShoppingCart.Core.Entities.Cart;
+using ShoppingCart.Domain.Entities.Cart;
+using ShoppingCart.Domain.Interfaces;
+using ShoppingCart.Domain.ResultCart;
+using ShoppingCart.Domain.DTOs;
+using Serilog;
+using ShoppingCart.Application.Resources;
+using ShoppingCart.Domain.Enum;
 
 namespace ShoppingCart.Application.Features.Commands.Handlers
 {
-    public class RemoveCouponRequestHandler(ICartHeaderDbContext cartHeaderContext, IMapper mapper) : IRequestHandler<RemoveCouponRequest, ShoppingCartAPIResponse>
+    public class RemoveCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper, ILogger logger) : IRequestHandler<RemoveCouponRequest, Result<CartHeaderDto>>
     {
-        private readonly ICartHeaderDbContext _cartHeaderContext = cartHeaderContext;
+        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly ShoppingCartAPIResponse _response = new();
+        private readonly ILogger _logger = logger.ForContext<RemoveCouponRequestHandler>();
 
-        public async Task<ShoppingCartAPIResponse> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartHeaderDto>> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                CartHeader cartHeaderFromDb = await _cartHeaderContext.CartHeaders.FirstAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
+                CartHeader cartHeaderFromDb = await _cartHeaderRepository.GetAll().FirstAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
                 cartHeaderFromDb.CouponCode = string.Empty;
-                _cartHeaderContext.CartHeaders.Update(cartHeaderFromDb);
-                await _cartHeaderContext.SaveChangesAsync(cancellationToken);
+                await _cartHeaderRepository.UpdateAsync(cartHeaderFromDb);
 
-                _response.IsSuccess = true;
-                _response.Message = "Купон успешно удален";
-                _response.Id = cartHeaderFromDb.Id;
-                _response.Data = cartHeaderFromDb;
-
-                return _response;
+                return new Result<CartHeaderDto>
+                {
+                    Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
+                    SuccessMessage = "Купон успешно удален",
+                };
             }
 
             catch (Exception exception)
             {
-                _response.IsSuccess = false;
-                _response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<CartHeaderDto>
+                {
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _response;
         }
     }
 }

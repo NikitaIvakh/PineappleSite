@@ -1,9 +1,10 @@
 ﻿using MediatR;
-using ShoppingCart.Application.Response;
+using ShoppingCart.Domain.DTOs;
+using ShoppingCart.Domain.ResultCart;
 
 namespace ShoppingCart.Application.Features.Requests.Handlers
 {
-    public class RemoveCartRequest : IRequest<ShoppingCartAPIResponse>
+    public class RemoveCartRequest : IRequest<Result<CartDetailsDto>>
     {
         public int CartDetailsId { get; set; }
     }

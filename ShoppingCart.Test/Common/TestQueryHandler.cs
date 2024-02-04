@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Moq;
 using ShoppingCart.Application.Profiles;
-using ShoppingCart.Application.Services.IServices;
+using ShoppingCart.Domain.Interfaces;
 using ShoppingCart.Infrastructure;
 using Xunit;
 
@@ -9,7 +9,7 @@ namespace ShoppingCart.Test.Common
 {
     public class TestQueryHandler : IDisposable
     {
-        protected ShoppingCartDbContext Context;
+        protected ApplicationDbContext Context;
         protected IMapper Mapper;
         protected IProductService ProductService;
         protected ICouponService CouponService;

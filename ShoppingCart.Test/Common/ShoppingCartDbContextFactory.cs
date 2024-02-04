@@ -6,10 +6,10 @@ namespace ShoppingCart.Test.Common
 {
     public static class ShoppingCartDbContextFactory
     {
-        public static ShoppingCartDbContext Create()
+        public static ApplicationDbContext Create()
         {
-            var options = new DbContextOptionsBuilder<ShoppingCartDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new ShoppingCartDbContext(options);
+            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+            var context = new ApplicationDbContext(options);
             context.Database.EnsureCreated();
             context.CartHeaders.AddRange(
                 new CartHeader
@@ -34,7 +34,7 @@ namespace ShoppingCart.Test.Common
             return context;
         }
 
-        public static void Desctroy(ShoppingCartDbContext shoppingCartDbContext)
+        public static void Desctroy(ApplicationDbContext shoppingCartDbContext)
         {
             shoppingCartDbContext.Database.EnsureDeleted();
             shoppingCartDbContext.Dispose();

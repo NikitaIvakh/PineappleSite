@@ -10,7 +10,7 @@ using ShoppingCart.Infrastructure;
 
 namespace ShoppingCart.Infrastructure.Migrations
 {
-    [DbContext(typeof(ShoppingCartDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     [Migration("20240125093526_IgnoreFields")]
     partial class IgnoreFields
     {

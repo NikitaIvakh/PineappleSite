@@ -1,52 +1,66 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Domain.DTOs;
+using ShoppingCart.Domain.ResultCart;
 using ShoppingCart.Application.Features.Requests.Handlers;
-using ShoppingCart.Application.Interfaces;
-using ShoppingCart.Application.Response;
-using ShoppingCart.Core.Entities.Cart;
+using ShoppingCart.Domain.Interfaces;
+using ShoppingCart.Domain.Entities.Cart;
+using Serilog;
+using ShoppingCart.Application.Resources;
+using ShoppingCart.Domain.Enum;
 
 namespace ShoppingCart.Application.Features.Commands.Handlers
 {
-    public class RemoveCartRequestHandlerc(ICartHeaderDbContext cartHeaderContext, ICartDetailsDbContext cartDetailsContext, IMapper mapper) : IRequestHandler<RemoveCartRequest, ShoppingCartAPIResponse>
+    public class RemoveCartRequestHandlerc(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper, ILogger logger) : IRequestHandler<RemoveCartRequest, Result<CartDetailsDto>>
     {
-        private readonly ICartHeaderDbContext _cartHeaderContext = cartHeaderContext;
-        private readonly ICartDetailsDbContext _cartDetailsContext = cartDetailsContext;
+        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
+        private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly ShoppingCartAPIResponse _response = new();
+        private readonly ILogger _logger = logger.ForContext<RemoveCartRequestHandlerc>();
 
-        public async Task<ShoppingCartAPIResponse> Handle(RemoveCartRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartDetailsDto>> Handle(RemoveCartRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                CartDetails cartDetails = await _cartDetailsContext.CartDetails.FirstOrDefaultAsync(key => key.Id == request.CartDetailsId, cancellationToken);
-                int totalCartRemoveItems = _cartDetailsContext.CartDetails.Where(key => key.CartHeaderId == cartDetails.CartHeaderId).Count();
-                _cartDetailsContext.CartDetails.Remove(cartDetails);
+                CartDetails? cartDetails = await _cartDetailsRepository.GetAll().FirstOrDefaultAsync(key => key.Id == request.CartDetailsId, cancellationToken);
+
+                if (cartDetails is null)
+                {
+                    return new Result<CartDetailsDto>
+                    {
+                        ErrorMessage = ErrorMessages.InternalServerError,
+                        ErrorCode = (int)ErrorCodes.InternalServerError,
+                    };
+                }
+
+                int totalCartRemoveItems = await _cartDetailsRepository.GetAll().Where(key => key.CartHeaderId == cartDetails.CartHeaderId).CountAsync(cancellationToken);
+                await _cartDetailsRepository.DeleteAsync(cartDetails);
 
                 if (totalCartRemoveItems == 1)
                 {
-                    CartHeader cartHeader = await _cartHeaderContext.CartHeaders.FirstOrDefaultAsync(key => key.Id == cartDetails.CartHeaderId);
-                    _cartHeaderContext.CartHeaders.Remove(cartHeader);
+                    CartHeader? cartHeader = await _cartHeaderRepository.GetAll().FirstOrDefaultAsync(key => key.Id == cartDetails.CartHeaderId, cancellationToken);
+
+                    if (cartHeader is not null)
+                        await _cartHeaderRepository.DeleteAsync(cartHeader);
                 }
 
-                await _cartDetailsContext.SaveChangesAsync(cancellationToken);
-                await _cartHeaderContext.SaveChangesAsync(cancellationToken);
-
-                _response.IsSuccess = true;
-                _response.Message = "Продукт из корзины успешно удален";
-                _response.Id = request.CartDetailsId;
-                _response.Data = request.CartDetailsId;
-
-                return _response;
+                return new Result<CartDetailsDto>
+                {
+                    SuccessMessage = "Продукт из корзины успешно удален",
+                    Data = _mapper.Map<CartDetailsDto>(cartDetails),
+                };
             }
 
             catch (Exception exception)
             {
-                _response.IsSuccess = false;
-                _response.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<CartDetailsDto>
+                {
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _response;
         }
     }
 }

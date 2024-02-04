@@ -1,10 +1,10 @@
 ﻿using MediatR;
-using ShoppingCart.Application.DTOs.Cart;
-using ShoppingCart.Application.Response;
+using ShoppingCart.Domain.DTOs;
+using ShoppingCart.Domain.ResultCart;
 
 namespace ShoppingCart.Application.Features.Requests.Handlers
 {
-    public class ApplyCouponRequest : IRequest<ShoppingCartAPIResponse>
+    public class ApplyCouponRequest : IRequest<Result<CartHeaderDto>>
     {
         public CartDto CartDto { get; set; }
     }

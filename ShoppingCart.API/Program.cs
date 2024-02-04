@@ -1,3 +1,4 @@
+using Serilog;
 using ShoppingCart.Application;
 using ShoppingCart.Infrastructure;
 
@@ -15,6 +16,7 @@ applicationBuilder.Services.ConfigureShoppingCartService(applicationBuilder.Conf
 
 applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]));
 applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]));
+applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
 
 WebApplication webApplication = applicationBuilder.Build();
 

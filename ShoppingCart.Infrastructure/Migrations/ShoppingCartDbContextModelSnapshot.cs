@@ -9,7 +9,7 @@ using ShoppingCart.Infrastructure;
 
 namespace ShoppingCart.Infrastructure.Migrations
 {
-    [DbContext(typeof(ShoppingCartDbContext))]
+    [DbContext(typeof(ApplicationDbContext))]
     partial class ShoppingCartDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

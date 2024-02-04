@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using ShoppingCart.Core.Entities.Cart;
+using ShoppingCart.Domain.Entities.Cart;
 
 namespace ShoppingCart.Infrastructure.Configuration
 {

@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using ShoppingCart.Application.DTOs.Cart;
 using ShoppingCart.Application.Features.Requests.Handlers;
 using ShoppingCart.Application.Features.Requests.Queries;
-using ShoppingCart.Application.Response;
+using ShoppingCart.Domain.DTOs;
+using ShoppingCart.Domain.ResultCart;
 
 namespace ShoppingCart.API.Controllers
 {
@@ -15,7 +15,7 @@ namespace ShoppingCart.API.Controllers
 
         // GET: api/<ShoppingCartController>
         [HttpGet("GetCart/{userId}")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> GetCart(string userId)
+        public async Task<ActionResult<Result<CartDto>>> GetCart(string userId)
         {
             var cart = await _mediator.Send(new GetShoppingCartRequest { UserId = userId });
             return Ok(cart);
@@ -23,21 +23,21 @@ namespace ShoppingCart.API.Controllers
 
         // POST api/<ShoppingCartController>
         [HttpPost("CartUpsert")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> CartUpsert([FromBody] CartDto cartDto)
+        public async Task<ActionResult<Result<CartDto>>> CartUpsert([FromBody] CartDto cartDto)
         {
             var comnand = await _mediator.Send(new CartUpsertRequest { CartDto = cartDto });
             return Ok(comnand);
         }
 
         [HttpPost("ApplyCoupon")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> ApplyCoupon([FromBody] CartDto cartDto)
+        public async Task<ActionResult<Result<CartDto>>> ApplyCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
             return Ok(command);
         }
 
         [HttpPost("RemoveCoupon")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> RemoveCoupon([FromBody] CartDto cartDto)
+        public async Task<ActionResult<Result<CartDto>>> RemoveCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new RemoveCouponRequest { CartDto = cartDto });
             return Ok(command);
@@ -45,7 +45,7 @@ namespace ShoppingCart.API.Controllers
 
         // DELETE api/<ShoppingCartController>/5
         [HttpDelete("RemoveCart/{cartDerailsId}")]
-        public async Task<ActionResult<ShoppingCartAPIResponse>> RemoveCart([FromBody] int cartDerailsId)
+        public async Task<ActionResult<Result<CartDto>>> RemoveCart([FromBody] int cartDerailsId)
         {
             var command = await _mediator.Send(new RemoveCartRequest { CartDetailsId = cartDerailsId });
             return Ok(command);

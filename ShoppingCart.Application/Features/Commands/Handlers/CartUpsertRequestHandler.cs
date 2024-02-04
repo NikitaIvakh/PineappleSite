@@ -2,73 +2,81 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Application.Features.Requests.Handlers;
-using ShoppingCart.Application.Interfaces;
-using ShoppingCart.Application.Response;
-using ShoppingCart.Core.Entities.Cart;
+using ShoppingCart.Domain.Entities.Cart;
+using ShoppingCart.Domain.Interfaces;
+using ShoppingCart.Domain.ResultCart;
+using ShoppingCart.Domain.DTOs;
+using Serilog;
+using ShoppingCart.Application.Resources;
+using ShoppingCart.Domain.Enum;
 
 namespace ShoppingCart.Application.Features.Commands.Handlers
 {
-    public class CartUpsertRequestHandler(ICartHeaderDbContext cartHeaderContext, ICartDetailsDbContext cartDetailsContext, IMapper mapper) : IRequestHandler<CartUpsertRequest, ShoppingCartAPIResponse>
+    public class CartUpsertRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper, ILogger logger) : IRequestHandler<CartUpsertRequest, Result<CartHeaderDto>>
     {
-        private readonly ICartHeaderDbContext _cartHeaderContext = cartHeaderContext;
-        private readonly ICartDetailsDbContext _cartDetailsContext = cartDetailsContext;
+        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
+        private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly ShoppingCartAPIResponse _shoppingCartAPIResponse = new();
+        private readonly ILogger _logger = logger.ForContext<CartUpsertRequestHandler>();
 
-        public async Task<ShoppingCartAPIResponse> Handle(CartUpsertRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartHeaderDto>> Handle(CartUpsertRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var cartHeaderFromDb = await _cartHeaderContext.CartHeaders.AsNoTracking().FirstOrDefaultAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
+                var cartHeaderFromDb = await _cartHeaderRepository.GetAll().FirstOrDefaultAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
 
                 if (cartHeaderFromDb is null)
                 {
                     CartHeader cartHeader = _mapper.Map<CartHeader>(request.CartDto.CartHeader);
-                    await _cartHeaderContext.CartHeaders.AddAsync(cartHeader, cancellationToken);
-                    await _cartHeaderContext.SaveChangesAsync(cancellationToken);
+                    await _cartHeaderRepository.CreateAsync(cartHeader);
 
-                    request.CartDto.CartDetails.First().CartHeaderId = cartHeader.Id;
-                    await _cartDetailsContext.CartDetails.AddAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()), cancellationToken);
-                    await _cartDetailsContext.SaveChangesAsync(cancellationToken);
+                    request.CartDto.CartDetails.Data.First().CartHeaderId = cartHeader.Id;
+                    await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.Data.First()));
+
+                    return new Result<CartHeaderDto>
+                    {
+                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
+                        SuccessMessage = "Продукт успешно добавлен в корзину",
+                    };
                 }
 
                 else
                 {
-                    var cartDetailsFromDb = await _cartDetailsContext.CartDetails.AsNoTracking().FirstOrDefaultAsync(key => key.ProductId == request.CartDto.CartDetails.First().ProductId &&
+                    var cartDetailsFromDb = await _cartDetailsRepository.GetAll().FirstOrDefaultAsync(key => key.ProductId == request.CartDto.CartDetails.Data.First().ProductId &&
                         key.CartHeaderId == cartHeaderFromDb.Id, cancellationToken);
 
                     if (cartDetailsFromDb is null || cartDetailsFromDb.Count == 0)
                     {
-                        request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.Id;
-                        await _cartDetailsContext.CartDetails.AddAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()), cancellationToken);
-                        await _cartDetailsContext.SaveChangesAsync(cancellationToken);
+                        request.CartDto.CartDetails.Data.First().CartHeaderId = cartHeaderFromDb.Id;
+                        await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.Data.First()));
                     }
 
                     else
                     {
-                        request.CartDto.CartDetails.First().Id = cartDetailsFromDb.Id;
-                        request.CartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
-                        request.CartDto.CartDetails.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
+                        request.CartDto.CartDetails.Data.First().Id = cartDetailsFromDb.Id;
+                        request.CartDto.CartDetails.Data.First().Count += cartDetailsFromDb.Count;
+                        request.CartDto.CartDetails.Data.First().CartHeaderId = cartDetailsFromDb.CartHeaderId;
 
-                        _cartDetailsContext.CartDetails.Update(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
-                        await _cartDetailsContext.SaveChangesAsync(cancellationToken);
+                        await _cartDetailsRepository.UpdateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.Data.First()));
                     }
                 }
 
-                _shoppingCartAPIResponse.IsSuccess = true;
-                _shoppingCartAPIResponse.Message = "Корзина успешно обновлена";
-                _shoppingCartAPIResponse.Data = request.CartDto;
-
-                return _shoppingCartAPIResponse;
+                return new Result<CartHeaderDto>
+                {
+                    Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
+                    SuccessMessage = "Корзина успешно обновлена",
+                };
             }
 
             catch (Exception exception)
             {
-                _shoppingCartAPIResponse.IsSuccess = false;
-                _shoppingCartAPIResponse.Message = exception.Message;
+                _logger.Warning(exception, exception.Message);
+                return new Result<CartHeaderDto>
+                {
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                };
             }
-
-            return _shoppingCartAPIResponse;
         }
     }
 }
