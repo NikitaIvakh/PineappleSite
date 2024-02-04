@@ -22,15 +22,28 @@ namespace ShoppingCart.Application.Features.Commands.Handlers
         {
             try
             {
-                CartHeader cartHeaderFromDb = await _cartHeaderRepository.GetAll().FirstAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
-                cartHeaderFromDb.CouponCode = string.Empty;
-                await _cartHeaderRepository.UpdateAsync(cartHeaderFromDb);
+                CartHeader? cartHeaderFromDb = await _cartHeaderRepository.GetAll().FirstOrDefaultAsync(key => key.UserId == request.CartDto.CartHeader.UserId, cancellationToken);
 
-                return new Result<CartHeaderDto>
+                if (cartHeaderFromDb is null)
                 {
-                    Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
-                    SuccessMessage = "Купон успешно удален",
-                };
+                    return new Result<CartHeaderDto>
+                    {
+                        ErrorMessage = ErrorMessages.CouponNotFound,
+                        ErrorCode = (int)ErrorCodes.CouponNotFound,
+                    };
+                }
+
+                else
+                {
+                    cartHeaderFromDb.CouponCode = string.Empty;
+                    await _cartHeaderRepository.UpdateAsync(cartHeaderFromDb);
+
+                    return new Result<CartHeaderDto>
+                    {
+                        Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
+                        SuccessMessage = "Купон успешно удален",
+                    };
+                }
             }
 
             catch (Exception exception)
