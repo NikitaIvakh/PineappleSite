@@ -9,9 +9,10 @@ namespace ShoppingCart.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ShoppingCartController(IMediator mediator) : ControllerBase
+    public class ShoppingCartController(IMediator mediator, ILogger<CartHeaderDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<CartHeaderDto> _logger = logger;
 
         // GET: api/<ShoppingCartController>
         [HttpGet("GetCart/{userId}")]
@@ -21,9 +22,11 @@ namespace ShoppingCart.API.Controllers
 
             if (cart.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Корзина успешно получена");
                 return Ok(cart);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения корзины");
             return BadRequest(cart.ErrorMessage);
         }
 
@@ -35,9 +38,11 @@ namespace ShoppingCart.API.Controllers
 
             if (comnand.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Корзина успешно обновлена");
                 return Ok(comnand);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления корзины");
             return BadRequest(comnand.ErrorMessage);
         }
 
@@ -48,9 +53,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно применен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка применения купона");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -61,9 +68,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Купон успешно удален");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления купона");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -75,9 +84,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Продукт успешно удален");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления продукта");
             return BadRequest(command.ErrorMessage);
         }
     }
