@@ -9,10 +9,10 @@ namespace ShoppingCart.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ShoppingCartController(IMediator mediator, ILogger<CartDto> _logger) : ControllerBase
+    public class ShoppingCartController(IMediator mediator, ILogger<CartDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-        private readonly ILogger<CartDto> _logger;
+        private readonly ILogger<CartDto> _logger = logger;
 
         // GET: api/<ShoppingCartController>
         [HttpGet("GetShoppingCart/{userId}")]
