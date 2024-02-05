@@ -10,7 +10,9 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
+builder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]));
 
 WebApplication app = builder.Build();
 

@@ -24,6 +24,7 @@ namespace ShoppingCart.Infrastructure.DependencyInjection
             services.AddScoped<IBaseRepository<CartDetails>, BaseRepository<CartDetails>>();
 
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ICouponService, CouponService>();
         }
 
         private static void RegisterDataBase(this IServiceCollection services, IConfiguration configuration)
