@@ -26,8 +26,8 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                 {
                     return new Result<CartDetailsDto>
                     {
-                        ErrorMessage = ErrorMessages.InternalServerError,
-                        ErrorCode = (int)ErrorCodes.InternalServerError,
+                        ErrorMessage = ErrorMessages.DetailsNotFound,
+                        ErrorCode = (int)ErrorCodes.DetailsNotFound,
                     };
                 }
 

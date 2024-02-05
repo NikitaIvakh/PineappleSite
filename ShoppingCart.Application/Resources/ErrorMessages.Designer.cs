@@ -61,6 +61,24 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Корзина не найдена.
+        /// </summary>
+        internal static string CartHeaderNotFound {
+            get {
+                return ResourceManager.GetString("CartHeaderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Детали не найдены.
+        /// </summary>
+        internal static string DetailsNotFound {
+            get {
+                return ResourceManager.GetString("DetailsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Внутренняя проблемы сервера.
         /// </summary>
         internal static string InternalServerError {

@@ -25,8 +25,8 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                 {
                     return new Result<CartHeaderDto>
                     {
-                        ErrorMessage = ErrorMessages.InternalServerError,
-                        ErrorCode = (int)ErrorCodes.InternalServerError,
+                        ErrorMessage = ErrorMessages.CartHeaderNotFound,
+                        ErrorCode = (int)ErrorCodes.CartHeaderNotFound,
                     };
                 }
 
