@@ -1,6 +1,7 @@
 using ShoppingCart.Infrastructure.DependencyInjection;
 using ShoppingCart.Application.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
+using ShoppingCart.API;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
 builder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]));
+
+builder.Services.AddSwagger();
 
 builder.Services.AddCors(key =>
 { 
