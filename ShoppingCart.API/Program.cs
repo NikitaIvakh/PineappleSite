@@ -18,7 +18,12 @@ builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
 builder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]));
 
-builder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+builder.Host.UseSerilog((context, logConfig) =>
+{
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
+
 builder.Services.AddSwagger();
 
 builder.Services.AddCors(key =>

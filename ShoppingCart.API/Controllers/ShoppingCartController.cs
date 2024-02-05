@@ -22,7 +22,7 @@ namespace ShoppingCart.API.Controllers
 
             if (request.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Корзина успешно получен");
+                _logger.LogDebug("LogDebug ================ Корзина успешно получена");
                 return Ok(request);
             }
 
