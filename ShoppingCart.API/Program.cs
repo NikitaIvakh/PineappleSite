@@ -1,5 +1,6 @@
 using ShoppingCart.Infrastructure.DependencyInjection;
 using ShoppingCart.Application.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,15 @@ builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
 builder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]));
 
+builder.Services.AddCors(key =>
+{ 
+    key.AddPolicy("CorsPolicy",
+        applicationBuilder => applicationBuilder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
+
 WebApplication app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -28,7 +38,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
+app.UseCors();
 app.MapControllers();
 
 app.Run();

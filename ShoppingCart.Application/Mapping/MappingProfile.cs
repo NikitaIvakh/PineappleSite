@@ -9,8 +9,8 @@ namespace ShoppingCart.Application.Mapping
         public MappingProfile()
         {
             #region ShoppingCart Mapping
-            CreateMap<CartHeader, CartHeader>();
-            CreateMap<CartDetails, CartDetailsDto>();
+            CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
+            CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
             #endregion
         }
     }

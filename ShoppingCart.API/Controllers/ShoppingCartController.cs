@@ -1,6 +1,7 @@
 ﻿using Favourites.Domain.DTOs;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Features.Requests.Queries;
 using ShoppingCart.Domain.Results;
 
@@ -20,17 +21,12 @@ namespace ShoppingCart.API.Controllers
             return Ok(request);
         }
 
-        // GET api/<ShoppingCartController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
         // POST api/<ShoppingCartController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<Result<CartDto>>> Post([FromBody] CartDto cartDto)
         {
+            var command = await _mediator.Send(new ShoppingCartUpsertRequest { CartDto = cartDto });
+            return Ok(command);
         }
 
         // PUT api/<ShoppingCartController>/5

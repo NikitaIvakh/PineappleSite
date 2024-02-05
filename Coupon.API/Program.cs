@@ -16,6 +16,15 @@ applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
 applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
 
+applicationBuilder.Services.AddCors(key =>
+{
+    key.AddPolicy("CorsPolicy",
+        applicationBuilder => applicationBuilder
+        .AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader());
+});
+
 applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();
@@ -30,5 +39,6 @@ if (webApplication.Environment.IsDevelopment())
 webApplication.UseHttpsRedirection();
 webApplication.UseSerilogRequestLogging();
 webApplication.UseAuthorization();
+webApplication.UseCors();
 webApplication.MapControllers();
 webApplication.Run();
