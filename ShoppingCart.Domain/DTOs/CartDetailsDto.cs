@@ -13,5 +13,7 @@ namespace Favourites.Domain.DTOs
         public ProductDto? Product { get; set; }
 
         public int ProductId { get; set; }
+
+        public double Count { get; set; }
     }
 }

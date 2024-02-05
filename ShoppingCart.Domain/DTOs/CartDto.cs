@@ -6,6 +6,6 @@ namespace Favourites.Domain.DTOs
     {
         public CartHeaderDto CartHeader { get; set; }
 
-        public CollectionResult<CartDetailsDto> CartDetails { get; set; }
+        public List<CartDetailsDto> CartDetails { get; set; }
     }
 }
