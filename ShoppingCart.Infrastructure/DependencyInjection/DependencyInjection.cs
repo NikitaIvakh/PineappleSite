@@ -13,6 +13,7 @@ namespace ShoppingCart.Infrastructure.DependencyInjection
         {
             services.RegisterServices();
             services.RegisterDataBase(configuration);
+            services.ApplyMigration();
         }
 
         private static void RegisterServices(this IServiceCollection services)
@@ -25,7 +26,7 @@ namespace ShoppingCart.Infrastructure.DependencyInjection
         {
             services.AddDbContext<ApplicationDbContext>(config =>
             {
-                config.UseNpgsql(configuration.GetConnectionString("ShoppingCartDbConnection");
+                config.UseNpgsql(configuration.GetConnectionString("ShoppingCartDbConnection"));
             });
         }
 
