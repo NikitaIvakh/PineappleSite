@@ -29,16 +29,12 @@ namespace ShoppingCart.API.Controllers
             return Ok(command);
         }
 
-        // PUT api/<ShoppingCartController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
         // DELETE api/<ShoppingCartController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{cartDetailsId}")]
+        public async Task<ActionResult<Result<CartDto>>> Delete(int cartDetailsId)
         {
+            var command = await _mediator.Send(new RemoveShoppingCartDetailsRequest { CartDetailsId = cartDetailsId });
+            return Ok(command);
         }
     }
 }
