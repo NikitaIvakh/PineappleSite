@@ -3,13 +3,11 @@ using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Products;
-using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
-using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation
 {
@@ -74,25 +72,6 @@ namespace PineappleSite.Presentation
             CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
             CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
             CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
-            #endregion
-
-            #region ShoppingCart Mapping
-            CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
-            CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
-            CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
-            CreateMap<List<CartDetailsViewModel>, CartDetailsDtoCollectionResult>().ReverseMap();
-            CreateMap<CartDto, CartViewModel>().ReverseMap();
-            CreateMap<CartDto, CartHeaderViewModel>().ReverseMap();
-
-            CreateMap<CartDto, CartViewModel>()
-                .ForMember(dest => dest.CartHeader, opt => opt.MapFrom(src => src.CartHeader))
-                .ForMember(dest => dest.CartDetails, opt => opt.MapFrom(src => src.CartDetails.Data))
-                .ReverseMap();
-
-            CreateMap<CartDtoResult, CartHeaderViewModel>().ReverseMap();
-            CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
-            CreateMap<CartDtoResult, CartResultViewModel<CartViewModel>>().ReverseMap();
-            CreateMap<CartHeaderDto, CartDetailsViewModel>().ReverseMap();
             #endregion
 
             #region Favourite Mapping

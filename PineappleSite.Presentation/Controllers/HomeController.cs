@@ -3,18 +3,15 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.Products;
-using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Favorites;
-using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class HomeController(ILogger<HomeController> logger, IProductService productService, IShoppingCartService shoppingCartService, IFavoriteService favoriteService) : Controller
+    public class HomeController(ILogger<HomeController> logger, IProductService productService, IFavoriteService favoriteService) : Controller
     {
         private readonly ILogger<HomeController> _logger = logger;
         private readonly IProductService _productService = productService;
-        private readonly IShoppingCartService _shoppingCartService = shoppingCartService;
         private readonly IFavoriteService _favoriteService = favoriteService;
 
         [HttpGet]
@@ -68,42 +65,42 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        [HttpPost]
-        [ActionName("AddToCart")]
-        public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
-        {
-            CartViewModel cartViewModel = new()
-            {
-                CartHeader = new CartHeaderViewModel
-                {
-                    UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value,
-                },
-            };
+        //[HttpPost]
+        //[ActionName("AddToCart")]
+        //public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
+        //{
+        //    CartViewModel cartViewModel = new()
+        //    {
+        //        CartHeader = new CartHeaderViewModel
+        //        {
+        //            UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value,
+        //        },
+        //    };
 
-            CartDetailsViewModel cartDetailsViewModel = new()
-            {
-                Count = productViewModel.Count,
-                ProductId = productViewModel.Id,
-            };
+        //    CartDetailsViewModel cartDetailsViewModel = new()
+        //    {
+        //        Count = productViewModel.Count,
+        //        ProductId = productViewModel.Id,
+        //    };
 
-            List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
-            cartViewModel.CartDetails = cartViewModels;
+        //    List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
+        //    cartViewModel.CartDetails = cartViewModels;
 
-            CartResultViewModel<CartViewModel> response = await _shoppingCartService.CartUpsertAsync(cartViewModel);
+        //    CartResultViewModel<CartViewModel> response = await _shoppingCartService.CartUpsertAsync(cartViewModel);
 
-            if (response.IsSuccess)
-            {
-                TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts));
-            }
+        //    if (response.IsSuccess)
+        //    {
+        //        TempData["success"] = response.SuccessMessage;
+        //        return RedirectToAction(nameof(GetProducts));
+        //    }
 
-            else
-            {
-                TempData["error"] = response.ErrorMessage;
-            }
+        //    else
+        //    {
+        //        TempData["error"] = response.ErrorMessage;
+        //    }
 
-            return View(cartViewModel);
-        }
+        //    return View(cartViewModel);
+        //}
 
         [HttpPost]
         [ActionName("AddToFavorites")]
