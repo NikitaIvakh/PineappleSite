@@ -9,16 +9,25 @@ namespace ShoppingCart.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ShoppingCartController(IMediator mediator) : ControllerBase
+    public class ShoppingCartController(IMediator mediator, ILogger<CartDto> _logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<CartDto> _logger;
 
         // GET: api/<ShoppingCartController>
         [HttpGet("GetShoppingCart/{userId}")]
         public async Task<ActionResult<Result<CartDto>>> GetShoppingCart(string userId)
         {
             var request = await _mediator.Send(new GetShoppingCartRequest { UserId = userId });
-            return Ok(request);
+
+            if (request.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ Корзина успешно получен");
+                return Ok(request);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка получения корзины");
+            return BadRequest(request.ErrorMessage);
         }
 
         // POST api/<ShoppingCartController>
@@ -26,21 +35,45 @@ namespace ShoppingCart.API.Controllers
         public async Task<ActionResult<Result<CartDto>>> Post([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new ShoppingCartUpsertRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ В корзину успешно добавлен товар");
+                return Ok(command);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка добавления товара в корзину");
+            return BadRequest(command.ErrorMessage);
         }
 
         [HttpPost("ApplyCoupon")]
         public async Task<ActionResult<Result<CartDto>>> ApplyCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ Купон успешно применен");
+                return Ok(command);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка применения купона");
+            return BadRequest(command.ErrorMessage);
         }
 
         [HttpPost("RemoveCoupon")]
         public async Task<ActionResult<Result<CartDto>>> RemoveCoupon([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new RemoveCouponRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ Купон успешно удален");
+                return Ok(command);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка удаления купона");
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<ShoppingCartController>/5
@@ -48,7 +81,15 @@ namespace ShoppingCart.API.Controllers
         public async Task<ActionResult<Result<CartDto>>> Delete(int cartDetailsId)
         {
             var command = await _mediator.Send(new RemoveShoppingCartDetailsRequest { CartDetailsId = cartDetailsId });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ Продукт из корзины успешно удален");
+                return Ok(command);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка удаления продукта из корзины");
+            return BadRequest(command.ErrorMessage);
         }
     }
 }
