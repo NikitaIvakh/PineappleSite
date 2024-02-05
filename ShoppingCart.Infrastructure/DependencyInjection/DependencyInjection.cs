@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Domain.Interfaces.Repository;
+using ShoppingCart.Domain.Interfaces.Service;
 using ShoppingCart.Infrastructure.Repository.Implement;
+using ShoppingCart.Infrastructure.Repository.Services;
 
 namespace ShoppingCart.Infrastructure.DependencyInjection
 {
@@ -20,6 +22,8 @@ namespace ShoppingCart.Infrastructure.DependencyInjection
         {
             services.AddScoped<IBaseRepository<CartHeader>, BaseRepository<CartHeader>>();
             services.AddScoped<IBaseRepository<CartDetails>, BaseRepository<CartDetails>>();
+
+            services.AddScoped<IProductService, ProductService>();
         }
 
         private static void RegisterDataBase(this IServiceCollection services, IConfiguration configuration)
