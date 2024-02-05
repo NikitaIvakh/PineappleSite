@@ -7,7 +7,7 @@ namespace ShoppingCart.Application.DependencyInjection
     {
         public static void ConfigureApplicationServices(this IServiceCollection services)
         {
-
+            services.RegisterServices();
         }
 
         private static void RegisterServices(this IServiceCollection services)
