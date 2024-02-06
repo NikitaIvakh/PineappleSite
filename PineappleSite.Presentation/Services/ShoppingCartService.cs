@@ -125,8 +125,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CartResult<CartViewModel>
                     {
-                        ErrorCode = apiResult.ErrorCode,
-                        ErrorMessage = apiResult.ErrorMessage,
+                        SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
                 }

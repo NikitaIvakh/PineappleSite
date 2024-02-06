@@ -24,30 +24,39 @@ namespace PineappleSite.Presentation.Controllers
                 string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
                 CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
 
-                cartViewModel = new()
+                if (result.IsSuccess)
                 {
-                    CartHeader = new CartHeaderViewModel
+                    cartViewModel = new()
                     {
-                        CartHeaderId = result.Data.CartHeader.CartHeaderId,
-                        UserId = userId,
-                        CouponCode = cartViewModel.CartHeader.CouponCode,
-                        Discount = result.Data.CartHeader.Discount,
-                        CartTotal = result.Data.CartHeader.CartTotal,
-                    },
-                    CartDetails = result.Data.CartDetails,
-                };
+                        CartHeader = new CartHeaderViewModel
+                        {
+                            CartHeaderId = result.Data.CartHeader.CartHeaderId,
+                            UserId = userId,
+                            CouponCode = cartViewModel.CartHeader.CouponCode,
+                            Discount = result.Data.CartHeader.Discount,
+                            CartTotal = result.Data.CartHeader.CartTotal,
+                        },
+                        CartDetails = result.Data.CartDetails,
+                    };
 
-                var response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
+                    var response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
 
-                if (response.IsSuccess)
-                {
-                    TempData["success"] = response.SuccessMessage;
-                    return RedirectToAction(nameof(Index));
+                    if (response.IsSuccess)
+                    {
+                        TempData["success"] = response.SuccessMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    else
+                    {
+                        TempData["error"] = response.ErrorMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
                 }
 
                 else
                 {
-                    TempData["error"] = response.ErrorMessage;
+                    TempData["error"] = result.ErrorMessage;
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -55,30 +64,61 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View();
+                return View(cartViewModel);
             }
         }
 
-        // GET: ShoppingCartController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: ShoppingCartController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public async Task<ActionResult> RemoveCoupon(CartViewModel cartViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
+                string? userid = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userid);
+
+                if (result.IsSuccess)
+                {
+                    cartViewModel = new CartViewModel
+                    {
+                        CartHeader = new CartHeaderViewModel
+                        {
+                            CartHeaderId = result.Data.CartHeader.CartHeaderId,
+                            UserId = result.Data.CartHeader.UserId,
+                            CouponCode = null,
+                            Discount = result.Data.CartHeader.CartHeaderId,
+                            CartTotal = result.Data.CartHeader.CartTotal,
+                        },
+                        CartDetails = result.Data.CartDetails,
+                    };
+
+                    var response = await _shoppingCartService.RemoveCouponAsync(cartViewModel);
+
+                    if (response.IsSuccess)
+                    {
+                        TempData["success"] = response.SuccessMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    else
+                    {
+                        TempData["error"] = response.ErrorMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                else
+                {
+                    TempData["error"] = result.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch
+
+            catch (Exception exception)
             {
-                return View();
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View(cartViewModel);
             }
         }
+
 
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()
         {

@@ -32,7 +32,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                 else
                 {
-                    cartHeader.CouponCode = string.Empty;
+                    cartHeader.CouponCode = null;
                     await _cartHeaderRepository.UpdateAsync(cartHeader);
 
                     return new Result<CartHeaderDto>
