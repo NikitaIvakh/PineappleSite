@@ -15,7 +15,7 @@ namespace PineappleSite.Presentation.Models.Products
 
         public double Price { get; set; }
 
-        [Range(1, 10)]
+        [Range(1, 10, ErrorMessage = "Выбор в диапазоне от 1 до 10")]
         public int Count { get; set; } = 1;
 
         public string? ImageUrl { get; set; }
