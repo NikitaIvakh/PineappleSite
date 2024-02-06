@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
@@ -15,16 +14,46 @@ namespace PineappleSite.Presentation.Services
         public async Task<CartResult<CartViewModel>> GetCartAsync(string userId)
         {
             AddBearerToken();
-            CartDtoResult cartDto = await _shoppingCartClient.GetShoppingCartAsync(userId);
-            CartResult<CartViewModel> result = new()
+            try
             {
-                Data = _mapper.Map<CartViewModel>(cartDto.Data),
-                ErrorMessage = cartDto.ErrorMessage,
-                ErrorCode = cartDto.ErrorCode,
-                SuccessMessage = cartDto.SuccessMessage,
-            };
+                CartDtoResult cartDto = await _shoppingCartClient.GetShoppingCartAsync(userId);
+                CartResult<CartViewModel> result = new()
+                {
+                    Data = _mapper.Map<CartViewModel>(cartDto.Data),
+                    ErrorMessage = cartDto.ErrorMessage,
+                    ErrorCode = cartDto.ErrorCode,
+                    SuccessMessage = cartDto.SuccessMessage,
+                };
 
-            return result;
+                if (result.IsSuccess)
+                {
+                    return result;
+                }
+
+                else
+                {
+                    foreach (var error in cartDto.ValidationErrors)
+                    {
+                        return new CartResult<CartViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = result.ErrorCode,
+                            ErrorMessage = result.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new CartResult<CartViewModel>();
+            }
+
+            catch (ShoppingCartExceptions exceptions)
+            {
+                return new CartResult<CartViewModel>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                };
+            }
         }
 
         public async Task<CartResult<CartViewModel>> CartUpsertAsync(CartViewModel cartViewModel)

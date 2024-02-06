@@ -120,6 +120,9 @@
   <data name="CartHeaderNotFound" xml:space="preserve">
     <value>Корзина не найдена</value>
   </data>
+  <data name="CouponNotFound" xml:space="preserve">
+    <value>Купон не найден</value>
+  </data>
   <data name="DetailsNotFound" xml:space="preserve">
     <value>Детали не найдены</value>
   </data>

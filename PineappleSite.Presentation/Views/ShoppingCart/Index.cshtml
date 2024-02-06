@@ -63,6 +63,7 @@
                                         <span>Купон:</span>
                                         <input name="CartViewModel.CartHeader.CouponCode" value="@Model.Data.CartHeader.CouponCode" />
                                         <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Применить</button>
+                                        <span class="text-danger" name="CartViewModel.CartHeader.CouponCode" asp-validation-for="Data.CartHeader.CouponCode"></span>
                                     }
 
                                     else

@@ -6,13 +6,15 @@ using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Interfaces.Repository;
+using ShoppingCart.Domain.Interfaces.Service;
 using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class ApplyCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
+    public class ApplyCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper, ICouponService couponService) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
+        private readonly ICouponService _couponService = couponService;
         private readonly IMapper _mapper = mapper;
 
         public async Task<Result<CartHeaderDto>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
@@ -32,14 +34,28 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                 else
                 {
-                    cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode;
-                    await _cartHeaderRepository.UpdateAsync(cartHeader);
+                    var coupon = await _couponService.GetCouponAsync(request.CartDto.CartHeader.CouponCode);
 
-                    return new Result<CartHeaderDto>
+                    if (coupon.Data is null)
                     {
-                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
-                        SuccessMessage = "Купон успешно применен",
-                    };
+                        return new Result<CartHeaderDto>
+                        {
+                            Data = _mapper.Map<CartHeaderDto>(cartHeader),
+                            ErrorMessage = ErrorMessages.CouponNotFound,
+                        };
+                    }
+
+                    else
+                    {
+                        cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode;
+                        await _cartHeaderRepository.UpdateAsync(cartHeader);
+
+                        return new Result<CartHeaderDto>
+                        {
+                            Data = _mapper.Map<CartHeaderDto>(cartHeader),
+                            SuccessMessage = "Купон успешно применен",
+                        };
+                    }
                 }
             }
 
