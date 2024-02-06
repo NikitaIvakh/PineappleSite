@@ -3,11 +3,13 @@ using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
+using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation
 {
@@ -89,6 +91,12 @@ namespace PineappleSite.Presentation
             CreateMap<FavouritesDto, FavouritesHeaderViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouritesViewModel>().ReverseMap();
             CreateMap<FavouritesDtoResult, FavouriteResultViewModel<FavouritesViewModel>>().ReverseMap();
+            #endregion
+
+            #region ShoppingCart Mapping
+            CreateMap<CartDto, CartViewModel>().ReverseMap();
+            CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
+            CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
             #endregion
         }
     }
