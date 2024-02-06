@@ -10,13 +10,13 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class ShoppingCartUpsertRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<ShoppingCartUpsertRequest, Result<CartDto>>
+    public class ShoppingCartUpsertRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<ShoppingCartUpsertRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Result<CartDto>> Handle(ShoppingCartUpsertRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartHeaderDto>> Handle(ShoppingCartUpsertRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                         .GetAll()
                         .FirstOrDefault(key => key.ProductId == request.CartDto.CartDetails.First().ProductId && key.CartHeaderId == cartHeaderFromDb.CartHeaderId);
 
-                    if (cartHeaderFromDb is null)
+                    if (cartDetailsFromDb is null)
                     {
                         request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
                         await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
@@ -53,16 +53,16 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                     }
                 }
 
-                return new Result<CartDto>
+                return new Result<CartHeaderDto>
                 {
-                    Data = request.CartDto,
+                    Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
                     SuccessMessage = "Товар успешно добавлен в корзину",
                 };
             }
 
             catch (Exception exception)
             {
-                return new Result<CartDto>
+                return new Result<CartHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,

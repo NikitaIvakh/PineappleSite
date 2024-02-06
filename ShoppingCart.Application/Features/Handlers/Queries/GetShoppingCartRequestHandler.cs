@@ -57,7 +57,7 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                         Product = key.Product,
                         ProductId = key.ProductId,
                         Count = key.Count,
-                    }).Where(key => key.CartHeaderId == cartHeader.CartHeaderId).ToList();
+                    }).OrderByDescending(key => key.CartDetailsId).Where(key => key.CartHeaderId == cartHeader.CartHeaderId).ToList();
 
                     CartDto cartDto = new()
                     {
