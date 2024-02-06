@@ -6,6 +6,6 @@ namespace ShoppingCart.Application.Features.Requests.Commands
 {
     public class ApplyCouponRequest : IRequest<Result<CartHeaderDto>>
     {
-        public CartHeaderDto CartHeaderDto { get; set; }
+        public CartDto CartDto { get; set; }
     }
 }

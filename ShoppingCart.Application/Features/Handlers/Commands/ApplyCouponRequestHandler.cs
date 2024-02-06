@@ -19,7 +19,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
         {
             try
             {
-                CartHeader? cartHeader = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.UserId == request.CartHeaderDto.UserId);
+                CartHeader? cartHeader = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
 
                 if (cartHeader is null)
                 {
@@ -32,7 +32,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                 else
                 {
-                    cartHeader.CouponCode = request.CartHeaderDto.CouponCode;
+                    cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode;
                     await _cartHeaderRepository.UpdateAsync(cartHeader);
 
                     return new Result<CartHeaderDto>

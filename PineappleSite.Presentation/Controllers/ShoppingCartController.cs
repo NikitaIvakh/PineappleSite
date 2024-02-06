@@ -17,11 +17,27 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ShoppingCartController/Details/5
-        public async Task<ActionResult> ApplyCoupon(CartHeaderViewModel cartHeaderViewModel)
+        public async Task<ActionResult> ApplyCoupon(CartViewModel cartViewModel)
         {
             try
             {
-                var response = await _shoppingCartService.ApplyCouponAsync(cartHeaderViewModel);
+                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
+
+                cartViewModel = new()
+                {
+                    CartHeader = new CartHeaderViewModel
+                    {
+                        CartHeaderId = result.Data.CartHeader.CartHeaderId,
+                        UserId = userId,
+                        CouponCode = cartViewModel.CartHeader.CouponCode,
+                        Discount = result.Data.CartHeader.Discount,
+                        CartTotal = result.Data.CartHeader.CartTotal,
+                    },
+                    CartDetails = result.Data.CartDetails,
+                };
+
+                var response = await _shoppingCartService.ApplyCouponAsync(cartViewModel);
 
                 if (response.IsSuccess)
                 {

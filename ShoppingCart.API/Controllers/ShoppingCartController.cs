@@ -47,9 +47,9 @@ namespace ShoppingCart.API.Controllers
         }
 
         [HttpPost("ApplyCoupon")]
-        public async Task<ActionResult<Result<CartHeaderDto>>> ApplyCoupon([FromBody] CartHeaderDto cartHeaderDto)
+        public async Task<ActionResult<Result<CartDto>>> ApplyCoupon([FromBody] CartDto cartDto)
         {
-            var command = await _mediator.Send(new ApplyCouponRequest { CartHeaderDto = cartHeaderDto });
+            var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
 
             if (command.IsSuccess)
             {

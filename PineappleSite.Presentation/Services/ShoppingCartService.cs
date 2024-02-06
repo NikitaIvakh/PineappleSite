@@ -70,20 +70,20 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CartResult<CartHeaderViewModel>> ApplyCouponAsync(CartHeaderViewModel cartHeaderViewModel)
+        public async Task<CartResult<CartViewModel>> ApplyCouponAsync(CartViewModel cartViewModel)
         {
             AddBearerToken();
             try
             {
-                CartHeaderDto cartHeaderDto = _mapper.Map<CartHeaderDto>(cartHeaderViewModel);
-                CartHeaderDtoResult apiResult = await _shoppingCartClient.ApplyCouponAsync(cartHeaderDto);
+                CartDto cartHeaderDto = _mapper.Map<CartDto>(cartViewModel);
+                CartDtoResult apiResult = await _shoppingCartClient.ApplyCouponAsync(cartHeaderDto);
 
                 if (apiResult.IsSuccess)
                 {
-                    return new CartResult<CartHeaderViewModel>
+                    return new CartResult<CartViewModel>
                     {
                         SuccessMessage = apiResult.SuccessMessage,
-                        Data = _mapper.Map<CartHeaderViewModel>(apiResult.Data),
+                        Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
                 }
 
@@ -91,7 +91,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (var error in apiResult.ValidationErrors)
                     {
-                        return new CartResult<CartHeaderViewModel>
+                        return new CartResult<CartViewModel>
                         {
                             ValidationErrors = error,
                             ErrorCode = apiResult.ErrorCode,
@@ -100,12 +100,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new CartResult<CartHeaderViewModel>();
+                return new CartResult<CartViewModel>();
             }
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartHeaderViewModel>
+                return new CartResult<CartViewModel>
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,

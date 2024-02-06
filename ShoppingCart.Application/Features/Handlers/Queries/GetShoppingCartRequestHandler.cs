@@ -70,7 +70,7 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                     foreach (var product in cartDto.CartDetails)
                     {
                         product.Product = products.Data.FirstOrDefault(key => key.Id == product.ProductId);
-                        cartDto.CartHeader.CartTotal += (product.Count *= product.Product?.Price ?? 0);
+                        cartDto.CartHeader.CartTotal += (product.Count * product.Product?.Price ?? 0);
                     }
 
                     if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
