@@ -1,0 +1,108 @@
+﻿@using PineappleSite.Presentation.Models.ShoppingCart
+@model PineappleSite.Presentation.Services.ShoppingCarts.CartResult<CartViewModel>
+
+@{
+    if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count > 0)
+    {
+        <form method="post">
+            <br />
+            <input asp-for="Data.CartHeader.UserId" hidden />
+            <input asp-for="Data.CartHeader.CartHeaderId" hidden />
+            <div class="">
+                <div class="card border mt-4 container">
+                    <div class="card-header bg-dark text-light ml-0 row ">
+                        <div class="col-6">
+                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Корзина</h3>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Вернуться к продуктам</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class=" d-none d-lg-block">
+                            <div class="row text-info">
+                                <div class="col-lg-2"></div>
+                                <div class="col-lg-5">Детали продукта</div>
+                                <div class="col-lg-2">Стоимость</div>
+                                <div class="col-lg-2">Количество</div>
+                                <div class="col-lg-1"></div>
+                            </div>
+                        </div>
+                        <hr />
+                        @{
+                            foreach (var cartObj in Model.Data.CartDetails)
+                            {
+                                <div class="row h-100">
+                                    <div class="col-4 col-md-2 text-center py-2">
+                                        <img src="@cartObj?.Product?.ImageUrl" class="rounded" width="100%" />
+                                    </div>
+                                    <div class="col-8 col-md-5">
+                                        <h5>@cartObj?.Product?.Name</h5>
+                                        <div style="font-size:11px;">@Html.Raw(cartObj?.Product?.Description)</div>
+                                    </div>
+                                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                        <span style="font-size:17px;">@cartObj?.Product?.Price Br</span>
+                                    </div>
+                                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                        <span style="font-size:17px;">@cartObj?.Count</span>
+                                    </div>
+                                    <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
+                                        <a asp-action="RemoveDetails" asp-route-cartDetailsId="@cartObj?.ProductId" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        <hr />
+                        <div class="row">
+                            <div class="col-6">
+                                @{
+                                    if (string.IsNullOrEmpty(Model.Data.CartHeader.CouponCode))
+                                    {
+                                        <span>Купон:</span>
+                                        <input asp-for="Data.CartHeader.CouponCode" />
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Применить</button>
+                                    }
+
+                                    else
+                                    {
+                                        <span>Купон:</span>
+                                        <input asp-for="Data.CartHeader.CouponCode" disabled />
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">Удалить</button>
+                                    }
+                                }
+                            </div>
+                            <div class="col-6 text-end">
+                                <span class="text-danger" style="font-size:21px;">Общая стоимость : @Model.Data.CartHeader.CartTotal Br<br /></span>
+                                @{
+                                    if (Model.Data.CartHeader.Discount > 0)
+                                    {
+                                        <span class="text-success"> Сумма скидки : @Model.Data.CartHeader.Discount Br</span>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer row">
+                        <div class="col-6 col-md-3 ">
+                            <button disabled readobly type="submit" class="btn btn-outline-danger form-control">Отправка по почте</button>
+                        </div>
+                        <div class="col-6 col-md-3 offset-md-6">
+                            <button disabled readobly asp-action="Checkout" class="btn btn-success form-control">Дальше</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    }
+
+    else
+    {
+        <div class="text-center">
+            <h1 class="text-white pt-4">Корзина пустая.</h1>
+            <p class="text-white pb-3">Добавьте продукты.</p>
+            @* <img src="/images/Empty_Cart.png" width="45%" /> *@
+        </div>
+    }
+}

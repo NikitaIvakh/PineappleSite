@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Favourites.Domain.DTOs;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Entities;
 
 namespace ShoppingCart.Application.Mapping

@@ -1,6 +1,4 @@
-﻿using ShoppingCart.Domain.DTOs;
-
-namespace Favourites.Domain.DTOs
+﻿namespace ShoppingCart.Domain.DTOs
 {
     public class CartDetailsDto
     {

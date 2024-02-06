@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Favourites.Domain.DTOs;
 using MediatR;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Resources;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Interfaces.Repository;
@@ -45,9 +45,9 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     else
                     {
-                        request.CartDto.CartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
                         request.CartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
                         request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
+                        request.CartDto.CartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
 
                         await _cartDetailsRepository.UpdateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
                     }

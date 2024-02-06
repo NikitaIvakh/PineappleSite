@@ -1,4 +1,4 @@
-﻿namespace Favourites.Domain.DTOs
+﻿namespace ShoppingCart.Domain.DTOs
 {
     public class CartHeaderDto
     {

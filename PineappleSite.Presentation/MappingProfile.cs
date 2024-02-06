@@ -97,6 +97,9 @@ namespace PineappleSite.Presentation
             CreateMap<CartDto, CartViewModel>().ReverseMap();
             CreateMap<CartHeaderDto, CartHeaderViewModel>().ReverseMap();
             CreateMap<CartDetailsDto, CartDetailsViewModel>().ReverseMap();
+
+            CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
+            CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
             #endregion
         }
     }

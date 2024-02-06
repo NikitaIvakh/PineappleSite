@@ -1,5 +1,5 @@
-﻿using Favourites.Domain.DTOs;
-using MediatR;
+﻿using MediatR;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Requests.Commands

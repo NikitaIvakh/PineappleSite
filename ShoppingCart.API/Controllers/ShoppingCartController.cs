@@ -1,8 +1,8 @@
-﻿using Favourites.Domain.DTOs;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Features.Requests.Queries;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.API.Controllers

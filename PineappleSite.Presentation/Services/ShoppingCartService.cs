@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Favorites;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
@@ -18,9 +19,9 @@ namespace PineappleSite.Presentation.Services
             CartResult<CartViewModel> result = new()
             {
                 Data = _mapper.Map<CartViewModel>(cartDto.Data),
-                SuccessMessage = cartDto.SuccessMessage,
                 ErrorMessage = cartDto.ErrorMessage,
                 ErrorCode = cartDto.ErrorCode,
+                SuccessMessage = cartDto.SuccessMessage,
             };
 
             return result;

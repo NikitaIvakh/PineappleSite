@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using AutoMapper;
-using Favourites.Domain.DTOs;
 using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Results;

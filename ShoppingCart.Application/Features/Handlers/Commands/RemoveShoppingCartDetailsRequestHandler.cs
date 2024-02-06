@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Favourites.Domain.DTOs;
 using MediatR;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Resources;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Interfaces.Repository;

@@ -22,7 +22,7 @@
             Data = data;
         }
 
-        public CartResult(string? errorMessage, int? errorCode, List<string>? validationErrors)
+        public CartResult(string? errorMessage, int? errorCode, string? validationErrors)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
