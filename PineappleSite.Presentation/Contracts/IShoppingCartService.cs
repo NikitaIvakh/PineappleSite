@@ -13,6 +13,6 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<CartResult<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 
-        Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int cartDetailsId);
+        Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int productId);
     }
 }

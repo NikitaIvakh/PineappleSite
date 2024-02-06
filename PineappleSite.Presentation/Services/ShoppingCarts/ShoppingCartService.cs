@@ -60,12 +60,12 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(int cartDetailsId);
+        System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(string productId, int? body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(int cartDetailsId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(string productId, int? body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -428,18 +428,18 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
 
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(int cartDetailsId)
+        public virtual System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(string productId, int? body)
         {
-            return ShoppingCartDELETEAsync(cartDetailsId, System.Threading.CancellationToken.None);
+            return ShoppingCartDELETEAsync(productId, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ShoppingCartExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(int cartDetailsId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CartDtoResult> ShoppingCartDELETEAsync(string productId, int? body, System.Threading.CancellationToken cancellationToken)
         {
-            if (cartDetailsId == null)
-                throw new System.ArgumentNullException("cartDetailsId");
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -447,6 +447,10 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
@@ -456,7 +460,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("ShoppingCart");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(cartDetailsId, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

@@ -36,6 +36,7 @@ namespace PineappleSite.Presentation.Controllers
                             Discount = result.Data.CartHeader.Discount,
                             CartTotal = result.Data.CartHeader.CartTotal,
                         },
+
                         CartDetails = result.Data.CartDetails,
                     };
 
@@ -119,6 +120,32 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
+        public async Task<ActionResult> RemoveCartDetails(int productId)
+        {
+            try
+            {
+                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                var response = await _shoppingCartService.RemoveCartDetailsAsync(productId);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.SuccessMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View(productId);
+            }
+        }
 
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()
         {

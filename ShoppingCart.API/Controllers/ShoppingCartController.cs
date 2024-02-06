@@ -77,10 +77,10 @@ namespace ShoppingCart.API.Controllers
         }
 
         // DELETE api/<ShoppingCartController>/5
-        [HttpDelete("{cartDetailsId}")]
-        public async Task<ActionResult<Result<CartDto>>> RemoveDetails(int cartDetailsId)
+        [HttpDelete("{productId}")]
+        public async Task<ActionResult<Result<CartDto>>> RemoveDetails([FromBody] int productId)
         {
-            var command = await _mediator.Send(new RemoveShoppingCartDetailsRequest { CartDetailsId = cartDetailsId });
+            var command = await _mediator.Send(new RemoveShoppingCartDetailsRequest { ProductId = productId });
 
             if (command.IsSuccess)
             {

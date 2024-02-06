@@ -75,6 +75,7 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
 
                     if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
                     {
+                        // TODO Check valid coupon
                         var coupon = await _couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
 
                         if (coupon is not null && cartDto.CartHeader.CartTotal > coupon.Data.MinAmount)

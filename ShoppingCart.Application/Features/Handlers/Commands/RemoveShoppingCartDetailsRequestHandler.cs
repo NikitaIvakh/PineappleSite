@@ -10,21 +10,22 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class RemoveShoppingCartDetailsRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<RemoveShoppingCartDetailsRequest, Result<CartDetailsDto>>
+    public class RemoveShoppingCartDetailsRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<RemoveShoppingCartDetailsRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Result<CartDetailsDto>> Handle(RemoveShoppingCartDetailsRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartHeaderDto>> Handle(RemoveShoppingCartDetailsRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                CartDetails? cartDetails = _cartDetailsRepository.GetAll().FirstOrDefault(key => key.CartDetailsId == request.CartDetailsId);
+                CartDetails? cartDetails = _cartDetailsRepository.GetAll().FirstOrDefault(key => key.ProductId == request.ProductId);
+                CartHeader? cartHeader = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartDetails.CartHeaderId);
 
                 if (cartDetails is null)
                 {
-                    return new Result<CartDetailsDto>
+                    return new Result<CartHeaderDto>
                     {
                         ErrorMessage = ErrorMessages.DetailsNotFound,
                         ErrorCode = (int)ErrorCodes.DetailsNotFound,
@@ -38,7 +39,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     if (totalRemoveCartDetails == 1)
                     {
-                        CartHeader? cartHeader = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartDetails.CartHeaderId);
+                        CartHeader? cartHeaderDelete = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartDetails.CartHeaderId);
 
                         if (cartHeader is not null)
                         {
@@ -46,17 +47,17 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                         }
                     }
 
-                    return new Result<CartDetailsDto>
+                    return new Result<CartHeaderDto>
                     {
+                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
                         SuccessMessage = "Продукт успешно удален",
-                        Data = _mapper.Map<CartDetailsDto>(cartDetails),
                     };
                 }
             }
 
             catch (Exception exception)
             {
-                return new Result<CartDetailsDto>
+                return new Result<CartHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,

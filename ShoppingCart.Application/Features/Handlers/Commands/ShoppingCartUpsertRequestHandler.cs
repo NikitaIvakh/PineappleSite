@@ -29,6 +29,12 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     request.CartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
                     await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
+
+                    return new Result<CartHeaderDto>
+                    {
+                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
+                        SuccessMessage = "Товар успешно добавлен в корзину",
+                    };
                 }
 
                 else

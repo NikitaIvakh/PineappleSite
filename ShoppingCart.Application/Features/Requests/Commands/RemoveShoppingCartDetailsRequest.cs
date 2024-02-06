@@ -4,8 +4,8 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Requests.Commands
 {
-    public class RemoveShoppingCartDetailsRequest : IRequest<Result<CartDetailsDto>>
+    public class RemoveShoppingCartDetailsRequest : IRequest<Result<CartHeaderDto>>
     {
-        public int CartDetailsId { get; set; }
+        public int ProductId { get; set; }
     }
 }

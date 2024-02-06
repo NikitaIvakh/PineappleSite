@@ -156,12 +156,12 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int cartDetailsId)
+        public async Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int productId)
         {
             AddBearerToken();
             try
             {
-                CartDtoResult apiResult = await _shoppingCartClient.ShoppingCartDELETEAsync(cartDetailsId);
+                CartDtoResult apiResult = await _shoppingCartClient.ShoppingCartDELETEAsync(productId.ToString(), productId);
 
                 if (apiResult.IsSuccess)
                 {
