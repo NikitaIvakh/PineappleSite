@@ -47,9 +47,9 @@ namespace ShoppingCart.API.Controllers
         }
 
         [HttpPost("ApplyCoupon")]
-        public async Task<ActionResult<Result<CartDto>>> ApplyCoupon([FromBody] CartDto cartDto)
+        public async Task<ActionResult<Result<CartHeaderDto>>> ApplyCoupon([FromBody] CartHeaderDto cartHeaderDto)
         {
-            var command = await _mediator.Send(new ApplyCouponRequest { CartDto = cartDto });
+            var command = await _mediator.Send(new ApplyCouponRequest { CartHeaderDto = cartHeaderDto });
 
             if (command.IsSuccess)
             {
@@ -78,7 +78,7 @@ namespace ShoppingCart.API.Controllers
 
         // DELETE api/<ShoppingCartController>/5
         [HttpDelete("{cartDetailsId}")]
-        public async Task<ActionResult<Result<CartDto>>> Delete(int cartDetailsId)
+        public async Task<ActionResult<Result<CartDto>>> RemoveDetails(int cartDetailsId)
         {
             var command = await _mediator.Send(new RemoveShoppingCartDetailsRequest { CartDetailsId = cartDetailsId });
 

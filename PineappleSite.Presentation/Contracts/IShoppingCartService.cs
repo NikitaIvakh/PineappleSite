@@ -9,7 +9,7 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<CartResult<CartViewModel>> CartUpsertAsync(CartViewModel cartViewModel);
 
-        Task<CartResult<CartViewModel>> ApplyCouponAsync(CartViewModel cartViewModel);
+        Task<CartResult<CartHeaderViewModel>> ApplyCouponAsync(CartHeaderViewModel cartHeaderViewModel);
 
         Task<CartResult<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 

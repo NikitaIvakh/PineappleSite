@@ -17,49 +17,28 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: ShoppingCartController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: ShoppingCartController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: ShoppingCartController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public async Task<ActionResult> ApplyCoupon(CartHeaderViewModel cartHeaderViewModel)
         {
             try
             {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+                var response = await _shoppingCartService.ApplyCouponAsync(cartHeaderViewModel);
 
-        // GET: ShoppingCartController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.SuccessMessage;
+                    return RedirectToAction(nameof(Index));
+                }
 
-        // POST: ShoppingCartController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
             }
-            catch
+
+            catch (Exception exception)
             {
+                ModelState.AddModelError(string.Empty, exception.Message);
                 return View();
             }
         }
