@@ -1,5 +1,6 @@
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
+using Favourite.API;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +13,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
+builder.Services.AddSwagger();
 
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
 
