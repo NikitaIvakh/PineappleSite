@@ -1,6 +1,6 @@
-﻿namespace Favourite.Domain.Entities
+﻿namespace Favourite.Domain.DTOs
 {
-    public class FavouriteHeader
+    public class FavouriteHeaderDto
     {
         public int FavouriteHeaderId { get; set; }
 
