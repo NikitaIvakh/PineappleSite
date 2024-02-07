@@ -25,4 +25,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Favourite.Application\Favourite.Application.csproj" />
+    <ProjectReference Include="..\Favourite.Domain\Favourite.Domain.csproj" />
+    <ProjectReference Include="..\Favourite.Infrastructure\Favourite.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
