@@ -1,6 +1,0 @@
-@Favourites.API_HostAddress = http://localhost:5252
-
-GET {{Favourites.API_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
