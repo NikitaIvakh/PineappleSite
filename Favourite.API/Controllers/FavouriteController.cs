@@ -1,4 +1,5 @@
-﻿using Favourite.Application.Features.Requests.Queries;
+﻿using Favourite.Application.Features.Requests.Commands;
+using Favourite.Application.Features.Requests.Queries;
 using Favourite.Domain.DTOs;
 using Favourite.Domain.Results;
 using MediatR;
@@ -23,9 +24,11 @@ namespace Favourite.API.Controllers
         }
 
         // POST api/<FavouriteController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("FavouriteUpsertAsync")]
+        public async Task<ActionResult<Result<FavouriteDto>>> FavouriteUpsertAsync([FromBody] FavouriteDto favouriteDto)
         {
+            var command = await _mediator.Send(new FavouriteProductUpsertRequest { FavouriteDto = favouriteDto });
+            return Ok(command);
         }
 
         // DELETE api/<FavouriteController>/5

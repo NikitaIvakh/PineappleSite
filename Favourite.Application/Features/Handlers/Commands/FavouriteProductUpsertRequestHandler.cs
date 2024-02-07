@@ -24,7 +24,7 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                 if (favouriteHeaderFromDb is null)
                 {
-                    FavouriteHeader? favouriteHeader = _mapper.Map<FavouriteHeader>(favouriteHeaderFromDb);
+                    FavouriteHeader? favouriteHeader = _mapper.Map<FavouriteHeader>(request.FavouriteDto.FavouriteHeader);
                     await _favouriteHeaderRepository.CreateAsync(favouriteHeader);
 
                     request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteHeader.FavouriteHeaderId;
@@ -57,7 +57,7 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Ваши избранные товары",
+                        SuccessMessage = "Продукт успешно добавлен в избранное",
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeaderFromDb),
                     };
                 }
