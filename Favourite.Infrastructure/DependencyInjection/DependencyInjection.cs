@@ -1,6 +1,8 @@
 ﻿using Favourite.Domain.Entities;
 using Favourite.Domain.Interfaces.Repository;
+using Favourite.Domain.Interfaces.Services;
 using Favourite.Infrastructure.Repository.Implement;
+using Favourite.Infrastructure.Repository.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +22,7 @@ namespace Favourite.Infrastructure.DependencyInjection
         {
             services.AddScoped<IBaseRepositiry<FavouriteHeader>, BaseRepository<FavouriteHeader>>();
             services.AddScoped<IBaseRepositiry<FavouriteDetails>, BaseRepository<FavouriteDetails>>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         private static void RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
