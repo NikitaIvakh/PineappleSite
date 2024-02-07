@@ -15,4 +15,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Favourite.Infrastructure\Favourite.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
