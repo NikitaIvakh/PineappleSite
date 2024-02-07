@@ -1,20 +1,17 @@
 ﻿using AutoMapper;
 using Moq;
-using ShoppingCart.Application.Mapping;
 using ShoppingCart.Domain.Entities;
+using ShoppingCart.Domain.Results;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Interfaces.Repository;
 using ShoppingCart.Domain.Interfaces.Service;
+using ShoppingCart.Application.Mapping;
 using ShoppingCart.Infrastructure;
-using ShoppingCart.Domain.DTOs;
-using ShoppingCart.Domain.Results;
 using ShoppingCart.Infrastructure.Repository.Implement;
-using ShoppingCart.Infrastructure.Repository.Services;
-using Xunit;
 
 namespace ShoppingCart.Test.Common
 {
-    [CollectionDefinition("QueryCollection")]
-    public class TestQueryHandler : IDisposable
+    public class TestCommandHandler : IDisposable
     {
         protected ApplicationDbContext Context;
         protected IMapper Mapper;
@@ -24,7 +21,7 @@ namespace ShoppingCart.Test.Common
         protected IProductService ProductService;
         protected ICouponService CouponService;
 
-        public TestQueryHandler()
+        public TestCommandHandler()
         {
             var productMock = new Mock<IProductService>();
 
@@ -65,7 +62,4 @@ namespace ShoppingCart.Test.Common
             ShoppingCartDbContextFactory.Destroy(Context);
         }
     }
-
-    [CollectionDefinition("QueryCollection")]
-    public class QueryCollection : ICollectionFixture<TestQueryHandler> { }
 }
