@@ -20,7 +20,13 @@ namespace Favourite.API.Controllers
         public async Task<ActionResult<Result<FavouriteDto>>> GetFavouriteProducts(string userId)
         {
             var request = await _mediator.Send(new GetFavouriteFroductsRequest { UserId = userId });
-            return Ok(request);
+
+            if (request.IsSuccess)
+            {
+                return Ok(request);
+            }
+
+            return BadRequest(request.ErrorMessage);
         }
 
         // POST api/<FavouriteController>
@@ -28,7 +34,13 @@ namespace Favourite.API.Controllers
         public async Task<ActionResult<Result<FavouriteDto>>> FavouriteUpsertAsync([FromBody] FavouriteDto favouriteDto)
         {
             var command = await _mediator.Send(new FavouriteProductUpsertRequest { FavouriteDto = favouriteDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // DELETE api/<FavouriteController>/5
@@ -36,7 +48,13 @@ namespace Favourite.API.Controllers
         public async Task<ActionResult<Result<FavouriteDto>>> Delete(int productId)
         {
             var command = await _mediator.Send(new RemoveFavouriteProductRequest { ProductId = productId });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
     }
 }
