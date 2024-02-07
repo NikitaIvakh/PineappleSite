@@ -12,8 +12,8 @@ namespace Favourite.API
                 options.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Version = "v1",
-                    Title = "Микросервис для работы с корзиной",
-                    Description = "Микросервис для работы с корзиной",
+                    Title = "Микросервис для работы с избранными товарами",
+                    Description = "Микросервис для работы с избранными товарами",
                     TermsOfService = new Uri("https://github.com/NikitaIvakh"),
                     Contact = new OpenApiContact
                     {
@@ -25,8 +25,8 @@ namespace Favourite.API
                 options.SwaggerDoc("v2", new OpenApiInfo
                 {
                     Version = "v2",
-                    Title = "Микросервис для работы с корзиной",
-                    Description = "Микросервис для работы с корзиной",
+                    Title = "Микросервис для работы с избранными товарамий",
+                    Description = "Микросервис для работы с избранными товарами",
                     TermsOfService = new Uri("https://github.com/NikitaIvakh"),
                     Contact = new OpenApiContact
                     {
