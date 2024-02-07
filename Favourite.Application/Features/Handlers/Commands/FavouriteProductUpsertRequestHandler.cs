@@ -69,6 +69,7 @@ namespace Favourite.Application.Features.Handlers.Commands
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = new List<string> { exception.Message }
                 };
             }
         }
