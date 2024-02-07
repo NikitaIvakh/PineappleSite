@@ -68,5 +68,14 @@ namespace Favourite.Application.Resources {
                 return ResourceManager.GetString("InternalServerError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукты не найдены.
+        /// </summary>
+        internal static string ProductsNotFound {
+            get {
+                return ResourceManager.GetString("ProductsNotFound", resourceCulture);
+            }
+        }
     }
 }

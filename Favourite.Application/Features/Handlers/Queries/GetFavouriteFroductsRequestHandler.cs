@@ -72,8 +72,8 @@ namespace Favourite.Application.Features.Handlers.Queries
                             return new Result<FavouriteDto>
                             {
                                 Data = favouriteDto,
-                                ErrorCode = (int)ErrorCodes.InternalServerError,
-                                ErrorMessage = ErrorMessages.InternalServerError,
+                                ErrorCode = (int)ErrorCodes.ProductsNotFound,
+                                ErrorMessage = ErrorMessages.ProductsNotFound,
                             };
                         }
 
