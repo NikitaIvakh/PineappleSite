@@ -10,7 +10,7 @@
 
         public int? ErrorCode { get; set; }
 
-        public List<string>? ValidationErrors { get; set; }
+        public string? ValidationErrors { get; set; }
     }
 
     public class FavouriteResult<TEntity> : FavouriteResult
@@ -22,7 +22,7 @@
             Data = data;
         }
 
-        public FavouriteResult(string? errorMessage, int? errorCode, List<string>? validationErrors)
+        public FavouriteResult(string? errorMessage, int? errorCode, string? validationErrors)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
