@@ -27,8 +27,8 @@ namespace Favourite.Application.Features.Handlers.Commands
                 {
                     return new Result<FavouriteHeaderDto>
                     {
-                        ErrorMessage = ErrorMessages.InternalServerError,
-                        ErrorCode = (int)ErrorCodes.InternalServerError,
+                        ErrorMessage = ErrorMessages.ProductNotFound,
+                        ErrorCode = (int)ErrorCodes.ProductNotFound,
                     };
                 }
 
@@ -41,7 +41,16 @@ namespace Favourite.Application.Features.Handlers.Commands
                     {
                         FavouriteHeader? favouriteHeaderDelete = _favouriteHeaderRepository.GetAll().FirstOrDefault(key => key.FavouriteHeaderId == favouriteDetails.FavouriteHeaderId);
 
-                        if (favouriteHeaderDelete is not null)
+                        if (favouriteHeaderDelete is null)
+                        {
+                            return new Result<FavouriteHeaderDto>
+                            {
+                                ErrorMessage = ErrorMessages.FavouriteHeaderNotFound,
+                                ErrorCode = (int)ErrorCodes.FavouriteHeaderNotFound,
+                            };
+                        }
+
+                        else if (favouriteHeaderDelete is not null)
                         {
                             await _favouriteHeaderRepository.DeleteAsync(favouriteHeaderDelete);
                         }

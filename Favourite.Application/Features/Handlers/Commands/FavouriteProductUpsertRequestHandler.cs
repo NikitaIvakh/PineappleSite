@@ -32,7 +32,7 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Ваши избранные товары",
+                        SuccessMessage = "Продукт успешно добавлен в избранное",
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeader),
                     };
                 }

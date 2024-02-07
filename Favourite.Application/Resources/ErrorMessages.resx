@@ -117,8 +117,14 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="FavouriteHeaderNotFound" xml:space="preserve">
+    <value>Заголовок избранного не найден</value>
+  </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Внутренняя ошибка сервера</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Продукт не найден</value>
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
     <value>Продукты не найдены</value>

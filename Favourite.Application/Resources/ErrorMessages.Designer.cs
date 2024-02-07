@@ -61,11 +61,29 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Заголовок избранного не найден.
+        /// </summary>
+        internal static string FavouriteHeaderNotFound {
+            get {
+                return ResourceManager.GetString("FavouriteHeaderNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Внутренняя ошибка сервера.
         /// </summary>
         internal static string InternalServerError {
             get {
                 return ResourceManager.GetString("InternalServerError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукт не найден.
+        /// </summary>
+        internal static string ProductNotFound {
+            get {
+                return ResourceManager.GetString("ProductNotFound", resourceCulture);
             }
         }
         
