@@ -2,7 +2,7 @@
 {
     public partial class FavoritesClient : IFavoritesClient
     {
-        HttpClient HttpClient
+        public HttpClient HttpClient
         {
             get { return _httpClient; }
         }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Models.Coupons;
+using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
+using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
@@ -81,6 +83,15 @@ namespace PineappleSite.Presentation
 
             CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
             CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
+            #endregion
+
+            #region Favourite Mapping
+            CreateMap<FavouriteDto, FavouriteViewModel>().ReverseMap();
+            CreateMap<FavouriteHeaderDto, FavouriteHeaderViewModel>().ReverseMap();
+            CreateMap<FavouriteDetailsDto, FavouriteDetailsViewModel>().ReverseMap();
+
+            CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
+            CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
             #endregion
         }
     }

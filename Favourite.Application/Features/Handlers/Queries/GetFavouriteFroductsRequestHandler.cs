@@ -32,7 +32,12 @@ namespace Favourite.Application.Features.Handlers.Queries
                 {
                     return new Result<FavouriteDto>
                     {
-                        Data = new FavouriteDto(),
+                        Data = new FavouriteDto()
+                        {
+                            FavouriteHeader = new FavouriteHeaderDto(),
+                            FavouriteDetails = new List<FavouriteDetailsDto>(),
+                        },
+
                         SuccessMessage = "В избранном никаких товаров нет",
                     };
                 }
@@ -52,7 +57,12 @@ namespace Favourite.Application.Features.Handlers.Queries
                     {
                         return new Result<FavouriteDto>
                         {
-                            Data = new FavouriteDto(),
+                            Data = new FavouriteDto()
+                            {
+                                FavouriteHeader = new FavouriteHeaderDto(),
+                                FavouriteDetails = new List<FavouriteDetailsDto>(),
+                            },
+
                             SuccessMessage = "В избранном никаких товаров нет",
                         };
                     }
