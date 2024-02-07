@@ -30,9 +30,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Handlers\Commands\" />
-    <Folder Include="Features\Requests\Commands\" />
-  </ItemGroup>
-
 </Project>
