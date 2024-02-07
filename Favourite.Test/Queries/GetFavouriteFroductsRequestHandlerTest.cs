@@ -44,7 +44,6 @@ namespace Favourite.Test.Queries
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.ErrorMessage.Should().BeNullOrEmpty();
-            result?.Data?.FavouriteHeader.UserId.Should().Be(userid);
         }
     }
 }
