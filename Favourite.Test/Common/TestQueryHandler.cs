@@ -6,6 +6,7 @@ using Favourite.Infrastructure.Repository.Implement;
 using Favourite.Infrastructure;
 using Moq;
 using Xunit;
+using Favourite.Application.Mapping;
 
 namespace Favourite.Test.Common
 {
@@ -26,6 +27,13 @@ namespace Favourite.Test.Common
             FavouriteHeader = new BaseRepository<FavouriteHeader>(Context);
             FavouriteDetails = new BaseRepository<FavouriteDetails>(Context);
             ProductService = productMock.Object;
+
+            var mapperConfiguration = new MapperConfiguration(config =>
+            {
+                config.AddProfile<MappingProfile>();
+            });
+
+            Mapper = mapperConfiguration.CreateMapper();
         }
 
         public void Dispose()
