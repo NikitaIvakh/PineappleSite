@@ -2,6 +2,8 @@
 using Favourite.Domain.Entities;
 using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Interfaces.Services;
+using Favourite.Domain.Results;
+using Favourite.Domain.DTOs;
 using Favourite.Infrastructure.Repository.Implement;
 using Favourite.Infrastructure;
 using Moq;
@@ -22,6 +24,16 @@ namespace Favourite.Test.Common
         public TestQueryHandler()
         {
             var productMock = new Mock<IProductService>();
+
+            productMock.Setup(mock => mock.GetProductListAsync())
+               .ReturnsAsync(new CollectionResult<ProductDto>
+               {
+                   Data = new List<ProductDto>
+                   {
+                        new() { Id = 4, Name = "Product 1", Price = 10.0 },
+                        new() { Id = 5, Name = "Product 2", Price = 20.0 },
+                   }
+               });
 
             Context = FavouriteProductsDbContextFactory.Create();
             FavouriteHeader = new BaseRepository<FavouriteHeader>(Context);

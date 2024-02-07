@@ -77,29 +77,17 @@ namespace Favourite.Application.Features.Handlers.Queries
 
                         CollectionResult<ProductDto> products = await _productService.GetProductListAsync();
 
-                        if (products is null || products.Count == 0)
+
+                        foreach (var item in favouriteDto.FavouriteDetails)
                         {
-                            return new Result<FavouriteDto>
-                            {
-                                Data = favouriteDto,
-                                ErrorCode = (int)ErrorCodes.ProductsNotFound,
-                                ErrorMessage = ErrorMessages.ProductsNotFound,
-                            };
+                            item.Product = products.Data.FirstOrDefault(key => key.Id == item.ProductId);
                         }
 
-                        else
+                        return new Result<FavouriteDto>
                         {
-                            foreach (var item in favouriteDto.FavouriteDetails)
-                            {
-                                item.Product = products.Data.FirstOrDefault(key => key.Id == item.ProductId);
-                            }
-
-                            return new Result<FavouriteDto>
-                            {
-                                Data = favouriteDto,
-                                SuccessMessage = "Ваши избранные товары",
-                            };
-                        }
+                            Data = favouriteDto,
+                            SuccessMessage = "Ваши избранные товары",
+                        };
                     }
                 }
             }

@@ -13,15 +13,15 @@ namespace Favourite.Test.Common
             context.Database.EnsureCreated();
             context.FavouriteHeaders.AddRange(new FavouriteHeader
             {
-                FavouriteHeaderId = 1,
+                FavouriteHeaderId = 3,
                 UserId = "bestuserid1"
             });
 
             context.FavouriteDetails.AddRange(new FavouriteDetails
             {
-                FavouriteDetailsId = 1,
-                FavouriteHeaderId = 1,
-                ProductId = 1,
+                FavouriteDetailsId = 3,
+                FavouriteHeaderId = 3,
+                ProductId = 4,
             });
 
             context.SaveChanges();
