@@ -1,6 +1,7 @@
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
 using Favourite.API;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,12 @@ builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 builder.Services.AddSwagger();
 
 builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
+builder.Host.UseSerilog((context, logConfig) =>
+{
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
+
 
 var app = builder.Build();
 

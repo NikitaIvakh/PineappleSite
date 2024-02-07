@@ -11,9 +11,10 @@ namespace Favourite.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class FavouriteController(IMediator mediator) : ControllerBase
+    public class FavouriteController(IMediator mediator, ILogger<FavouriteDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<FavouriteDto> _logger = logger;
 
         // GET api/<FavouriteController>/5
         [HttpGet("GetFavouriteProducts/{userId}")]
@@ -23,9 +24,11 @@ namespace Favourite.API.Controllers
 
             if (request.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранные товары успешно получены");
                 return Ok(request);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения избранных товаров");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -37,9 +40,11 @@ namespace Favourite.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранны1 товарр успешно обновден");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления избранного товара");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -51,9 +56,11 @@ namespace Favourite.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Избранный товар успешно удален");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления избранного товара");
             return BadRequest(command.ErrorMessage);
         }
     }

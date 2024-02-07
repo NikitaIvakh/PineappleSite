@@ -6,10 +6,7 @@ namespace Favourite.API
     {
         public static void AddSwagger(this IServiceCollection services)
         {
-            services.AddSwagger();
-            services.AddSwaggerGen();
-            services.AddEndpointsApiExplorer();
-
+            services.AddHttpContextAccessor();
             services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("v1", new OpenApiInfo
