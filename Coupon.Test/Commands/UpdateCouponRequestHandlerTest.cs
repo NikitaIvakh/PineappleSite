@@ -92,7 +92,7 @@ namespace Coupon.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ErrorMessage.Should().Be("Код купона не валидный");
+            result.ErrorMessage.Should().Be("Купон не может быть обновлен");
             result.ValidationErrors.ShouldBe(["Строка не должна превышать 20 символов"]);
         }
 
@@ -118,7 +118,7 @@ namespace Coupon.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ErrorMessage.Should().Be("Сумма скидки купона не может превышать стоимость продукта");
+            result.ErrorMessage.Should().Be("Купон не может быть обновлен");
             result.ValidationErrors.ShouldBe(["Скидка не должна превышать стоимость продукта"]);
         }
 
@@ -144,8 +144,8 @@ namespace Coupon.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ErrorMessage.Should().Be("Сумма для применения купона не валидна");
-            result.ValidationErrors.ShouldBe(["Цена товара должна быть ниже 101 единиц"]);
+            result.ErrorMessage.Should().Be("Купон не может быть обновлен");
+            result.ValidationErrors.ShouldBe(["Цена товара должна быть ниже 101 единицы"]);
         }
 
         [Fact]
@@ -170,7 +170,11 @@ namespace Coupon.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ErrorMessage.Should().Be("Код купона не валидный");
+            result.ErrorMessage.Should().Be("Купон не может быть обновлен");
+            result.ValidationErrors.ShouldBe([
+                "Строка не должна превышать 20 символов",
+                "Сумма скидки не должна превышать 101 единицу",
+                "Скидка не должна превышать стоимость продукта"]);
         }
     }
 }
