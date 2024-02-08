@@ -2,12 +2,14 @@
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Identities;
+using PineappleSite.Presentation.Services.Orders;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
@@ -92,6 +94,17 @@ namespace PineappleSite.Presentation
 
             CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
             CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
+            #endregion
+
+            #region Order Mapping
+            CreateMap<Services.Orders.ProductDto, ProductViewModel>().ReverseMap();
+            CreateMap<Services.Orders.CartDto, CartViewModel>().ReverseMap();
+            CreateMap<Services.Orders.CartHeaderDto, CartHeaderViewModel>().ReverseMap();
+            CreateMap<Services.Orders.CartDetailsDto, CartDetailsViewModel>().ReverseMap();
+
+            CreateMap<OrderHeaderDto, OrderHeaderViewModel>().ReverseMap();
+            CreateMap<OrderDetailsDto, OrderDetailsViewModel>().ReverseMap();
+            CreateMap<StripeRequestDto, StripeRequestViewModel>().ReverseMap();
             #endregion
         }
     }
