@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
 namespace Order.Application.DependencyInjection
@@ -14,6 +15,7 @@ namespace Order.Application.DependencyInjection
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(config => config.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]));
+            services.AddValidatorsFromAssemblies(new[] { Assembly.GetExecutingAssembly() });
         }
     }
 }

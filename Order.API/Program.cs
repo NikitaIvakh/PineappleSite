@@ -1,3 +1,4 @@
+using Order.Application.DependencyInjection;
 using Order.Infrastructure.DependencyInjection;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
@@ -9,6 +10,7 @@ applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
+applicationBuilder.Services.ConfigureApplicationServices();
 applicationBuilder.Services.ConfigureInfrastructureServices(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
