@@ -18,4 +18,8 @@
     <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Repository\Services\" />
+  </ItemGroup>
+
 </Project>
