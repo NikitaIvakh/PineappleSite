@@ -47,6 +47,14 @@ namespace Order.API.Controllers
             return Ok(command);
         }
 
+        // POST api/<OrderController>
+        [HttpPost("ValidateStripeSession")]
+        public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            var command = await _mediator.Send(new ValidateStripeSessionRequest { OrderHeaderId = orderHeaderId });
+            return Ok(command);
+        }
+
         // PUT api/<OrderController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
