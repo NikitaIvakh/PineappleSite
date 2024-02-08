@@ -65,8 +65,9 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.Should().Be("Название продукта не валидно");
-            result.ValidationErrors.Should().NotBeNullOrEmpty();
+            result.ErrorMessage.Should().Be("Продукт не может быть создан");
+            result.ErrorCode.Should().Be(408);
+            result.ValidationErrors.ShouldBe(["Строка должна быть более 3 символов."]);
         }
 
         [Fact]
@@ -96,8 +97,11 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Описание продукта не валидно");
-            result.ValidationErrors.Should().NotBeNullOrEmpty();
+            result.ErrorMessage.ShouldBe("Продукт не может быть создан");
+            result.ErrorCode.Should().Be(408);
+            result.ValidationErrors.ShouldBe([
+                "Строка не должна превышать 500 символов.",
+                "Стоимость продукта не должна превышать 1000."]);
         }
 
         [Fact]
@@ -121,8 +125,9 @@ namespace Product.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Стоимость продукта не валидна");
+            result.ErrorMessage.ShouldBe("Продукт не может быть создан");
             result.ValidationErrors.Should().NotBeNullOrEmpty();
+            result.ValidationErrors.ShouldBe(["Стоимость продукта не должна превышать 1000."]);
         }
     }
 }
