@@ -79,6 +79,17 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             MinAmount = request.CreateCoupon.MinAmount,
                         };
 
+                        var options = new Stripe.CouponCreateOptions
+                        {
+                            Currency = "byn",
+                            Id = coupon.CouponCode,
+                            Name = coupon.CouponCode,
+                            AmountOff = (long)(coupon.DiscountAmount * 100),
+                        };
+
+                        var service = new Stripe.CouponService();
+                        service.Create(options);
+
                         await _repository.CreateAsync(coupon);
 
                         return new Result<CouponDto>
