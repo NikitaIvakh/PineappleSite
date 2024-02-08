@@ -9,6 +9,8 @@ namespace Order.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<OrderHeader> builder)
         {
             builder.HasKey(key => key.OrderHeaderId);
+            builder.Property(key => key.UserId).IsRequired(false);
+            builder.Property(key => key.CouponCode).IsRequired(false);
         }
     }
 }

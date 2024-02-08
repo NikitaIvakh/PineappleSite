@@ -1,12 +1,10 @@
-﻿using Order.Domain.Entities;
-
-namespace Order.Domain.DTOs
+﻿namespace Order.Domain.DTOs
 {
     public class OrderDetailsDto
     {
         public int OrderDetailsId { get; set; }
 
-        public OrderHeader? OrderHeader { get; set; }
+        public OrderHeaderDto? OrderHeader { get; set; }
 
         public int OrderHeaderId { get; set; }
 

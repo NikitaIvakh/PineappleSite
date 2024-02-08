@@ -15,11 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
+    <Folder Include="Repository\Services\" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Repository\Services\" />
+    <ProjectReference Include="..\Order.Domain\Order.Domain.csproj" />
   </ItemGroup>
 
 </Project>

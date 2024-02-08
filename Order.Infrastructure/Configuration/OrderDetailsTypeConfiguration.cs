@@ -9,7 +9,8 @@ namespace Order.Infrastructure.Configuration
         public void Configure(EntityTypeBuilder<OrderDetails> builder)
         {
             builder.HasKey(key => key.OrderDetailsId);
-            builder.HasOne(key => key.OrderHeader).WithMany().HasForeignKey(key => key.OrderHeaderId);
+            builder.Property(key => key.OrderDetailsId).ValueGeneratedOnAdd();
+            builder.HasOne(key => key.OrderHeader).WithMany(key => key.OrderDetails).HasForeignKey(key => key.OrderHeaderId);
 
             builder.Ignore(key => key.Product);
         }
