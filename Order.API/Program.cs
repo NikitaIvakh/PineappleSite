@@ -19,6 +19,9 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationServices();
 applicationBuilder.Services.ConfigureInfrastructureServices(applicationBuilder.Configuration);
 
+applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]));
+applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]));
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
