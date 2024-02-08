@@ -21,7 +21,7 @@ namespace Order.Application.Features.Handlers.Commands
             try
             {
                 OrderHeaderDto orderHeaderDto = _mapper.Map<OrderHeaderDto>(request.CartDto.CartHeader);
-                orderHeaderDto.OrderTime = DateTime.UtcNow;
+                orderHeaderDto.OrderTime = DateTime.Now;
                 orderHeaderDto.Status = StaticDetails.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(request.CartDto.CartDetails);
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);

@@ -4,6 +4,6 @@
     {
         public CartHeaderDto CartHeader { get; set; }
 
-        public List<CartDetailsDto> CartDetails { get; set; }
+        public List<CartDetailsDto>? CartDetails { get; set; }
     }
 }

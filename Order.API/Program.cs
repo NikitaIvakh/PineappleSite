@@ -1,11 +1,16 @@
 using Order.Application.DependencyInjection;
 using Order.Infrastructure.DependencyInjection;
+using System.Text.Json.Serialization;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-applicationBuilder.Services.AddControllers();
+applicationBuilder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddHttpContextAccessor();

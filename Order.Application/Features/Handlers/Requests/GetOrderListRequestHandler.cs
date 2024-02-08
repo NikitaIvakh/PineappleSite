@@ -27,16 +27,16 @@ namespace Order.Application.Features.Handlers.Requests
                 var userRole = _httpContextAccessor.HttpContext.User.IsInRole(StaticDetails.RoleAdmin);
 
                 if (userRole is true)
-                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).OrderBy(key => key.OrderHeaderId).ToList();
+                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails);
 
                 else
-                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).OrderBy(key => key.OrderHeaderId).ToList();
+                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId);
 
                 return new CollectionResult<OrderHeaderDto>
                 {
                     Count = orderHeader.Count(),
                     SuccessMessage = "Список заказов",
-                    Data = _mapper.Map<List<OrderHeaderDto>>(orderHeader),
+                    Data = _mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(orderHeader),
                 };
             }
 

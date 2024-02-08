@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
 using Order.Domain.ResultOrder;
@@ -31,9 +32,11 @@ namespace Order.API.Controllers
         }
 
         // POST api/<OrderController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("CreateOrder")]
+        public async Task<ActionResult<Result<OrderHeaderDto>>> CreateOrder([FromBody] CartDto cartDto)
         {
+            var command = await _mediator.Send(new CreateOrderRequest { CartDto = cartDto });
+            return Ok(command);
         }
 
         // PUT api/<OrderController>/5
