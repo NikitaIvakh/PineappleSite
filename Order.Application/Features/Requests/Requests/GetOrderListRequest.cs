@@ -4,7 +4,7 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Requests.Requests
 {
-    public class GetOrderListRequest : IRequest<Result<OrderHeaderDto>>
+    public class GetOrderListRequest : IRequest<CollectionResult<OrderHeaderDto>>
     {
         public string UserId { get; set; }
     }

@@ -13,13 +13,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Order.Application.Features.Handlers.Requests
 {
-    public class GetOrderListRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IHttpContextAccessor httpContextAccessor, IMapper mapper) : IRequestHandler<GetOrderListRequest, Result<OrderHeaderDto>>
+    public class GetOrderListRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IHttpContextAccessor httpContextAccessor, IMapper mapper) : IRequestHandler<GetOrderListRequest, CollectionResult<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<Result<OrderHeaderDto>> Handle(GetOrderListRequest request, CancellationToken cancellationToken)
+        public async Task<CollectionResult<OrderHeaderDto>> Handle(GetOrderListRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,16 +32,16 @@ namespace Order.Application.Features.Handlers.Requests
                 else
                     orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).OrderBy(key => key.OrderHeaderId).ToList();
 
-                return new Result<OrderHeaderDto>
+                return new CollectionResult<OrderHeaderDto>
                 {
                     SuccessMessage = "Список заказов",
-                    Data = _mapper.Map<OrderHeaderDto>(orderHeader),
+                    Data = _mapper.Map<List<OrderHeaderDto>>(orderHeader),
                 };
             }
 
             catch (Exception exception)
             {
-                return new Result<OrderHeaderDto>
+                return new CollectionResult<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
