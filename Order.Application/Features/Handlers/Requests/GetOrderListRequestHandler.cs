@@ -34,6 +34,7 @@ namespace Order.Application.Features.Handlers.Requests
 
                 return new CollectionResult<OrderHeaderDto>
                 {
+                    Count = orderHeader.Count(),
                     SuccessMessage = "Список заказов",
                     Data = _mapper.Map<List<OrderHeaderDto>>(orderHeader),
                 };

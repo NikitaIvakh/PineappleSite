@@ -23,10 +23,11 @@ namespace Order.API.Controllers
         }
 
         // GET api/<OrderController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetOrder/{orderId}")]
+        public async Task<ActionResult<Result<OrderHeaderDto>>> GetOrder(int orderId)
         {
-            return "value";
+            var request = await _mediator.Send(new GetOrderRequest { OrderId = orderId });
+            return Ok(request);
         }
 
         // POST api/<OrderController>
