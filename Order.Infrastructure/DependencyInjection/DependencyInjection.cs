@@ -3,7 +3,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Order.Domain.Entities;
 using Order.Domain.Interfaces.Repository;
+using Order.Domain.Interfaces.Services;
 using Order.Infrastructure.Repository.Implementation;
+using Order.Infrastructure.Repository.Services;
 
 namespace Order.Infrastructure.DependencyInjection
 {
@@ -20,6 +22,7 @@ namespace Order.Infrastructure.DependencyInjection
         {
             services.AddScoped<IBaseRepository<OrderHeader>, BaseRepository<OrderHeader>>();
             services.AddScoped<IBaseRepository<OrderDetails>, BaseRepository<OrderDetails>>();
+            services.AddScoped<IProductService, ProductService>();
         }
 
         private static void RegisterDBConnectionString(this IServiceCollection services, IConfiguration configuration)
