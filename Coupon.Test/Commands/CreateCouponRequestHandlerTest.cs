@@ -62,9 +62,9 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Сумма для применения купона не валидна");
+            result.ErrorMessage.Should().Be("Купон не может быть создан");
             result.SuccessMessage.Should().BeNull();
-            result.ValidationErrors.Should().NotBeNull();
+            result.ValidationErrors.ShouldBe(["Цена товара должна быть ниже 101 единицы"]);
         }
 
         [Fact]
@@ -87,9 +87,9 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Сумма скидки купона не может превышать стоимость продукта");
+            result.ErrorMessage.Should().Be("Купон не может быть создан");
             result.SuccessMessage.Should().BeNull();
-            result.ValidationErrors.Should().NotBeNull();
+            result.ValidationErrors.ShouldBe(["Скидка не должна превышать стоимость продукта"]);
         }
 
         [Fact]
@@ -112,9 +112,9 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Код купона не валидный");
+            result.ErrorMessage.Should().Be("Купон не может быть создан");
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ValidationErrors.Should().NotBeNull();
+            result.ValidationErrors.ShouldBe(["Строка не должна превышать 20 символов"]);
         }
 
         [Fact]
@@ -137,8 +137,9 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.IsSuccess.Should().BeFalse();
-            result.ErrorMessage.Should().Be("Купон уже используется");
+            result.ErrorMessage.Should().Be("Такой купон уже существует");
             result.SuccessMessage.Should().BeNullOrEmpty();
+            result.ValidationErrors.Should().BeNullOrEmpty();
         }
     }
 }
