@@ -17,7 +17,7 @@ namespace Order.API.Controllers
 
         // GET: api/<OrderController>
         [HttpGet("GetAllOrders/{userId}")]
-        public async Task<ActionResult<CollectionResult>> GetAllOrders(string userId)
+        public async Task<ActionResult<CollectionResult<OrderHeaderDto>>> GetAllOrders(string userId)
         {
             var request = await _mediator.Send(new GetOrderListRequest { UserId = userId });
             return Ok(request);
@@ -25,7 +25,7 @@ namespace Order.API.Controllers
 
         // GET api/<OrderController>/5
         [HttpGet("GetOrder/{orderId}")]
-        public async Task<ActionResult<Result>> GetOrder(int orderId)
+        public async Task<ActionResult<Result<OrderHeaderDto>>> GetOrder(int orderId)
         {
             var request = await _mediator.Send(new GetOrderRequest { OrderId = orderId });
             return Ok(request);
@@ -33,7 +33,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("CreateOrder")]
-        public async Task<ActionResult<Result>> CreateOrder([FromBody] CartDto cartDto)
+        public async Task<ActionResult<Result<OrderHeaderDto>>> CreateOrder([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new CreateOrderRequest { CartDto = cartDto });
             return Ok(command);
@@ -41,7 +41,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("CreateStripeSession")]
-        public async Task<ActionResult<Result>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        public async Task<ActionResult<Result<OrderHeaderDto>>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
         {
             var command = await _mediator.Send(new CreateStripeRequest { StripeRequest = stripeRequestDto });
             return Ok(command);
@@ -49,7 +49,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("ValidateStripeSession")]
-        public async Task<ActionResult<Result>> ValidateStripeSession([FromBody] int orderHeaderId)
+        public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession([FromBody] int orderHeaderId)
         {
             var command = await _mediator.Send(new ValidateStripeSessionRequest { OrderHeaderId = orderHeaderId });
             return Ok(command);
@@ -57,7 +57,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("UpdateOrderStatus")]
-        public async Task<ActionResult<Result>> UpdateOrderStatus(int orderHeaderId, [FromBody] string newStatus)
+        public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(int orderHeaderId, [FromBody] string newStatus)
         {
             var command = await _mediator.Send(new UpdateOrderStatusRequest { OrderHeaderId = orderHeaderId, NewStatus = newStatus });
             return Ok(command);
