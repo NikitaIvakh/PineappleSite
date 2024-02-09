@@ -103,9 +103,12 @@ namespace PineappleSite.Presentation
             CreateMap<Services.Orders.CartDetailsDto, CartDetailsViewModel>().ReverseMap();
 
             CreateMap<OrderHeaderDto, OrderHeaderViewModel>().ReverseMap();
-            CreateMap<OrderDetailsDto, OrderDetailsViewModel>().ReverseMap();
+            CreateMap<OrderDetailsDto, OrderDetailsViewModel>()
+                .ForMember(key => key.Product, src => src.MapFrom(key => key.Product))
+                .ReverseMap();
             CreateMap<StripeRequestDto, StripeRequestViewModel>().ReverseMap();
             CreateMap<OrderHeaderDto, StripeRequestViewModel>().ReverseMap();
+            CreateMap<OrderHeaderDtoResult, OrderHeaderViewModel>().ReverseMap();
             CreateMap<System.DateTimeOffset, System.DateTime>().ReverseMap();
             #endregion
         }

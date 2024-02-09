@@ -23,32 +23,32 @@ namespace PineappleSite.Presentation.Controllers
 
             var response = await _orderService.GetAllOrdersAsync(userId);
 
-            //if (response is not null && response.IsSuccess)
-            //{
-            //    orderHeaderDtos = JsonConvert.DeserializeObject<IEnumerable<OrderHeaderViewModel>>(Convert.ToString(response.Data));
-            //    switch (status)
-            //    {
-            //        case "approved":
-            //            orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Approved);
-            //            break;
+            if (response is not null && response.IsSuccess)
+            {
+                orderHeaderDtos = response.Data;
+                switch (status)
+                {
+                    case "approved":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Approved);
+                        break;
 
-            //        case "readyforpickup":
-            //            orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_ReadyForPickup);
-            //            break;
+                    case "readyforpickup":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_ReadyForPickup);
+                        break;
 
-            //        case "cancelled":
-            //            orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Cancelled || key.Status == StaticDetails.Status_Refunded);
-            //            break;
+                    case "cancelled":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Cancelled || key.Status == StaticDetails.Status_Refunded);
+                        break;
 
-            //        default:
-            //            break;
-            //    }
-            //}
+                    default:
+                        break;
+                }
+            }
 
-            //else
-            //    orderHeaderDtos = new List<OrderHeaderViewModel>();
+            else
+                orderHeaderDtos = new List<OrderHeaderViewModel>();
 
-            return Json(new { data = response.Data.OrderByDescending(key => key.OrderHeaderId) });
+            return Json(new { data = orderHeaderDtos });
         }
 
         public async Task<ActionResult> GetOrderDetails(int orderId)
