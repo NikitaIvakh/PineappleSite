@@ -105,6 +105,8 @@ namespace PineappleSite.Presentation
             CreateMap<OrderHeaderDto, OrderHeaderViewModel>().ReverseMap();
             CreateMap<OrderDetailsDto, OrderDetailsViewModel>().ReverseMap();
             CreateMap<StripeRequestDto, StripeRequestViewModel>().ReverseMap();
+            CreateMap<OrderHeaderDto, StripeRequestViewModel>().ReverseMap();
+            CreateMap<System.DateTimeOffset, System.DateTime>().ReverseMap();
             #endregion
         }
     }

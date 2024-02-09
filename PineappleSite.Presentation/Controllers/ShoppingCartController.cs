@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
@@ -151,33 +152,58 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
+        public async Task<IActionResult> Checkout()
+        {
+            try
+            {
+                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
+
+                if (result.IsSuccess)
+                {
+                    CartViewModel cartViewModel = new()
+                    {
+                        CartHeader = new CartHeaderViewModel
+                        {
+                            CartHeaderId = result.Data.CartHeader.CartHeaderId,
+                            UserId = userId,
+                            CouponCode = result.Data.CartHeader.CouponCode,
+                            Discount = result.Data.CartHeader.Discount,
+                            CartTotal = result.Data.CartHeader.CartTotal,
+                        },
+
+                        CartDetails = result.Data.CartDetails,
+                    };
+
+                    return View(cartViewModel);
+                }
+
+                else
+                {
+                    TempData["error"] = result.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
+        }
+
+        [HttpPost]
         [ActionName("Checkout")]
         public async Task<ActionResult> Checkout(CartViewModel cartViewModel)
         {
             CartResult<CartViewModel> cart = await GetShoppingCartAfterAuthenticate();
-            cartViewModel = new()
-            { 
-                CartHeader = new CartHeaderViewModel
-                {
-                    CartHeaderId = cart.Data.CartHeader.CartHeaderId,
-                    UserId = cart.Data.CartHeader.UserId,
-                    CouponCode = cart.Data.CartHeader.CouponCode,
-                    Discount = cart.Data.CartHeader.Discount,
-                    CartTotal = cart.Data.CartHeader.CartTotal,
-                    Name = cart.Data.CartHeader.Name,
-                    PhoneNumber = cart.Data.CartHeader.PhoneNumber,
-                    Email = cart.Data.CartHeader.Email,
-                },
-
-                CartDetails = cart.Data.CartDetails,
-            };
-
             cart.Data.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
             cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
             cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
+            cartViewModel.CartDetails = cart.Data.CartDetails;
 
             var response = await _orderService.CreateOrderAsync(cartViewModel);
-            OrderHeaderViewModel orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderViewModel>(Convert.ToString(response.Data));
+            OrderHeaderViewModel orderHeaderDto = response.Data;
 
             if (response is not null && response.IsSuccess)
             {
@@ -191,7 +217,7 @@ namespace PineappleSite.Presentation.Controllers
                 };
 
                 var stripeResponse = await _orderService.CreateStripeSessionAsync(stripeRequestDto);
-                StripeRequestViewModel stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestViewModel>(Convert.ToString(stripeResponse.Data));
+                StripeRequestViewModel stripeResponseResult = stripeResponse.Data;
                 Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
                 return new StatusCodeResult(303);
             }
@@ -205,7 +231,7 @@ namespace PineappleSite.Presentation.Controllers
 
             if (response is not null & response.IsSuccess)
             {
-                OrderHeaderViewModel orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderViewModel>(Convert.ToString(response.Data));
+                OrderHeaderViewModel orderHeaderDto = response.Data;
 
                 if (orderHeaderDto.Status == StaticDetails.Status_Approved)
                     return View(orderId);

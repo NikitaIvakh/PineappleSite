@@ -42,7 +42,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("CreateStripeSession")]
-        public async Task<ActionResult<Result<OrderHeaderDto>>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        public async Task<ActionResult<Result<StripeRequestDto>>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
         {
             var command = await _mediator.Send(new CreateStripeRequest { StripeRequest = stripeRequestDto });
             return Ok(command);

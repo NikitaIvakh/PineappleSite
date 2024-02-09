@@ -154,7 +154,7 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 StripeRequestDto stripeRequestDto = _mapper.Map<StripeRequestDto>(stripeRequest);
-                var response = await _orderClient.CreateStripeSessionAsync(stripeRequestDto);
+                StripeRequestDtoResult response = await _orderClient.CreateStripeSessionAsync(stripeRequestDto);
 
                 if (response.IsSuccess)
                 {

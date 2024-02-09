@@ -27,13 +27,10 @@ namespace Order.Infrastructure.Repository.Implementation
 
         public Task<TEntity> UpdateAsync(TEntity entity)
         {
-            if (entity is not null)
-            {
-                _context.Update(entity);
-                _context.SaveChanges();
-            }
+            _context.Update(entity);
+            _context.SaveChanges();
 
-            throw new ArgumentNullException(nameof(entity), "Объект пустой");
+            return Task.FromResult(entity);
         }
 
         public Task DeleteAsync(TEntity entity)

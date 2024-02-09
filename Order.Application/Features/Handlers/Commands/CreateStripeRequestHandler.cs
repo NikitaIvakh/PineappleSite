@@ -7,14 +7,14 @@ using Order.Domain.Entities;
 using Order.Domain.Enum;
 using Order.Domain.Interfaces.Repository;
 using Order.Domain.ResultOrder;
+using Order.Infrastructure;
 using Stripe.Checkout;
 
 namespace Order.Application.Features.Handlers.Commands
 {
-    public class CreateStripeRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper) : IRequestHandler<CreateStripeRequest, Result<StripeRequestDto>>
+    public class CreateStripeRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository) : IRequestHandler<CreateStripeRequest, Result<StripeRequestDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
-        private readonly IMapper _mapper = mapper;
 
         public async Task<Result<StripeRequestDto>> Handle(CreateStripeRequest request, CancellationToken cancellationToken)
         {
@@ -68,6 +68,9 @@ namespace Order.Application.Features.Handlers.Commands
 
                 OrderHeader orderHeader = _orderHeaderRepository.GetAll().First(key => key.OrderHeaderId == request.StripeRequest.OrderHeader.OrderHeaderId);
                 orderHeader.StripeSessionId = session.Id;
+                request.StripeRequest.StripeSessionId = session.Id;
+
+                await _orderHeaderRepository.UpdateAsync(orderHeader);
 
                 return new Result<StripeRequestDto>
                 {

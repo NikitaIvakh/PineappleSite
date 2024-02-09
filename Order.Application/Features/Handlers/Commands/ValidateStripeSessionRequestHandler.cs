@@ -8,14 +8,16 @@ using Order.Domain.Entities;
 using Order.Domain.Enum;
 using Order.Domain.Interfaces.Repository;
 using Order.Domain.ResultOrder;
+using Order.Infrastructure;
 using Stripe;
 using Stripe.Checkout;
 
 namespace Order.Application.Features.Handlers.Commands
 {
-    public class ValidateStripeSessionRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper) : IRequestHandler<ValidateStripeSessionRequest, Result<OrderHeaderDto>>
+    public class ValidateStripeSessionRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, ApplicationDbContext applicationDbContext) : IRequestHandler<ValidateStripeSessionRequest, Result<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
+        private readonly ApplicationDbContext _applicationDbContext = applicationDbContext;
         private readonly IMapper _mapper = mapper;
 
         public async Task<Result<OrderHeaderDto>> Handle(ValidateStripeSessionRequest request, CancellationToken cancellationToken)
