@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Services.Orders;
@@ -17,100 +19,97 @@ namespace PineappleSite.Presentation.Controllers
             return View();
         }
 
-        public async Task<ActionResult> GetAllOrders()
+        public async Task<ActionResult> GetAllOrders(string status)
         {
-            try
-            {
-                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
-                OrderCollectionResult<OrderHeaderViewModel> response = await _orderService.GetAllOrdersAsync(userId);
+            IEnumerable<OrderHeaderViewModel> orderHeaderDtos;
+            string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
 
-                if (response.IsSuccess)
+            var response = await _orderService.GetAllOrdersAsync(userId);
+
+            if (response is not null && response.IsSuccess)
+            {
+                orderHeaderDtos = JsonConvert.DeserializeObject<IEnumerable<OrderHeaderViewModel>>(Convert.ToString(response.Data));
+                switch (status)
                 {
-                    TempData["success"] = response.SuccessMessage;
-                    return Json(new { data = response.Data.OrderByDescending(key => key.OrderHeaderId) });
+                    case "approved":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Approved);
+                        break;
+
+                    case "readyforpickup":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_ReadyForPickup);
+                        break;
+
+                    case "cancelled":
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Cancelled || key.Status == StaticDetails.Status_Refunded);
+                        break;
+
+                    default:
+                        break;
                 }
-
-                else
-                {
-                    TempData["error"] = response.ErrorMessage;
-                    return RedirectToAction(nameof(OrderIndex));
-                }
             }
 
-            catch (Exception exception)
-            {
-                ModelState.AddModelError(string.Empty, exception.Message);
-                return View();
-            }
+            else
+                orderHeaderDtos = new List<OrderHeaderViewModel>();
+
+            return Json(new { data = orderHeaderDtos.OrderByDescending(key => key.OrderHeaderId) });
         }
 
-        // GET: OrderController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> GetOrderDetails(int orderId)
         {
+            OrderHeaderDto orderHeaderDto = new();
+            string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+
+            var response = await _orderService.GetOrderAsync(orderId);
+
+            if (response is not null && response.IsSuccess)
+                orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Data));
+
+            if (!User.IsInRole(StaticDetails.RoleAdmin) && userId != orderHeaderDto.UserId)
+                return NotFound();
+
+            return View(orderHeaderDto);
+        }
+
+        [HttpPost("OrderReadyForPickup")]
+        public async Task<ActionResult> OrderReadyForPickup(int orderId)
+        {
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_ReadyForPickup);
+
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+            }
+
             return View();
         }
 
-        // GET: OrderController/Create
-        public ActionResult Create()
+        [HttpPost("CompleteOrder")]
+        public async Task<ActionResult> CompleteOrder(int orderId)
         {
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Completed);
+
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+            }
+
             return View();
         }
 
-        // POST: OrderController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        [HttpPost("CancelOrder")]
+        public async Task<ActionResult> CancelOrder(int orderId)
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Cancelled);
 
-        // GET: OrderController/Edit/5
-        public ActionResult Edit(int id)
-        {
+            if (response is not null && response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+            }
+
             return View();
-        }
-
-        // POST: OrderController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: OrderController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: OrderController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
         }
     }
 }

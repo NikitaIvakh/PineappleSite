@@ -1,23 +1,68 @@
 ﻿@model IEnumerable<PineappleSite.Presentation.Models.Orders.OrderHeaderViewModel>
 
-@{
-    ViewData["Title"] = "OrderIndex";
+﻿@{
+    var status = Context.Request.Query["status"];
+    var approved = "";
+    var readyforpickup = "";
+    var cancelled = "";
+    var all = "";
+
+    switch (status)
+    {
+        case "approved":
+            approved = "active text-white bg-secondary";
+            break;
+
+        case "readyforpickup":
+            readyforpickup = "active text-white bg-secondary";
+            break;
+
+        case "cancelled":
+            cancelled = "active text-white bg-secondary";
+            break;
+
+        default:
+            all = "active text-white bg-secondary";
+            break;
+    }
 }
 
-<div class="card-body p-4">
-    <table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%; text-align:center;">
-        <thead>
-            <tr>
-                <th style="text-align: center">ID</th>
-                <th style="text-align: center">Email</th>
-                <th style="text-align: center">Name</th>
-                <th style="text-align: center">Phone</th>
-                <th style="text-align: center">Status</th>
-                <th style="text-align: center">Total</th>
-                <th style="text-align: center">View Details</th>
-            </tr>
-        </thead>
-    </table>
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient ml-0 py-3 d-flex justify-content-between">
+        <div class="row">
+            <h1 class="text-white">Список заказов</h1>
+        </div>
+        <ul class="list-group list-group-horizontal-sm pt-2">
+            <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved">
+            <li class="list-group-item @approved">Подтвержден</li>
+            </a>
+            <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup">
+            <li class="list-group-item @readyforpickup">Готов к выдаче</li>
+            </a>
+            <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled">
+            <li class="list-group-item @cancelled">Отменен</li>
+            </a>
+            <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="all">
+            <li class="list-group-item @all">Все</li>
+            </a>
+        </ul>
+    </div>
+
+    <div class="card-body p-4">
+        <table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%; text-align:center;">
+            <thead>
+                <tr>
+                    <th style="text-align: center">ID</th>
+                    <th style="text-align: center">Почта</th>
+                    <th style="text-align: center">Имя</th>
+                    <th style="text-align: center">Тнлефон</th>
+                    <th style="text-align: center">Статус</th>
+                    <th style="text-align: center">Итого</th>
+                    <th style="text-align: center">Детали</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
 </div>
 
 @section Scripts {
