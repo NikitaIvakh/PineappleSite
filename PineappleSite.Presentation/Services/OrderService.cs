@@ -70,29 +70,211 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public Task<OrderResult<OrderHeaderViewModel>> GetOrderAsync(int orderHeaderId)
+        public async Task<OrderResult<OrderHeaderViewModel>> GetOrderAsync(int orderHeaderId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _orderClient.GetOrderAsync(orderHeaderId);
+
+                if (response.IsSuccess)
+                {
+                    return new OrderResult<OrderHeaderViewModel>
+                    {
+                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
+                        SuccessMessage = response.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in response.ValidationErrors)
+                    {
+                        return new OrderResult<OrderHeaderViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorMessage = response.ErrorMessage,
+                            ErrorCode = response.ErrorCode,
+                        };
+                    }
+                }
+
+                return new OrderResult<OrderHeaderViewModel>();
+            }
+
+            catch (OrdersExceptions exception)
+            {
+                return new OrderResult<OrderHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode
+                };
+            }
         }
 
-        public Task<OrderResult<OrderHeaderViewModel>> CreateOrderAsync(CartViewModel cartViewModel)
+        public async Task<OrderResult<OrderHeaderViewModel>> CreateOrderAsync(CartViewModel cartViewModel)
         {
-            throw new NotImplementedException();
+            try
+            {
+                CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
+                var response = await _orderClient.CreateOrderAsync(cartDto);
+
+                if (response.IsSuccess)
+                {
+                    return new OrderResult<OrderHeaderViewModel>
+                    {
+                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
+                        SuccessMessage = response.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in response.ValidationErrors)
+                    {
+                        return new OrderResult<OrderHeaderViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = response.ErrorCode,
+                            ErrorMessage = response.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new OrderResult<OrderHeaderViewModel>();
+            }
+
+            catch (OrdersExceptions exception)
+            {
+                return new OrderResult<OrderHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode
+                };
+            }
         }
 
-        public Task<OrderResult<StripeRequestViewModel>> CreateStripeSessionAsync(StripeRequestViewModel stripeRequest)
+        public async Task<OrderResult<StripeRequestViewModel>> CreateStripeSessionAsync(StripeRequestViewModel stripeRequest)
         {
-            throw new NotImplementedException();
+            try
+            {
+                StripeRequestDto stripeRequestDto = _mapper.Map<StripeRequestDto>(stripeRequest);
+                var response = await _orderClient.CreateStripeSessionAsync(stripeRequestDto);
+
+                if (response.IsSuccess)
+                {
+                    return new OrderResult<StripeRequestViewModel>
+                    {
+                        Data = _mapper.Map<StripeRequestViewModel>(response.Data),
+                        SuccessMessage = response.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in response.ValidationErrors)
+                    {
+                        return new OrderResult<StripeRequestViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = response.ErrorCode,
+                            ErrorMessage = response.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new OrderResult<StripeRequestViewModel>();
+            }
+
+            catch (OrdersExceptions exception)
+            {
+                return new OrderResult<StripeRequestViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode
+                };
+            }
         }
 
-        public Task<OrderResult<OrderHeaderViewModel>> ValidateStripeSessionAsync(int orderHeaderId)
+        public async Task<OrderResult<OrderHeaderViewModel>> ValidateStripeSessionAsync(int orderHeaderId)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _orderClient.ValidateStripeSessionAsync(orderHeaderId);
+
+                if (response.IsSuccess)
+                {
+                    return new OrderResult<OrderHeaderViewModel>
+                    {
+                        SuccessMessage = response.SuccessMessage,
+                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in response.ValidationErrors)
+                    {
+                        return new OrderResult<OrderHeaderViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = response.ErrorCode,
+                            ErrorMessage = response.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new OrderResult<OrderHeaderViewModel>();
+            }
+
+            catch (OrdersExceptions exception)
+            {
+                return new OrderResult<OrderHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
         }
 
-        public Task<OrderResult<OrderHeaderViewModel>> UpdateOrderStatusAsync(int orderHeaderId, string newStatus)
+        public async Task<OrderResult<OrderHeaderViewModel>> UpdateOrderStatusAsync(int orderHeaderId, string newStatus)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var response = await _orderClient.UpdateOrderStatusAsync(orderHeaderId, newStatus);
+
+                if (response.IsSuccess)
+                {
+                    return new OrderResult<OrderHeaderViewModel>
+                    {
+                        SuccessMessage = response.SuccessMessage,
+                        Data = _mapper.Map<OrderHeaderViewModel>(response),
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in response.ValidationErrors)
+                    {
+                        return new OrderResult<OrderHeaderViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = response.ErrorCode,
+                            ErrorMessage = response.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new OrderResult<OrderHeaderViewModel>();
+            }
+
+            catch (OrdersExceptions exception)
+            {
+                return new OrderResult<OrderHeaderViewModel>
+                {
+                    ErrorMessage = exception.Response,
+                    ErrorCode = exception.StatusCode,
+                };
+            }
         }
     }
 }
