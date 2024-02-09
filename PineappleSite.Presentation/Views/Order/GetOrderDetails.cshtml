@@ -43,7 +43,7 @@
                             </div>
 
                             @{
-                                if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
                                 {
                                     <div class="row my-1">
                                         <div class="col-3">Id Сессии</div>
@@ -94,7 +94,7 @@
                             @{
                                 if (Model.Status == StaticDetails.Status_Approved)
                                 {
-                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
                                     {
                                         <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Заказ готов</button>
                                     }
@@ -102,7 +102,7 @@
 
                                 if (Model.Status == StaticDetails.Status_ReadyForPickup)
                                 {
-                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
                                     {
                                         <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">Завершить заказ</button>
                                     }
