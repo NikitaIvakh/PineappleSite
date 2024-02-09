@@ -56,13 +56,13 @@ namespace PineappleSite.Presentation.Controllers
 
         public async Task<ActionResult> GetOrderDetails(int orderId)
         {
-            OrderHeaderDto orderHeaderDto = new();
+            OrderHeaderViewModel orderHeaderDto = new();
             string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
 
             var response = await _orderService.GetOrderAsync(orderId);
 
             if (response is not null && response.IsSuccess)
-                orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Data));
+                orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderViewModel>(Convert.ToString(response.Data));
 
             if (!User.IsInRole(StaticDetails.RoleAdmin) && userId != orderHeaderDto.UserId)
                 return NotFound();
