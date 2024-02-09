@@ -1,0 +1,25 @@
+﻿@model IEnumerable<PineappleSite.Presentation.Models.Orders.OrderHeaderViewModel>
+
+@{
+    ViewData["Title"] = "OrderIndex";
+}
+
+<div class="card-body p-4">
+    <table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%; text-align:center;">
+        <thead>
+            <tr>
+                <th style="text-align: center">ID</th>
+                <th style="text-align: center">Email</th>
+                <th style="text-align: center">Name</th>
+                <th style="text-align: center">Phone</th>
+                <th style="text-align: center">Status</th>
+                <th style="text-align: center">Total</th>
+                <th style="text-align: center">View Details</th>
+            </tr>
+        </thead>
+    </table>
+</div>
+
+@section Scripts {
+    <script src="~/js/orders/orderIndex.js"></script>
+}

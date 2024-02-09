@@ -31,6 +31,7 @@ applicationBuilder.Services.AddScoped<IUserService, UserService>();
 applicationBuilder.Services.AddScoped<IProductService, ProductService>();
 applicationBuilder.Services.AddScoped<IFavoriteService, FavoriteService>();
 applicationBuilder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
+applicationBuilder.Services.AddScoped<IOrderService, OrderService>();
 
 applicationBuilder.Services.Configure<CookiePolicyOptions>(options =>
 {

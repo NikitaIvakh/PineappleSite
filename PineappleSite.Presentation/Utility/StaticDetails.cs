@@ -12,5 +12,10 @@ namespace PineappleSite.Presentation.Utility
             [Display(Name = "Администратор")]
             Administrator = 2
         }
+
+
+        public const string RoleAdmin = "Administrator";
+        public const string RoleEmployee = "Employee";
+        public const string UserAdmin = "admin@localhost.com";
     }
 }
