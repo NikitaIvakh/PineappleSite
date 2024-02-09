@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
+using PineappleSite.Presentation.Utility;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class ShoppingCartController(IShoppingCartService shoppingCartService) : Controller
+    public class ShoppingCartController(IShoppingCartService shoppingCartService, IOrderService orderService) : Controller
     {
         private readonly IShoppingCartService _shoppingCartService = shoppingCartService;
+        private readonly IOrderService _orderService = orderService;
 
         // GET: ShoppingCartController
         public async Task<ActionResult> Index()
@@ -145,6 +149,69 @@ namespace PineappleSite.Presentation.Controllers
                 ModelState.AddModelError(string.Empty, exception.Message);
                 return View(productId);
             }
+        }
+
+        [ActionName("Checkout")]
+        public async Task<ActionResult> Checkout(CartViewModel cartViewModel)
+        {
+            CartResult<CartViewModel> cart = await GetShoppingCartAfterAuthenticate();
+            cartViewModel = new()
+            { 
+                CartHeader = new CartHeaderViewModel
+                {
+                    CartHeaderId = cart.Data.CartHeader.CartHeaderId,
+                    UserId = cart.Data.CartHeader.UserId,
+                    CouponCode = cart.Data.CartHeader.CouponCode,
+                    Discount = cart.Data.CartHeader.Discount,
+                    CartTotal = cart.Data.CartHeader.CartTotal,
+                    Name = cart.Data.CartHeader.Name,
+                    PhoneNumber = cart.Data.CartHeader.PhoneNumber,
+                    Email = cart.Data.CartHeader.Email,
+                },
+
+                CartDetails = cart.Data.CartDetails,
+            };
+
+            cart.Data.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
+            cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
+            cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
+
+            var response = await _orderService.CreateOrderAsync(cartViewModel);
+            OrderHeaderViewModel orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderViewModel>(Convert.ToString(response.Data));
+
+            if (response is not null && response.IsSuccess)
+            {
+                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+
+                StripeRequestViewModel stripeRequestDto = new()
+                {
+                    ApprovedUrl = domain + "ShoppingCart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
+                    CancelUrl = domain + "ShoppingCart/Checkout",
+                    OrderHeader = orderHeaderDto,
+                };
+
+                var stripeResponse = await _orderService.CreateStripeSessionAsync(stripeRequestDto);
+                StripeRequestViewModel stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestViewModel>(Convert.ToString(stripeResponse.Data));
+                Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+                return new StatusCodeResult(303);
+            }
+
+            return View();
+        }
+
+        public async Task<ActionResult> Confirmation(int orderId)
+        {
+            var response = await _orderService.ValidateStripeSessionAsync(orderId);
+
+            if (response is not null & response.IsSuccess)
+            {
+                OrderHeaderViewModel orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderViewModel>(Convert.ToString(response.Data));
+
+                if (orderHeaderDto.Status == StaticDetails.Status_Approved)
+                    return View(orderId);
+            }
+
+            return View(orderId);
         }
 
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()
