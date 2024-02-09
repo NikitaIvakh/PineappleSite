@@ -6,8 +6,6 @@ namespace PineappleSite.Presentation.Models.Orders
     {
         public int OrderDetailsId { get; set; }
 
-        public OrderHeaderViewModel? OrderHeader { get; set; }
-
         public int OrderHeaderId { get; set; }
 
         public ProductViewModel? Product { get; set; }

@@ -23,18 +23,18 @@ namespace Order.Application.Features.Handlers.Requests
         {
             try
             {
-                IEnumerable<OrderHeader> orderHeader;
+                List<OrderHeaderDto> orderHeader;
                 var userRole = _httpContextAccessor.HttpContext.User.IsInRole(StaticDetails.RoleAdmin);
 
                 if (userRole is true)
-                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails);
+                    orderHeader = _mapper.Map<List<OrderHeaderDto>>( await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).ToListAsync(cancellationToken));
 
                 else
-                    orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId);
+                    orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).ToListAsync(cancellationToken));
 
                 return new CollectionResult<OrderHeaderDto>
                 {
-                    Count = orderHeader.Count(),
+                    Count = orderHeader.Count,
                     SuccessMessage = "Список заказов",
                     Data = _mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(orderHeader),
                 };

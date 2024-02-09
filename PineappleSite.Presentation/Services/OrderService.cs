@@ -15,22 +15,18 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<OrderCollectionResult<OrderHeaderViewModel>> GetAllOrdersAsync(string userId)
         {
+            AddBearerToken();
             try
             {
                 var result = await _orderClient.GetAllOrdersAsync(userId);
 
                 if (result.IsSuccess)
                 {
-                    OrderCollectionResult<OrderHeaderViewModel> response = new()
+                    return new OrderCollectionResult<OrderHeaderViewModel>
                     {
-                        Data = _mapper.Map<IReadOnlyCollection<OrderHeaderViewModel>>(result.Data),
-                        ErrorCode = result.ErrorCode,
-                        ErrorMessage = result.ErrorMessage,
-                        Count = result.Count,
                         SuccessMessage = result.SuccessMessage,
+                        Data = _mapper.Map<IReadOnlyCollection<OrderHeaderViewModel>>(result.Data),
                     };
-
-                    return response;
                 }
 
                 else

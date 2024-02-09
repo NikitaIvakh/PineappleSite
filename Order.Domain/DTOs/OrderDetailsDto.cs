@@ -4,8 +4,6 @@
     {
         public int OrderDetailsId { get; set; }
 
-        public OrderHeaderDto? OrderHeader { get; set; }
-
         public int OrderHeaderId { get; set; }
 
         public ProductDto? Product { get; set; }

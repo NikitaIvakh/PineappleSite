@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
+using Order.Domain.Entities;
 using Order.Domain.ResultOrder;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860

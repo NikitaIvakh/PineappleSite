@@ -25,7 +25,7 @@ namespace PineappleSite.Presentation.Controllers
 
             if (response is not null && response.IsSuccess)
             {
-                orderHeaderDtos = JsonConvert.DeserializeObject<IEnumerable<OrderHeaderViewModel>>(Convert.ToString(response.Data));
+                orderHeaderDtos = response.Data;
                 switch (status)
                 {
                     case "approved":

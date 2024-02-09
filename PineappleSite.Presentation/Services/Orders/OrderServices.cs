@@ -782,9 +782,6 @@ namespace PineappleSite.Presentation.Services.Orders
         [Newtonsoft.Json.JsonProperty("orderDetailsId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int OrderDetailsId { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("orderHeader", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public OrderHeaderDto OrderHeader { get; set; }
-
         [Newtonsoft.Json.JsonProperty("orderHeaderId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int OrderHeaderId { get; set; }
 
