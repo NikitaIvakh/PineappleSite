@@ -79,6 +79,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             MinAmount = request.CreateCoupon.MinAmount,
                         };
 
+                        await _repository.CreateAsync(coupon);
+
                         var options = new Stripe.CouponCreateOptions
                         {
                             Currency = "byn",
@@ -89,8 +91,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                         var service = new Stripe.CouponService();
                         service.Create(options);
-
-                        await _repository.CreateAsync(coupon);
 
                         return new Result<CouponDto>
                         {

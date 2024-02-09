@@ -2,6 +2,7 @@ using Coupon.API;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
 using Serilog;
+using Stripe;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
 applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+
+StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 applicationBuilder.Services.AddCors(key =>
 {
