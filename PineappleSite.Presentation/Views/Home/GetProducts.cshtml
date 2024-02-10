@@ -1,6 +1,7 @@
 ﻿@using PineappleSite.Presentation.Extecsions
+@using PineappleSite.Presentation.Models.Paginated
 @using PineappleSite.Presentation.Services.Products
-@model ProductsCollectionResultViewModel<PineappleSite.Presentation.Models.Products.ProductViewModel>
+@model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
     ViewData["Title"] = "Продукция";
@@ -12,13 +13,43 @@
         height: 200px;
         object-fit: cover;
     }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .pagination .page-item {
+        margin: 0 5px;
+    }
+
+    .pagination .page-item.disabled span {
+        color: #6c757d;
+        pointer-events: none;
+    }
+
+    .pagination .page-item a,
+    .pagination .page-item span {
+        display: inline-block;
+        padding: 5px 10px;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+        text-decoration: none;
+    }
+
+    .pagination .page-item.active span {
+        background-color: #007bff;
+        color: #fff;
+    }
 </style>
 
 <form>
     <div class="container">
         <div class="row">
             @{
-                foreach (var product in Model.Data)
+                foreach (var product in Model)
                 {
                     <div class="col-12 col-md-6 col-lg-4 d-flex align-items-stretch">
                         <div class="p-0 my-3 border rounded">
@@ -42,6 +73,26 @@
                     </div>
                 }
             }
+            <div class="pagination">
+                @if (Model.HasPreviosPage)
+                {
+                    <a asp-action="GetProducts"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       class="page-item">
+                        <span>&laquo; Назад</span>
+                    </a>
+                }
+                @if (Model.HasNextPage)
+                {
+                    <a asp-action="GetProducts"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       class="page-item">
+                        <span>Вперед &raquo;</span>
+                    </a>
+                }
+            </div>
         </div>
     </div>
 </form>

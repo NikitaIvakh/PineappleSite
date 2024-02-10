@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Favourites;
+using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Favorites;
@@ -24,10 +25,35 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts()
+        public async Task<IActionResult> GetProducts(string currentFilter, int? pageNumber)
         {
-            var products = await _productService.GetAllProductsAsync();
-            return View(products);
+            try
+            {
+                var products = await _productService.GetAllProductsAsync();
+
+                if (products.IsSuccess)
+                {
+                    ViewData["CurrentFilter"] = currentFilter;
+
+                    var pageIndex = 9;
+                    var filteredProducts = products.Data.AsQueryable();
+                    var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
+
+                    return View(paginatedProducts);
+                }
+
+                else
+                {
+                    TempData["error"] = products.ErrorMessage;
+                    return RedirectToAction(nameof(GetProducts));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         [HttpGet]
