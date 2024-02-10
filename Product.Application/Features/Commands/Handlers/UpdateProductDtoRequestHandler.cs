@@ -120,6 +120,12 @@ namespace Product.Application.Features.Commands.Handlers
                                 product.ImageLocalPath = filePath;
 
                                 await _repository.UpdateAsync(product);
+
+                                return new Result<ProductDto>
+                                {
+                                    SuccessMessage = "Продукт успешно обновлен",
+                                    Data = _mapper.Map<ProductDto>(product),
+                                };
                             }
                         }
 
@@ -134,10 +140,16 @@ namespace Product.Application.Features.Commands.Handlers
                                     fileInfo.Delete();
                             }
 
-                            product.ImageUrl = null;
-                            product.ImageLocalPath = null;
+                            request.UpdateProduct.ImageUrl = product.ImageUrl;
+                            request.UpdateProduct.ImageLocalPath = product.ImageLocalPath;
 
                             await _repository.UpdateAsync(product);
+
+                            return new Result<ProductDto>
+                            {
+                                SuccessMessage = "Продукт успешно обновлен",
+                                Data = _mapper.Map<ProductDto>(product),
+                            };
                         }
 
                         return new Result<ProductDto>

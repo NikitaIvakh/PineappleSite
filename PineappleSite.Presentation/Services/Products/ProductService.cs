@@ -60,12 +60,12 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
@@ -126,7 +126,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -232,21 +232,21 @@ namespace PineappleSite.Presentation.Services.Products
                         content_.Add(new System.Net.Http.StringContent(ConvertToString(price, System.Globalization.CultureInfo.InvariantCulture)), "Price");
                     }
 
-                    if (avatar == null)
-                        throw new System.ArgumentNullException("avatar");
-                    else
+                    var content_avatar_ = avatar != null && avatar.Data != null ? new System.Net.Http.StreamContent(avatar.Data) : null;
+
+                    if (content_avatar_ != null)
                     {
-                        var content_avatar_ = new System.Net.Http.StreamContent(avatar.Data);
                         if (!string.IsNullOrEmpty(avatar.ContentType))
                             content_avatar_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(avatar.ContentType);
                         content_.Add(content_avatar_, "Avatar", avatar.FileName ?? "Avatar");
                     }
+
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -327,7 +327,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -407,7 +407,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -466,15 +466,15 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath)
         {
-            return ProductPUTAsync(id, productId, name, description, productCategory, price, avatar, System.Threading.CancellationToken.None);
+            return ProductPUTAsync(id, productId, name, description, productCategory, price, avatar, imageUrl, imageLocalPath, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -525,21 +525,24 @@ namespace PineappleSite.Presentation.Services.Products
                         content_.Add(new System.Net.Http.StringContent(ConvertToString(price, System.Globalization.CultureInfo.InvariantCulture)), "Price");
                     }
 
-                    if (avatar == null)
-                        throw new System.ArgumentNullException("avatar");
-                    else
+                    var content_avatar_ = avatar != null && avatar.Data != null ? new System.Net.Http.StreamContent(avatar.Data) : null;
+
+                    if (content_avatar_ != null)
                     {
-                        var content_avatar_ = new System.Net.Http.StreamContent(avatar.Data);
                         if (!string.IsNullOrEmpty(avatar.ContentType))
                             content_avatar_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(avatar.ContentType);
                         content_.Add(content_avatar_, "Avatar", avatar.FileName ?? "Avatar");
                     }
+
+                    content_.Add(new System.Net.Http.StringContent(ConvertToString(imageUrl, System.Globalization.CultureInfo.InvariantCulture)), "ImageUrl");
+                    content_.Add(new System.Net.Http.StringContent(ConvertToString(imageLocalPath, System.Globalization.CultureInfo.InvariantCulture)), "ImageLocalPath");
+
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -625,7 +628,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-                
+
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -754,7 +757,7 @@ namespace PineappleSite.Presentation.Services.Products
                     var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
                     if (field != null)
                     {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
+                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
                             as System.Runtime.Serialization.EnumMemberAttribute;
                         if (attribute != null)
                         {
@@ -766,17 +769,17 @@ namespace PineappleSite.Presentation.Services.Products
                     return converted == null ? string.Empty : converted;
                 }
             }
-            else if (value is bool) 
+            else if (value is bool)
             {
                 return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
             }
             else if (value is byte[])
             {
-                return System.Convert.ToBase64String((byte[]) value);
+                return System.Convert.ToBase64String((byte[])value);
             }
             else if (value.GetType().IsArray)
             {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
+                var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
                 return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
             }
 
@@ -892,12 +895,12 @@ namespace PineappleSite.Presentation.Services.Products
     public partial class FileParameter
     {
         public FileParameter(System.IO.Stream data)
-            : this (data, null, null)
+            : this(data, null, null)
         {
         }
 
         public FileParameter(System.IO.Stream data, string fileName)
-            : this (data, fileName, null)
+            : this(data, fileName, null)
         {
         }
 
@@ -954,10 +957,10 @@ namespace PineappleSite.Presentation.Services.Products
 
 }
 
-#pragma warning restore  108
-#pragma warning restore  114
-#pragma warning restore  472
-#pragma warning restore  612
+#pragma warning restore 108
+#pragma warning restore 114
+#pragma warning restore 472
+#pragma warning restore 612
 #pragma warning restore 1573
 #pragma warning restore 1591
 #pragma warning restore 8073

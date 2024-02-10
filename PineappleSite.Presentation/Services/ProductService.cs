@@ -156,7 +156,9 @@ namespace PineappleSite.Presentation.Services
                     product.Description,
                     (ProductCategory?)product.ProductCategory,
                     product.Price,
-                    avatarFileParameter);
+                    avatarFileParameter,
+                    product.ImageUrl,
+                    product.ImageLocalPath);
 
                 if (apiResponse.IsSuccess)
                 {

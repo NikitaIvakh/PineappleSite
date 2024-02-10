@@ -105,20 +105,28 @@ namespace Product.Application.Features.Commands.Handlers
                             var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
                             product.ImageUrl = Path.Combine(baseUrl, "ProductImages", fileName);
                             product.ImageLocalPath = filePath;
+
+                            await _repository.UpdateAsync(product);
+
+                            return new Result<ProductDto>
+                            {
+                                SuccessMessage = "Продукт успешно добавлен",
+                                Data = _mapper.Map<ProductDto>(product),
+                            };
                         }
 
                         else
                         {
                             product.ImageUrl = "https://placehold.co/600x400";
                             product.ImageLocalPath = "https://placehold.co/600x400";
-                        }
 
-                        await _repository.UpdateAsync(product);
+                            await _repository.UpdateAsync(product);
 
-                        return new Result<ProductDto>
-                        {
-                            SuccessMessage = "Продукт успешно добавлен",
-                            Data = _mapper.Map<ProductDto>(product),
+                            return new Result<ProductDto>
+                            {
+                                SuccessMessage = "Продукт успешно добавлен",
+                                Data = _mapper.Map<ProductDto>(product),
+                            };
                         };
                     }
                 }

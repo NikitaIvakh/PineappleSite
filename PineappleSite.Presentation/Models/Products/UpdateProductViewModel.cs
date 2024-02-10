@@ -21,5 +21,9 @@ namespace PineappleSite.Presentation.Models.Products
         public double Price { get; set; }
 
         public IFormFile? Avatar { get; set; }
+
+        public string? ImageUrl { get; set; }
+
+        public string? ImageLocalPath { get; set; }
     }
 }
