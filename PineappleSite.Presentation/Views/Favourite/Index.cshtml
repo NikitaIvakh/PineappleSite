@@ -2,7 +2,7 @@
 @model PineappleSite.Presentation.Services.Favorites.FavouriteResult<FavouriteViewModel>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Избранные товары";
 }
 
 @{
@@ -65,9 +65,8 @@
     else
     {
         <div class="text-center">
-            <h1 class="text-white pt-4">Список избранных товаров пуст.</h1>
-            <p class="text-white pb-3">Добавьте продукты.</p>
-            @* <img src="/images/Empty_Cart.png" width="45%" /> *@
+            <h1 class="text-white pt-4">Избранных товаров нет.</h1>
+            <p class="text-white pb-3">Воспользуйтесь поиском, чтобы найти всё, что нужно...</p>
         </div>
     }
 }
