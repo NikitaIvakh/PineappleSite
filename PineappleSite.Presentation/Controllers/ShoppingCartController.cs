@@ -202,6 +202,7 @@ namespace PineappleSite.Presentation.Controllers
             cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
             cartViewModel.CartDetails = cart.Data.CartDetails;
             cartViewModel.CartHeader.CouponCode = cart.Data.CartHeader.CouponCode;
+            cartViewModel.CartHeader.Discount = cart.Data.CartHeader.Discount;
 
             var response = await _orderService.CreateOrderAsync(cartViewModel);
             OrderHeaderViewModel orderHeaderDto = response.Data;
