@@ -1,89 +1,16 @@
 ﻿@using PineappleSite.Presentation.Models.Paginated
 @model PaginatedList<PineappleSite.Presentation.Models.Coupons.CouponViewModel>
 
-
 @{
     ViewData["Title"] = "Список купонов";
+    <link rel="stylesheet" href="~/css/coupons/IndexCoupons.css" asp-append-version="true" />
 }
-
-<style>
-    label {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-
-    input[type="text"] {
-        padding: 8px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 250px;
-    }
-
-    .search-button {
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 8px;
-    }
-
-    .search-button:hover {
-        background-color: #0056b3;
-    }
-
-    .clear-button {
-        padding: 8px 16px;
-        background-color: #6c757d;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 8px;
-    }
-
-    .clear-button:hover {
-        background-color: #4e555a;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-        .pagination .page-item {
-            margin: 0 5px;
-        }
-
-            .pagination .page-item.disabled span {
-                color: #6c757d;
-                pointer-events: none;
-            }
-
-            .pagination .page-item a,
-            .pagination .page-item span {
-                display: inline-block;
-                padding: 5px 10px;
-                color: #007bff;
-                border: 1px solid #007bff;
-                border-radius: 4px;
-                text-decoration: none;
-            }
-
-            .pagination .page-item.active span {
-                background-color: #007bff;
-                color: #fff;
-            }
-</style>
-
 
 <div class="col-12 form-text">
     <form asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
-                <label for="searchCode">Поиск купона:</label>
+                <label for="searchCode" style="font-size:20px; color:white">Поиск купона:</label>
             </p>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchCode" id="searchCode" value="@ViewData["SearchCode"]" />
@@ -95,6 +22,7 @@
         </div>
     </form>
 </div>
+
 <form id="deleteSelectedForm" asp-action="DeleteMultiple" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
@@ -185,21 +113,4 @@
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    document.getElementById("clearSearch").addEventListener("click", function () {
-        document.getElementById("searchCode").value = "";
-        window.location.href = "/Coupon/Index";
-    });
-
-    $(document).ready(function () {
-        $('input[name="selectedCoupons"]').change(function () {
-            var selectedCount = $('input[name="selectedCoupons"]:checked').length;
-            if (selectedCount >= 2) {
-                $('#deleteAllButton').show();
-            } else {
-                $('#deleteAllButton').hide();
-            }
-        });
-    });
-
-</script>
+<script src="~/js/coupons/IndexCoupons.js" asp-append-version="true"></script>
