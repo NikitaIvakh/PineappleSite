@@ -1,22 +1,10 @@
 ﻿@using PineappleSite.Presentation.Extecsions
 @model PineappleSite.Presentation.Models.Products.ProductViewModel
 
-<style>
-    .car-image {
-        max-width: 100%;
-        max-height: 300px;
-        object-fit: cover;
-    }
-
-    .details-container {
-        display: flex;
-        align-items: center;
-    }
-
-    .details-text {
-        margin-left: 20px;
-    }
-</style>
+@{
+    ViewData["Title"] = "Детали продукта";
+    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true"/>
+}
 
 <form method="post" action="/GetProductDetails">
     <input asp-for="Id" hidden />
@@ -70,16 +58,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-@* <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function() {
-        $(".addToCartButton").click(function() {
-            $("#addToCart").val("true");
-        });
-
-        $(".addToFavoritesButton").click(function() {
-            $("#addToCart").val("false");
-        });
-    });
-</script> *@

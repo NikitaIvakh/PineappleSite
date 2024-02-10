@@ -2,13 +2,10 @@
     ViewData["Title"] = "Главная стираница";
 }
 
-<style>
-    .custom-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-</style>
+@{
+    ViewData["Title"] = "Pineapple Restaurant";
+    <link rel="stylesheet" href="~/css/home/homeIndex.css" asp-append-version="true" />
+}
 
 <div style="padding: 10px;"></div>
 
@@ -155,16 +152,8 @@
     }
 }
 
-@section Scripts
-{
-    <script>
+<script src="~/js/home/homeIndex.js" asp-append-version="true"></script>
 
-        $('#btnHideId').click(function () {
-            $('#ulListId').hide(2000);
-        });
-
-        $('#btnShowId').click(function () {
-            $('#ulListId').show(2000);
-        });
-    </script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

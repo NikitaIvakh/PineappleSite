@@ -4,75 +4,9 @@
 @model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Продукция";
+    ViewData["Title"] = "Продукты";
+    <link rel="stylesheet" href="~/css/home/getProducts.css" asp-append-version="true"/>
 }
-
-<style>
-    .custom-image {
-        width: 100%;
-        height: 200px;
-        object-fit: cover;
-    }
-
-    .pagination {
-        display: flex;
-        justify-content: center;
-        margin-top: 20px;
-    }
-
-        .pagination .page-item {
-            margin: 0 5px;
-        }
-
-            .pagination .page-item.disabled span {
-                color: #6c757d;
-                pointer-events: none;
-            }
-
-            .pagination .page-item a,
-            .pagination .page-item span {
-                display: inline-block;
-                padding: 5px 10px;
-                color: #007bff;
-                border: 1px solid #007bff;
-                border-radius: 4px;
-                text-decoration: none;
-            }
-
-            .pagination .page-item.active span {
-                background-color: #007bff;
-                color: #fff;
-            }
-
-    .search-button {
-        padding: 8px 16px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 8px;
-    }
-
-        .search-button:hover {
-            background-color: #0056b3;
-        }
-
-    .clear-button {
-        padding: 8px 16px;
-        background-color: #6c757d;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        margin-left: 8px;
-    }
-
-        .clear-button:hover {
-            background-color: #4e555a;
-        }
-</style>
-
 
 <div class="col-12 form-text">
     <form asp-action="GetProducts" method="get">
@@ -144,12 +78,7 @@
 </form>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script>
-    document.getElementById("clearSearch").addEventListener("click", function () {
-        document.getElementById("searchProduct").value = "";
-        window.location.href = "/Home/GetProducts";
-    });
-</script>
+<script src="~/js/home/getProducts.js" asp-append-version="true"></script>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
