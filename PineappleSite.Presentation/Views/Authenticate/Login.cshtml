@@ -4,38 +4,56 @@
     ViewData["Title"] = "Вход в аккаунт";
 }
 
-<h1>Вход в аккаунт</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger text-white"></div>
-            <input type="hidden" asp-for="ReturnUrl" />
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+<form class="container col-6" asp-action="Login">
+    <br />
+    <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Вход в аккаунт</h1>
+                </div>
             </div>
-            <br />
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" type="password" class="form-control" />
+        </div>
+        <hr />
+        <div class="row">
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;">Почта</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <input class="form-control" asp-for="Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" asp-for="Password">Пароль</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <div class="input-group">
+                        <input asp-for="Password" type="password" class="form-control" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" id="togglePassword">
+                                <i class="fa fa-eye"></i> Показать
+                            </button>
+                        </div>
+                    </div>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Вход" class="btn btn-primary" />
+            <div class="col-5 offset-1">
+                <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index">Вернуться назад</a>
             </div>
-        </form>
+            <div class="col-5">
+                <input type="submit" value="Войти в аккаунт" class="btn btn-success form-control" />
+            </div>
+        </div>
     </div>
-</div>
-<br />
-<div>
-    <a class="text-white" asp-action="Index" asp-controller="Home">Вернуться на главную</a>
-</div>
+</form>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    <partial name="_ValidationScriptsPartial" />
 }
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/users/createUser.js" asp-append-version="true"></script>
