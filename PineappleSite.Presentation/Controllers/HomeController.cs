@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Extecsions;
 using PineappleSite.Presentation.Models;
 using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Favorites;
+using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
 
@@ -25,7 +27,7 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetProducts(string currentFilter, int? pageNumber)
+        public async Task<IActionResult> GetProducts(string searchProduct, string currentFilter, int? pageNumber)
         {
             try
             {
@@ -33,6 +35,23 @@ namespace PineappleSite.Presentation.Controllers
 
                 if (products.IsSuccess)
                 {
+                    if (!string.IsNullOrEmpty(searchProduct))
+                    {
+                        var filteredProductList = products.Data.Where(
+                            key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.ProductCategory.GetDisplayName().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Price.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Count.ToString().Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase)).ToList();
+
+                        products = new ProductsCollectionResultViewModel<ProductViewModel>
+                        {
+                            Data = filteredProductList,
+                        };
+                    }
+
+                    ViewData["SearchProduct"] = searchProduct;
                     ViewData["CurrentFilter"] = currentFilter;
 
                     var pageIndex = 9;
