@@ -118,8 +118,6 @@ namespace Product.Application.Features.Commands.Handlers
                         else
                         {
                             product.ImageUrl = "https://placehold.co/600x400";
-                            product.ImageLocalPath = "https://placehold.co/600x400";
-
                             await _repository.UpdateAsync(product);
 
                             return new Result<ProductDto>

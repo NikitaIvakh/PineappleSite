@@ -75,13 +75,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">Картинка</label>
                 </div>
                 <div class="col-6 pb-3">
-                    @if (Model.Avatar != null)
-                    {
-                        <div>
-                            <img src="@Model.ImageUrl" alt="Картинка" style="max-width: 100px;" />
-                        </div>
-                    }
-                    <input asp-for="Avatar" class="form-control" type="file" accept="image/*" />
+                    <input asp-for="Avatar" class="form-control" />
                     <span asp-validation-for="Avatar" class="text-danger"></span>
                 </div>
             </div>
