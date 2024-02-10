@@ -21,7 +21,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<CollectionResult<OrderHeaderDto>>> GetAllOrders(string userId)
         {
             var request = await _mediator.Send(new GetOrderListRequest { UserId = userId });
-            return Ok(request);
+
+            if (request.IsSuccess)
+            {
+                return Ok(request);
+            }
+
+            return BadRequest(request.ErrorMessage);
         }
 
         // GET api/<OrderController>/5
@@ -29,7 +35,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<Result<OrderHeaderDto>>> GetOrder(int orderId)
         {
             var request = await _mediator.Send(new GetOrderRequest { OrderId = orderId });
-            return Ok(request);
+
+            if (request.IsSuccess)
+            {
+                return Ok(request);
+            }
+
+            return BadRequest(request.ErrorMessage);
         }
 
         // POST api/<OrderController>
@@ -37,7 +49,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<Result<OrderHeaderDto>>> CreateOrder([FromBody] CartDto cartDto)
         {
             var command = await _mediator.Send(new CreateOrderRequest { CartDto = cartDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // POST api/<OrderController>
@@ -45,7 +63,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<Result<StripeRequestDto>>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
         {
             var command = await _mediator.Send(new CreateStripeRequest { StripeRequest = stripeRequestDto });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // POST api/<OrderController>
@@ -53,7 +77,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession([FromBody] int orderHeaderId)
         {
             var command = await _mediator.Send(new ValidateStripeSessionRequest { OrderHeaderId = orderHeaderId });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
 
         // POST api/<OrderController>
@@ -61,7 +91,13 @@ namespace Order.API.Controllers
         public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(int orderHeaderId, [FromBody] string newStatus)
         {
             var command = await _mediator.Send(new UpdateOrderStatusRequest { OrderHeaderId = orderHeaderId, NewStatus = newStatus });
-            return Ok(command);
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
         }
     }
 }

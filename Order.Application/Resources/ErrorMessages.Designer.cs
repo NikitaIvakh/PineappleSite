@@ -70,6 +70,15 @@ namespace Order.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Создать заказ невозможно.
+        /// </summary>
+        internal static string OrderNotCreated {
+            get {
+                return ResourceManager.GetString("OrderNotCreated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Заказ не найден.
         /// </summary>
         internal static string OrderNotFound {

@@ -93,6 +93,7 @@ namespace PineappleSite.Presentation.Controllers
                             Discount = result.Data.CartHeader.CartHeaderId,
                             CartTotal = result.Data.CartHeader.CartTotal,
                         },
+
                         CartDetails = result.Data.CartDetails,
                     };
 
@@ -196,50 +197,81 @@ namespace PineappleSite.Presentation.Controllers
         [ActionName("Checkout")]
         public async Task<ActionResult> Checkout(CartViewModel cartViewModel)
         {
-            CartResult<CartViewModel> cart = await GetShoppingCartAfterAuthenticate();
-            cart.Data.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
-            cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
-            cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
-            cartViewModel.CartDetails = cart.Data.CartDetails;
-            cartViewModel.CartHeader.CouponCode = cart.Data.CartHeader.CouponCode;
-            cartViewModel.CartHeader.Discount = cart.Data.CartHeader.Discount;
-
-            var response = await _orderService.CreateOrderAsync(cartViewModel);
-            OrderHeaderViewModel orderHeaderDto = response.Data;
-
-            if (response is not null && response.IsSuccess)
+            try
             {
-                var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+                CartResult<CartViewModel> cart = await GetShoppingCartAfterAuthenticate();
+                cart.Data.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
+                cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
+                cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
+                cartViewModel.CartDetails = cart.Data.CartDetails;
+                cartViewModel.CartHeader.CouponCode = cart.Data.CartHeader.CouponCode;
+                cartViewModel.CartHeader.Discount = cart.Data.CartHeader.Discount;
 
-                StripeRequestViewModel stripeRequestDto = new()
+                var response = await _orderService.CreateOrderAsync(cartViewModel);
+                OrderHeaderViewModel orderHeaderDto = response.Data;
+
+                if (response is not null && response.IsSuccess)
                 {
-                    ApprovedUrl = domain + "ShoppingCart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
-                    CancelUrl = domain + "ShoppingCart/Checkout",
-                    OrderHeader = orderHeaderDto,
-                };
+                    var domain = Request.Scheme + "://" + Request.Host.Value + "/";
 
-                var stripeResponse = await _orderService.CreateStripeSessionAsync(stripeRequestDto);
-                StripeRequestViewModel stripeResponseResult = stripeResponse.Data;
-                Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
-                return new StatusCodeResult(303);
+                    StripeRequestViewModel stripeRequestDto = new()
+                    {
+                        ApprovedUrl = domain + "ShoppingCart/Confirmation?orderId=" + orderHeaderDto.OrderHeaderId,
+                        CancelUrl = domain + "ShoppingCart/Checkout",
+                        OrderHeader = orderHeaderDto,
+                    };
+
+                    var stripeResponse = await _orderService.CreateStripeSessionAsync(stripeRequestDto);
+                    StripeRequestViewModel stripeResponseResult = stripeResponse.Data;
+                    Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+                    return new StatusCodeResult(303);
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction(nameof(Checkout));
+                }
             }
 
-            return View();
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         public async Task<ActionResult> Confirmation(int orderId)
         {
-            var response = await _orderService.ValidateStripeSessionAsync(orderId);
-
-            if (response is not null & response.IsSuccess)
+            try
             {
-                OrderHeaderViewModel orderHeaderDto = response.Data;
+                var response = await _orderService.ValidateStripeSessionAsync(orderId);
 
-                if (orderHeaderDto.Status == StaticDetails.Status_Approved)
-                    return View(orderId);
+                if (response is not null & response.IsSuccess)
+                {
+                    OrderHeaderViewModel orderHeaderDto = response.Data;
+
+                    if (orderHeaderDto.Status == StaticDetails.Status_Approved)
+                    {
+                        TempData["success"] = response.SuccessMessage;
+                        return View(orderId);
+                    }
+
+                    else
+                    {
+                        TempData["error"] = response.ErrorMessage;
+                        return View(orderId);
+                    }
+                }
+
+                return View(orderId);
             }
 
-            return View(orderId);
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View();
+            }
         }
 
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()

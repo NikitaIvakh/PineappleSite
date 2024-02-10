@@ -4,5 +4,6 @@
     {
         OrderNotFound = 404,
         InternalServerError = 500,
+        OrderNotCreated = 501,
     }
 }
