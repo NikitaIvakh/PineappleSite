@@ -84,17 +84,3 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-
-@* <div class="form-group">
-    <label asp-for="ProductCategory" class="control-label"></label><br />
-    @foreach (var value in Enum.GetValues(typeof(PineappleSite.Presentation.Models.Products.Enum.ProductCategory)))
-    {
-        <div class="form-check">
-            <input class="form-check-input" type="radio" asp-for="ProductCategory" value="@value" id="@($"ProductCategory_{value}")">
-            <label class="form-check-label" for="@($"ProductCategory_{value}")">
-                @value
-            </label>
-        </div>
-    }
-    <span asp-validation-for="ProductCategory" class="text-danger"></span>
-</div> *@
