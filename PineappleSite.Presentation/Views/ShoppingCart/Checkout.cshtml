@@ -1,6 +1,10 @@
 ﻿@using PineappleSite.Presentation.Models.ShoppingCart
 @model CartViewModel
 
+@{
+    ViewData["Title"] = "Создание заказа";
+}
+
 <form method="post">
     <input asp-for="CartHeader.UserId" hidden />
     <input asp-for="CartHeader.CartHeaderId" hidden />
@@ -31,7 +35,7 @@
                         <span asp-validation-for="CartHeader.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="col-12 pt-2">
-                        <label class="col-form-label">Когда заказ будет готов, мы Вам перезвоним. Если вы сделаете заказ, когда автосалон закрыт, мы свяыжемся с Вами на следующий день для уточнения деталей.</label>
+                        <label class="col-form-label">Когда заказ будет готов, мы Вам перезвоним. Если вы сделаете заказ, когда ресторан будет закрыт, мы свяыжемся с Вами на следующий день для уточнения деталей.</label>
                     </div>
 
                 </div>
