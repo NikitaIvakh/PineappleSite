@@ -1,6 +1,7 @@
 using Order.Application.DependencyInjection;
 using Order.Infrastructure.DependencyInjection;
 using Stripe;
+using Order.API;
 using System.Text.Json.Serialization;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
@@ -24,6 +25,8 @@ applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = ne
 applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]));
 
 StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
+applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();
 
