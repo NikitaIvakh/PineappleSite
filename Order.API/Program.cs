@@ -3,6 +3,7 @@ using Order.Infrastructure.DependencyInjection;
 using Stripe;
 using Order.API;
 using System.Text.Json.Serialization;
+using Serilog;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,11 @@ applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new
 
 StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
+applicationBuilder.Host.UseSerilog((context, logConfig) =>
+{ 
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
 applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();

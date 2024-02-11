@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
-using Order.Domain.Entities;
 using Order.Domain.ResultOrder;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -12,9 +11,10 @@ namespace Order.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrderController(IMediator mediator) : ControllerBase
+    public class OrderController(IMediator mediator, ILogger<OrderHeaderDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<OrderHeaderDto> _logger = logger;
 
         // GET: api/<OrderController>
         [HttpGet("GetAllOrders/{userId}")]
@@ -24,9 +24,11 @@ namespace Order.API.Controllers
 
             if (request.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Заказы успешно получены");
                 return Ok(request);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения заказов");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -38,9 +40,11 @@ namespace Order.API.Controllers
 
             if (request.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Заказ успешно получен");
                 return Ok(request);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка получения заказа");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -52,9 +56,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Заказ успешно создан");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка удаления заказа");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -66,9 +72,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Сессия для оплаты успешно создана");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка создания сессии для оплаты");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -80,9 +88,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Оплата успешно прошла валидацию");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Оплата не успешно прошла валидацию");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -94,9 +104,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logger.LogDebug("LogDebug ================ Статус заказ успешно обновлен");
                 return Ok(command);
             }
 
+            _logger.LogError("LogDebugError ================ Ошибка обновления статуса заказа");
             return BadRequest(command.ErrorMessage);
         }
     }
