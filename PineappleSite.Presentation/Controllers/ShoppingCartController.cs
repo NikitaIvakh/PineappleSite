@@ -274,6 +274,61 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
+        public async Task<ActionResult> RabbitMQShoppingCart(CartViewModel cartViewModel)
+        {
+            try
+            {
+                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                CartResult<CartViewModel> response = await _shoppingCartService.GetCartAsync(userId);
+
+                if (response.IsSuccess)
+                {
+                    cartViewModel = new CartViewModel
+                    {
+                        CartHeader = new CartHeaderViewModel
+                        {
+                            CartHeaderId = response.Data.CartHeader.CartHeaderId,
+                            UserId = userId,
+                            CouponCode = response.Data.CartHeader.CouponCode,
+                            Discount = response.Data.CartHeader.Discount,
+                            CartTotal = response.Data.CartHeader.CartTotal,
+                            Name = response.Data.CartHeader.Name,
+                            PhoneNumber = response.Data.CartHeader.PhoneNumber,
+                            Email = response.Data.CartHeader.Email,
+                        },
+
+                        CartDetails = response.Data.CartDetails,
+                    };
+
+                    var result = await _shoppingCartService.RabbitMQShoppingCartAsync(cartViewModel);
+
+                    if (result.IsSuccess)
+                    {
+                        TempData["success"] = result.SuccessMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
+
+                    else
+                    {
+                        TempData["error"] = result.ErrorMessage;
+                        return RedirectToAction(nameof(Index));
+                    }
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View(cartViewModel);
+            }
+        }
+
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()
         {
             string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;

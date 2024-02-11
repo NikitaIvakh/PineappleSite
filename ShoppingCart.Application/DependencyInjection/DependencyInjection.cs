@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using PineappleSite.Infrastructure.RabbitMQ.Common;
+using PineappleSite.Infrastructure.RabbitMQ.Events;
 using System.Reflection;
 
 namespace ShoppingCart.Application.DependencyInjection
@@ -14,6 +16,8 @@ namespace ShoppingCart.Application.DependencyInjection
         {
             services.AddAutoMapper(Assembly.GetExecutingAssembly());
             services.AddMediatR(config => config.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]));
+
+            services.AddScoped<IRabbitMQMessageSender, RabbitMQMessageSender>();
         }
     }
 }

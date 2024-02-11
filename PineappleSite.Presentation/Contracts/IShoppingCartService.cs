@@ -14,5 +14,7 @@ namespace PineappleSite.Presentation.Contracts
         Task<CartResult<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 
         Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int productId);
+
+        Task<CartResult<bool>> RabbitMQShoppingCartAsync(CartViewModel cartViewModel);
     }
 }

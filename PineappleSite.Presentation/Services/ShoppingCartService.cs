@@ -226,5 +226,49 @@ namespace PineappleSite.Presentation.Services
                 };
             }
         }
+
+        public async Task<CartResult<bool>> RabbitMQShoppingCartAsync(CartViewModel cartViewModel)
+        {
+            AddBearerToken();
+            try
+            {
+                CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
+                BooleanResult apiResponse = await _shoppingCartClient.RabbitMQShoppingCartRequestAsync(cartDto);
+
+                if (apiResponse.IsSuccess)
+                {
+                    return new CartResult<bool>
+                    {
+                        Data = apiResponse.Data,
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in apiResponse.ValidationErrors)
+                    {
+                        return new CartResult<bool>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new CartResult<bool>();
+            }
+
+            catch (ShoppingCartExceptions exceptions)
+            {
+                return new CartResult<bool>
+                {
+                    ErrorMessage = exceptions.Response,
+                    ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = exceptions.Message,
+                };
+            }
+        }
     }
 }

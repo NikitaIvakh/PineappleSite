@@ -8,7 +8,7 @@
 @{
     if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count > 0)
     {
-        <form method="post">
+        <form method="post" asp-action="RabbitMQShoppingCart">
             <br />
             <input asp-for="Data.CartHeader.UserId" hidden />
             <input asp-for="Data.CartHeader.CartHeaderId" hidden />
@@ -91,7 +91,7 @@
                     </div>
                     <div class="card-footer row">
                         <div class="col-6 col-md-3 ">
-                            <button disabled readobly type="submit" class="btn btn-outline-danger form-control">Отправка по почте</button>
+                            <button type="submit" class="btn btn-outline-danger form-control">Отправка запроса</button>
                         </div>
                         <div class="col-6 col-md-3 offset-md-6">
                             <a asp-action="Checkout" class="btn btn-success form-control">Продолжить</a>

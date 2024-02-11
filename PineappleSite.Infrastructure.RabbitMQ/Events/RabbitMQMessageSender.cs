@@ -19,7 +19,7 @@ namespace PineappleSite.Infrastructure.RabbitMQ.Events
             _password = "guest";
         }
 
-        public void SendMessage(object baseMessage, string queueName)
+        public bool SendMessage(object baseMessage, string queueName)
         {
             var connectionFactory = new ConnectionFactory
             {
@@ -36,7 +36,12 @@ namespace PineappleSite.Infrastructure.RabbitMQ.Events
             var json = JsonConvert.SerializeObject(baseMessage);
             var body = Encoding.UTF8.GetBytes(json);
 
-            channel.BasicPublish(exchange: "", routingKey: queueName, null, body);
+            var properties = channel.CreateBasicProperties();
+            properties.ContentType = "application/json";
+
+            channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body);
+
+            return true;
         }
     }
 }

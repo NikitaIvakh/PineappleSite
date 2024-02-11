@@ -91,5 +91,20 @@ namespace ShoppingCart.API.Controllers
             _logger.LogError("LogDebugError ================ Ошибка удаления продукта из корзины");
             return BadRequest(command.ErrorMessage);
         }
+
+        [HttpPost("RabbitMQShoppingCartRequest")]
+        public async Task<ActionResult<Result<bool>>> RabbitMQShoppingCartRequest([FromBody] CartDto cartDto)
+        {
+            var command = await _mediator.Send(new RabbitMQSendRequest { CartDto = cartDto });
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug("LogDebug ================ Письмо в очередь успешно доставлено");
+                return Ok(command);
+            }
+
+            _logger.LogError("LogDebugError ================ Ошибка добавления письма в очередь");
+            return BadRequest(command.ErrorMessage);
+        }
     }
 }
