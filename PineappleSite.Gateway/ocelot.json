@@ -366,6 +366,90 @@
       ],
       "UpstreamPathTemplate": "/api/Order/UpdateOrderStatus",
       "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product/{id}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      //"Product.API": "https://localhost:7100"
+      "DownstreamPathTemplate": "/api/Product",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7100
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Product",
+      "UpstreamHttpMethod": [ "DELETE" ]
     }
   ],
 
