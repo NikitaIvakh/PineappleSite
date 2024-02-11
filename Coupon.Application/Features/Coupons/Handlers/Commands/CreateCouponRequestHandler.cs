@@ -74,7 +74,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         coupon = new CouponEntity
                         {
-                            CouponCode = request.CreateCoupon.CouponCode,
+                            CouponCode = request.CreateCoupon.CouponCode.Replace(" ", ""),
                             DiscountAmount = request.CreateCoupon.DiscountAmount,
                             MinAmount = request.CreateCoupon.MinAmount,
                         };

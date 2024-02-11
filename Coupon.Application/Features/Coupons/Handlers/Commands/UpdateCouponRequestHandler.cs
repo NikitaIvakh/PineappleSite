@@ -71,7 +71,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                     else
                     {
-                        coupon.CouponCode = request.UpdateCoupon.CouponCode;
+                        coupon.CouponCode = request.UpdateCoupon.CouponCode.Replace(" ", "");
                         coupon.DiscountAmount = request.UpdateCoupon.DiscountAmount;
                         coupon.MinAmount = request.UpdateCoupon.MinAmount;
 

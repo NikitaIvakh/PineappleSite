@@ -1,0 +1,6 @@
+@PineappleSite.Gateway_HostAddress = http://localhost:5094
+
+GET {{PineappleSite.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

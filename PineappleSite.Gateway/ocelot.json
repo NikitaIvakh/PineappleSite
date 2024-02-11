@@ -1,0 +1,117 @@
+{
+  "Routes": [
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon/Coupons",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon/Coupons",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"Coupon.API": "https://localhost:7149"
+      "DownstreamPathTemplate": "/api/Coupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7149
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Coupon",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    }
+  ],
+
+  "GlobalConfiguration": {
+    "BaseUrl": "https://localhost:7777"
+  }
+}
