@@ -108,6 +108,54 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
+    },
+
+    {
+      //"Favourite.API": "https://localhost:7247"
+      "DownstreamPathTemplate": "/api/Favourite/GetFavouriteProducts/{userid}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7247
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Favourite/GetFavouriteProducts/{userid}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Favourite.API": "https://localhost:7247"
+      "DownstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7247
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"Favourite.API": "https://localhost:7247"
+      "DownstreamPathTemplate": "/api/Favourite/{productId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7247
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Favourite/{productId}",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     }
   ],
 

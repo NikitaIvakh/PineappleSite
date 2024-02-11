@@ -21,7 +21,7 @@ applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7777"));
 applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient => identityClient.BaseAddress = new Uri("https://localhost:7133"));
 applicationBuilder.Services.AddHttpClient<IProductClient, ProductClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7100"));
-applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7247"));
+applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
 applicationBuilder.Services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart => cart.BaseAddress = new Uri("https://localhost:7101"));
 applicationBuilder.Services.AddHttpClient<IOrderClient, OrderClient>(order => order.BaseAddress = new Uri("https://localhost:7017"));
 
