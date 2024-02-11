@@ -156,6 +156,132 @@
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
       }
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/Login",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/Login",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/Register",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/Register",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/Logout",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/Logout",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/GetAllUsers",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/GetAllUsers",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/GetUserById/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/GetUserById/{id}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/{id}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
+      "UpstreamHttpMethod": [ "PUT" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/{id}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/{id}",
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User",
+      "UpstreamHttpMethod": [ "DELETE" ]
     }
   ],
 
