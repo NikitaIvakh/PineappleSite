@@ -450,6 +450,76 @@
       ],
       "UpstreamPathTemplate": "/api/Product",
       "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/ShoppingCart/GetShoppingCart/{userid}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ShoppingCart/GetShoppingCart/{userid}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/ShoppingCart",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ShoppingCart",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/ShoppingCart/ApplyCoupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ShoppingCart/ApplyCoupon",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/ShoppingCart/RemoveCoupon",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ShoppingCart/RemoveCoupon",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/ShoppingCart/{productId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/ShoppingCart/{productId}",
+      "UpstreamHttpMethod": [ "DELETE" ]
     }
   ],
 
