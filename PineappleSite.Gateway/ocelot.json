@@ -282,6 +282,90 @@
       ],
       "UpstreamPathTemplate": "/api/User",
       "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/GetOrder/{orderId}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/GetOrder/{orderId}",
+      "UpstreamHttpMethod": [ "GET" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/CreateOrder",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/CreateOrder",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/CreateStripeSession",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/CreateStripeSession",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/ValidateStripeSession",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/ValidateStripeSession",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Order.API": "https://localhost:7017"
+      "DownstreamPathTemplate": "/api/Order/UpdateOrderStatus",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7017
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Order/UpdateOrderStatus",
+      "UpstreamHttpMethod": [ "POST" ]
     }
   ],
 

@@ -23,7 +23,7 @@ applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(ident
 applicationBuilder.Services.AddHttpClient<IProductClient, ProductClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7100"));
 applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
 applicationBuilder.Services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart => cart.BaseAddress = new Uri("https://localhost:7101"));
-applicationBuilder.Services.AddHttpClient<IOrderClient, OrderClient>(order => order.BaseAddress = new Uri("https://localhost:7017"));
+applicationBuilder.Services.AddHttpClient<IOrderClient, OrderClient>(order => order.BaseAddress = new Uri("https://localhost:7777"));
 
 applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
 applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
