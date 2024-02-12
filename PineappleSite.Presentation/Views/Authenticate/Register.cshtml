@@ -1,7 +1,7 @@
 ﻿@model PineappleSite.Presentation.Models.Identities.RegisterRequestViewModel
 
 @{
-    ViewData["Title"] = "Регистрация";
+    ViewData["Title"] = Localizer["Register"];
 }
 
 <form class="container col-7" asp-action="Register">
@@ -10,7 +10,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Регистрация</h1>
+                    <h1 class="text-white">@Localizer["Register"]</h1>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["FirstName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="FirstName" />
@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["LastName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="LastName" />
@@ -36,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Почтовый адрес</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="EmailAddress" />
@@ -45,7 +45,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Отображаемое имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["UserName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="UserName" />
@@ -54,14 +54,14 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" asp-for="Password">Пароль</label>
+                    <label class="control-label pt-2" style="font-size:20px;" asp-for="Password">@Localizer["Password"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <div class="input-group">
                         <input asp-for="Password" type="password" class="form-control" />
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" id="togglePassword">
-                                <i class="fa fa-eye"></i> Показать
+                                <i class="fa fa-eye"></i> @Localizer["Show"]
                             </button>
                         </div>
                     </div>
@@ -69,10 +69,10 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="col-5 offset-1">
-                <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index">@Localizer["Go Back"]</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="Зарегистрироваться" class="btn btn-success form-control" />
+                <input type="submit" value="@Localizer["Register"]" class="btn btn-success form-control" />
             </div>
         </div>
     </div>
