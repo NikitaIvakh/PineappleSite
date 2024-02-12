@@ -1,9 +1,5 @@
 ﻿@{
-    ViewData["Title"] = "Главная стираница";
-}
-
-@{
-    ViewData["Title"] = "Pineapple Restaurant";
+    ViewData["Title"] = @Localizer["Home Page"];
     <link rel="stylesheet" href="~/css/home/homeIndex.css" asp-append-version="true" />
 }
 
@@ -14,11 +10,11 @@
     {
         <div class="card col-md-12">
             <div class="card-body">
-                <h5 class="card-title text-center">Добро пожаловать на сайт ресторана «PineApple»</h5>
-                <small class="card-text">Откройте для себя наш уникальный ресторан с неповторимой атмосферой.</small>
-                <small class="card-text">На нашем сайте вы сможете насладиться широким выбором изысканных блюд и напитков, созданных нашими талантливыми шеф-поварами.</small>
-                <small class="card-text">Мы гарантируем, что каждое блюдо приготовлено с любовью и из самых свежих ингредиентов.</small>
-                <p class="card-text"><small class="text-muted">Автор - Nikita Ivakh</small></p>
+                <h5 class="card-title text-center">@Localizer["Welcome 1"]</h5>
+                <small class="card-text">@Localizer["Welcome 2"]</small>
+                <small class="card-text">@Localizer["Welcome 3"]</small>
+                <small class="card-text">@Localizer["Welcome 4"]</small>
+                <p class="card-text"><small class="text-muted">@Localizer["Author"]</small></p>
             </div>
         </div>
 
@@ -29,15 +25,15 @@
                 {
                     <div class="col">
                         <div class="card h-100">
-                            <img src="https://eda.yandex/images/3472725/9c63d886b068aa80f2a74180b809bfee-400x400.jpeg" alt="PineApple, Суп Харчо" data-testid="smart-image-img" loading="lazy">
+                            <img src="https://eda.yandex/images/3472725/9c63d886b068aa80f2a74180b809bfee-400x400.jpeg" alt="@Localizer["Alt 1"]" data-testid="smart-image-img" loading="lazy">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Суп Харчо</h5>
+                                <h5 class="card-title">@Localizer["Product 1"]</h5>
                                 <p class="card-text">
-                                    Готовится на пряном наваристом говяжьем бульоне с кусочками говядины, томатным соусом, рисом и специями. Самый знаменитый грузинский суп.
+                                    @Localizer["Description 1"]
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                             </div>
                         </div>
                     </div>
@@ -46,31 +42,31 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3749380/cb72079ede70127406fd3ab20bd0bf73-400x400.jpeg" alt="PineApple, Соленья" data-testid="smart-image-img" loading="lazy">
+                    <img src="https://eda.yandex/images/3749380/cb72079ede70127406fd3ab20bd0bf73-400x400.jpeg" alt="@Localizer["Alt 2"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Соленья</h5>
+                        <h5 class="card-title">@Localizer["Product 2"]</h5>
                         <p class="card-text">
-                            Маринованные: капуста, огурцы, помидор с чесноком, пряная морковь, опята, черемша, лук.
+                            @Localizer["Description 2"]
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                     </div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3377781/ed6447749d4ea649486f619b2b3a218a-400x400.jpeg" alt="PineApple, Торт Маскарпоне большой"
+                    <img src="https://eda.yandex/images/3377781/ed6447749d4ea649486f619b2b3a218a-400x400.jpeg" alt="@Localizer["Alt 3"]"
                          class="SmartImage_image SmartImage_coverFitImg SmartImage_visibleImg SmartImage_animatedImg" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
-                        <h5 class="card-title">Торт Маскарпоне большой</h5>
+                        <h5 class="card-title">@Localizer["Product 3"]</h5>
                         <p class="card-text">
-                            Миндальный бисквит, мусс маскарпоне, малина, клубника.
+                            @Localizer["Description 3"]
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                     </div>
                 </div>
             </div>
@@ -80,15 +76,15 @@
                 {
                     <div class="col">
                         <div class="card h-100">
-                            <img src="https://eda.yandex/images/2783965/98bc932e95accd14040f0e041cb78046-400x400.jpeg" alt="PineApple, Карбонара" data-testid="smart-image-img" loading="lazy">
+                            <img src="https://eda.yandex/images/2783965/98bc932e95accd14040f0e041cb78046-400x400.jpeg" alt="@Localizer["Alt 4"]" data-testid="smart-image-img" loading="lazy">
                             <div class="card-body text-center">
-                                <h5 class="card-title">Карбонара</h5>
+                                <h5 class="card-title">@Localizer["Product 4"]</h5>
                                 <p class="card-text">
-                                    Бекон, Ветчина, Крем фреш, Лук, Сыр моцарелла, Шампиньоны.
+                                    @Localizer["Description 4"]
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">Список продуктов</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                             </div>
                         </div>
                     </div>
@@ -101,11 +97,11 @@
     {
         <div class="card">
             <div class="card-header">
-                Вы не вошли в аккаунт
+                @Localizer["NotRegistered"]
             </div>
             <div class="card-body">
                 <blockquote class="blockquote mb-0">
-                    <p>Чтобы увидеть весь контент, Вам необходимо зарегистрироваться.</p>
+                    <p>@Localizer["NotRegisteredDescription"]</p>
                 </blockquote>
             </div>
         </div>
@@ -115,36 +111,36 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3504598/5397bebd78c66a5ccdd0d042411d145f-400x400.jpeg" alt="PineApple, Жареный картофель с грибами и яйцом" data-testid="smart-image-img" loading="lazy">
+                    <img src="https://eda.yandex/images/3504598/5397bebd78c66a5ccdd0d042411d145f-400x400.jpeg" alt="@Localizer["Alt 5"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
-                        <h5 class="card-title text-center">Недоступно</h5>
+                        <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Жареный картофель с грибами и яйцом</small>
+                        <small class="text-muted">@Localizer["Description 5"]</small>
                     </div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3595513/360fe75e8b8e4c148ec5da89a3d38933-400x400.jpeg" alt="PineApple, Ассорти из колбас с хреном" data-testid="smart-image-img" loading="lazy">
+                    <img src="https://eda.yandex/images/3595513/360fe75e8b8e4c148ec5da89a3d38933-400x400.jpeg" alt="@Localizer["Alt 6"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
-                        <h5 class="card-title text-center">Недоступно</h5>
+                        <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Ассорти из колбас с хреном</small>
+                        <small class="text-muted">@Localizer["Description 6"]</small>
                     </div>
                 </div>
             </div>
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3521394/ed581a8b759b44af5295587045ffe23b-400x400.jpeg" alt="PineApple, Куриная котлета по-домашнему с картофельным пюре" data-testid="smart-image-img" loading="lazy">
+                    <img src="https://eda.yandex/images/3521394/ed581a8b759b44af5295587045ffe23b-400x400.jpeg" alt="@Localizer["Alt 7"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
-                        <h5 class="card-title text-center">Недоступно</h5>
+                        <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
                     <div class="card-footer">
-                        <small class="text-muted">Куриная котлета по-домашнему с картофельным пюре</small>
+                        <small class="text-muted">@Localizer["Description 6"]</small>
                     </div>
                 </div>
             </div>

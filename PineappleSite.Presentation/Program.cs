@@ -8,11 +8,14 @@ using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Orders;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization.Routing;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-applicationBuilder.Services.AddControllersWithViews();
+applicationBuilder.Services.AddControllersWithViews().AddViewLocalization().AddDataAnnotationsLocalization();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddHttpClient();
 
@@ -41,6 +44,22 @@ applicationBuilder.Services.Configure<CookiePolicyOptions>(options =>
 applicationBuilder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 applicationBuilder.Services.AddTransient<IIdentityService, IdentityService>();
 
+applicationBuilder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Resources";
+});
+
+applicationBuilder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture("ru-RU");
+    options.SupportedCultures = new List<CultureInfo> { new CultureInfo("ru-RU"), new CultureInfo("en-US") };
+    options.SupportedUICultures = new List<CultureInfo> { new CultureInfo("ru-RU"), new CultureInfo("en-US") };
+    options.FallBackToParentUICultures = true;
+
+    options.RequestCultureProviders.Clear();
+    options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider());
+});
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -54,6 +73,8 @@ if (!webApplication.Environment.IsDevelopment())
 webApplication.UseCookiePolicy();
 webApplication.UseHttpsRedirection();
 webApplication.UseStaticFiles();
+
+webApplication.UseRequestLocalization();
 
 webApplication.UseRouting();
 
