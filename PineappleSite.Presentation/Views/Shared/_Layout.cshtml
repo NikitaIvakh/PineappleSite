@@ -14,18 +14,11 @@
     <link rel="stylesheet" href="~/css/backImage.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css" />
 </head>
-
-@{
-    string returnUrl = Context.Request.Path + Context.Request.QueryString;
-    string productLink = Url.Action("Index", "Home");
-    string languageLink = $"{productLink}?culture={CultureInfo.CurrentCulture.Name}&returnUrl={returnUrl}";
-}
-
 <body class="backgroundImageOnSite">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3 backgroundImageOnNavBar">
             <div class="container-fluid">
-                <a class="navbar-brand" href="@languageLink" style="display: flex; align-items: center;">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="display: flex; align-items: center;">
                     <img width="35px" src="~/images/PineApple.jpg" style="margin-top: -3px; margin-right: 5px;" /> <span style="margin-top: -3px; margin-right: 3px;">Pineapple Restaurant</span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -37,10 +30,10 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a href="@languageLink" class="nav-link text-dark">Home</a>
+                            <a asp-controller="Home" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="nav-link text-dark">@Localizer["Home"]</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-route-culture="@CultureInfo.CurrentCulture.Name" asp-action="Privacy">@Localizer["Privacy"]</a>
                         </li>
                         @{
                             if (User.Identity.IsAuthenticated)
@@ -48,16 +41,16 @@
                                 if (User.IsInRole("Administrator"))
                                 {
                                     <li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Для администратора</a>
+                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["For the administrator"]</a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index">Купоны</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index">@Localizer["Coupons"]</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="GetProducts">Продукты</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="GetProducts">@Localizer["Products"]</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">Пользователи</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">@Localizer["Users"]</a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                         </ul>
@@ -72,11 +65,11 @@
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="" asp-controller="Favourite" asp-action="Index">
-                                Избранное
+                                @Localizer["Favourites"]
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">Управление заказами</a>
+                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">@Localizer["Order Management"]</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
