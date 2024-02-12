@@ -117,88 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Alt 1" xml:space="preserve">
-    <value>PineApple, Kharcho Soup</value>
+  <data name="AddToCart" xml:space="preserve">
+    <value>Add to cart</value>
   </data>
-  <data name="Alt 2" xml:space="preserve">
-    <value>PineApple, Pickles</value>
+  <data name="AddToFavorites" xml:space="preserve">
+    <value>Add to favorites</value>
   </data>
-  <data name="Alt 3" xml:space="preserve">
-    <value>Pineapple, Mascarpone Large Cake</value>
-  </data>
-  <data name="Alt 4" xml:space="preserve">
-    <value>PineApple, Carbonara</value>
-  </data>
-  <data name="Alt 5" xml:space="preserve">
-    <value>PineApple, Fried potatoes with mushrooms and egg</value>
-  </data>
-  <data name="Alt 6" xml:space="preserve">
-    <value>PineApple, Assorted sausages with horseradish</value>
-  </data>
-  <data name="Alt 7" xml:space="preserve">
-    <value>PineApple, Homemade Chicken cutlet with mashed potatoes</value>
-  </data>
-  <data name="Author" xml:space="preserve">
-    <value>Author - Nikita Ivakh</value>
-  </data>
-  <data name="Description 1" xml:space="preserve">
-    <value>It is cooked in a spicy rich beef broth with pieces of beef, tomato sauce, rice and spices. The most famous Georgian soup.</value>
-  </data>
-  <data name="Description 2" xml:space="preserve">
-    <value>Pickled: cabbage, cucumbers, tomato with garlic, spicy carrots, honeydew, wild cherry, onion.</value>
-  </data>
-  <data name="Description 3" xml:space="preserve">
-    <value>Almond sponge cake, mascarpone mousse, raspberries, strawberries.</value>
-  </data>
-  <data name="Description 4" xml:space="preserve">
-    <value>Bacon, Ham, Fresh cream, Onion, mozzarella Cheese, Mushrooms.</value>
-  </data>
-  <data name="Description 5" xml:space="preserve">
-    <value>Fried potatoes with mushrooms and egg</value>
-  </data>
-  <data name="Description 6" xml:space="preserve">
-    <value>Homemade chicken cutlet with mashed potatoes</value>
-  </data>
-  <data name="Description 7" xml:space="preserve">
-    <value>Homemade chicken cutlet with mashed potatoes</value>
+  <data name="Back to Products" xml:space="preserve">
+    <value>Back to Products</value>
   </data>
   <data name="Home Page" xml:space="preserve">
-    <value>Home Page</value>
-  </data>
-  <data name="NotRegistered" xml:space="preserve">
-    <value>You are not logged in to your account</value>
-  </data>
-  <data name="NotRegisteredDescription" xml:space="preserve">
-    <value>To see all the content, you need to register.</value>
-  </data>
-  <data name="Product 1" xml:space="preserve">
-    <value>Kharcho Soup</value>
-  </data>
-  <data name="Product 2" xml:space="preserve">
-    <value>Pickles</value>
-  </data>
-  <data name="Product 3" xml:space="preserve">
-    <value>Mascarpone cake is big</value>
-  </data>
-  <data name="Product 4" xml:space="preserve">
-    <value>Carbonara</value>
-  </data>
-  <data name="Product Not registered" xml:space="preserve">
-    <value>Unavailable</value>
-  </data>
-  <data name="ProductList" xml:space="preserve">
-    <value>List of products</value>
-  </data>
-  <data name="Welcome 1" xml:space="preserve">
-    <value>Welcome to the website of the «PineApple» restaurant</value>
-  </data>
-  <data name="Welcome 2" xml:space="preserve">
-    <value>Discover our unique restaurant with a unique atmosphere.</value>
-  </data>
-  <data name="Welcome 3" xml:space="preserve">
-    <value>On our website you can enjoy a wide selection of delicious dishes and drinks created by our talented chefs.</value>
-  </data>
-  <data name="Welcome 4" xml:space="preserve">
-    <value>We guarantee that every dish is prepared with love and with the freshest ingredients.</value>
+    <value>Product Details</value>
   </data>
 </root>
