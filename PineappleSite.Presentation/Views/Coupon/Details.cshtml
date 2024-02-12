@@ -1,7 +1,8 @@
-﻿@model PineappleSite.Presentation.Models.Coupons.CouponViewModel
+﻿@using System.Globalization
+@model PineappleSite.Presentation.Models.Coupons.CouponViewModel
 
 @{
-    ViewData["Title"] = "Детали купона";
+    ViewData["Title"] = Localizer["Details"];
 }
 
 <form class="container col-7" asp-action="Details">
@@ -10,7 +11,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Детали купона</h1>
+                    <h1 class="text-white">@Localizer["Details"]</h1>
                 </div>
             </div>
         </div>
@@ -27,7 +28,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Код купона</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Coupon Code"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="CouponCode" readonly />
@@ -36,7 +37,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Сумма скидки</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Discount Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="DiscountAmount" readonly />
@@ -45,7 +46,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Стоимость продукта</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Min Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="MinAmount" readonly />
@@ -53,7 +54,7 @@
                 </div>
             </div>
             <div class="col-5 offset-3">
-                <a class="btn-primary btn form-control" asp-action="Index">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Go Back"]</a>
             </div>
         </div>
     </div>
