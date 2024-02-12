@@ -1,4 +1,5 @@
 ﻿@using PineappleSite.Presentation.Extecsions
+@using System.Globalization
 @model PineappleSite.Presentation.Models.Products.ProductViewModel
 
 @{
@@ -42,12 +43,12 @@
             </div>
             <div class="card-footer row bg-dark">
                 <div class="col-12 col-md-6 pb-1">
-                    <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" style="height:50px;">@Localizer["Back to Products"]</a>
+                    <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="height:50px;">@Localizer["Back to Products"]</a>
                 </div>
                 <div class="col-12 col-md-6 text-end">
                     <div class="d-flex justify-content-end">
-                        <button asp-action="AddToCart" asp-controller="Home" type="submit" class="btn btn-primary form-control btn-lg me-2" style="height:50px;">@Localizer["AddToCart"]</button>
-                        <button asp-action="AddToFavorites" asp-controller="Home" type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
+                        <button asp-action="AddToCart" asp-controller="Home" asp-route-culture="@CultureInfo.CurrentCulture.Name" type="submit" class="btn btn-primary form-control btn-lg me-2" style="height:50px;">@Localizer["AddToCart"]</button>
+                        <button asp-action="AddToFavorites" asp-controller="Home" asp-route-culture="@CultureInfo.CurrentCulture.Name" type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
                     </div>
                 </div>
             </div>
