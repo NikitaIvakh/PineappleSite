@@ -1,24 +1,25 @@
 ﻿@using PineappleSite.Presentation.Extecsions
 @using PineappleSite.Presentation.Models.Paginated
 @using PineappleSite.Presentation.Services.Products
+@using System.Globalization
 @model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Продукты";
-    <link rel="stylesheet" href="~/css/home/getProducts.css" asp-append-version="true"/>
+    ViewData["Title"] = @Localizer["Products"];
+    <link rel="stylesheet" href="~/css/home/getProducts.css" asp-append-version="true" />
 }
 
 <div class="col-12 form-text">
-    <form asp-action="GetProducts" method="get">
+    <form id="searchForm" asp-action="GetProducts" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
-                <label for="searchProduct" style="color:white; font-size: 20px;">Поиск продукта:</label>
+                <label for="searchProduct" style="color:white; font-size: 20px;">@Localizer["Search product"]</label>
             </p>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
+                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">Поиск</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
                 </div>
             </div>
         </div>
@@ -44,7 +45,7 @@
                                     </div>
                                     <div class="row mt-auto mb-0">
                                         <div class="col">
-                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-id="@product.Id">Посмотреть детали</a>
+                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-culture="@CultureInfo.CurrentCulture.Name" asp-route-id="@product.Id">@Localizer["View details"]</a>
                                         </div>
                                     </div>
                                 </div>
@@ -59,8 +60,9 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
-                        <span>&laquo; Назад</span>
+                        <span>&laquo; @Localizer["Previous"]</span>
                     </a>
                 }
                 @if (Model.HasNextPage)
@@ -68,8 +70,9 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
-                        <span>Вперед &raquo;</span>
+                        <span>@Localizer["Next"] &raquo;</span>
                     </a>
                 }
             </div>
@@ -83,3 +86,18 @@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
+
+<script>
+    document.getElementById("searchForm").addEventListener("submit", function (event) {
+        var culture = "@CultureInfo.CurrentCulture.Name";
+        var url = this.action + "?culture=" + culture + "&" + new URLSearchParams(new FormData(this)).toString();
+        event.preventDefault();
+        window.location.href = url;
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", function () {
+        var culture = "@CultureInfo.CurrentCulture.Name";
+        var url = document.getElementById("searchForm").action + "?culture=" + culture;
+        window.location.href = url;
+    });
+</script>
