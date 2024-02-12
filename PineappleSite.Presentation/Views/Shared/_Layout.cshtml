@@ -44,13 +44,13 @@
                                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["For the administrator"]</a>
                                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index">@Localizer["Coupons"]</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Coupons"]</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="GetProducts">@Localizer["Products"]</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Products"]</a>
                                             </li>
                                             <li>
-                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index">@Localizer["Users"]</a>
+                                                <a class="dropdown-item" asp-area="" asp-controller="User" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Users"]</a>
                                             </li>
                                             <li><hr class="dropdown-divider"></li>
                                         </ul>
@@ -59,17 +59,17 @@
                             }
                         }
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="ShoppingCart" asp-action="Index">
+                            <a class="nav-link" asp-area="" asp-controller="ShoppingCart" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                 &nbsp; <i class="bi bi-cart"></i>&nbsp;
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Favourite" asp-action="Index">
+                            <a class="nav-link" asp-area="" asp-controller="Favourite" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                 @Localizer["Favourites"]
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex">@Localizer["Order Management"]</a>
+                            <a class="nav-link " asp-area="" asp-controller="Order" asp-action="OrderIndex" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Order Management"]</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav">
