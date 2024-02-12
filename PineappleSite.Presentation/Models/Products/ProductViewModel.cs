@@ -15,6 +15,7 @@ namespace PineappleSite.Presentation.Models.Products
 
         public double Price { get; set; }
 
+        [Required(ErrorMessage = "Поле обязательно для заполения")]
         [Range(1, 10, ErrorMessage = "Выбор в диапазоне от 1 до 10")]
         public int Count { get; set; } = 1;
 
