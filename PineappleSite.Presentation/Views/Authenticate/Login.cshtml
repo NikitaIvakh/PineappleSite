@@ -1,7 +1,7 @@
 ﻿@model PineappleSite.Presentation.Models.Identities.AuthRequestViewModel
 
 @{
-    ViewData["Title"] = "Вход в аккаунт";
+    ViewData["Title"] = Localizer["Login"];
 }
 
 <form class="container col-6" asp-action="Login">
@@ -10,7 +10,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Вход в аккаунт</h1>
+                    <h1 class="text-white">@Localizer["Login"]</h1>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Почта</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Email"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="Email" />
@@ -27,14 +27,14 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" asp-for="Password">Пароль</label>
+                    <label class="control-label pt-2" style="font-size:20px;" asp-for="Password">@Localizer["Password"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <div class="input-group">
                         <input asp-for="Password" type="password" class="form-control" />
                         <div class="input-group-append">
                             <button type="button" class="btn btn-secondary" id="togglePassword">
-                                <i class="fa fa-eye"></i> Показать
+                                <i class="fa fa-eye"></i> @Localizer["Show"]
                             </button>
                         </div>
                     </div>
@@ -42,10 +42,10 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="col-5 offset-1">
-                <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index"> @Localizer["Go back"]</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="Войти в аккаунт" class="btn btn-success form-control" />
+                <input type="submit" value="@Localizer["Login"]" class="btn btn-success form-control" />
             </div>
         </div>
     </div>
