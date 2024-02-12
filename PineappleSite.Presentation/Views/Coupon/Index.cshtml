@@ -1,4 +1,5 @@
 ﻿@using PineappleSite.Presentation.Models.Paginated
+@using System.Globalization
 @model PaginatedList<PineappleSite.Presentation.Models.Coupons.CouponViewModel>
 
 @{
@@ -37,7 +38,7 @@
                 <div class="col-6">
                 </div>
                 <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Добавить новый купон</a>
+                    <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name"><i class="bi bi-plus-square"></i> Добавить новый купон</a>
                     <br />  <br />
                     <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
                 </div>
@@ -70,7 +71,7 @@
                                 <td>@item.DiscountAmount</td>
                                 <td>@item.MinAmount</td>
                                 <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.CouponId">
+                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>
