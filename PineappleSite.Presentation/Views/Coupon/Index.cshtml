@@ -3,33 +3,33 @@
 @model PaginatedList<PineappleSite.Presentation.Models.Coupons.CouponViewModel>
 
 @{
-    ViewData["Title"] = "Список купонов";
+    ViewData["Title"] = Localizer["Coupon List"];
     <link rel="stylesheet" href="~/css/coupons/IndexCoupons.css" asp-append-version="true" />
 }
 
 <div class="col-12 form-text">
-    <form asp-action="Index" method="get">
+    <form id="searchForm" asp-action="Index" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
-                <label for="searchCode" style="font-size:20px; color:white">Поиск купона:</label>
+                <label for="searchCode" style="font-size:20px; color:white">@Localizer["Search coupon"]</label>
             </p>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchCode" id="searchCode" value="@ViewData["SearchCode"]" />
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">Поиск</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
 
-<form id="deleteSelectedForm" asp-action="DeleteMultiple" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
+<form id="deleteSelectedForm" asp-action="DeleteMultiple" onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Список купонов</h1>
+                    <h1 class="text-white">@Localizer["Coupon List"]</h1>
                 </div>
             </div>
         </div>
@@ -38,21 +38,21 @@
                 <div class="col-6">
                 </div>
                 <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name"><i class="bi bi-plus-square"></i> Добавить новый купон</a>
+                    <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name"><i class="bi bi-plus-square"></i> @Localizer["AddNewCoupon"]</a>
                     <br />  <br />
-                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
+                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["DeleteAllButton"]</button>
                 </div>
             </div>
             <table class="table text-center">
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Идентификатор</th>
-                        <th>Код купона</th>
-                        <th>Сумма скидки</th>
-                        <th>Стоимости продукта</th>
-                        <th>Обновление</th>
-                        <th>Удаление</th>
+                        <th>@Localizer["Id"]</th>
+                        <th>@Localizer["Coupon Code"]</th>
+                        <th>@Localizer["Discount Amount"]</th>
+                        <th>@Localizer["Min Amount"]</th>
+                        <th>@Localizer["Update"]</th>
+                        <th>@Localizer["Delete"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,8 +77,8 @@
                                 </td>
                                 <td>
                                     <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;"
-                                          onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                                          onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete"]</button>
                                     </form>
                                 </td>
                             </tr>
@@ -94,8 +94,9 @@
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-searchCode="@ViewData["SearchCode"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
-                        <span>&laquo; Назад</span>
+                        <span>&laquo; @Localizer["Previous"]</span>
                     </a>
                 }
                 @if (Model.HasNextPage)
@@ -104,8 +105,9 @@
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-searchCode="@ViewData["SearchCode"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
-                        <span>Вперед &raquo;</span>
+                        <span>@Localizer["Next"] &raquo;</span>
                     </a>
                 }
             </div>
@@ -115,3 +117,18 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/js/coupons/IndexCoupons.js" asp-append-version="true"></script>
+
+<script>
+    document.getElementById("searchForm").addEventListener("submit", function (event) {
+        var culture = "@CultureInfo.CurrentCulture.Name";
+        var url = this.action + "?culture=" + culture + "&" + new URLSearchParams(new FormData(this)).toString();
+        event.preventDefault();
+        window.location.href = url;
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", function () {
+        var culture = "@CultureInfo.CurrentCulture.Name";
+        var url = document.getElementById("searchForm").action + "?culture=" + culture;
+        window.location.href = url;
+    });
+</script>
