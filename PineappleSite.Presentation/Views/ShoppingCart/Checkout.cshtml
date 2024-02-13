@@ -2,7 +2,7 @@
 @model CartViewModel
 
 @{
-    ViewData["Title"] = "Создание заказа";
+    ViewData["Title"] = Localizer["Creating an order"];
 }
 
 <form method="post">
@@ -13,29 +13,29 @@
     <div class="border mt-2 p-4 rounded bg-light">
         <div class="container row">
             <div class="col-md-7 col-12">
-                <span style="font-size:25px;" class="text-warning mb-2">Заявка на заказ</span>
+                <span style="font-size:25px;" class="text-warning mb-2">@Localizer["Request for an order"]</span>
             </div>
             <div class="col-md-5 col-12">
-                <a asp-action="CartIndex" class="btn btn-outline-warning form-control">Вернуться в корзину</a>
+                <a asp-action="CartIndex" class="btn btn-outline-warning form-control">@Localizer["Return to the shopping cart"]</a>
             </div>
             <br /><br /><br />
             <hr />
             <div class="col-7">
                 <div class="row pt-2">
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.Name" placeholder="Полное имя..." />
+                        <input class="form-control" asp-for="CartHeader.Name" placeholder="@Localizer["Full name"]" />
                         <span asp-validation-for="CartHeader.Name" class="text-danger"></span>
                     </div>
                     <div class="col-12 py-2">
-                        <input class="form-control" placeholder="Почта..." asp-for="CartHeader.Email" />
+                        <input class="form-control" asp-for="CartHeader.Email" placeholder="@Localizer["Email"]" />
                         <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
                     </div>
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.PhoneNumber" placeholder="Номер телефона..." />
+                        <input class="form-control" asp-for="CartHeader.PhoneNumber" placeholder="@Localizer["Phone"]" />
                         <span asp-validation-for="CartHeader.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="col-12 pt-2">
-                        <label class="col-form-label">Когда заказ будет готов, мы Вам перезвоним. Если вы сделаете заказ, когда ресторан будет закрыт, мы свяыжемся с Вами на следующий день для уточнения деталей.</label>
+                        <label class="col-form-label">@Localizer["The order is accepted"]</label>
                     </div>
 
                 </div>
@@ -45,9 +45,9 @@
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
                             <div class="row text-danger">
-                                <div class="col-6">Детали заказа</div>
-                                <div class="col-3">Стоимость</div>
-                                <div class="col-3">Количество</div>
+                                <div class="col-6">@Localizer["Order details"]</div>
+                                <div class="col-3">@Localizer["Price"]</div>
+                                <div class="col-3">@Localizer["Quantity"]</div>
                             </div>
                         </div>
                         <hr />
@@ -71,7 +71,7 @@
                             }
                         }
                         <div class="row">
-                            <div class="col-12 text-center pr-4 text-danger">Общая сумма:  @Model.CartHeader.CartTotal Byn<br /></div>
+                            <div class="col-12 text-center pr-4 text-danger">@Localizer["Total amount"]  @Model.CartHeader.CartTotal Byn<br /></div>
                         </div>
 
                     </div>
@@ -80,7 +80,7 @@
 
                             <div class="col-12 ">
                                 <button type="submit" class="btn btn-success form-control ">
-                                    <span>Оплатить</span>
+                                    <span>@Localizer["To pay"]</span>
                                 </button>
                             </div>
                         </div>
