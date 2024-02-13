@@ -2,7 +2,7 @@
 @model PineappleSite.Presentation.Services.Favorites.FavouriteResult<FavouriteViewModel>
 
 @{
-    ViewData["Title"] = "Избранные товары";
+    ViewData["Title"] = Localizer["Favourite Products"];
 }
 
 @{
@@ -16,19 +16,19 @@
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
                         <div class="col-6">
-                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Избранное</h3>
+                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; @Localizer["Favourite"]</h3>
                         </div>
                         <div class="col-6 text-end">
-                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Вернуться к продуктам</a>
+                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">@Localizer["Back to Products"]</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
                             <div class="row text-info">
                                 <div class="col-lg-2"></div>
-                                <div class="col-lg-5">Детали продукта</div>
-                                <div class="col-lg-2">Стоимость</div>
-                                <div class="col-lg-2">Количество</div>
+                                <div class="col-lg-5">@Localizer["Product Details"]</div>
+                                <div class="col-lg-2">@Localizer["Price"]</div>
+                                <div class="col-lg-2">@Localizer["Quantity"]</div>
                                 <div class="col-lg-1"></div>
                             </div>
                         </div>
@@ -65,8 +65,8 @@
     else
     {
         <div class="text-center">
-            <h1 class="text-white pt-4">Избранных товаров нет.</h1>
-            <p class="text-white pb-3">Воспользуйтесь поиском, чтобы найти всё, что нужно...</p>
+            <h1 class="text-white pt-4">@Localizer["There are no favourite products."]</h1>
+            <p class="text-white pb-3">@Localizer["Use the search to find everything you need..."]</p>
         </div>
     }
 }
