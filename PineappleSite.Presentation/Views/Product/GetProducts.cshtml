@@ -2,7 +2,7 @@
 @model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
-    ViewData["Title"] = "Список продуктов";
+    ViewData["Title"] = Localizer["List of products"];
     <link rel="stylesheet" href="~/css/products/productList.css" asp-append-version="true" />
 }
 
@@ -10,24 +10,24 @@
     <form asp-action="GetProducts" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
-                <label for="searchProduct" style="font-size:20px; color:white">Поиск продукта:</label>
+                <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Product Search"]</label>
             </p>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">Поиск</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
                 </div>
             </div>
         </div>
     </form>
 </div>
-<form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
+<form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('@Localizer["Do you really want to delete these records?"]')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Список продуктов</h1>
+                    <h1 class="text-white">@Localizer["List of products"]</h1>
                 </div>
             </div>
         </div>
@@ -36,9 +36,9 @@
                 <div class="col-6">
                 </div>
                 <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Добавить новый продукт</a>
+                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
                     <br />  <br />
-                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
+                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
                     <div class="col-12 form-text">
                     </div>
                 </div>
@@ -47,14 +47,14 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Идентификатор</th>
-                        <th>Наименование</th>
-                        <th>Описание</th>
-                        <th>Категория</th>
-                        <th>Стоимости продукта</th>
-                        <th>Детали</th>
-                        <th>Обновление</th>
-                        <th>Удаление</th>
+                        <th>@Localizer["Id"]</th>
+                        <th>@Localizer["Product name"]</th>
+                        <th>@Localizer["Description"]</th>
+                        <th>@Localizer["ProductCategory"]</th>
+                        <th>@Localizer["Price"]</th>
+                        <th>@Localizer["Details"]</th>
+                        <th>@Localizer["Update"]</th>
+                        <th>@Localizer["Delete"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@
                                 <td>@item.ProductCategory</td>
                                 <td>@item.Price</td>
                                 <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">Детали</a>
+                                    <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">@Localizer["Details"]</a>
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">
@@ -83,8 +83,8 @@
                                 </td>
                                 <td>
                                     <form asp-action="Delete" asp-route-id="@item.Id" style="display:inline;"
-                                          onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                                          onsubmit="return confirm('@Localizer["Do you really want to delete this entry?"]')" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete product"]</button>
                                     </form>
                                 </td>
                             </tr>
@@ -101,7 +101,7 @@
                        asp-route-searchUser="@ViewData["SearchUser"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
                        class="page-item">
-                        <span>&laquo; Назад</span>
+                        <span>&laquo; @Localizer["Previous"]</span>
                     </a>
                 }
                 @if (Model.HasNextPage)
@@ -111,7 +111,7 @@
                        asp-route-searchUser="@ViewData["SearchUser"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
                        class="page-item">
-                        <span>Вперед &raquo;</span>
+                        <span>@Localizer["Next"] &raquo;</span>
                     </a>
                 }
             </div>
