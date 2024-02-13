@@ -202,27 +202,11 @@ namespace PineappleSite.Presentation.Controllers
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            Response.Cookies.Append("selectedCulture", culture, new CookieOptions
-            { 
-                Expires = DateTimeOffset.UtcNow.AddYears(1),
-                Path = "/",
-                SameSite = SameSiteMode.None,
-                Secure = true
-            });
-
-            var selectedCulture = Request.Cookies["selectedCulture"];
-            var requestCulture = new RequestCulture(selectedCulture);
-
             Response.Cookies.Append(
                 CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(requestCulture),
-                new CookieOptions
-                {
-                    Expires = DateTimeOffset.UtcNow.AddYears(1),
-                    Path = "/",
-                    SameSite = SameSiteMode.None,
-                    Secure = true
-                });
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) }
+            );
 
             return LocalRedirect(returnUrl);
         }

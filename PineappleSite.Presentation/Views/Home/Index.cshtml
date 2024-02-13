@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@{
+﻿@{
     ViewData["Title"] = @Localizer["Home Page"];
     <link rel="stylesheet" href="~/css/home/homeIndex.css" asp-append-version="true" />
 }
@@ -34,7 +33,7 @@
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="card-link">@Localizer["ProductList"]</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                             </div>
                         </div>
                     </div>
@@ -51,7 +50,7 @@
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="card-link">@Localizer["ProductList"]</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                     </div>
                 </div>
             </div>
@@ -67,7 +66,7 @@
                         </p>
                     </div>
                     <div class="card-footer text-center">
-                        <a asp-controller="Home" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="card-link">@Localizer["ProductList"]</a>
+                        <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                     </div>
                 </div>
             </div>
@@ -85,7 +84,7 @@
                                 </p>
                             </div>
                             <div class="card-footer text-center">
-                                <a asp-controller="Home" asp-action="GetProducts" asp-route-culture="@CultureInfo.CurrentCulture.Name" class="card-link">@Localizer["ProductList"]</a>
+                                <a asp-controller="Home" asp-action="GetProducts" class="card-link">@Localizer["ProductList"]</a>
                             </div>
                         </div>
                     </div>

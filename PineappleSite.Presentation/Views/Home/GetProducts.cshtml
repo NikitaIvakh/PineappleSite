@@ -10,7 +10,7 @@
 }
 
 <div class="col-12 form-text">
-    <form id="searchForm" asp-action="GetProducts" method="get">
+    <form asp-action="GetProducts" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
                 <label for="searchProduct" style="color:white; font-size: 20px;">@Localizer["Search product"]</label>
@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="row mt-auto mb-0">
                                         <div class="col">
-                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-culture="@CultureInfo.CurrentCulture.Name" asp-route-id="@product.Id">@Localizer["View details"]</a>
+                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-id="@product.Id">@Localizer["View details"]</a>
                                         </div>
                                     </div>
                                 </div>
@@ -60,7 +60,6 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
-                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
                         <span>&laquo; @Localizer["Previous"]</span>
                     </a>
@@ -70,7 +69,6 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
-                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
                        class="page-item">
                         <span>@Localizer["Next"] &raquo;</span>
                     </a>
@@ -88,13 +86,6 @@
 }
 
 <script>
-    document.getElementById("searchForm").addEventListener("submit", function (event) {
-        var culture = "@CultureInfo.CurrentCulture.Name";
-        var url = this.action + "?culture=" + culture + "&" + new URLSearchParams(new FormData(this)).toString();
-        event.preventDefault();
-        window.location.href = url;
-    });
-
     document.getElementById("clearSearch").addEventListener("click", function () {
         var culture = "@CultureInfo.CurrentCulture.Name";
         var url = document.getElementById("searchForm").action + "?culture=" + culture;

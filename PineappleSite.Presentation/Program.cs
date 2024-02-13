@@ -35,14 +35,15 @@ applicationBuilder.Services.AddScoped<IProductService, ProductService>();
 applicationBuilder.Services.AddScoped<IFavoriteService, FavoriteService>();
 applicationBuilder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
 applicationBuilder.Services.AddScoped<IOrderService, OrderService>();
-
-applicationBuilder.Services.Configure<CookiePolicyOptions>(options =>
-{
-    options.MinimumSameSitePolicy = SameSiteMode.None;
-});
-
-applicationBuilder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
 applicationBuilder.Services.AddTransient<IIdentityService, IdentityService>();
+
+applicationBuilder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.ExpireTimeSpan = TimeSpan.FromHours(10);
+        options.LoginPath = "/Authenticate/Login";
+        options.AccessDeniedPath = "/Authenticate/AccessDenied";
+    });
 
 applicationBuilder.Services.AddLocalization(options =>
 {
@@ -51,16 +52,31 @@ applicationBuilder.Services.AddLocalization(options =>
 
 applicationBuilder.Services.Configure<RequestLocalizationOptions>(options =>
 {
-    options.DefaultRequestCulture = new RequestCulture("ru-RU");
-    options.SupportedCultures = new List<CultureInfo> { new CultureInfo("ru-RU"), new CultureInfo("en-US") };
-    options.SupportedUICultures = new List<CultureInfo> { new CultureInfo("ru-RU"), new CultureInfo("en-US") };
-    options.FallBackToParentUICultures = true;
+    var supportedCultures = new[]
+    {
+        new CultureInfo("ru-RU"),
+        new CultureInfo("en-US"),
+    };
 
-    options.RequestCultureProviders.Clear();
-    options.RequestCultureProviders.Add(new QueryStringRequestCultureProvider());
+    options.DefaultRequestCulture = new RequestCulture("ru-RU");
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
 });
 
 WebApplication webApplication = applicationBuilder.Build();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("ru-RU"),
+    new CultureInfo("en-US"),
+};
+
+webApplication.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture("ru-RU"),
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 // Configure the HTTP request pipeline.
 if (!webApplication.Environment.IsDevelopment())
@@ -72,10 +88,8 @@ if (!webApplication.Environment.IsDevelopment())
 
 webApplication.UseCookiePolicy();
 webApplication.UseHttpsRedirection();
+
 webApplication.UseStaticFiles();
-
-webApplication.UseRequestLocalization();
-
 webApplication.UseRouting();
 
 webApplication.UseAuthentication();
