@@ -53,18 +53,40 @@ namespace PineappleSite.Presentation.Controllers
 
         public async Task<ActionResult> GetOrderDetails(int orderId)
         {
-            OrderHeaderViewModel orderHeaderDto = new();
-            string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+            try
+            {
+                OrderHeaderViewModel orderHeaderDto = new();
+                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
 
-            var response = await _orderService.GetOrderAsync(orderId);
+                var response = await _orderService.GetOrderAsync(orderId);
 
-            if (response is not null && response.IsSuccess)
-                orderHeaderDto = response.Data;
+                if (response is not null && response.IsSuccess)
+                {
+                    orderHeaderDto = response.Data;
 
-            if (!User.IsInRole(StaticDetails.RoleAdmin) && userId != orderHeaderDto.UserId)
-                return NotFound();
+                    if (orderHeaderDto is not null)
+                    {
+                        return View(orderHeaderDto);
+                    }
 
-            return View(orderHeaderDto);
+                    else
+                    {
+                        TempData["error"] = response.ErrorMessage;
+                        return RedirectToAction(nameof(OrderIndex));
+                    }
+                }
+
+                else
+                {
+                    return RedirectToAction(nameof(OrderIndex), new { orderId = orderId });
+                }
+            }
+
+            catch (Exception exception)
+            {
+                ModelState.AddModelError(string.Empty, exception.Message);
+                return View(orderId);
+            }
         }
 
         [HttpPost("OrderReadyForPickup")]
