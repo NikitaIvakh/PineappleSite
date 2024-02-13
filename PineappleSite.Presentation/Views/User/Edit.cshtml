@@ -4,7 +4,7 @@
 @model PineappleSite.Presentation.Models.Users.UpdateUserViewModel
 
 @{
-    ViewData["Title"] = "Обновить пользователя";
+    ViewData["Title"] = Localizer["Update user"];
 }
 
 <form class="container col-6" asp-action="Edit">
@@ -13,7 +13,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Обновить пользователя</h1>
+                    <h1 class="text-white">@Localizer["Update user"]</h1>
                 </div>
             </div>
         </div>
@@ -21,7 +21,7 @@
         <div class="row">
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>@Localizer["Id"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="Id" readonly hidden />
@@ -30,7 +30,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["FirstName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="FirstName" />
@@ -39,7 +39,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["LastName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="LastName" />
@@ -48,7 +48,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Почтовый адрес</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="EmailAddress" />
@@ -57,7 +57,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Отображаемое имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["UserName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="UserName" />
@@ -66,20 +66,20 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" asp-for="UserRoles">Роль</label>
+                    <label class="control-label pt-2" style="font-size:20px;" asp-for="UserRoles">@Localizer["Role"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <select asp-for="UserRoles" asp-items="Html.GetEnumSelectList<StaticDetails.UserRoles>()" class="form-control">
-                        <option value="">Выберите роль</option>
+                        <option value="">@Localizer["Choose a role"]</option>
                     </select>
                 </div>
                 <span asp-validation-for="UserRoles" class="text-danger"></span>
             </div>
             <div class="col-5 offset-1">
-                <a class="btn-primary btn form-control" asp-action="Index">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-action="Index">@Localizer["Go back"]</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="Обновить" class="btn btn-success form-control" />
+                <input type="submit" value="@Localizer["Update user"]" class="btn btn-success form-control" />
             </div>
         </div>
     </div>
