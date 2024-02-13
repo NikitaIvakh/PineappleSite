@@ -2,7 +2,7 @@
 @model PineappleSite.Presentation.Services.ShoppingCarts.CartResult<CartViewModel>
 
 @{
-    ViewData["Title"] = "Корзина";
+    ViewData["Title"] = Localizer["Shopping cart"];
 }
 
 @{
@@ -16,19 +16,19 @@
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
                         <div class="col-6">
-                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; Корзина</h3>
+                            <h3 class="text-success"><i class="bi bi-cart"></i> &nbsp; @Localizer["Shopping cart"]</h3>
                         </div>
                         <div class="col-6 text-end">
-                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">Вернуться к продуктам</a>
+                            <a asp-action="GetProducts" asp-controller="Home" class="btn btn-outline-warning mt-2 btn-sm">@Localizer["Back to Products"]</a>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
                             <div class="row text-info">
                                 <div class="col-lg-2"></div>
-                                <div class="col-lg-5">Детали продукта</div>
-                                <div class="col-lg-2">Стоимость</div>
-                                <div class="col-lg-2">Количество</div>
+                                <div class="col-lg-5">@Localizer["Product details"]</div>
+                                <div class="col-lg-2">@Localizer["Price"]</div>
+                                <div class="col-lg-2">@Localizer["Quantity"]</div>
                                 <div class="col-lg-1"></div>
                             </div>
                         </div>
@@ -64,26 +64,26 @@
                                 @{
                                     if (string.IsNullOrEmpty(Model.Data.CartHeader.CouponCode))
                                     {
-                                        <span>Купон:</span>
+                                        <span>@Localizer["Coupon"]</span>
                                         <input name="CartViewModel.CartHeader.CouponCode" value="@Model.Data.CartHeader.CouponCode" />
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">Применить</button>
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">@Localizer["Apply"]</button>
                                         <span class="text-danger" name="CartViewModel.CartHeader.CouponCode" asp-validation-for="Data.CartHeader.CouponCode"></span>
                                     }
 
                                     else
                                     {
-                                        <span>Купон:</span>
+                                        <span>@Localizer["Coupon"]</span>
                                         <input asp-for="Data.CartHeader.CouponCode" disabled />
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">Удалить</button>
+                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">@Localizer["Delete"]</button>
                                     }
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">Общая стоимость : @Model.Data.CartHeader.CartTotal Br<br /></span>
+                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Br<br /></span>
                                 @{
                                     if (Model.Data.CartHeader.Discount > 0)
                                     {
-                                        <span class="text-success"> Сумма скидки : @Model.Data.CartHeader.Discount Br</span>
+                                        <span class="text-success"> @Localizer["Discount amount"] @Model.Data.CartHeader.Discount Br</span>
                                     }
                                 }
                             </div>
@@ -91,10 +91,10 @@
                     </div>
                     <div class="card-footer row">
                         <div class="col-6 col-md-3 ">
-                            <button type="submit" class="btn btn-outline-danger form-control">Отправка запроса</button>
+                            <button type="submit" class="btn btn-outline-danger form-control">@Localizer["Sending a request"]</button>
                         </div>
                         <div class="col-6 col-md-3 offset-md-6">
-                            <a asp-action="Checkout" class="btn btn-success form-control">Продолжить</a>
+                            <a asp-action="Checkout" class="btn btn-success form-control">@Localizer["Continue"]</a>
                         </div>
                     </div>
                 </div>
@@ -105,8 +105,8 @@
     else
     {
         <div class="text-center">
-            <h1 class="text-white pt-4">Корзина пустая.</h1>
-            <p class="text-white pb-3">Воспользуйтесь поиском, чтобы найти всё, что нужно...</p>
+            <h1 class="text-white pt-4">@Localizer["Empty shopping cart"]</h1>
+            <p class="text-white pb-3">@Localizer["Use the search to find everything you need..."]</p>
         </div>
     }
 }
