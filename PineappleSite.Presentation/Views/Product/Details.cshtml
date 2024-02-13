@@ -3,7 +3,7 @@
 @model PineappleSite.Presentation.Models.Products.ProductViewModel
 
 @{
-    ViewData["Title"] = "Детали продукта";
+    ViewData["Title"] = Localizer["Product details"];
 }
 
 <form class="container col-7" asp-action="Details">
@@ -12,7 +12,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Детали продукта</h1>
+                    <h1 class="text-white">@Localizer["Product details"]</h1>
                 </div>
             </div>
         </div>
@@ -20,7 +20,7 @@
         <div class="row">
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>@Localizer["Id"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="Id" readonly hidden />
@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Наименование продукта</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Product name"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="Name" readonly />
@@ -38,7 +38,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Описание</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Description"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <textarea class="form-control" asp-for="Description" readonly> </textarea>
@@ -47,7 +47,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size: 20px;">Категория продукта</label>
+                    <label class="control-label pt-2" style="font-size: 20px;">@Localizer["ProductCategory"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <select asp-for="ProductCategory" class="form-control" readonly disabled>
@@ -63,7 +63,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Стоимость продукта</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Price"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="Price" readonly />
@@ -71,7 +71,7 @@
                 </div>
             </div>
             <div class="col-5 offset-3">
-                <a class="btn-primary btn form-control" asp-action="GetProducts">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-action="GetProducts">@Localizer["Go back to the products"]</a>
             </div>
         </div>
     </div>
