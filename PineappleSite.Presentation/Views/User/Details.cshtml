@@ -1,7 +1,7 @@
 ﻿@model PineappleSite.Presentation.Models.Users.UserWithRolesViewModel
 
 @{
-    ViewData["Title"] = "Детали пользователя";
+    ViewData["Title"] = Localizer["User details"];
 }
 
 <form class="container col-7" asp-action="Details">
@@ -10,7 +10,7 @@
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Детали пользователя</h1>
+                    <h1 class="text-white">@Localizer["User details"]</h1>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
         <div class="row">
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;" hidden>Идентификатор</label>
+                    <label class="control-label pt-2" style="font-size:20px;" hidden>@Localizer["Id"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="User.Id" readonly hidden />
@@ -27,7 +27,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["FirstName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="User.FirstName" readonly />
@@ -36,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Фамилия</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["LastName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="User.LastName" readonly />
@@ -45,7 +45,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Почтовый адрес</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="User.Email" readonly />
@@ -54,7 +54,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Отображаемое имя</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["UserName"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     <input class="form-control" asp-for="User.UserName" readonly />
@@ -63,7 +63,7 @@
             </div>
             <div class="row">
                 <div class="col-6">
-                    <label class="control-label pt-2" style="font-size:20px;">Роль</label>
+                    <label class="control-label pt-2" style="font-size:20px;">@Localizer["Role"]</label>
                 </div>
                 <div class="col-6 pb-3">
                     @{
@@ -76,7 +76,7 @@
                 </div>
             </div>
             <div class="col-5 offset-3">
-                <a class="btn-primary btn form-control" asp-action="Index">Вернуться назад</a>
+                <a class="btn-primary btn form-control" asp-action="Index">@Localizer["Go back"]</a>
             </div>
         </div>
     </div>
