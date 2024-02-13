@@ -2,30 +2,30 @@
 @model PaginatedList<PineappleSite.Presentation.Models.Users.UserWithRolesViewModel>
 
 @{
-    ViewData["Title"] = "Список пользователей";
+    ViewData["Title"] = Localizer["List of users"];
     <link rel="stylesheet" href="~/css/users/userList.css" asp-append-version="true" />
 }
 
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p class="mb-0">
-            <label for="searchUser" style="font-size:20px; color:white">Поиск пользователя:</label>
+            <label for="searchUser" style="font-size:20px; color:white">@Localizer["User Search:"]</label>
         </p>
         <div class="input-group mb-3">
             <input type="text" class="form-control" name="searchUser" id="searchUser" value="@ViewData["SearchUser"]" />
             <div class="input-group-append">
-                <button type="submit" class="btn btn-primary search-button">Поиск</button>
-                <button type="button" id="clearSearch" class="btn btn-secondary clear-button">Очистить</button>
+                <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
             </div>
         </div>
     </div>
 </form>
-<form id="deleteSelectedForm" asp-action="DeleteUserList" onsubmit="return confirm('Вы действительно хотите удалить данные записи?')" method="post">
+<form id="deleteSelectedForm" asp-action="DeleteUserList" onsubmit="return confirm('@Localizer["Do you really want to delete these records?"]')" method="post">
     <div class="card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h1 class="text-white">Зарегистрированные пользователи</h1>
+                    <h1 class="text-white">@Localizer["Registered users"]</h1>
                 </div>
             </div>
         </div>
@@ -34,9 +34,9 @@
                 <div class="col-6">
                 </div>
                 <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Добавить нового пользователя</a>
+                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new user"]</a>
                     <br />  <br />
-                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">Удалить выбранные</button>
+                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
                     <div class="col-12 form-text">
                     </div>
                 </div>
@@ -45,13 +45,13 @@
                 <thead>
                     <tr>
                         <th></th>
-                        <th>Имя</th>
-                        <th>Фамилия</th>
-                        <th>Почтовый адрес</th>
-                        <th>Отображаемое имя</th>
-                        <th>Роль</th>
-                        <th>Обновить</th>
-                        <th>Удалить</th>
+                        <th>@Localizer["FirstName"]</th>
+                        <th>@Localizer["LastName"]</th>
+                        <th>@Localizer["EmailAddress"]</th>
+                        <th>@Localizer["UserName"]</th>
+                        <th>@Localizer["Role"]</th>
+                        <th>@Localizer["Update"]</th>
+                        <th>@Localizer["Delete"]</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -84,8 +84,8 @@
                                 </td>
                                 <td>
                                     <form asp-action="Delete" asp-route-id="@item.User.Id" style="display:inline;"
-                                          onsubmit="return confirm('Вы действительно хотите удалить данную запись?')" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger d-inline">Удалить</button>
+                                          onsubmit="return confirm('@Localizer["Do you really want to delete this entry?"]')" method="post">
+                                        <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete"]</button>
                                     </form>
                                 </td>
                             </tr>
@@ -102,7 +102,7 @@
                        asp-route-searchUser="@ViewData["SearchUser"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
                        class="page-item">
-                        <span>&laquo; Назад</span>
+                        <span>&laquo; @Localizer["Previous"]</span>
                     </a>
                 }
                 @if (Model.HasNextPage)
@@ -112,7 +112,7 @@
                        asp-route-searchUser="@ViewData["SearchUser"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
                        class="page-item">
-                        <span>Вперед &raquo;</span>
+                        <span>@Localizer["Next"] &raquo;</span>
                     </a>
                 }
             </div>
