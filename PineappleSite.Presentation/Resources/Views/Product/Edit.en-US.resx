@@ -126,16 +126,19 @@
   <data name="Id" xml:space="preserve">
     <value>Id</value>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>Image</value>
+  </data>
   <data name="Price" xml:space="preserve">
     <value>Price</value>
-  </data>
-  <data name="Product details" xml:space="preserve">
-    <value>Product details</value>
   </data>
   <data name="Product name" xml:space="preserve">
     <value>Product name</value>
   </data>
   <data name="ProductCategory" xml:space="preserve">
     <value>Product category</value>
+  </data>
+  <data name="Update product" xml:space="preserve">
+    <value>Update product</value>
   </data>
 </root>

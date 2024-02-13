@@ -118,24 +118,27 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Description" xml:space="preserve">
-    <value>Description</value>
+    <value>Описание</value>
   </data>
   <data name="Go back to the products" xml:space="preserve">
-    <value>Go back to the products</value>
+    <value>Вернуться назад</value>
   </data>
   <data name="Id" xml:space="preserve">
-    <value>Id</value>
+    <value>Идентификатор</value>
+  </data>
+  <data name="Image" xml:space="preserve">
+    <value>Картинка</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Price</value>
-  </data>
-  <data name="Product details" xml:space="preserve">
-    <value>Product details</value>
+    <value>Стоимость продукта</value>
   </data>
   <data name="Product name" xml:space="preserve">
-    <value>Product name</value>
+    <value>Наименование продукта</value>
   </data>
   <data name="ProductCategory" xml:space="preserve">
-    <value>Product category</value>
+    <value>Категория продукта</value>
+  </data>
+  <data name="Update product" xml:space="preserve">
+    <value>Обновить продукт</value>
   </data>
 </root>
