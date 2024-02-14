@@ -10,9 +10,12 @@ namespace Identity.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IMediator mediator) : ControllerBase
+    public class UserController(IMediator mediator, ILogger<UserWithRolesDto> userWithRolesLogger, ILogger<DeleteUserDto> deleteLogger, ILogger<bool> boolLogger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<UserWithRolesDto> _userWithRolesLogger = userWithRolesLogger;
+        private readonly ILogger<DeleteUserDto> _deleteLogger = deleteLogger;
+        private readonly ILogger<bool> _boolLogger = boolLogger;
 
         [HttpGet("GetAllUsers")]
         public async Task<ActionResult<CollectionResult<UserWithRolesDto>>> GetAllUsers(string userId = "")
@@ -21,9 +24,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Уcпешный вывод пользователей: {userId}");
                 return Ok(command);
             }
 
+            _userWithRolesLogger.LogError($"LogDebugError ================ Выод пользователей не удался: {userId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -35,9 +40,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Пользователь успешно получен: {id}");
                 return Ok(command);
             }
 
+            _userWithRolesLogger.LogError($"LogDebugError ================ Получить пользователея не удалось: {id}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -49,9 +56,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Пользователь успешно обновлен: {updateUser.Id}");
                 return Ok(command);
             }
 
+            _userWithRolesLogger.LogError($"LogDebugError ================ Обновить пользователеля не удалось: {updateUser.Id}");
             return BadRequest(command.ValidationErrors);
         }
 
@@ -63,9 +72,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Профиль пользователя успешно обновлен: {updateUserProfile.Id}");
                 return Ok(command);
             }
 
+            _userWithRolesLogger.LogError($"LogDebugError ================ Обновить профиль пользователеля не удалось: {updateUserProfile.Id}");
             return BadRequest(command.ValidationErrors);
         }
 
@@ -77,9 +88,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _deleteLogger.LogDebug($"LogDebug ================ Пользователя успешно удален: {deleteUserDto.Id}");
                 return Ok(command);
             }
 
+            _deleteLogger.LogError($"LogDebugError ================ Удалить пользователеля не удалось: {deleteUserDto.Id}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -90,9 +103,11 @@ namespace Identity.API.Controllers
 
             if (comamnd.IsSuccess)
             {
+                _boolLogger.LogDebug($"LogDebug ================ Пользователи успешно удалены: {deleteUserListDto.UserIds}");
                 return Ok(comamnd);
             }
 
+            _deleteLogger.LogError($"LogDebugError ================ Удалить пользователелей не удалось: {deleteUserListDto.UserIds}");
             return BadRequest(comamnd.ErrorMessage);
         }
     }
