@@ -140,7 +140,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             return new Result<UserWithRolesDto>
                             {
                                 Data = userWithRoles,
-                                SuccessMessage = "Профиль пользователя успешно обновлен",
+                                SuccessMessage = "Профиль успешно обновлен",
                             };
                         }
                     }
