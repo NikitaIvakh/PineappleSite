@@ -37,11 +37,11 @@ namespace Coupon.API.Controllers
 
             if (query.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно получен");
+                _logger.LogDebug($"LogDebug ================ Купон успешно получен: {id}");
                 return Ok(query);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения купона");
+            _logger.LogError($"LogDebugError ================ Ошибка получения купона: {id}");
             return BadRequest(query.ErrorMessage);
         }
 
@@ -52,11 +52,11 @@ namespace Coupon.API.Controllers
 
             if (query.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно получен");
+                _logger.LogDebug($"LogDebug ================ Купон успешно получен: {couponCode}");
                 return Ok(query);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения купона");
+            _logger.LogError($"LogDebugError ================ Ошибка получения купона: {couponCode}");
             return BadRequest(query.ErrorMessage);
         }
 
@@ -68,11 +68,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно создан");
+                _logger.LogDebug($"LogDebug ================ Купон успешно создан: {createCouponDto.CouponCode}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка создания купона");
+            _logger.LogError($"LogDebugError ================ Ошибка создания купона: {createCouponDto.CouponCode}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -84,11 +84,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно обновлен");
+                _logger.LogDebug($"LogDebug ================ Купон успешно обновлен: {updateCouponDto.CouponId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка обновления купона");
+            _logger.LogError($"LogDebugError ================ Ошибка обновления купона: {updateCouponDto.CouponId}");
             return BadRequest(command.ValidationErrors);
         }
 
@@ -100,11 +100,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно удылен");
+                _logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.Id}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления купона");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.Id}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -116,11 +116,11 @@ namespace Coupon.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купоны успешно удалены");
+                _logger.LogDebug($"LogDebug ================ Купоны успешно удалены: {deleteCouponListDto.CouponIds}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления купонов");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления купонов: {deleteCouponListDto.CouponIds}");
             return BadRequest(command.ErrorMessage);
         }
     }

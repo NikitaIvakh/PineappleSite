@@ -24,11 +24,11 @@ namespace Favourite.API.Controllers
 
             if (request.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Избранные товары успешно получены");
+                _logger.LogDebug($"LogDebug ================ Избранные товары успешно получены: {userId}");
                 return Ok(request);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения избранных товаров");
+            _logger.LogError($"LogDebugError ================ Ошибка получения избранных товаров: {userId}");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -40,11 +40,11 @@ namespace Favourite.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Избранны1 товарр успешно обновден");
+                _logger.LogDebug($"LogDebug ================ Избранны1 товарр успешно обновден: {favouriteDto.FavouriteHeader.FavouriteHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка обновления избранного товара");
+            _logger.LogError($"LogDebugError ================ Ошибка обновления избранного товара: {favouriteDto.FavouriteHeader.FavouriteHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -56,11 +56,11 @@ namespace Favourite.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Избранный товар успешно удален");
+                _logger.LogDebug($"LogDebug ================ Избранный товар успешно удален: {productId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления избранного товара");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления избранного товара: {productId}");
             return BadRequest(command.ErrorMessage);
         }
     }
