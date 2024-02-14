@@ -15,7 +15,11 @@ applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
-applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+applicationBuilder.Host.UseSerilog((context, logConfig) =>
+{
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
 
 applicationBuilder.Services.AddSwagger();
 
