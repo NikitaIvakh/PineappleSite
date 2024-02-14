@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Resources;
+using Coupon.Application.Resources.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Validations;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;

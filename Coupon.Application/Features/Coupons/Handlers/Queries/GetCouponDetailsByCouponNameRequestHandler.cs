@@ -1,4 +1,5 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Queries;
+using Coupon.Application.Resources.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Resources;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;

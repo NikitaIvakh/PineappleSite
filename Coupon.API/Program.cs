@@ -1,8 +1,10 @@
 using Coupon.API;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
+using Microsoft.AspNetCore.Localization;
 using Serilog;
 using Stripe;
+using System.Globalization;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,7 @@ WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 applicationBuilder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 applicationBuilder.Services.AddEndpointsApiExplorer();
+applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureApplicationService();
@@ -30,7 +33,36 @@ applicationBuilder.Services.AddCors(key =>
 
 applicationBuilder.Services.AddSwagger();
 
+applicationBuilder.Services.AddLocalization(options =>
+{
+    options.ResourcesPath = "Coupon.Application.Resources.Features.Coupons.Handlers.Commands";
+});
+
+applicationBuilder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    var supportedCultures = new[]
+    {
+        new CultureInfo("ru-RU"),
+        new CultureInfo("en-US"),
+    };
+
+    options.SupportedCultures = supportedCultures;
+    options.SupportedUICultures = supportedCultures;
+});
+
 WebApplication webApplication = applicationBuilder.Build();
+
+var supportedCultures = new[]
+{
+    new CultureInfo("ru-RU"),
+    new CultureInfo("en-US"),
+};
+
+webApplication.UseRequestLocalization(new RequestLocalizationOptions
+{
+    SupportedCultures = supportedCultures,
+    SupportedUICultures = supportedCultures
+});
 
 // Configure the HTTP request pipeline.
 if (webApplication.Environment.IsDevelopment())

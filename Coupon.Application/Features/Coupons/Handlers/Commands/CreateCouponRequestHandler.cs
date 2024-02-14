@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Coupon.Application.Features.Coupons.Requests.Commands;
-using Coupon.Application.Resources;
+using Coupon.Application.Resources.Features.Coupons.Handlers.Commands;
 using Coupon.Application.Validations;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
@@ -8,17 +9,22 @@ using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using Serilog;
+using System.Net.Http;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
+    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, IStringLocalizer<ErrorMessage> localizer, IHttpContextAccessor httpContextAccessor, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<CreateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
+        private readonly IStringLocalizer<ErrorMessage> _localizer = localizer;
         private readonly CreateValidator _createValidator = createValidator;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<Result<CouponDto>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
         {
@@ -62,11 +68,38 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                     if (coupon is not null)
                     {
+                        string errorMessageKey = "";
+
+                        var encodedCookieValues = "c%3Den-US%7Cuic%3Den-US,c%3Dru-RU%7Cuic%3Dru-RU";
+
+                        var decodedCookieValues = Uri.UnescapeDataString(encodedCookieValues);
+                        var cookieValues = decodedCookieValues.Split(',');
+
+                        var selectedLanguage = _httpContextAccessor.HttpContext.Features.Get<IRequestCultureFeature>().RequestCulture.Culture.Name;
+
+                        foreach (var cookieValue in cookieValues)
+                        {
+                            var cultureParts = cookieValue.Trim().Split('=')[1];
+                            var culture = cultureParts[..5];
+
+                            if (culture == selectedLanguage)
+                            {
+                                errorMessageKey = ErrorMessage_en_US1.CouponAlreadyExists;
+                                break;
+                            }
+
+                            if (culture == selectedLanguage)
+                            {
+                                errorMessageKey = ErrorMessage_ru_RU1.CouponAlreadyExists;
+                                break;
+                            }
+                        }
+
                         return new Result<CouponDto>
                         {
-                            ErrorMessage = ErrorMessage.CouponAlreadyExists,
-                            ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
                             Data = null,
+                            ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
+                            ErrorMessage = _localizer[errorMessageKey].Value,
                         };
                     }
 
