@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
+namespace Coupon.Application.Resources {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class ErrorMessage_en_US1 {
+    internal class ErrorMessage {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal ErrorMessage_en_US1() {
+        internal ErrorMessage() {
         }
         
         /// <summary>
@@ -39,8 +39,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Coupon.Application.Resources.Features.Coupons.Handlers.Commands.ErrorMessage_en_U" +
-                            "S1", typeof(ErrorMessage_en_US1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Coupon.Application.Resources.ErrorMessage", typeof(ErrorMessage).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,7 +61,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupon already exists.
+        ///   Ищет локализованную строку, похожую на Такой купон уже существует.
         /// </summary>
         internal static string CouponAlreadyExists {
             get {
@@ -71,7 +70,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupon code not valid.
+        ///   Ищет локализованную строку, похожую на Код купона не валидный.
         /// </summary>
         internal static string CouponCodeNotValid {
             get {
@@ -80,7 +79,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupon not created.
+        ///   Ищет локализованную строку, похожую на Купон не может быть создан.
         /// </summary>
         internal static string CouponNotCreated {
             get {
@@ -89,7 +88,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupon not deleted.
+        ///   Ищет локализованную строку, похожую на Купон не может быть удален.
         /// </summary>
         internal static string CouponNotDeleted {
             get {
@@ -98,7 +97,25 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupon not found.
+        ///   Ищет локализованную строку, похожую на Такого купона не существует.
+        /// </summary>
+        internal static string CouponNotDeletedCatch {
+            get {
+                return ResourceManager.GetString("CouponNotDeletedCatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Таких купонов не существует.
+        /// </summary>
+        internal static string CouponNotDeletedListCatch {
+            get {
+                return ResourceManager.GetString("CouponNotDeletedListCatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Купон не найден.
         /// </summary>
         internal static string CouponNotFound {
             get {
@@ -107,7 +124,25 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Coupons  not found.
+        ///   Ищет локализованную строку, похожую на Купон не может быть обновлен.
+        /// </summary>
+        internal static string CouponNotUpdated {
+            get {
+                return ResourceManager.GetString("CouponNotUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Такого купона не существует.
+        /// </summary>
+        internal static string CouponNotUpdatedNull {
+            get {
+                return ResourceManager.GetString("CouponNotUpdatedNull", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Купоны не найдены.
         /// </summary>
         internal static string CouponsNotFound {
             get {
@@ -116,7 +151,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Discount amount not valid.
+        ///   Ищет локализованную строку, похожую на Сумма скидки купона не может превышать стоимость продукта.
         /// </summary>
         internal static string DiscountAmountNotValid {
             get {
@@ -125,7 +160,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Internal server error.
+        ///   Ищет локализованную строку, похожую на Внутренняя проблема сервера.
         /// </summary>
         internal static string InternalServerError {
             get {
@@ -134,7 +169,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Min amount not valid.
+        ///   Ищет локализованную строку, похожую на Сумма для применения купона не валидна.
         /// </summary>
         internal static string MinAmountNotValid {
             get {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
+namespace Coupon.Application.Resources {
     using System;
     
     
@@ -39,8 +39,7 @@ namespace Coupon.Application.Resources.Features.Coupons.Handlers.Commands {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Coupon.Application.Resources.Features.Coupons.Handlers.Commands.ErrorMessage.ru-R" +
-                            "U1", typeof(ErrorMessage_ru_RU1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Coupon.Application.Resources.ErrorMessage.ru-RU1", typeof(ErrorMessage_ru_RU1).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

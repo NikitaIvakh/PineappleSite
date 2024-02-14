@@ -46,6 +46,7 @@ applicationBuilder.Services.Configure<RequestLocalizationOptions>(options =>
         new CultureInfo("en-US"),
     };
 
+    options.DefaultRequestCulture = new RequestCulture("ru-RU");
     options.SupportedCultures = supportedCultures;
     options.SupportedUICultures = supportedCultures;
 });
@@ -60,6 +61,7 @@ var supportedCultures = new[]
 
 webApplication.UseRequestLocalization(new RequestLocalizationOptions
 {
+    DefaultRequestCulture = new RequestCulture("ru-RU"),
     SupportedCultures = supportedCultures,
     SupportedUICultures = supportedCultures
 });
