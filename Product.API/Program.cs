@@ -24,7 +24,12 @@ applicationBuilder.Services.AddCors(key =>
 
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService();
-applicationBuilder.Host.UseSerilog((context, logConfig) => logConfig.ReadFrom.Configuration(context.Configuration));
+applicationBuilder.Host.UseSerilog((context, logConfig) =>
+{
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
+
 applicationBuilder.Services.AddSwagger();
 
 WebApplication webApplication = applicationBuilder.Build();
