@@ -8,19 +8,17 @@ using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, IHttpContextAccessor httpContextAccessor, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
+    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<CreateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
         private readonly CreateValidator _createValidator = createValidator;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         public async Task<Result<CouponDto>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
         {
