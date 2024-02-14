@@ -38,11 +38,11 @@ namespace Product.API.Controllers
 
             if (query.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукт успешно получен");
+                _logger.LogDebug($"LogDebug ================ Продукт успешно получен: {id}");
                 return Ok(query);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения продукта");
+            _logger.LogError($"LogDebugError ================ Ошибка получения продукта: {id}");
             return BadRequest(query.ErrorMessage);
         }
 
@@ -54,11 +54,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукт успешно добавлен");
+                _logger.LogDebug($"LogDebug ================ Продукт успешно добавлен: {createProductDto.Name}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка добавления продукта");
+            _logger.LogError($"LogDebugError ================ Ошибка добавления продукта: {createProductDto.Name}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -70,11 +70,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукт успешно обновлен");
+                _logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка обновления продукта");
+            _logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -86,11 +86,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукт успешно удален");
+                _logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления продукта");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -102,11 +102,11 @@ namespace Product.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукты успешно удалены");
+                _logger.LogDebug($"LogDebug ================ Продукты успешно удалены: {deleteProductsDto.ProductIds}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления продуктов");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления продуктов: {deleteProductsDto.ProductIds}");
             return BadRequest(command.ErrorMessage);
         }
     }
