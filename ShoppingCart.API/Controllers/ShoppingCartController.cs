@@ -22,11 +22,11 @@ namespace ShoppingCart.API.Controllers
 
             if (request.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Корзина успешно получена");
+                _logger.LogDebug($"LogDebug ================ Корзина успешно получена: {userId}");
                 return Ok(request);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения корзины");
+            _logger.LogError($"LogDebugError ================ Ошибка получения корзины: {userId}");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -38,11 +38,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ В корзину успешно добавлен товар");
+                _logger.LogDebug($"LogDebug ================ В корзину успешно добавлен товар: {cartDto.CartHeader.CartHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка добавления товара в корзину");
+            _logger.LogError($"LogDebugError ================ Ошибка добавления товара в корзину: {cartDto.CartHeader.CartHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -53,11 +53,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно применен");
+                _logger.LogDebug($"LogDebug ================ Купон успешно применен: {cartDto.CartHeader.CartHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка применения купона");
+            _logger.LogError($"LogDebugError ================ Ошибка применения купона: {cartDto.CartHeader.CartHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -68,11 +68,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Купон успешно удален");
+                _logger.LogDebug($"LogDebug ================ Купон успешно удален: {cartDto.CartHeader.CartHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления купона");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {cartDto.CartHeader.CartHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -84,11 +84,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Продукт из корзины успешно удален");
+                _logger.LogDebug($"LogDebug ================ Продукт из корзины успешно удален: {productId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления продукта из корзины");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления продукта из корзины: {productId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -99,11 +99,11 @@ namespace ShoppingCart.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Письмо в очередь успешно доставлено");
+                _logger.LogDebug($"LogDebug ================ Письмо в очередь успешно доставлено: {cartDto.CartHeader.CartHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка добавления письма в очередь");
+            _logger.LogError($"LogDebugError ================ Ошибка добавления письма в очередь: {cartDto.CartHeader.CartHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
     }
