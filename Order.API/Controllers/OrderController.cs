@@ -24,11 +24,11 @@ namespace Order.API.Controllers
 
             if (request.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Заказы успешно получены");
+                _logger.LogDebug($"LogDebug ================ Заказы успешно получены: {userId}");
                 return Ok(request);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения заказов");
+            _logger.LogError($"LogDebugError ================ Ошибка получения заказов: {userId}");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -40,11 +40,11 @@ namespace Order.API.Controllers
 
             if (request.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Заказ успешно получен");
+                _logger.LogDebug($"LogDebug ================ Заказ успешно получен: {orderId}");
                 return Ok(request);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка получения заказа");
+            _logger.LogError($"LogDebugError ================ Ошибка получения заказа: {orderId}");
             return BadRequest(request.ErrorMessage);
         }
 
@@ -56,11 +56,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Заказ успешно создан");
+                _logger.LogDebug($"LogDebug ================ Заказ успешно создан: {cartDto.CartHeader.CartHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка удаления заказа");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления заказа: {cartDto.CartHeader.CartHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -72,11 +72,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Сессия для оплаты успешно создана");
+                _logger.LogDebug($"LogDebug ================ Сессия для оплаты успешно создана: {stripeRequestDto.StripeSessionId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка создания сессии для оплаты");
+            _logger.LogError($"LogDebugError ================ Ошибка создания сессии для оплаты: {stripeRequestDto.StripeSessionId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -88,11 +88,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Оплата успешно прошла валидацию");
+                _logger.LogDebug($"LogDebug ================ Оплата успешно прошла валидацию: {orderHeaderId}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Оплата не успешно прошла валидацию");
+            _logger.LogError($"LogDebugError ================ Оплата не успешно прошла валидацию: {orderHeaderId}");
             return BadRequest(command.ErrorMessage);
         }
 
@@ -104,11 +104,11 @@ namespace Order.API.Controllers
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug("LogDebug ================ Статус заказ успешно обновлен");
+                _logger.LogDebug($"LogDebug ================ Статус заказ успешно обновлен: {orderHeaderId} - {newStatus}");
                 return Ok(command);
             }
 
-            _logger.LogError("LogDebugError ================ Ошибка обновления статуса заказа");
+            _logger.LogError($"LogDebugError ================ Ошибка обновления статуса заказа: {orderHeaderId} - {newStatus}");
             return BadRequest(command.ErrorMessage);
         }
     }
