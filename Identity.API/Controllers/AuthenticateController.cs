@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Identity.Domain.ResultIdentity;
-using Identity.Domain.DTOs.Identities;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Application.Features.Identities.Requests.Commands;
 
@@ -9,9 +8,12 @@ namespace Identity.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticateController(IMediator mediator) : ControllerBase
+    public class AuthenticateController(IMediator mediator, ILogger<AuthResponseDto> authLogger, ILogger<RegisterResponseDto> registerLogger, ILogger<LogoutUserRequest> LogourLogger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
+        private readonly ILogger<AuthResponseDto> _authLogger = authLogger;
+        private readonly ILogger<RegisterResponseDto> _registerLogger = registerLogger;
+        private readonly ILogger<LogoutUserRequest> _logourLogger = LogourLogger;
 
         [HttpPost("Login")]
         public async Task<ActionResult<Result<AuthResponseDto>>> Login([FromBody] AuthRequestDto authRequest)
@@ -20,9 +22,11 @@ namespace Identity.API.Controllers
 
             if (login.IsSuccess)
             {
+                _authLogger.LogDebug($"LogDebug ================ Уcпешный вход в аккаунт: {authRequest.Email}");
                 return Ok(login);
             }
 
+            _authLogger.LogError($"LogDebugError ================ Войти в аккаунт не удалось: {authRequest.Email}");
             return BadRequest(login.ErrorMessage);
         }
 
@@ -33,9 +37,11 @@ namespace Identity.API.Controllers
 
             if (register.IsSuccess)
             {
+                _registerLogger.LogDebug($"LogDebug ================ Уcпешная регистрация: {registerRequest.EmailAddress}");
                 return Ok(register);
             }
 
+            _registerLogger.LogError($"LogDebugError ================ Регистрация не удалась: {registerRequest.EmailAddress}");
             return BadRequest(register.ValidationErrors);
         }
 
@@ -46,9 +52,11 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _logourLogger.LogDebug("LogDebug ================ Уcпешный выход из аккаунта");
                 return Ok(command);
             }
 
+            _registerLogger.LogError($"LogDebugError ================ Выход из аккаунта не удался");
             return BadRequest(command.ErrorMessage);
         }
     }
