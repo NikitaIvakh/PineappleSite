@@ -28,11 +28,14 @@ applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new
 StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 applicationBuilder.Host.UseSerilog((context, logConfig) =>
-{ 
+{
     logConfig.ReadFrom.Configuration(context.Configuration);
     logConfig.WriteTo.Console();
 });
+
 applicationBuilder.Services.AddSwagger();
+
+applicationBuilder.Services.AddHealthChecks();
 
 WebApplication webApplication = applicationBuilder.Build();
 
@@ -44,6 +47,7 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
+webApplication.MapHealthChecks("health");
 
 webApplication.UseAuthorization();
 
