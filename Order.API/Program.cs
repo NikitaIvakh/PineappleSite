@@ -4,6 +4,8 @@ using Stripe;
 using Order.API;
 using System.Text.Json.Serialization;
 using Serilog;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -35,8 +37,6 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
 
 applicationBuilder.Services.AddSwagger();
 
-applicationBuilder.Services.AddHealthChecks();
-
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -47,7 +47,10 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
-webApplication.MapHealthChecks("health");
+webApplication.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+});
 
 webApplication.UseAuthorization();
 
