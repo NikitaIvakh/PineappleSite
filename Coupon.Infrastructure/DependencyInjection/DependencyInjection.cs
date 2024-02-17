@@ -1,10 +1,11 @@
-﻿using Coupon.Domain.DTOs;
-using Coupon.Domain.Entities;
+﻿using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
+using Coupon.Infrastructure.Health;
 using Coupon.Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Coupon.Infrastructure.DependencyInjection
 {
@@ -15,13 +16,16 @@ namespace Coupon.Infrastructure.DependencyInjection
             var connectionString = configuration.GetConnectionString("CouponConnectionString");
             services.AddDbContext<ApplicationDbContext>(options => { options.UseNpgsql(connectionString); });
 
-            services.RepositoriesInit();
+            services.RepositoriesInit(configuration);
             services.MigrationsInit();
         }
 
-        private static void RepositoriesInit(this IServiceCollection services)
+        private static void RepositoriesInit(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddScoped<IBaseRepository<CouponEntity>, BaseRepository<CouponEntity>>();
+
+            services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("custom-postgresql", HealthStatus.Unhealthy);
+            services.AddScoped(sp => new DbConnectionFactory(configuration.GetConnectionString("CouponConnectionString")));
         }
 
         private static void MigrationsInit(this IServiceCollection services)
