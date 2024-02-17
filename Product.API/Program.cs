@@ -32,6 +32,8 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
 
 applicationBuilder.Services.AddSwagger();
 
+applicationBuilder.Services.AddHealthChecks();
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,8 +45,11 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
+webApplication.MapHealthChecks("health");
+
 webApplication.UseRouting();
 webApplication.UseAuthorization();
+
 webApplication.UseCors();
 webApplication.UseStaticFiles();
 webApplication.MapControllers();
