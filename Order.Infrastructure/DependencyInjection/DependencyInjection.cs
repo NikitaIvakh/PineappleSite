@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Order.Domain.Entities;
 using Order.Domain.Interfaces.Repository;
 using Order.Domain.Interfaces.Services;
+using Order.Infrastructure.Health;
 using Order.Infrastructure.Repository.Implementation;
 using Order.Infrastructure.Repository.Services;
 
@@ -13,16 +14,21 @@ namespace Order.Infrastructure.DependencyInjection
     {
         public static void ConfigureInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterServices();
+            services.RegisterServices(configuration);
             services.RegisterDBConnectionString(configuration);
             services.ConfigureMigration();
         }
 
-        private static void RegisterServices(this IServiceCollection services)
+        private static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("OrderDbConnectionString");
+
             services.AddScoped<IBaseRepository<OrderHeader>, BaseRepository<OrderHeader>>();
             services.AddScoped<IBaseRepository<OrderDetails>, BaseRepository<OrderDetails>>();
             services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped(scope => new DbConnectionFactory(connectionString));
+            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void RegisterDBConnectionString(this IServiceCollection services, IConfiguration configuration)
