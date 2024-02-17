@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Product.API;
 using Product.Application.DependencyInjection;
 using Product.Infrastructure.DependencyInjection;
@@ -32,8 +34,6 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
 
 applicationBuilder.Services.AddSwagger();
 
-applicationBuilder.Services.AddHealthChecks();
-
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +45,10 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
-webApplication.MapHealthChecks("health");
+webApplication.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+});
 
 webApplication.UseRouting();
 webApplication.UseAuthorization();
