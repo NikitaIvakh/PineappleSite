@@ -1,6 +1,8 @@
+using HealthChecks.UI.Client;
 using Identity.API;
 using Identity.Application.DependencyInjection;
 using Identity.Infrastructure.DependencyInjection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
@@ -32,8 +34,6 @@ applicationBuilder.Services.AddCors(key =>
         .AllowAnyHeader());
 });
 
-applicationBuilder.Services.AddHealthChecks();
-
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +45,10 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
-webApplication.MapHealthChecks("health");
+webApplication.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+});
 
 webApplication.UseRouting();
 webApplication.UseAuthorization();
