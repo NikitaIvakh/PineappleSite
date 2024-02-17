@@ -1,6 +1,7 @@
 ﻿using Identity.Application.Services;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Interface;
+using Identity.Infrastructure.Health;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,13 +13,15 @@ namespace Identity.Infrastructure.DependencyInjection
     {
         public static void ConfigureIdentityService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterServices();
+            services.RegisterServices(configuration);
             services.RegisterDBConnectionString(configuration);
             services.ApplyMigration();
         }
 
-        private static void RegisterServices(this IServiceCollection services)
+        private static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("IdentityConnextionString");
+
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
@@ -32,6 +35,9 @@ namespace Identity.Infrastructure.DependencyInjection
 
             services.AddScoped<RoleManager<IdentityRole>>();
             services.AddScoped<ITokenProvider, TokenProvider>();
+
+            services.AddScoped(scope => new DbConnectionFactory(connectionString));
+            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<PineAppleIdentityDbContext>();
         }
 
         private static void RegisterDBConnectionString(this IServiceCollection services, IConfiguration configuration)
