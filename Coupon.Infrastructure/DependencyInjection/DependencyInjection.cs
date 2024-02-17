@@ -22,10 +22,11 @@ namespace Coupon.Infrastructure.DependencyInjection
 
         private static void RepositoriesInit(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IBaseRepository<CouponEntity>, BaseRepository<CouponEntity>>();
+            var connectionString = configuration.GetConnectionString("CouponConnectionString");
 
-            services.AddHealthChecks().AddCheck<DatabaseHealthCheck>("custom-postgresql", HealthStatus.Unhealthy);
-            services.AddScoped(sp => new DbConnectionFactory(configuration.GetConnectionString("CouponConnectionString")));
+            services.AddScoped<IBaseRepository<CouponEntity>, BaseRepository<CouponEntity>>();
+            services.AddScoped(sp => new DbConnectionFactory(connectionString));
+            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void MigrationsInit(this IServiceCollection services)

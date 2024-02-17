@@ -1,6 +1,8 @@
 using Coupon.API;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Stripe;
 
@@ -45,7 +47,10 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
-webApplication.MapHealthChecks("health");
+webApplication.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 webApplication.UseSerilogRequestLogging();
 webApplication.UseAuthorization();
