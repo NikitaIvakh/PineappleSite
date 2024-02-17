@@ -1,6 +1,7 @@
 ﻿using Favourite.Domain.Entities;
 using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Interfaces.Services;
+using Favourite.Infrastructure.Health;
 using Favourite.Infrastructure.Repository.Implement;
 using Favourite.Infrastructure.Repository.Services;
 using Microsoft.EntityFrameworkCore;
@@ -13,16 +14,21 @@ namespace Favourite.Infrastructure.DependencyInjection
     {
         public static void ConfigureInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterServices();
+            services.RegisterServices(configuration);
             services.RegisterDatabase(configuration);
             services.RegisterMigrations();
         }
 
-        private static void RegisterServices(this IServiceCollection services)
+        private static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var connectionString = configuration.GetConnectionString("FavouriteDbConnectionString");
+
             services.AddScoped<IBaseRepositiry<FavouriteHeader>, BaseRepository<FavouriteHeader>>();
             services.AddScoped<IBaseRepositiry<FavouriteDetails>, BaseRepository<FavouriteDetails>>();
             services.AddScoped<IProductService, ProductService>();
+
+            services.AddScoped(scope => new DbConnectionFactory(connectionString));
+            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void RegisterDatabase(this IServiceCollection services, IConfiguration configuration)
