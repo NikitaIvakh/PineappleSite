@@ -1,6 +1,8 @@
+using Favourite.API;
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
-using Favourite.API;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,9 +25,6 @@ builder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-builder.Services.AddHealthChecks();
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -36,7 +35,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapHealthChecks("health");
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.UseAuthorization();
 
