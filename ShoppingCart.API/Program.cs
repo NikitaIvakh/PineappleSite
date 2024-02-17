@@ -2,6 +2,8 @@ using ShoppingCart.Infrastructure.DependencyInjection;
 using ShoppingCart.Application.DependencyInjection;
 using ShoppingCart.API;
 using Serilog;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using HealthChecks.UI.Client;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -27,15 +29,13 @@ builder.Host.UseSerilog((context, logConfig) =>
 builder.Services.AddSwagger();
 
 builder.Services.AddCors(key =>
-{ 
+{
     key.AddPolicy("CorsPolicy",
         applicationBuilder => applicationBuilder
         .AllowAnyOrigin()
         .AllowAnyMethod()
         .AllowAnyHeader());
 });
-
-builder.Services.AddHealthChecks();
 
 WebApplication app = builder.Build();
 
@@ -47,7 +47,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.MapHealthChecks("health");
+app.MapHealthChecks("health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
+});
 
 app.UseAuthorization();
 app.UseCors();
