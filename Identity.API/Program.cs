@@ -32,6 +32,8 @@ applicationBuilder.Services.AddCors(key =>
         .AllowAnyHeader());
 });
 
+applicationBuilder.Services.AddHealthChecks();
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
@@ -43,6 +45,7 @@ if (webApplication.Environment.IsDevelopment())
 
 webApplication.UseAuthentication();
 webApplication.UseHttpsRedirection();
+webApplication.MapHealthChecks("health");
 
 webApplication.UseRouting();
 webApplication.UseAuthorization();
