@@ -23,6 +23,8 @@ builder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
+builder.Services.AddHealthChecks();
+
 
 var app = builder.Build();
 
@@ -34,6 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.MapHealthChecks("health");
 
 app.UseAuthorization();
 
