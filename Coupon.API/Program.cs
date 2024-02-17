@@ -24,6 +24,8 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
 
 StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
+applicationBuilder.Services.AddHealthChecks();
+
 applicationBuilder.Services.AddCors(key =>
 {
     key.AddPolicy("CorsPolicy",
@@ -45,8 +47,12 @@ if (webApplication.Environment.IsDevelopment())
 }
 
 webApplication.UseHttpsRedirection();
+webApplication.MapHealthChecks("health");
+
 webApplication.UseSerilogRequestLogging();
 webApplication.UseAuthorization();
+
 webApplication.UseCors();
 webApplication.MapControllers();
+
 webApplication.Run();
