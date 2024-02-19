@@ -17,21 +17,21 @@ namespace Coupon.Infrastructure.Configuration
 
         private static void SeedData(EntityTypeBuilder<CouponEntity> builder)
         {
-            builder.HasData(new CouponEntity
-            {
-                CouponId = 1,
-                CouponCode = "5OFF",
-                DiscountAmount = 2,
-                MinAmount = 7,
-            },
+            //builder.HasData(new CouponEntity
+            //{
+            //    CouponId = 1,
+            //    CouponCode = "5OFF",
+            //    DiscountAmount = 2,
+            //    MinAmount = 7,
+            //},
 
-            new CouponEntity
-            {
-                CouponId = 2,
-                CouponCode = "7OFF",
-                DiscountAmount = 5,
-                MinAmount = 10,
-            });
+            //new CouponEntity
+            //{
+            //    CouponId = 2,
+            //    CouponCode = "7OFF",
+            //    DiscountAmount = 5,
+            //    MinAmount = 10,
+            //});
         }
     }
 }

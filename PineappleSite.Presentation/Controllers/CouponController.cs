@@ -39,13 +39,18 @@ namespace PineappleSite.Presentation.Controllers
                     var filteredCoupons = coupons.Data.AsQueryable();
                     var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
 
+                    if (paginatedCoupons.Count == 0)
+                    {
+                        return View();
+                    }
+
                     return View(paginatedCoupons);
                 }
 
                 else
                 {
                     TempData["error"] = coupons.ErrorMessage;
-                    return RedirectToAction(nameof(Index));
+                    return View();
                 }
             }
 

@@ -7,113 +7,124 @@
     <link rel="stylesheet" href="~/css/coupons/IndexCoupons.css" asp-append-version="true" />
 }
 
-<div class="col-12 form-text">
-    <form id="searchForm" asp-action="Index" method="get">
-        <div class="form-actions no-color">
-            <p class="mb-0">
-                <label for="searchCode" style="font-size:20px; color:white">@Localizer["Search coupon"]</label>
-            </p>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" name="searchCode" id="searchCode" value="@ViewData["SearchCode"]" />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
+@{
+    if (Model is not null && Model.Count > 0)
+    {
+        <div class="col-12 form-text">
+            <form id="searchForm" asp-action="Index" method="get">
+                <div class="form-actions no-color">
+                    <p class="mb-0">
+                        <label for="searchCode" style="font-size:20px; color:white">@Localizer["Search coupon"]</label>
+                    </p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="searchCode" id="searchCode" value="@ViewData["SearchCode"]" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                            <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
-</div>
 
-<form id="deleteSelectedForm" asp-action="DeleteMultiple" onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
-    <div class="card shadow border-4 mt-3 mb-md-4">
-        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="text-white">@Localizer["Coupon List"]</h1>
+        <form id="deleteSelectedForm" asp-action="DeleteMultiple" onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
+            <div class="card shadow border-4 mt-3 mb-md-4">
+                <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h1 class="text-white">@Localizer["Coupon List"]</h1>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="card-body p-4">
-            <div class="row pb-3">
-                <div class="col-6">
-                </div>
-                <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name"><i class="bi bi-plus-square"></i> @Localizer["AddNewCoupon"]</a>
-                    <br />  <br />
-                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["DeleteAllButton"]</button>
-                </div>
-            </div>
-            <table class="table text-center">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>@Localizer["Id"]</th>
-                        <th>@Localizer["Coupon Code"]</th>
-                        <th>@Localizer["Discount Amount"]</th>
-                        <th>@Localizer["Min Amount"]</th>
-                        <th>@Localizer["Update"]</th>
-                        <th>@Localizer["Delete"]</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int itemCount = 0;
-                    }
-                    @{
-                        foreach (var item in Model)
-                        {
+                <div class="card-body p-4">
+                    <div class="row pb-3">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name"><i class="bi bi-plus-square"></i> @Localizer["AddNewCoupon"]</a>
+                            <br />  <br />
+                            <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["DeleteAllButton"]</button>
+                        </div>
+                    </div>
+                    <table class="table text-center">
+                        <thead>
                             <tr>
-                                <td>
-                                    <input type="checkbox" name="selectedCoupons" value="@item.CouponId" />
-                                </td>
-                                <td>@item.CouponId</td>
-                                <td>@item.CouponCode</td>
-                                <td>@item.DiscountAmount</td>
-                                <td>@item.MinAmount</td>
-                                <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;"
-                                          onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete"]</button>
-                                    </form>
-                                </td>
+                                <th></th>
+                                <th>@Localizer["Id"]</th>
+                                <th>@Localizer["Coupon Code"]</th>
+                                <th>@Localizer["Discount Amount"]</th>
+                                <th>@Localizer["Min Amount"]</th>
+                                <th>@Localizer["Update"]</th>
+                                <th>@Localizer["Delete"]</th>
                             </tr>
-                            itemCount++;
+                        </thead>
+                        <tbody>
+                            @{
+                                int itemCount = 0;
+                            }
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selectedCoupons" value="@item.CouponId" />
+                                        </td>
+                                        <td>@item.CouponId</td>
+                                        <td>@item.CouponCode</td>
+                                        <td>@item.DiscountAmount</td>
+                                        <td>@item.MinAmount</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;"
+                                                  onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
+                                                <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete"]</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    itemCount++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        @if (Model.HasPreviosPage)
+                        {
+                            <a asp-action="Index"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-searchCode="@ViewData["SearchCode"]"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                               asp-route-culture="@CultureInfo.CurrentCulture.Name"
+                               class="page-item">
+                                <span>&laquo; @Localizer["Previous"]</span>
+                            </a>
                         }
-                    }
-                </tbody>
-            </table>
-            <div class="pagination">
-                @if (Model.HasPreviosPage)
-                {
-                    <a asp-action="Index"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-searchCode="@ViewData["SearchCode"]"
-                       asp-route-pageNumber="@(Model.PageIndex - 1)"
-                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
-                       class="page-item">
-                        <span>&laquo; @Localizer["Previous"]</span>
-                    </a>
-                }
-                @if (Model.HasNextPage)
-                {
-                    <a asp-action="Index"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-searchCode="@ViewData["SearchCode"]"
-                       asp-route-pageNumber="@(Model.PageIndex + 1)"
-                       asp-route-culture="@CultureInfo.CurrentCulture.Name"
-                       class="page-item">
-                        <span>@Localizer["Next"] &raquo;</span>
-                    </a>
-                }
+                        @if (Model.HasNextPage)
+                        {
+                            <a asp-action="Index"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-searchCode="@ViewData["SearchCode"]"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)"
+                               asp-route-culture="@CultureInfo.CurrentCulture.Name"
+                               class="page-item">
+                                <span>@Localizer["Next"] &raquo;</span>
+                            </a>
+                        }
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-</form>
+        </form>
+
+    }
+
+    else
+    {
+        <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="font-size: 20px; color:white"><i class="bi bi-plus-square"></i> @Localizer["AddNewCoupon"]</a>
+    }
+}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/js/coupons/IndexCoupons.js" asp-append-version="true"></script>

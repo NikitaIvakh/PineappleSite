@@ -3,12 +3,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace Coupon.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPostgres : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,15 +24,6 @@ namespace Coupon.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Coupons", x => x.CouponId);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Coupons",
-                columns: new[] { "CouponId", "CouponCode", "DiscountAmount", "MinAmount" },
-                values: new object[,]
-                {
-                    { 1, "5OFF", 2.0, 7.0 },
-                    { 2, "7OFF", 5.0, 10.0 }
                 });
         }
 

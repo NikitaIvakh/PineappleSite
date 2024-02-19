@@ -11,20 +11,20 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Coupon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240114121429_AddPostgres")]
-    partial class AddPostgres
+    [Migration("20240219070348_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Coupon.Core.Entities.CouponEntity", b =>
+            modelBuilder.Entity("Coupon.Domain.Entities.CouponEntity", b =>
                 {
                     b.Property<int>("CouponId")
                         .ValueGeneratedOnAdd()
@@ -45,22 +45,6 @@ namespace Coupon.Infrastructure.Migrations
                     b.HasKey("CouponId");
 
                     b.ToTable("Coupons", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            CouponId = 1,
-                            CouponCode = "5OFF",
-                            DiscountAmount = 2.0,
-                            MinAmount = 7.0
-                        },
-                        new
-                        {
-                            CouponId = 2,
-                            CouponCode = "7OFF",
-                            DiscountAmount = 5.0,
-                            MinAmount = 10.0
-                        });
                 });
 #pragma warning restore 612, 618
         }
