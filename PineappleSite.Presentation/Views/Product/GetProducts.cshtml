@@ -1,4 +1,5 @@
 ﻿@using PineappleSite.Presentation.Models.Paginated
+@using System.Globalization
 @model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
@@ -6,118 +7,128 @@
     <link rel="stylesheet" href="~/css/products/productList.css" asp-append-version="true" />
 }
 
-<div class="col-12 form-text">
-    <form asp-action="GetProducts" method="get">
-        <div class="form-actions no-color">
-            <p class="mb-0">
-                <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Product Search"]</label>
-            </p>
-            <div class="input-group mb-3">
-                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
-                <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
+@{
+    if (Model is not null && Model.Count > 0)
+    {
+        <div class="col-12 form-text">
+            <form asp-action="GetProducts" method="get">
+                <div class="form-actions no-color">
+                    <p class="mb-0">
+                        <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Product Search"]</label>
+                    </p>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
+                            <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
-</div>
-<form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('@Localizer["Do you really want to delete these records?"]')" method="post">
-    <div class="card shadow border-4 mt-3 mb-md-4">
-        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h1 class="text-white">@Localizer["List of products"]</h1>
+        <form id="deleteSelectedForm" asp-action="DeleteProductList" onsubmit="return confirm('@Localizer["Do you really want to delete these records?"]')" method="post">
+            <div class="card shadow border-4 mt-3 mb-md-4">
+                <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h1 class="text-white">@Localizer["List of products"]</h1>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="card-body p-4">
-            <div class="row pb-3">
-                <div class="col-6">
-                </div>
-                <div class="col-6 text-end">
-                    <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
-                    <br />  <br />
-                    <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
-                    <div class="col-12 form-text">
+                <div class="card-body p-4">
+                    <div class="row pb-3">
+                        <div class="col-6">
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
+                            <br />  <br />
+                            <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
+                            <div class="col-12 form-text">
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table text-center">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>@Localizer["Id"]</th>
+                                <th>@Localizer["Product name"]</th>
+                                <th>@Localizer["Description"]</th>
+                                <th>@Localizer["ProductCategory"]</th>
+                                <th>@Localizer["Price"]</th>
+                                <th>@Localizer["Details"]</th>
+                                <th>@Localizer["Update"]</th>
+                                <th>@Localizer["Delete"]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                int itemCount = 0;
+                            }
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            <input type="checkbox" name="selectedProducts" value="@item.Id" />
+                                        </td>
+                                        <td>@item.Id</td>
+                                        <td>@item.Name</td>
+                                        <td>@item.Description</td>
+                                        <td>@item.ProductCategory</td>
+                                        <td>@item.Price</td>
+                                        <td>
+                                            <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">@Localizer["Details"]</a>
+                                        </td>
+                                        <td>
+                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">
+                                                <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <form asp-action="Delete" asp-route-id="@item.Id" style="display:inline;"
+                                                  onsubmit="return confirm('@Localizer["Do you really want to delete this entry?"]')" method="post">
+                                                <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete product"]</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    itemCount++;
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        @if (Model.HasPreviosPage)
+                        {
+                            <a asp-action="GetProducts"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-searchUser="@ViewData["SearchUser"]"
+                               asp-route-pageNumber="@(Model.PageIndex - 1)"
+                               class="page-item">
+                                <span>&laquo; @Localizer["Previous"]</span>
+                            </a>
+                        }
+                        @if (Model.HasNextPage)
+                        {
+                            <a asp-action="GetProducts"
+                               asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                               asp-route-searchUser="@ViewData["SearchUser"]"
+                               asp-route-pageNumber="@(Model.PageIndex + 1)"
+                               class="page-item">
+                                <span>@Localizer["Next"] &raquo;</span>
+                            </a>
+                        }
                     </div>
                 </div>
             </div>
-            <table class="table text-center">
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>@Localizer["Id"]</th>
-                        <th>@Localizer["Product name"]</th>
-                        <th>@Localizer["Description"]</th>
-                        <th>@Localizer["ProductCategory"]</th>
-                        <th>@Localizer["Price"]</th>
-                        <th>@Localizer["Details"]</th>
-                        <th>@Localizer["Update"]</th>
-                        <th>@Localizer["Delete"]</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @{
-                        int itemCount = 0;
-                    }
-                    @{
-                        foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="selectedProducts" value="@item.Id" />
-                                </td>
-                                <td>@item.Id</td>
-                                <td>@item.Name</td>
-                                <td>@item.Description</td>
-                                <td>@item.ProductCategory</td>
-                                <td>@item.Price</td>
-                                <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">@Localizer["Details"]</a>
-                                </td>
-                                <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">
-                                        <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                </td>
-                                <td>
-                                    <form asp-action="Delete" asp-route-id="@item.Id" style="display:inline;"
-                                          onsubmit="return confirm('@Localizer["Do you really want to delete this entry?"]')" method="post">
-                                        <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete product"]</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            itemCount++;
-                        }
-                    }
-                </tbody>
-            </table>
-            <div class="pagination">
-                @if (Model.HasPreviosPage)
-                {
-                    <a asp-action="GetProducts"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-searchUser="@ViewData["SearchUser"]"
-                       asp-route-pageNumber="@(Model.PageIndex - 1)"
-                       class="page-item">
-                        <span>&laquo; @Localizer["Previous"]</span>
-                    </a>
-                }
-                @if (Model.HasNextPage)
-                {
-                    <a asp-action="GetProducts"
-                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                       asp-route-searchUser="@ViewData["SearchUser"]"
-                       asp-route-pageNumber="@(Model.PageIndex + 1)"
-                       class="page-item">
-                        <span>@Localizer["Next"] &raquo;</span>
-                    </a>
-                }
-            </div>
-        </div>
-    </div>
-</form>
+        </form>
+    }
+
+    else
+    {
+        <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="font-size: 20px; color:white"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
+    }
+}
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/js/products/productList.js" asp-append-version="true"></script>

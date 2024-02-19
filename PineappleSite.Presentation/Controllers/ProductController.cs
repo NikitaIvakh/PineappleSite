@@ -47,6 +47,11 @@ namespace PineappleSite.Presentation.Controllers
                     var filteredProducts = products.Data.AsQueryable();
                     var paginatedProducts = PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
 
+                    if (paginatedProducts.Count == 0)
+                    {
+                        return View();
+                    }
+
                     return View(paginatedProducts);
                 }
 
