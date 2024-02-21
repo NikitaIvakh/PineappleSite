@@ -2,7 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Products;
-using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Products;
 
 namespace PineappleSite.Presentation.Controllers
