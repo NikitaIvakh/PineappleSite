@@ -10,7 +10,6 @@ using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Orders;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
-using Microsoft.AspNetCore.Localization.Routing;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
