@@ -38,7 +38,7 @@ namespace Coupon.Infrastructure.DependencyInjection
             using var serviceProvider = score.CreateScope();
             var context = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-            if (!context.Database.GetPendingMigrations().Any())
+            if (context.Database.GetPendingMigrations().Any())
             {
                 context.Database.Migrate();
             }
