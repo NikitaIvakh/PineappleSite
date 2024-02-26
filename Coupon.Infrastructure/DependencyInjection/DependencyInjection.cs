@@ -12,10 +12,8 @@ namespace Coupon.Infrastructure.DependencyInjection
     {
         public static void ConfigureInfrastructureServive(this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = configuration.GetConnectionString("CouponConnectionString");
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseNpgsql(connectionString); });
-
             services.RepositoriesInit(configuration);
+            services.RegisterConnectionString(configuration);
             services.MigrationsInit();
         }
 
@@ -28,12 +26,22 @@ namespace Coupon.Infrastructure.DependencyInjection
             services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
         }
 
+        private static void RegisterConnectionString(this IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("CouponConnectionString");
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseNpgsql(connectionString); });
+        }
+
         private static void MigrationsInit(this IServiceCollection services)
         {
             var score = services.BuildServiceProvider();
             using var serviceProvider = score.CreateScope();
             var context = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            context.Database.Migrate();
+
+            if (!context.Database.GetPendingMigrations().Any())
+            {
+                context.Database.Migrate();
+            }
         }
     }
 }
