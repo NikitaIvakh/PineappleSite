@@ -6,9 +6,11 @@ using PineappleSite.Presentation.Services.Products;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class ProductController(IProductService productService) : Controller
+    public class ProductController(IProductService productService, IShoppingCartService shoppingCartService, IFavoriteService favoriteService) : Controller
     {
         private readonly IProductService _productService = productService;
+        private readonly IShoppingCartService _shoppingCartService = shoppingCartService;
+        private readonly IFavoriteService _favoriteService = favoriteService;
 
         // GET: ProductController
         public async Task<ActionResult> Index()
@@ -212,6 +214,8 @@ namespace PineappleSite.Presentation.Controllers
             try
             {
                 ProductResultViewModel response = await _productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
+                var removeCartDetails = await _shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
+                var removeFavouriteDetails = await _favoriteService.FavouruteRemoveProductsAsync(deleteProductViewModel.Id);
 
                 if (response.IsSuccess)
                 {

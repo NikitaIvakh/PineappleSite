@@ -36,8 +36,8 @@ namespace Product.Application.Features.Commands.Queries
                     _logger.Warning(ErrorMessage.ProductsNotFound, ErrorCodes.ProductsNotFound);
                     return new CollectionResult<ProductDto>
                     {
-                        ErrorMessage = ErrorMessage.ProductsNotFound,
-                        ErrorCode = (int)ErrorCodes.ProductsNotFound,
+                        Data = [],
+                        SuccessMessage = "Пока продуктов нет!"
                     };
                 }
 

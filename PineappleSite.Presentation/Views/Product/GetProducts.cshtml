@@ -86,10 +86,9 @@
                                             </a>
                                         </td>
                                         <td>
-                                            <form asp-action="Delete" asp-route-id="@item.Id" style="display:inline;"
-                                                  onsubmit="return confirm('@Localizer["Do you really want to delete this entry?"]')" method="post">
-                                                <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete product"]</button>
-                                            </form>
+                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                                <i class="bi bi-trash">Удалить</i>
+                                            </button>
                                         </td>
                                     </tr>
                                     itemCount++;
