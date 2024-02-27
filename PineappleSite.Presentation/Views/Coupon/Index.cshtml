@@ -54,6 +54,7 @@
                                 <th>@Localizer["Coupon Code"]</th>
                                 <th>@Localizer["Discount Amount"]</th>
                                 <th>@Localizer["Min Amount"]</th>
+                                <th>@Localizer["Details"]</th>
                                 <th>@Localizer["Delete"]</th>
                             </tr>
                         </thead>
@@ -73,9 +74,12 @@
                                         <td>@item.DiscountAmount</td>
                                         <td>@item.MinAmount</td>
                                         <td>
-                                            <a class="btn btn-sm btn-success" asp-action="Delete" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
+                                            <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">Детали</a>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                                <i class="bi bi-trash">Удалить</i>
+                                            </button>
                                         </td>
                                     </tr>
                                     itemCount++;

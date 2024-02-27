@@ -10,6 +10,7 @@ using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
@@ -81,7 +82,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                         await _repository.CreateAsync(coupon);
 
-                        var options = new Stripe.CouponCreateOptions
+                        var options = new CouponCreateOptions
                         {
                             Currency = "byn",
                             Id = coupon.CouponCode,
@@ -89,9 +90,26 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             AmountOff = (long)(coupon.DiscountAmount * 100),
                         };
 
-                        var service = new Stripe.CouponService();
-                        service?.Delete(coupon.CouponCode);
-                        service?.Create(options);
+                        CouponService? service = new();
+
+                        if (options.Id is not null)
+                        {
+                            try
+                            {
+                                var existingCoupon = service?.Get(coupon.CouponCode);
+
+                                if (existingCoupon is not null)
+                                {
+                                    service?.Delete(coupon.CouponCode);
+                                    service?.Create(options);
+                                }
+                            }
+
+                            catch (StripeException ex)
+                            {
+                                service?.Create(options);
+                            }
+                        }
 
                         return new Result<CouponDto>
                         {
