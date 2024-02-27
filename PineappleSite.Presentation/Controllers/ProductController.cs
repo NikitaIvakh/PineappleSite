@@ -214,8 +214,8 @@ namespace PineappleSite.Presentation.Controllers
             try
             {
                 ProductResultViewModel response = await _productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
-                var removeCartDetails = await _shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
-                var removeFavouriteDetails = await _favoriteService.FavouruteRemoveProductsAsync(deleteProductViewModel.Id);
+                await _shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
+                await _favoriteService.FavouruteRemoveProductsAsync(deleteProductViewModel.Id);
 
                 if (response.IsSuccess)
                 {
