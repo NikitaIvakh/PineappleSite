@@ -54,7 +54,6 @@
                                 <th>@Localizer["Coupon Code"]</th>
                                 <th>@Localizer["Discount Amount"]</th>
                                 <th>@Localizer["Min Amount"]</th>
-                                <th>@Localizer["Update"]</th>
                                 <th>@Localizer["Delete"]</th>
                             </tr>
                         </thead>
@@ -74,15 +73,9 @@
                                         <td>@item.DiscountAmount</td>
                                         <td>@item.MinAmount</td>
                                         <td>
-                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                            <a class="btn btn-sm btn-success" asp-action="Delete" asp-route-id="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
-                                        </td>
-                                        <td>
-                                            <form asp-action="Delete" asp-route-id="@item.CouponId" style="display:inline;"
-                                                  onsubmit="return confirm('@Localizer["Remove entities"]')" method="post">
-                                                <button type="submit" class="btn btn-sm btn-danger d-inline">@Localizer["Delete"]</button>
-                                            </form>
                                         </td>
                                     </tr>
                                     itemCount++;

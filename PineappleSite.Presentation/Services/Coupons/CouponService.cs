@@ -78,12 +78,12 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponDELETE2Async(DeleteCouponListDto body);
+        System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponDELETE2Async(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -613,15 +613,15 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponDELETE2Async(DeleteCouponListDto body)
+        public virtual System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body)
         {
-            return CouponDELETE2Async(body, System.Threading.CancellationToken.None);
+            return DeleteCouponListAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponDELETE2Async(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -641,6 +641,8 @@ namespace PineappleSite.Presentation.Services.Coupons
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("DeleteCouponList");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 

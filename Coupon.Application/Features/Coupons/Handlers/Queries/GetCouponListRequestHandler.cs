@@ -28,13 +28,13 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     MinAmount = key.MinAmount,
                 }).OrderBy(key => key.CouponId).ToListAsync(cancellationToken);
 
-                if (coupons.Count == 0)
+                if (coupons is null || coupons.Count == 0)
                 {
                     _logger.Warning(ErrorMessage.CouponsNotFound, coupons.Count);
                     return new CollectionResult<CouponDto>()
                     {
-                        ErrorMessage = ErrorMessage.CouponsNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponsNotFound,
+                        Data = [],
+                        SuccessMessage = "Никаких купонов нет"
                     };
                 }
 

@@ -48,7 +48,8 @@ namespace Order.Application.Features.Handlers.Commands
                             ProductData = new SessionLineItemPriceDataProductDataOptions
                             {
                                 Name = item.Product.Name,
-                            }
+                                Description = item.Product.Description,
+                            },
                         },
 
                         Quantity = item.Count,

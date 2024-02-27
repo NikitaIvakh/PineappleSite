@@ -173,6 +173,12 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
+        [HttpGet]
+        public async Task<ActionResult> Delete()
+        {
+            return View();
+        }
+
         // POST: CouponController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]

@@ -90,7 +90,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         };
 
                         var service = new Stripe.CouponService();
-                        service.Create(options);
+                        service?.Delete(coupon.CouponCode);
+                        service?.Create(options);
 
                         return new Result<CouponDto>
                         {

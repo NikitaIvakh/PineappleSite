@@ -109,8 +109,8 @@ namespace Coupon.API.Controllers
         }
 
         // DELETE api/<CouponController>/5
-        [HttpDelete]
-        public async Task<ActionResult<CollectionResult<CouponDto>>> Delete([FromBody] DeleteCouponListDto deleteCouponListDto)
+        [HttpDelete("DeleteCouponList")]
+        public async Task<ActionResult<CollectionResult<CouponDto>>> DeleteCouponList([FromBody] DeleteCouponListDto deleteCouponListDto)
         {
             var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });
 

@@ -262,7 +262,7 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 DeleteCouponListDto deleteCouponListDto = _mapper.Map<DeleteCouponListDto>(deleteCouponList);
-                CouponDtoCollectionResult apiResponse = await _couponClient.CouponDELETE2Async(deleteCouponListDto);
+                CouponDtoCollectionResult apiResponse = await _couponClient.DeleteCouponListAsync(deleteCouponListDto);
 
                 if (apiResponse.IsSuccess)
                 {
