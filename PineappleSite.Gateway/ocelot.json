@@ -240,6 +240,20 @@
 
     {
       //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/User/CreateUser",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/User/CreateUser",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
       "DownstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

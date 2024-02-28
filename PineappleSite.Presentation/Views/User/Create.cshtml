@@ -1,4 +1,7 @@
-﻿@model PineappleSite.Presentation.Models.Identities.RegisterRequestViewModel
+﻿@using PineappleSite.Presentation.Extecsions
+@using PineappleSite.Presentation.Services.Identities
+@using PineappleSite.Presentation.Utility
+@model PineappleSite.Presentation.Models.Users.CreateUserViewModel
 
 @{
     ViewData["Title"] = Localizer["Add user"];
@@ -67,6 +70,15 @@
                     </div>
                 </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size: 20px;">@Localizer["Role"]</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <select asp-for="Roles" asp-items="Html.GetEnumSelectList<StaticDetails.UserRoles>()" class="form-control"></select>
+                    <span asp-validation-for="Roles" class="text-danger"></span>
+                </div>
             </div>
             <div class="col-5 offset-1">
                 <a class="btn-primary btn form-control" asp-action="Index">@Localizer["Go back"]</a>

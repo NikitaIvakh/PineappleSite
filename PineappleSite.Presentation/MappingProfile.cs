@@ -50,12 +50,13 @@ namespace PineappleSite.Presentation
                 .ForPath(key => key.User.ImageUrl, opt => opt.MapFrom(key => key.User.ImageUrl))
                 .ForPath(key => key.User.ImageLocalPath, opt => opt.MapFrom(key => key.User.ImageLocalPath))
                 .ReverseMap();
-            CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
 
+            CreateMap<ApplicationUser, ApplicationUserViewModel>().ReverseMap();
             CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
             CreateMap<ApplicationUser, UpdateUserViewModel>().ReverseMap();
             CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
             CreateMap<DeleteUserListDto, DeleteUserListViewModel>().ReverseMap();
+            CreateMap<CreateUserDto, CreateUserViewModel>().ReverseMap();
 
             CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
             CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();

@@ -25,7 +25,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
                 }
-                
+
                 else
                 {
                     foreach (var error in users.ValidationErrors)
@@ -93,19 +93,19 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<RegisterResponseViewModel>> CreateUserAsync(RegisterRequestViewModel register)
+        public async Task<IdentityResult<UserWithRolesViewModel>> CreateUserAsync(CreateUserViewModel createUserViewModel)
         {
             AddBearerToken();
             try
             {
-                RegisterRequestDto registerRequestDto = _mapper.Map<RegisterRequestDto>(register);
-                RegisterResponseDtoResult apiResponse = await _identityClient.RegisterAsync(registerRequestDto);
+                CreateUserDto createUserDto = _mapper.Map<CreateUserDto>(createUserViewModel);
+                UserWithRolesDtoResult apiResponse = await _identityClient.CreateUserAsync(createUserDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new IdentityResult<RegisterResponseViewModel>
+                    return new IdentityResult<UserWithRolesViewModel>
                     {
-                        Data = _mapper.Map<RegisterResponseViewModel>(apiResponse),
+                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse.Data),
                         SuccessMessage = apiResponse.SuccessMessage,
                     };
                 }
@@ -114,7 +114,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<RegisterResponseViewModel>
+                        return new IdentityResult<UserWithRolesViewModel>
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -123,12 +123,12 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<RegisterResponseViewModel>();
+                return new IdentityResult<UserWithRolesViewModel>();
             }
 
             catch (IdentityExceptions exception)
             {
-                return new IdentityResult<RegisterResponseViewModel>
+                return new IdentityResult<UserWithRolesViewModel>
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,

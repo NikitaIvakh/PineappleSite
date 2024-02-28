@@ -101,11 +101,11 @@ namespace PineappleSite.Presentation.Controllers
         // POST: UserController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create(RegisterRequestViewModel registerRequest)
+        public async Task<ActionResult> Create(CreateUserViewModel createUserViewModel)
         {
             try
             {
-                IdentityResult<RegisterResponseViewModel> response = await _userService.CreateUserAsync(registerRequest);
+                IdentityResult<UserWithRolesViewModel> response = await _userService.CreateUserAsync(createUserViewModel);
 
                 if (response.IsSuccess)
                 {
