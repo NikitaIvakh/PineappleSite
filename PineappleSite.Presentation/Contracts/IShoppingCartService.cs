@@ -1,4 +1,5 @@
-﻿using PineappleSite.Presentation.Models.ShoppingCart;
+﻿using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation.Contracts
@@ -14,6 +15,8 @@ namespace PineappleSite.Presentation.Contracts
         Task<CartResult<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 
         Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int productId);
+
+        Task<CartResult<CartViewModel>> RemoveCartDetailsListAsync(DeleteProductsViewModel deleteProductListViewModel);
 
         Task<CartResult<bool>> RabbitMQShoppingCartAsync(CartViewModel cartViewModel);
     }

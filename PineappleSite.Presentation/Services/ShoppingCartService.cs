@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
@@ -223,6 +224,49 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                };
+            }
+        }
+
+        public async Task<CartResult<CartViewModel>> RemoveCartDetailsListAsync(DeleteProductsViewModel deleteProductListViewModel)
+        {
+            AddBearerToken();
+            try
+            {
+                DeleteProductList removeShoppingCartDetailsList = _mapper.Map<DeleteProductList>(deleteProductListViewModel);
+                CartDtoResult apiResponse = await _shoppingCartClient.RemoveDetailsListAsync(removeShoppingCartDetailsList);
+
+                if (apiResponse.IsSuccess)
+                {
+                    return new CartResult<CartViewModel>
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<CartViewModel>(apiResponse.Data),
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in apiResponse.ValidationErrors)
+                    {
+                        return new CartResult<CartViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new CartResult<CartViewModel>();
+            }
+
+            catch (ShoppingCartExceptions exceptions)
+            {
+                return new CartResult<CartViewModel>
+                {
+                    ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
                 };
             }
         }

@@ -10,13 +10,13 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class RemoveShoppingCartDetailsListRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<RemoveShoppingCartDetailsListRequest, CollectionResult<CartDetailsDto>>
+    public class RemoveShoppingCartDetailsListRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<RemoveShoppingCartDetailsListRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
 
-        public async Task<CollectionResult<CartDetailsDto>> Handle(RemoveShoppingCartDetailsListRequest request, CancellationToken cancellationToken)
+        public async Task<Result<CartHeaderDto>> Handle(RemoveShoppingCartDetailsListRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -25,9 +25,9 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                 if (cartDetails is null || cartDetails.Count == 0)
                 {
-                    return new CollectionResult<CartDetailsDto>
+                    return new Result<CartHeaderDto>
                     {
-                        Data = new List<CartDetailsDto>(),
+                        Data = new CartHeaderDto(),
                         ErrorCode = (int)ErrorCodes.DetailsNotFound,
                         ErrorMessage = ErrorMessages.DetailsNotFound,
                     };
@@ -48,18 +48,17 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                         }
                     }
 
-                    return new CollectionResult<CartDetailsDto>
+                    return new Result<CartHeaderDto>
                     {
-                        Count = cartDetails.Count,
                         SuccessMessage = "Продукты успешно удалены",
-                        Data = _mapper.Map<IReadOnlyCollection<CartDetailsDto>>(cartDetails),
+                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
                     };
                 }
             }
 
             catch (Exception exception)
             {
-                return new CollectionResult<CartDetailsDto>
+                return new Result<CartHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
