@@ -248,6 +248,7 @@ namespace PineappleSite.Presentation.Controllers
             var response = await _productService.DeleteProductsAsync(deleteProducts);
 
             await _shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
+            await _favoriteService.FavouruteRemoveProductsListAsync(deleteProducts);
 
             if (response.IsSuccess)
             {

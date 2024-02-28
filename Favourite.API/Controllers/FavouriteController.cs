@@ -63,5 +63,20 @@ namespace Favourite.API.Controllers
             _logger.LogError($"LogDebugError ================ Ошибка удаления избранного товара: {productId}");
             return BadRequest(command.ErrorMessage);
         }
+
+        [HttpDelete("DeleteProductList")]
+        public async Task<ActionResult<Result<FavouriteDto>>> DeleteProductList([FromBody] DeleteFavouriteProducts deleteFavouriteProducts)
+        {
+            var command = await _mediator.Send(new DeleteProductListRequest { DeleteFavourite = deleteFavouriteProducts });
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug($"LogDebug ================ Избранные товары успешно удалены: {deleteFavouriteProducts.ProductIds}");
+                return Ok(command);
+            }
+
+            _logger.LogError($"LogDebugError ================ Ошибка удаления избранных товаров: {deleteFavouriteProducts.ProductIds}");
+            return BadRequest(command.ErrorMessage);
+        }
     }
 }

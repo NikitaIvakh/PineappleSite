@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Favourites;
+using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Services.Favorites;
 
 namespace PineappleSite.Presentation.Services
@@ -138,6 +139,48 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                };
+            }
+        }
+
+        public async Task<FavouriteResult<FavouriteViewModel>> FavouruteRemoveProductsListAsync(DeleteProductsViewModel deleteProductsViewModel)
+        {
+            try
+            {
+                var favouriteDto = _mapper.Map<DeleteFavouriteProducts>(deleteProductsViewModel);
+                var apiResult = await _favoritesClient.DeleteProductListAsync(favouriteDto);
+
+                if (apiResult.IsSuccess)
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        SuccessMessage = apiResult.SuccessMessage,
+                        Data = _mapper.Map<FavouriteViewModel>(apiResult.Data),
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in apiResult.ValidationErrors)
+                    {
+                        return new FavouriteResult<FavouriteViewModel>
+                        {
+                            ValidationErrors = error,
+                            ErrorCode = apiResult.ErrorCode,
+                            ErrorMessage = apiResult.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new FavouriteResult<FavouriteViewModel>();
+            }
+
+            catch (FavoritesExceptions exceptions)
+            {
+                return new FavouriteResult<FavouriteViewModel>
+                {
+                    ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
                 };
             }
         }

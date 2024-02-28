@@ -93,6 +93,8 @@ namespace PineappleSite.Presentation
             CreateMap<FavouriteDto, FavouriteViewModel>().ReverseMap();
             CreateMap<FavouriteHeaderDto, FavouriteHeaderViewModel>().ReverseMap();
             CreateMap<FavouriteDetailsDto, FavouriteDetailsViewModel>().ReverseMap();
+            CreateMap<Services.Favorites.DeleteFavouriteProducts, DeleteFavouriteProductsViewModel>().ReverseMap();
+            CreateMap<DeleteProductsViewModel, DeleteFavouriteProducts>().ReverseMap();
 
             CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
             CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();

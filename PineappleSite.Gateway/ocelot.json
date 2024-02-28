@@ -53,7 +53,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
@@ -67,7 +67,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "PUT" ],
+      "UpstreamHttpMethod": [ "PUT" ]
     },
 
     {
@@ -81,7 +81,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ],
+      "UpstreamHttpMethod": [ "DELETE" ]
     },
 
     {
@@ -95,7 +95,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon",
-      "UpstreamHttpMethod": [ "DELETE" ],
+      "UpstreamHttpMethod": [ "DELETE" ]
     },
 
     {
@@ -123,7 +123,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
-      "UpstreamHttpMethod": [ "POST" ],
+      "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
@@ -137,7 +137,21 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/{productId}",
-      "UpstreamHttpMethod": [ "DELETE" ],
+      "UpstreamHttpMethod": [ "DELETE" ]
+    },
+
+    {
+      //"Favourite.API": "https://localhost:7247"
+      "DownstreamPathTemplate": "/api/Favourite/DeleteProductList",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7247
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Favourite/DeleteProductList",
+      "UpstreamHttpMethod": [ "DELETE" ]
     },
 
     {

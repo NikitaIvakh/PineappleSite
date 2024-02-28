@@ -135,10 +135,10 @@
   <data name="Quantity" xml:space="preserve">
     <value>Количество</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>Воспользуйтесь поиском, чтобы найти всё, что нужно...</value>
-  </data>
   <data name="There are no favourite products." xml:space="preserve">
     <value>Избранных товаров нет.</value>
+  </data>
+  <data name="Use the search to find everything you need..." xml:space="preserve">
+    <value>Воспользуйтесь поиском, чтобы найти всё, что нужно...</value>
   </data>
 </root>
