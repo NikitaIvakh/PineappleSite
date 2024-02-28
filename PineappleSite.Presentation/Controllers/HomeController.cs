@@ -97,7 +97,41 @@ namespace PineappleSite.Presentation.Controllers
                         ImageLocalPath = product.Data.ImageLocalPath,
                     };
 
-                    return View(productViewModel);
+                    string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                    FavouriteResult<FavouriteViewModel> result = await _favoriteService.GetFavouruteProductsAsync(userId);
+
+                    if (result is null || result.Data.FavouriteDetails.Count == 0 || result.Data.FavouriteDetails.FirstOrDefault().ProductId != product.Data.Id)
+                    {
+                        var favouriteProduct1 = new ProductFavouriteViewModel
+                        {
+                            Product = productViewModel,
+                            Favourite = new FavouriteViewModel(),
+                        };
+
+                        return View(favouriteProduct1);
+                    }
+
+                    else
+                    {
+                        FavouriteViewModel favouriteViewModel = new()
+                        {
+                            FavouriteHeader = new FavouriteHeaderViewModel
+                            {
+                                FavouriteHeaderId = result.Data.FavouriteHeader.FavouriteHeaderId,
+                                UserId = userId,
+                            },
+
+                            FavouriteDetails = result.Data.FavouriteDetails,
+                        };
+
+                        var favouriteProduct = new ProductFavouriteViewModel
+                        {
+                            Product = productViewModel,
+                            Favourite = favouriteViewModel,
+                        };
+
+                        return View(favouriteProduct);
+                    }
                 }
 
                 else
@@ -116,7 +150,7 @@ namespace PineappleSite.Presentation.Controllers
 
         [HttpPost]
         [ActionName("AddToCart")]
-        public async Task<IActionResult> AddToCart(ProductViewModel productViewModel)
+        public async Task<IActionResult> AddToCart(ProductFavouriteViewModel productViewModel)
         {
             CartViewModel cartViewModel = new()
             {
@@ -128,8 +162,8 @@ namespace PineappleSite.Presentation.Controllers
 
             CartDetailsViewModel cartDetailsViewModel = new()
             {
-                Count = productViewModel.Count,
-                ProductId = productViewModel.Id,
+                Count = productViewModel.Product.Count,
+                ProductId = productViewModel.Product.Id,
             };
 
             List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
@@ -153,7 +187,7 @@ namespace PineappleSite.Presentation.Controllers
 
         [HttpPost]
         [ActionName("AddToFavorites")]
-        public async Task<IActionResult> AddToFavorites(ProductViewModel productViewModel)
+        public async Task<IActionResult> AddToFavorites(ProductFavouriteViewModel productViewModel)
         {
             FavouriteViewModel favouritesViewModel = new()
             {
@@ -165,7 +199,7 @@ namespace PineappleSite.Presentation.Controllers
 
             FavouriteDetailsViewModel favoriteDetailsViewModel = new()
             {
-                ProductId = productViewModel.Id,
+                ProductId = productViewModel.Product.Id,
             };
 
             List<FavouriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];

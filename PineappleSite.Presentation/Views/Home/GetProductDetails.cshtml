@@ -1,38 +1,39 @@
 ﻿@using PineappleSite.Presentation.Extecsions
-@model PineappleSite.Presentation.Models.Products.ProductViewModel
+@using PineappleSite.Presentation.Models.Favourites
+@model PineappleSite.Presentation.Models.ProductFavouriteViewModel
 
 @{
     ViewData["Title"] = @Localizer["Home Page"];
-    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true" />
 }
 
 <form method="post" action="/GetProductDetails">
-    <input asp-for="Id" hidden />
+    <input asp-for="Product.Id" hidden />
 
     <div class="pt-4">
         <div class="card container" style="border:1px solid #808080;">
             <div class="card-header bg-dark text-light row" style="border-radius: 0px;">
                 <div class="col-12 col-md-6">
-                    <h1 class="text-white">@Model.Name</h1>
+                    <h1 class="text-white">@Model.Product.Name</h1>
                 </div>
                 <div class="col-12 col-md-6 text-end">
-                    <h1 class="text-warning">@Model.Price Byn</h1>
+                    <h1 class="text-warning">@Model.Product.Price Byn</h1>
                 </div>
             </div>
             <div class="card-body">
                 <div class="container rounded p-2">
                     <div class="row">
                         <div class="col-12 col-lg-4 p-1 text-center">
-                            <img src="@Model.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" />
+                            <img src="@Model.Product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" />
                         </div>
                         <div class="col-12 col-lg-8">
                             <div class="row pl-3">
                                 <div class="col-12">
-                                    <span class="badge bg-success text-white p-3 border">@Model.ProductCategory.GetDisplayName()</span>
-                                    <p class="text-secondary">Описание: @Html.Raw(Model.Description)</p>
+                                    <span class="badge bg-success text-white p-3 border">@Model.Product.ProductCategory.GetDisplayName()</span>
+                                    <p class="text-secondary">Описание: @Html.Raw(Model.Product.Description)</p>
                                     <div class="row mx-0">
-                                        <input class="form-control" asp-for="Count" />
-                                        <span class="text-danger" asp-validation-for="Count"></span>
+                                        <input class="form-control" asp-for="Product.Count" />
+                                        <span class="text-danger" asp-validation-for="Product.Count"></span>
                                     </div>
                                 </div>
                             </div>
@@ -46,13 +47,23 @@
                 </div>
                 <div class="col-12 col-md-6 text-end">
                     <div class="d-flex justify-content-end">
-                        <button asp-action="AddToCart" asp-controller="Home" type="submit" class="btn btn-primary form-control btn-lg me-2" style="height:50px;">@Localizer["AddToCart"]</button>
-                        <button asp-action="AddToFavorites" asp-controller="Home" type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
+                        <button asp-action="AddToCart" asp-controller="Home" value="@Model.Product.Id type="submit" class="btn btn-primary form-control btn-lg me-2" style="height:50px;">@Localizer["AddToCart"]</button>
+                        @{
+                            if (Model.Favourite != null && Model.Favourite.FavouriteDetails != null && Model.Favourite.FavouriteDetails.Any(fd => fd.ProductId == Model.Product.Id))
+                            {
+
+                                <button hidden asp-action="AddToFavorites" asp-controller="Home" value="@Model.Product.Id type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
+                            }
+
+                            else
+                            {
+                                <button asp-action="AddToFavorites" asp-controller="Home" value="@Model.Product.Id type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
+                            }
+                        }
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </form>
 
 @section Scripts {
