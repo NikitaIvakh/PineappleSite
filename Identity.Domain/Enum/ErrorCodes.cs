@@ -8,6 +8,8 @@
         UserCanNotDeleted = 407,
         UpdateProdileError = 408,
         UserUpdateError = 409,
+        UserCanNotBeCreated = 410,
+        EmailAddressAlreadyExists = 411,
         InternalServerError = 500,
         AccountLoginError = 501,
         ErrorLoggingOutOfTheAccount = 502,

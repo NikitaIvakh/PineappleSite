@@ -48,6 +48,21 @@ namespace Identity.API.Controllers
             return BadRequest(command.ErrorMessage);
         }
 
+        [HttpPost("CreateUser")]
+        public async Task<ActionResult<Result<UserWithRolesDto>>> CreateUser([FromBody] CreateUserDto createUserDto)
+        {
+            var command = await _mediator.Send(new CreateUserRequest { CreateUser = createUserDto });
+
+            if (command.IsSuccess)
+            {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Пользователь успешно создан: {createUserDto.UserName}");
+                return Ok(command);
+            }
+
+            _userWithRolesLogger.LogError($"LogDebugError ================ Удалить пользователея не удалось: {createUserDto.UserName}");
+            return BadRequest(command.ValidationErrors);
+        }
+
         // PUT api/<UserController>/5
         [HttpPut("{id}")]
         public async Task<ActionResult<Result<RegisterResponseDto>>> Put([FromBody] UpdateUserDto updateUser)

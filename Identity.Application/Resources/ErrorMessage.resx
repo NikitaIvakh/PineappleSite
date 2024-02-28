@@ -120,6 +120,9 @@
   <data name="AccountLoginError" xml:space="preserve">
     <value>Неправильно введен логин или пароль</value>
   </data>
+  <data name="EmailAddressAlreadyExists" xml:space="preserve">
+    <value>Такой почтовый адрес уже существует</value>
+  </data>
   <data name="EmailAddressError" xml:space="preserve">
     <value>Почтовый адрес введен неверно</value>
   </data>
@@ -155,6 +158,9 @@
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
     <value>Такой пользователь уже существует</value>
+  </data>
+  <data name="UserCanNotBeCreated" xml:space="preserve">
+    <value>Пользовтаель не может быть создан</value>
   </data>
   <data name="UserCanNotDeleted" xml:space="preserve">
     <value>Пользователь не может быть удален</value>

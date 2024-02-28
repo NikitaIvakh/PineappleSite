@@ -70,6 +70,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Такой почтовый адрес уже существует.
+        /// </summary>
+        internal static string EmailAddressAlreadyExists {
+            get {
+                return ResourceManager.GetString("EmailAddressAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Почтовый адрес введен неверно.
         /// </summary>
         internal static string EmailAddressError {
@@ -174,6 +183,15 @@ namespace Identity.Application.Resources {
         internal static string UserAlreadyExists {
             get {
                 return ResourceManager.GetString("UserAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пользовтаель не может быть создан.
+        /// </summary>
+        internal static string UserCanNotBeCreated {
+            get {
+                return ResourceManager.GetString("UserCanNotBeCreated", resourceCulture);
             }
         }
         
