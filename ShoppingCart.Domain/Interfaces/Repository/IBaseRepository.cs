@@ -9,5 +9,7 @@
         Task<TEntity> UpdateAsync(TEntity entity);
 
         Task DeleteAsync(TEntity entity);
+
+        Task DeleteListAsync(List<TEntity> entities);
     }
 }

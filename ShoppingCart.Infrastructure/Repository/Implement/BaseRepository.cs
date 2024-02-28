@@ -50,5 +50,18 @@ namespace ShoppingCart.Infrastructure.Repository.Implement
 
             throw new ArgumentNullException(nameof(entity), "Объект пустой");
         }
+
+        public Task DeleteListAsync(List<TEntity> entities)
+        {
+            if (entities is not null)
+            {
+                _context.RemoveRange(entities);
+                _context.SaveChanges();
+
+                return Task.FromResult(entities);
+            }
+
+            throw new ArgumentNullException(nameof(entities), "Объект пустой");
+        }
     }
 }

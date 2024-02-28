@@ -92,6 +92,21 @@ namespace ShoppingCart.API.Controllers
             return BadRequest(command.ErrorMessage);
         }
 
+        [HttpDelete("RemoveDetailsList")]
+        public async Task<ActionResult<CollectionResult<CartDetailsDto>>> RemoveDetailsList([FromBody] DeleteProductList deleteProductList)
+        {
+            var command = await _mediator.Send(new RemoveShoppingCartDetailsListRequest { DeleteProduct = deleteProductList });
+
+            if (command.IsSuccess)
+            {
+                _logger.LogDebug($"LogDebug ================ Продукты из корзины успешно удалены: {deleteProductList.ProductIds}");
+                return Ok(command);
+            }
+
+            _logger.LogError($"LogDebugError ================ Ошибка удаления продуктов из корзины: {deleteProductList.ProductIds}");
+            return BadRequest(command.ErrorMessage);
+        }
+
         [HttpPost("RabbitMQShoppingCartRequest")]
         public async Task<ActionResult<Result<bool>>> RabbitMQShoppingCartRequest([FromBody] CartDto cartDto)
         {
