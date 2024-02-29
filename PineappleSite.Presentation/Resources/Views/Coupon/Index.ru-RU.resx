@@ -135,6 +135,9 @@
   <data name="DeleteAllButton" xml:space="preserve">
     <value>Удалить выбранные</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Детали</value>
+  </data>
   <data name="Discount Amount" xml:space="preserve">
     <value>Сумма скидки</value>
   </data>
