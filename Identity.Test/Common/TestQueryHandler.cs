@@ -39,8 +39,7 @@ namespace Identity.Test.Common
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
 
-            var memoryCache = new Mock<IMemoryCache>();
-            MemoryCache = memoryCache.Object;
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

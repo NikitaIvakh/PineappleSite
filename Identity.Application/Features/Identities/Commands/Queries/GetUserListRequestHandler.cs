@@ -77,12 +77,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                     }
                 }
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                    .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                    .SetPriority(CacheItemPriority.Normal);
-
-                _memoryCache.Set(cacheKey, usersWithRoles, cacheEntryOptions);
+                _memoryCache.Set(cacheKey, usersWithRoles);
 
                 return new CollectionResult<UserWithRolesDto>
                 {

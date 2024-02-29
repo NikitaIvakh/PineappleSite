@@ -54,12 +54,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                         Roles = roles.ToList()
                     };
 
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                        .SetPriority(CacheItemPriority.Normal);
-
-                    _memoryCache.Set(cacheKey, userWithRoles, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, userWithRoles);
 
                     return new Result<UserWithRolesDto>
                     {
