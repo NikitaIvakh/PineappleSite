@@ -27,6 +27,7 @@ builder.Host.UseSerilog((context, logConfig) =>
 });
 
 builder.Services.AddSwagger();
+builder.Services.AddMemoryCache();
 
 builder.Services.AddCors(key =>
 {

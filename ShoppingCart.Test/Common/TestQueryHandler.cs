@@ -10,6 +10,7 @@ using ShoppingCart.Domain.Results;
 using ShoppingCart.Infrastructure.Repository.Implement;
 using ShoppingCart.Infrastructure.Repository.Services;
 using Xunit;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace ShoppingCart.Test.Common
 {
@@ -23,6 +24,7 @@ namespace ShoppingCart.Test.Common
         protected IBaseRepository<CartDetails> CartDetails;
         protected IProductService ProductService;
         protected ICouponService CouponService;
+        protected IMemoryCache MemoryCache;
 
         public TestQueryHandler()
         {
@@ -51,6 +53,9 @@ namespace ShoppingCart.Test.Common
             CartDetails = new BaseRepository<CartDetails>(Context);
             ProductService = productMock.Object;
             CouponService = couponMock.Object;
+
+            var memoryCache = new Mock<IMemoryCache>();
+            MemoryCache = memoryCache.Object;
 
             var mapperComfiguration = new MapperConfiguration(config =>
             {

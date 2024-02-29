@@ -13,7 +13,7 @@ namespace ShoppingCart.Test.Queries
         public async Task GetShoppingCartRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetShoppingCartRequestHandler(CartHeader, CartDetails, ProductService, CouponService, Mapper);
+            var handler = new GetShoppingCartRequestHandler(CartHeader, CartDetails, ProductService, CouponService, Mapper, MemoryCache);
             var userId = "TestuserId23";
 
             // Act
@@ -32,7 +32,7 @@ namespace ShoppingCart.Test.Queries
         public async Task GetShoppingCartRequestHandlerTest_NewUserId()
         {
             // Arrange
-            var handler = new GetShoppingCartRequestHandler(CartHeader, CartDetails, ProductService, CouponService, Mapper);
+            var handler = new GetShoppingCartRequestHandler(CartHeader, CartDetails, ProductService, CouponService, Mapper, MemoryCache);
             var userId = "newuserid";
 
             // Act
