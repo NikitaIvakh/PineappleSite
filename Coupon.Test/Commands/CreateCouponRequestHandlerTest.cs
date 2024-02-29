@@ -3,43 +3,47 @@ using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Domain.DTOs;
 using Coupon.Test.Common;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Shouldly;
+using Stripe;
 using Xunit;
 
 namespace Coupon.Test.Commands
 {
     public class CreateCouponRequestHandlerTest : TestCommandHandler
     {
-        //[Fact]
-        //public async Task CreareCouponRequestHandlerTest_Success()
-        //{
-        //    // Arrange
-        //    var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
-        //    var createCoupon = new CreateCouponDto
-        //    {
-        //        CouponCode = "Test 123".Replace(" ", ""),
-        //        DiscountAmount = 45,
-        //        MinAmount = 67,
-        //    };
+        [Fact]
+        public async Task CreareCouponRequestHandlerTest_Success()
+        {
+            // Arrange
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var createCoupon = new CreateCouponDto
+            {
+                CouponCode = "Test 123",
+                DiscountAmount = 45,
+                MinAmount = 67,
+            };
 
-        //    // Act
-        //    var result = await handler.Handle(new CreateCouponRequest
-        //    {
-        //        CreateCoupon = createCoupon,
-        //    }, CancellationToken.None);
+            StripeConfiguration.ApiKey = "sk_test_51O90F4D1JYWWRL6F1K5vbfmQJeQuN8YRrNQYhq1I3l6OHyRqe6kzhS6wYYelu1YXtjftts7Ela0WDdmIafeGRS6n00AL3kb8tV";
 
-        //    // Assert
-        //    result.Should().ShouldNotBeNull();
-        //    result.IsSuccess.Should().BeTrue();
-        //    result.SuccessMessage.Should().Be("Купон успешно создан");
-        //    result.ValidationErrors.Should().BeNull();
+            // Act
+            var result = await handler.Handle(new CreateCouponRequest
+            {
+                CreateCoupon = createCoupon,
+            }, CancellationToken.None);
+
+            // Assert
+            result.Should().ShouldNotBeNull();
+            result.IsSuccess.Should().BeTrue();
+            result.SuccessMessage.Should().Be("Купон успешно создан");
+            result.ValidationErrors.Should().BeNull();
 
 
-        //    var createCouponDto = await Context.Coupons.AsNoTracking().FirstOrDefaultAsync(key => key.CouponId == result.Data.CouponId);
-        //    createCoupon.CouponCode.Should().Be("Test 123");
-        //    createCoupon.DiscountAmount.Should().Be(45);
-        //    createCoupon.MinAmount.Should().Be(67);
-        //}
+            var createCouponDto = await Context.Coupons.AsNoTracking().FirstOrDefaultAsync(key => key.CouponId == result.Data.CouponId);
+            createCoupon.CouponCode.Should().Be("Test 123");
+            createCoupon.DiscountAmount.Should().Be(45);
+            createCoupon.MinAmount.Should().Be(67);
+        }
 
         [Fact]
         public async Task CreateCouponRequestHandlerTest_MinAmount_Error()
