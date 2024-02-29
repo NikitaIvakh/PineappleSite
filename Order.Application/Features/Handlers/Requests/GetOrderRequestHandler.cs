@@ -48,12 +48,7 @@ namespace Order.Application.Features.Handlers.Requests
 
                     else
                     {
-                        var cacheEntryOptions = new MemoryCacheEntryOptions()
-                            .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                            .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                            .SetPriority(CacheItemPriority.Normal);
-
-                        _memoryCache.Set(cacheKey, orderHeader, cacheEntryOptions);
+                        _memoryCache.Set(cacheKey, orderHeader);
 
                         return new Result<OrderHeaderDto>
                         {
