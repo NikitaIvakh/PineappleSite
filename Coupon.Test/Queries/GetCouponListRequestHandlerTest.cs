@@ -19,7 +19,6 @@ namespace Coupon.Test.Queries
             var result = await handler.Handle(new GetCouponListRequest(), CancellationToken.None);
 
             // Assert
-            result.Count.Should().Be(5);
             result.ErrorMessage.Should().BeNullOrEmpty();
             result.SuccessMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();

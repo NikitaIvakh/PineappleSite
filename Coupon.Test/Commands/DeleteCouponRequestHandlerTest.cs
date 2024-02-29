@@ -17,7 +17,7 @@ namespace Coupon.Test.Commands
             var handler = new DeleteCouponRequestHandler(Repository, DeleteLogger, Mapper, DeleteValidator);
             var deleteCoupon = new DeleteCouponDto
             {
-                Id = 1,
+                Id = 3,
             };
 
             // Act
