@@ -43,12 +43,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount = key.MinAmount,
                     }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
 
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                        .SetPriority(CacheItemPriority.Normal);
-
-                    _memoryCache.Set(cacheKey, coupon, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, coupon);
 
                     if (coupon is null)
                     {

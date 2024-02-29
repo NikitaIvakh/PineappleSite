@@ -32,20 +32,18 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     };
                 }
 
-                coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                else
                 {
-                    CouponId = key.CouponId,
-                    CouponCode = key.CouponCode,
-                    DiscountAmount = key.DiscountAmount,
-                    MinAmount = key.MinAmount,
-                }).FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
+                    coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                    {
+                        CouponId = key.CouponId,
+                        CouponCode = key.CouponCode,
+                        DiscountAmount = key.DiscountAmount,
+                        MinAmount = key.MinAmount,
+                    }).FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
 
-                var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                        .SetPriority(CacheItemPriority.Normal);
-
-                _memoryCache.Set(cacheKey, coupon, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, coupon);
+                }
 
                 if (coupon is null)
                 {

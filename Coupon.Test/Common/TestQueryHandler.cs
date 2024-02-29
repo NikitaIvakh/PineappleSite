@@ -31,8 +31,7 @@ namespace Coupon.Test.Common
             GetListLogger = Log.ForContext<GetCouponListRequestHandler>();
             Repository = new BaseRepository<CouponEntity>(Context);
 
-            var memoryCache = new Mock<IMemoryCache>();
-            MemoryCache = memoryCache.Object;
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {

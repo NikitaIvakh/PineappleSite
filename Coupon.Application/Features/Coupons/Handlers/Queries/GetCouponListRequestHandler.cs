@@ -25,7 +25,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
             try
             {
 
-                if (_memoryCache.TryGetValue(cacheKey, out IReadOnlyCollection<CouponDto> coupons))
+                if (_memoryCache.TryGetValue(cacheKey, out IReadOnlyCollection<CouponDto>? coupons))
                 {
                     return new CollectionResult<CouponDto>
                     {
@@ -44,12 +44,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount = key.MinAmount,
                     }).OrderBy(key => key.CouponId).ToListAsync(cancellationToken);
 
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                        .SetPriority(CacheItemPriority.Normal);
-
-                    _memoryCache.Set(cacheKey, coupons, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, coupons);
 
                     if (coupons is null || coupons.Count == 0)
                     {
