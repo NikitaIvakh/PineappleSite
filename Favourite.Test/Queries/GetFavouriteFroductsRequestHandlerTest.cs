@@ -13,7 +13,7 @@ namespace Favourite.Test.Queries
         public async Task GetFavouriteFroductsRequestHandlerTest_Success()
         {
             //Arrange
-            var handler = new GetFavouriteFroductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, Mapper);
+            var handler = new GetFavouriteFroductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, Mapper, MemoryCache);
             var userid = "bestuserid1";
 
             // Act
@@ -32,7 +32,7 @@ namespace Favourite.Test.Queries
         public async Task GetFavouriteFroductsRequestHandlerTest_NewUserId()
         {
             //Arrange
-            var handler = new GetFavouriteFroductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, Mapper);
+            var handler = new GetFavouriteFroductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, Mapper, MemoryCache);
             var userid = "bestuserid12";
 
             // Act

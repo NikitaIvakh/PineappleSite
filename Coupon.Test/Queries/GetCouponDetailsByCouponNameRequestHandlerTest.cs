@@ -13,7 +13,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponDetailsByCouponNameRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger);
+            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger, MemoryCache);
             var couponCode = "10OFF";
 
             // Act
@@ -32,7 +32,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponDetailsByCouponNameRequestHandlerTest_FailOrWrongCouponCode()
         {
             // Arrange
-            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger);
+            var handler = new GetCouponDetailsByCouponNameRequestHandler(Repository, GetByCodeLogger, MemoryCache);
             var couponCode = "101OFF";
 
             // Act

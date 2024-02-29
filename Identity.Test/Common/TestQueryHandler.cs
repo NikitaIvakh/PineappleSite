@@ -3,8 +3,10 @@ using Identity.Application.Features.Identities.Commands.Queries;
 using Identity.Application.Profiles;
 using Identity.Domain.Entities.Users;
 using Identity.Infrastructure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using Moq;
 using Serilog;
@@ -18,6 +20,7 @@ namespace Identity.Test.Common
         protected IMapper Mapper;
         protected ILogger GetUsersLogger;
         protected ILogger GetUserLogger;
+        protected IMemoryCache MemoryCache;
         protected UserManager<ApplicationUser> UserManager;
 
         public TestQueryHandler()
@@ -35,6 +38,9 @@ namespace Identity.Test.Common
                 Mock.Of<IdentityErrorDescriber>(),
                 Mock.Of<IServiceProvider>(),
                 Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
+
+            var memoryCache = new Mock<IMemoryCache>();
+            MemoryCache = memoryCache.Object;
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

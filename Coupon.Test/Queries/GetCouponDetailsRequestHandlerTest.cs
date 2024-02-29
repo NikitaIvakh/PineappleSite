@@ -14,7 +14,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponDetailsRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetCouponDetailsRequestHandler(Repository, GetLogger);
+            var handler = new GetCouponDetailsRequestHandler(Repository, GetLogger, MemoryCache);
             int couponId = 5;
 
             // Act
@@ -39,7 +39,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponDetailsRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new GetCouponDetailsRequestHandler(Repository, GetLogger);
+            var handler = new GetCouponDetailsRequestHandler(Repository, GetLogger, MemoryCache);
             var couponId = 999;
 
             // Act

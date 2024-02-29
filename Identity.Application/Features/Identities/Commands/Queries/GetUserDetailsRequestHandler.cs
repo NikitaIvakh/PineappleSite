@@ -8,21 +8,33 @@ using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
-    public class GetUserDetailsRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMapper mapper) : IRequestHandler<GetUserDetailsRequest, Result<UserWithRolesDto>>
+    public class GetUserDetailsRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<GetUserDetailsRequest, Result<UserWithRolesDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<GetUserDetailsRequestHandler>();
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheGetUserKey";
 
         public async Task<Result<UserWithRolesDto>> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var user = await _userManager.Users.FirstOrDefaultAsync(key => key.Id == request.Id, cancellationToken);
+                if (_memoryCache.TryGetValue(cacheKey, out UserWithRoles? userWithRoles))
+                {
+                    return new Result<UserWithRolesDto>
+                    {
+                        Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
+                    };
+                }
+
+                var user = await _userManager.FindByIdAsync(request.Id);
 
                 if (user is null)
                 {
@@ -36,7 +48,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                 else
                 {
                     var roles = await _userManager.GetRolesAsync(user);
-                    var userWithRolesDto = new UserWithRoles
+                    userWithRoles = new UserWithRoles
                     {
                         User = user,
                         Roles = roles.ToList()
@@ -44,8 +56,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
 
                     return new Result<UserWithRolesDto>
                     {
-                        Data = _mapper.Map<UserWithRolesDto>(userWithRolesDto),
-
+                        Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
                     };
                 }
             }

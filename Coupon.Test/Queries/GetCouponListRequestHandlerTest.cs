@@ -13,7 +13,7 @@ namespace Coupon.Test.Queries
         public async Task GetCouponListRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetCouponListRequestHandler(Repository, GetListLogger);
+            var handler = new GetCouponListRequestHandler(Repository, GetListLogger, MemoryCache);
 
             // Act
             var result = await handler.Handle(new GetCouponListRequest(), CancellationToken.None);

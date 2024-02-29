@@ -9,6 +9,7 @@ using Favourite.Infrastructure;
 using Moq;
 using Xunit;
 using Favourite.Application.Mapping;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Favourite.Test.Common
 {
@@ -16,6 +17,7 @@ namespace Favourite.Test.Common
     {
         protected ApplicationDbContext Context;
         protected IMapper Mapper;
+        protected IMemoryCache MemoryCache;
 
         protected IBaseRepositiry<FavouriteHeader> FavouriteHeader;
         protected IBaseRepositiry<FavouriteDetails> FavouriteDetails;
@@ -39,6 +41,9 @@ namespace Favourite.Test.Common
             FavouriteHeader = new BaseRepository<FavouriteHeader>(Context);
             FavouriteDetails = new BaseRepository<FavouriteDetails>(Context);
             ProductService = productMock.Object;
+
+            var memoryCache = new Mock<IMemoryCache>();
+            MemoryCache = memoryCache.Object;
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

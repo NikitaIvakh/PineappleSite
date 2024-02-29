@@ -8,6 +8,8 @@ using Serilog;
 using Coupon.Application.Features.Coupons.Handlers.Commands;
 using Coupon.Infrastructure.Repository;
 using Coupon.Application.Features.Coupons.Handlers.Queries;
+using Microsoft.Extensions.Caching.Memory;
+using Moq;
 
 namespace Coupon.Test.Common
 {
@@ -19,6 +21,7 @@ namespace Coupon.Test.Common
         protected ILogger GetLogger;
         protected ILogger GetListLogger;
         protected IMapper Mapper;
+        protected IMemoryCache MemoryCache;
 
         public TestQueryHandler()
         {
@@ -27,6 +30,9 @@ namespace Coupon.Test.Common
             GetLogger = Log.ForContext<GetCouponDetailsRequestHandler>();
             GetListLogger = Log.ForContext<GetCouponListRequestHandler>();
             Repository = new BaseRepository<CouponEntity>(Context);
+
+            var memoryCache = new Mock<IMemoryCache>();
+            MemoryCache = memoryCache.Object;
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
