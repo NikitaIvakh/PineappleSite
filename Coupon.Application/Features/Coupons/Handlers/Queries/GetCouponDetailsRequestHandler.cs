@@ -7,43 +7,58 @@ using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponDetailsRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger) : IRequestHandler<GetCouponDetailsRequest, Result<CouponDto>>
+    public class GetCouponDetailsRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<GetCouponDetailsRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<GetCouponDetailsRequestHandler>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "couponCacheKey";
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var coupon = await _repository.GetAllAsync().Select(key => new CouponDto
-                {
-                    CouponId = key.CouponId,
-                    CouponCode = key.CouponCode,
-                    DiscountAmount = key.DiscountAmount,
-                    MinAmount = key.MinAmount,
-                }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
-
-                if (coupon is null)
-                {
-                    _logger.Warning($"Купон с {request.Id} не найден");
-                    return new Result<CouponDto>
-                    {
-                        ErrorMessage = ErrorMessage.CouponNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponNotFound,
-                    };
-                }
-
-                else
+                if (_memoryCache.TryGetValue(cacheKey, out CouponDto? coupon))
                 {
                     return new Result<CouponDto>
                     {
                         Data = coupon,
                     };
+                }
+
+                else
+                {
+                    coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                    {
+                        CouponId = key.CouponId,
+                        CouponCode = key.CouponCode,
+                        DiscountAmount = key.DiscountAmount,
+                        MinAmount = key.MinAmount,
+                    }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
+
+                    if (coupon is null)
+                    {
+                        _logger.Warning($"Купон с {request.Id} не найден");
+                        return new Result<CouponDto>
+                        {
+                            ErrorMessage = ErrorMessage.CouponNotFound,
+                            ErrorCode = (int)ErrorCodes.CouponNotFound,
+                        };
+                    }
+
+                    else
+                    {
+                        return new Result<CouponDto>
+                        {
+                            Data = coupon,
+                        };
+                    }
                 }
             }
 
