@@ -13,7 +13,7 @@ namespace Product.Test.Queries
         public async Task GetProductDetailsRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetProductDetailsRequestHandler(Repository, Logger, Mapper);
+            var handler = new GetProductDetailsRequestHandler(Repository, Logger, MemoryCache);
             var producId = 4;
 
             // Act
@@ -33,7 +33,7 @@ namespace Product.Test.Queries
         public async Task GetProductDetailsRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new GetProductDetailsRequestHandler(Repository, Logger, Mapper);
+            var handler = new GetProductDetailsRequestHandler(Repository, Logger, MemoryCache);
             var productId = 999;
 
             // Act && Assert

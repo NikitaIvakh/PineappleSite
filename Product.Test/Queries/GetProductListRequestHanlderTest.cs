@@ -14,7 +14,7 @@ namespace Product.Test.Queries
         public async Task GetProductListRequestHanlderTest_Success()
         {
             // Arrange
-            var handler = new GetProductListRequestHandler(Repository, Logger);
+            var handler = new GetProductListRequestHandler(Repository, Logger, MemoryCache);
 
             // Act
             var result = await handler.Handle(new GetProductListRequest(), CancellationToken.None);

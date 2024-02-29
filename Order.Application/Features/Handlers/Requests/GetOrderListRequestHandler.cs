@@ -45,6 +45,13 @@ namespace Order.Application.Features.Handlers.Requests
                 else
                     orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).ToListAsync(cancellationToken));
 
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                    .SetPriority(CacheItemPriority.Normal);
+
+                _memoryCache.Set(cacheKey, orderHeader, cacheEntryOptions);
+
                 return new CollectionResult<OrderHeaderDto>
                 {
                     Count = orderHeader.Count,
@@ -55,6 +62,7 @@ namespace Order.Application.Features.Handlers.Requests
 
             catch (Exception exception)
             {
+                _memoryCache.Remove(cacheKey);
                 return new CollectionResult<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,

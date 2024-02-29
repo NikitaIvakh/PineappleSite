@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Microsoft.Extensions.Caching.Memory;
+using Moq;
 using Product.Application.Features.Commands.Queries;
 using Product.Application.Profiles;
 using Product.Domain.Entities.Producrs;
@@ -16,6 +18,7 @@ namespace Product.Test.Common
         protected IMapper Mapper;
         protected IBaseRepository<ProductEntity> Repository;
         protected ILogger Logger;
+        protected IMemoryCache MemoryCache;
 
         public TestQueryHandler()
         {
@@ -29,6 +32,8 @@ namespace Product.Test.Common
             });
 
             Mapper = mapperConfiguration.CreateMapper();
+            var memoryCache = new Mock<IMemoryCache>();
+            MemoryCache = memoryCache.Object;
         }
 
         public void Dispose()

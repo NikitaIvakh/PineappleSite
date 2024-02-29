@@ -1,6 +1,6 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Product.Application.Features.Requests.Queries;
 using Product.Application.Resources;
 using Product.Domain.DTOs;
@@ -12,16 +12,27 @@ using Serilog;
 
 namespace Product.Application.Features.Commands.Queries
 {
-    public class GetProductDetailsRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMapper mapper) : IRequestHandler<GetProductDetailsRequest, Result<ProductDto>>
+    public class GetProductDetailsRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<GetProductDetailsRequest, Result<ProductDto>>
     {
         private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<GetProductDetailsRequestHandler>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheProducDetailsKey";
 
         public async Task<Result<ProductDto>> Handle(GetProductDetailsRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                ProductDto? productDto = await _repository.GetAll().Select(key => new ProductDto
+                if (_memoryCache.TryGetValue(cacheKey, out ProductDto? productDto))
+                {
+                    return new Result<ProductDto>
+                    {
+                        Data = productDto,
+                    };
+                }
+
+                productDto = await _repository.GetAll().Select(key => new ProductDto
                 {
                     Id = key.Id,
                     Name = key.Name,
@@ -44,6 +55,13 @@ namespace Product.Application.Features.Commands.Queries
 
                 else
                 {
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                        .SetPriority(CacheItemPriority.Normal);
+
+                    _memoryCache.Set(cacheKey, productDto, cacheEntryOptions);
+
                     return new Result<ProductDto>
                     {
                         Data = productDto,
@@ -54,6 +72,7 @@ namespace Product.Application.Features.Commands.Queries
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
+                _memoryCache.Remove(cacheKey);
                 return new Result<ProductDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
