@@ -36,6 +36,7 @@ applicationBuilder.Services.AddCors(key =>
 });
 
 applicationBuilder.Services.AddSwagger();
+applicationBuilder.Services.AddMemoryCache();
 
 WebApplication webApplication = applicationBuilder.Build();
 
