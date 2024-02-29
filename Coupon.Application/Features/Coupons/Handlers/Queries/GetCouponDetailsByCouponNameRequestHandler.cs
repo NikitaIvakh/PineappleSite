@@ -40,9 +40,17 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     MinAmount = key.MinAmount,
                 }).FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
 
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                        .SetPriority(CacheItemPriority.Normal);
+
+                _memoryCache.Set(cacheKey, coupon, cacheEntryOptions);
+
                 if (coupon is null)
                 {
                     _logger.Warning($"Купон с {request.CouponCode} не найден");
+                    _memoryCache.Remove(cacheKey);
                     return new Result<CouponDto>
                     {
                         ErrorMessage = ErrorMessage.CouponNotFound,

@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
+using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
@@ -42,9 +43,17 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount = key.MinAmount,
                     }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
 
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                        .SetPriority(CacheItemPriority.Normal);
+
+                    _memoryCache.Set(cacheKey, coupon, cacheEntryOptions);
+
                     if (coupon is null)
                     {
                         _logger.Warning($"Купон с {request.Id} не найден");
+                        _memoryCache.Remove(cacheKey);
                         return new Result<CouponDto>
                         {
                             ErrorMessage = ErrorMessage.CouponNotFound,
