@@ -98,6 +98,13 @@ namespace Favourite.Application.Features.Handlers.Queries
                                 item.Product = products?.Data?.FirstOrDefault(key => key.Id == item.ProductId);
                             }
 
+                            var cacheEntryOptions = new MemoryCacheEntryOptions()
+                                .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                                .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                                .SetPriority(CacheItemPriority.Normal);
+
+                            _memoryCache.Set(cacheKey, favouriteDto, cacheEntryOptions);
+
                             return new Result<FavouriteDto>
                             {
                                 Data = favouriteDto,
@@ -110,6 +117,7 @@ namespace Favourite.Application.Features.Handlers.Queries
 
             catch (Exception exception)
             {
+                _memoryCache.Remove(cacheKey);
                 return new Result<FavouriteDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
