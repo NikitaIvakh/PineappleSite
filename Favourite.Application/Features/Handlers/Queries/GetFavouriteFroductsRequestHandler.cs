@@ -8,52 +8,43 @@ using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Interfaces.Services;
 using Favourite.Domain.Results;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Favourite.Application.Features.Handlers.Queries
 {
-    public class GetFavouriteFroductsRequestHandler(IBaseRepositiry<FavouriteHeader> _headerRepository, IBaseRepositiry<FavouriteDetails> detailsRepository, IProductService productService, IMapper mapper) : IRequestHandler<GetFavouriteFroductsRequest, Result<FavouriteDto>>
+    public class GetFavouriteFroductsRequestHandler(IBaseRepositiry<FavouriteHeader> _headerRepository, IBaseRepositiry<FavouriteDetails> detailsRepository, IProductService productService,
+        IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<GetFavouriteFroductsRequest, Result<FavouriteDto>>
     {
         private readonly IBaseRepositiry<FavouriteHeader> _favouriteHeaderRepository = _headerRepository;
         private readonly IBaseRepositiry<FavouriteDetails> _favouriteDetailsRepository = detailsRepository;
         private readonly IProductService _productService = productService;
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheGetFavouritekey";
 
         public async Task<Result<FavouriteDto>> Handle(GetFavouriteFroductsRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                FavouriteHeaderDto? favouriteHeader = _favouriteHeaderRepository.GetAll().Select(key => new FavouriteHeaderDto
-                {
-                    FavouriteHeaderId = key.FavouriteHeaderId,
-                    UserId = key.UserId,
-                }).FirstOrDefault(key => key.UserId == request.UserId);
-
-                if (favouriteHeader is null)
+                if (_memoryCache.TryGetValue(cacheKey, out FavouriteDto? favouriteDto))
                 {
                     return new Result<FavouriteDto>
                     {
-                        Data = new FavouriteDto()
-                        {
-                            FavouriteHeader = new FavouriteHeaderDto(),
-                            FavouriteDetails = new List<FavouriteDetailsDto>(),
-                        },
-
-                        SuccessMessage = "В избранном никаких товаров нет",
+                        Data = favouriteDto,
+                        SuccessMessage = "Ваши избранные товары",
                     };
                 }
 
                 else
                 {
-                    List<FavouriteDetailsDto> favouriteDetails = _favouriteDetailsRepository.GetAll().Select(key => new FavouriteDetailsDto
+                    FavouriteHeaderDto? favouriteHeader = _favouriteHeaderRepository.GetAll().Select(key => new FavouriteHeaderDto
                     {
-                        FavouriteDetailsId = key.FavouriteDetailsId,
-                        FavouriteHeader = _mapper.Map<FavouriteHeaderDto>(key.FavouriteHeader),
                         FavouriteHeaderId = key.FavouriteHeaderId,
-                        Product = key.Product,
-                        ProductId = key.ProductId,
-                    }).OrderByDescending(key => key.FavouriteDetailsId).ToList();
+                        UserId = key.UserId,
+                    }).FirstOrDefault(key => key.UserId == request.UserId);
 
-                    if (favouriteDetails is null || favouriteDetails.Count == 0)
+                    if (favouriteHeader is null)
                     {
                         return new Result<FavouriteDto>
                         {
@@ -69,25 +60,50 @@ namespace Favourite.Application.Features.Handlers.Queries
 
                     else
                     {
-                        FavouriteDto favouriteDto = new()
+                        List<FavouriteDetailsDto> favouriteDetails = _favouriteDetailsRepository.GetAll().Select(key => new FavouriteDetailsDto
                         {
-                            FavouriteHeader = favouriteHeader,
-                            FavouriteDetails = favouriteDetails,
-                        };
+                            FavouriteDetailsId = key.FavouriteDetailsId,
+                            FavouriteHeader = _mapper.Map<FavouriteHeaderDto>(key.FavouriteHeader),
+                            FavouriteHeaderId = key.FavouriteHeaderId,
+                            Product = key.Product,
+                            ProductId = key.ProductId,
+                        }).OrderByDescending(key => key.FavouriteDetailsId).ToList();
 
-                        CollectionResult<ProductDto> products = await _productService.GetProductListAsync();
-
-
-                        foreach (var item in favouriteDto.FavouriteDetails)
+                        if (favouriteDetails is null || favouriteDetails.Count == 0)
                         {
-                            item.Product = products.Data.FirstOrDefault(key => key.Id == item.ProductId);
+                            return new Result<FavouriteDto>
+                            {
+                                Data = new FavouriteDto()
+                                {
+                                    FavouriteHeader = new FavouriteHeaderDto(),
+                                    FavouriteDetails = new List<FavouriteDetailsDto>(),
+                                },
+
+                                SuccessMessage = "В избранном никаких товаров нет",
+                            };
                         }
 
-                        return new Result<FavouriteDto>
+                        else
                         {
-                            Data = favouriteDto,
-                            SuccessMessage = "Ваши избранные товары",
-                        };
+                            favouriteDto = new()
+                            {
+                                FavouriteHeader = favouriteHeader,
+                                FavouriteDetails = favouriteDetails,
+                            };
+
+                            CollectionResult<ProductDto> products = await _productService.GetProductListAsync();
+
+                            foreach (var item in favouriteDto.FavouriteDetails)
+                            {
+                                item.Product = products?.Data?.FirstOrDefault(key => key.Id == item.ProductId);
+                            }
+
+                            return new Result<FavouriteDto>
+                            {
+                                Data = favouriteDto,
+                                SuccessMessage = "Ваши избранные товары",
+                            };
+                        }
                     }
                 }
             }
