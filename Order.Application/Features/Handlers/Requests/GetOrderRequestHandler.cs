@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Order.Application.Features.Requests.Requests;
 using Order.Application.Resources;
 using Order.Domain.DTOs;
@@ -11,27 +12,19 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Handlers.Requests
 {
-    public class GetOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper) : IRequestHandler<GetOrderRequest, Result<OrderHeaderDto>>
+    public class GetOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<GetOrderRequest, Result<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheOrderDetailsKey";
 
         public async Task<Result<OrderHeaderDto>> Handle(GetOrderRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                OrderHeader? orderHeader = _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).FirstOrDefault(key => key.OrderHeaderId == request.OrderId);
-
-                if (orderHeader is null)
-                {
-                    return new Result<OrderHeaderDto>
-                    {
-                        ErrorMessage = ErrorMessages.OrderNotFound,
-                        ErrorCode = (int)ErrorCodes.OrderNotFound,
-                    };
-                }
-
-                else
+                if (_memoryCache.TryGetValue(cacheKey, out OrderHeader? orderHeader))
                 {
                     return new Result<OrderHeaderDto>
                     {
@@ -39,10 +32,41 @@ namespace Order.Application.Features.Handlers.Requests
                         Data = _mapper.Map<OrderHeaderDto>(orderHeader),
                     };
                 }
+
+                else
+                {
+                    orderHeader = await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).FirstOrDefaultAsync(key => key.OrderHeaderId == request.OrderId, cancellationToken);
+
+                    if (orderHeader is null)
+                    {
+                        return new Result<OrderHeaderDto>
+                        {
+                            ErrorMessage = ErrorMessages.OrderNotFound,
+                            ErrorCode = (int)ErrorCodes.OrderNotFound,
+                        };
+                    }
+
+                    else
+                    {
+                        var cacheEntryOptions = new MemoryCacheEntryOptions()
+                            .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                            .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                            .SetPriority(CacheItemPriority.Normal);
+
+                        _memoryCache.Set(cacheKey, orderHeader, cacheEntryOptions);
+
+                        return new Result<OrderHeaderDto>
+                        {
+                            SuccessMessage = "Заказ успешно получен",
+                            Data = _mapper.Map<OrderHeaderDto>(orderHeader),
+                        };
+                    }
+                }
             }
 
             catch (Exception exception)
             {
+                _memoryCache.Remove(cacheKey);
                 return new Result<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,

@@ -54,6 +54,13 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                         Roles = roles.ToList()
                     };
 
+                    var cacheEntryOptions = new MemoryCacheEntryOptions()
+                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                        .SetPriority(CacheItemPriority.Normal);
+
+                    _memoryCache.Set(cacheKey, userWithRoles, cacheEntryOptions);
+
                     return new Result<UserWithRolesDto>
                     {
                         Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
@@ -64,6 +71,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
+                _memoryCache.Remove(cacheKey);
                 return new Result<UserWithRolesDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
