@@ -42,8 +42,7 @@ namespace Favourite.Test.Common
             FavouriteDetails = new BaseRepository<FavouriteDetails>(Context);
             ProductService = productMock.Object;
 
-            var memoryCache = new Mock<IMemoryCache>();
-            MemoryCache = memoryCache.Object;
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

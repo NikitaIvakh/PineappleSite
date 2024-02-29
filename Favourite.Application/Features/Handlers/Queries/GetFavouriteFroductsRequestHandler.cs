@@ -98,12 +98,7 @@ namespace Favourite.Application.Features.Handlers.Queries
                                 item.Product = products?.Data?.FirstOrDefault(key => key.Id == item.ProductId);
                             }
 
-                            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                                .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                                .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                                .SetPriority(CacheItemPriority.Normal);
-
-                            _memoryCache.Set(cacheKey, favouriteDto, cacheEntryOptions);
+                            _memoryCache.Set(cacheKey, favouriteDto);
 
                             return new Result<FavouriteDto>
                             {
