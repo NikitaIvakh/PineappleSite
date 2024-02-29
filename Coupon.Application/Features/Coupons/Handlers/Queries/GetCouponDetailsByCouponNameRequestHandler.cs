@@ -7,20 +7,32 @@ using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponDetailsByCouponNameRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger) : IRequestHandler<GetCouponDetailsByCouponNameRequest, Result<CouponDto>>
+    public class GetCouponDetailsByCouponNameRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<GetCouponDetailsByCouponNameRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<GetCouponDetailsByCouponNameRequestHandler>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "couponCodeCacheKey";
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsByCouponNameRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var coupon = await _repository.GetAllAsync().Select(key => new CouponDto
+                if (_memoryCache.TryGetValue(cacheKey, out CouponDto? coupon))
+                {
+                    return new Result<CouponDto>
+                    {
+                        Data = coupon,
+                    };
+                }
+
+                coupon = await _repository.GetAllAsync().Select(key => new CouponDto
                 {
                     CouponId = key.CouponId,
                     CouponCode = key.CouponCode,
