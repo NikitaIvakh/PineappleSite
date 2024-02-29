@@ -32,8 +32,7 @@ namespace Product.Test.Common
             });
 
             Mapper = mapperConfiguration.CreateMapper();
-            var memoryCache = new Mock<IMemoryCache>();
-            MemoryCache = memoryCache.Object;
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
         }
 
         public void Dispose()

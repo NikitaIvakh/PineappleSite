@@ -55,12 +55,7 @@ namespace Product.Application.Features.Commands.Queries
 
                 else
                 {
-                    var cacheEntryOptions = new MemoryCacheEntryOptions()
-                        .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                        .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                        .SetPriority(CacheItemPriority.Normal);
-
-                    _memoryCache.Set(cacheKey, productDto, cacheEntryOptions);
+                    _memoryCache.Set(cacheKey, productDto);
 
                     return new Result<ProductDto>
                     {
