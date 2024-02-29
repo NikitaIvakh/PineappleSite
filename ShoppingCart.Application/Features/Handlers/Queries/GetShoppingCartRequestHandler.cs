@@ -109,12 +109,7 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                             }
                         }
 
-                        var cacheEntryOptions = new MemoryCacheEntryOptions()
-                            .SetSlidingExpiration(TimeSpan.FromSeconds(10))
-                            .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
-                            .SetPriority(CacheItemPriority.Normal);
-
-                        _memoryCache.Set(cacheKey, cartDto, cacheEntryOptions);
+                        _memoryCache.Set(cacheKey, cartDto);
 
                         return new Result<CartDto>
                         {

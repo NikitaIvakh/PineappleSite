@@ -54,8 +54,7 @@ namespace ShoppingCart.Test.Common
             ProductService = productMock.Object;
             CouponService = couponMock.Object;
 
-            var memoryCache = new Mock<IMemoryCache>();
-            MemoryCache = memoryCache.Object;
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var mapperComfiguration = new MapperConfiguration(config =>
             {
