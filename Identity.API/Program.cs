@@ -34,6 +34,8 @@ applicationBuilder.Services.AddCors(key =>
         .AllowAnyHeader());
 });
 
+applicationBuilder.Services.AddMemoryCache();
+
 WebApplication webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.

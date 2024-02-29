@@ -9,19 +9,33 @@ using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Identity.Application.Resources;
 using Identity.Domain.Enum;
+using Microsoft.Extensions.Caching.Memory;
+using System.Linq;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
-    public class GetUserListRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger) : IRequestHandler<GetUserListRequest, CollectionResult<UserWithRolesDto>>
+    public class GetUserListRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<GetUserListRequest, CollectionResult<UserWithRolesDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<GetUserListRequest>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheUserListKey";
 
         public async Task<CollectionResult<UserWithRolesDto>> Handle(GetUserListRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var usersWithRoles = new List<UserWithRolesDto>();
+                if (_memoryCache.TryGetValue(cacheKey, out List<UserWithRolesDto>? usersWithRoles))
+                {
+                    return new CollectionResult<UserWithRolesDto>
+                    {
+                        Data = usersWithRoles,
+                        Count = usersWithRoles.Count
+                    };
+                }
+
+                usersWithRoles = new List<UserWithRolesDto>();
                 var currentUser = await _userManager.FindByIdAsync(request.UserId);
 
                 if (currentUser is not null)
@@ -63,6 +77,13 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                     }
                 }
 
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(10))
+                    .SetAbsoluteExpiration(TimeSpan.FromSeconds(3600))
+                    .SetPriority(CacheItemPriority.Normal);
+
+                _memoryCache.Set(cacheKey, usersWithRoles, cacheEntryOptions);
+
                 return new CollectionResult<UserWithRolesDto>
                 {
                     Data = usersWithRoles,
@@ -73,6 +94,7 @@ namespace Identity.Application.Features.Identities.Commands.Queries
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
+                _memoryCache.Remove(cacheKey);
                 return new CollectionResult<UserWithRolesDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
