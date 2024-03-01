@@ -28,7 +28,7 @@ namespace Orders.Test.Requests
             result?.Data?.OrderHeaderId.Should().Be(orderId);
             result?.Data?.CouponCode.Should().Be("5off");
             result?.Data?.Name.Should().Be("name");
-            result?.Data?.Email.Should().Be("email");
+            result?.Data?.Email.Should().Be("email@gmail.com");
             result?.Data?.PhoneNumber.Should().Be("375445679090");
         }
 

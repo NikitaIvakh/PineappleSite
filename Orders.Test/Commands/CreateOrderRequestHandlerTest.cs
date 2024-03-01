@@ -169,5 +169,55 @@ namespace Orders.Test.Commands
             result.ErrorMessage.Should().Be("Создать заказ невозможно");
             result.SuccessMessage.Should().BeNullOrEmpty();
         }
+
+        [Fact]
+        public async Task CreateOrderRequestHandler_FailOrWrongPhoneNumberl()
+        {
+            // Arrange
+            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator);
+            var cartDto = new CartDto
+            {
+                CartHeader = new CartHeaderDto
+                {
+                    CartHeaderId = 1,
+                    UserId = "TestuserId23",
+                    CouponCode = "5OFF",
+                    Discount = 10,
+                    CartTotal = 20,
+
+                    Name = "name",
+                    PhoneNumber = "37",
+                    Email = "email@gmail.com",
+                },
+
+                CartDetails =
+                [
+                    new() {
+                        CartDetailsId = 1,
+                        CartHeaderId = 1,
+                        ProductId = 3,
+                        Count = 1,
+                        Product = new ProductDto(){
+                            Id = 1,
+                            Name = "name",
+                            Description = "descriptiodescriptionn",
+                            Price = 25,
+                            ProductCategory = Order.Domain.Enum.ProductCategory.Drinks,
+                        },
+                    },
+                ],
+            };
+
+            // Act
+            var result = await handler.Handle(new CreateOrderRequest
+            {
+                CartDto = cartDto,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Создать заказ невозможно");
+            result.SuccessMessage.Should().BeNullOrEmpty();
+        }
     }
 }
