@@ -5,6 +5,7 @@ using Order.Domain.Entities;
 using Order.Domain.Interfaces.Repository;
 using Order.Infrastructure.Repository.Implementation;
 using Order.Infrastructure;
+using Order.Application.Validators;
 
 namespace Orders.Test.Common
 {
@@ -15,6 +16,7 @@ namespace Orders.Test.Common
         protected IMemoryCache MemoryCache;
         protected IBaseRepository<OrderHeader> OrderHeader;
         protected IBaseRepository<OrderDetails> OrderDetails;
+        protected IOrderValidator CreateValidator;
 
         public TestCommandsHandler()
         {
@@ -29,6 +31,7 @@ namespace Orders.Test.Common
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
             OrderHeader = new BaseRepository<OrderHeader>(Context);
             OrderDetails = new BaseRepository<OrderDetails>(Context);
+            CreateValidator = new IOrderValidator();
         }
 
         public void Dispose()

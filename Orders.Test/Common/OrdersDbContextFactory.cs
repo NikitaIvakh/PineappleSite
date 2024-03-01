@@ -22,7 +22,7 @@ namespace Orders.Test.Common
                 OrderTotal = 10,
 
                 Name = "name",
-                Email = "email",
+                Email = "email@gmail.com",
                 PhoneNumber = "375445679090",
 
                 OrderTime = DateTime.Now,
