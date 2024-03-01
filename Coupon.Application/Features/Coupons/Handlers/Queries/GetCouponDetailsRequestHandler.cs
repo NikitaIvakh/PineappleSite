@@ -43,8 +43,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount = key.MinAmount,
                     }).FirstOrDefaultAsync(key => key.CouponId == request.Id, cancellationToken);
 
-                    _memoryCache.Set(cacheKey, coupon);
-
                     if (coupon is null)
                     {
                         _logger.Warning($"Купон с {request.Id} не найден");

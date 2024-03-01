@@ -58,8 +58,6 @@ namespace Product.Application.Features.Commands.Queries
 
                     else
                     {
-                        _memoryCache.Set(cacheKey, products);
-
                         return new CollectionResult<ProductDto>
                         {
                             Data = products,

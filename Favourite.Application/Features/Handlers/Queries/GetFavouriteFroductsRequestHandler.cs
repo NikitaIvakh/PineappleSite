@@ -98,8 +98,6 @@ namespace Favourite.Application.Features.Handlers.Queries
                                 item.Product = products?.Data?.FirstOrDefault(key => key.Id == item.ProductId);
                             }
 
-                            _memoryCache.Set(cacheKey, favouriteDto);
-
                             return new Result<FavouriteDto>
                             {
                                 Data = favouriteDto,

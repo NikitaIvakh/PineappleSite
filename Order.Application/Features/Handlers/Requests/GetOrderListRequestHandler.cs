@@ -45,8 +45,6 @@ namespace Order.Application.Features.Handlers.Requests
                 else
                     orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).ToListAsync(cancellationToken));
 
-                _memoryCache.Set(cacheKey, orderHeader);
-
                 return new CollectionResult<OrderHeaderDto>
                 {
                     Count = orderHeader.Count,

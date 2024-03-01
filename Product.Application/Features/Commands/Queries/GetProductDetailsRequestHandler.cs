@@ -55,8 +55,6 @@ namespace Product.Application.Features.Commands.Queries
 
                 else
                 {
-                    _memoryCache.Set(cacheKey, productDto);
-
                     return new Result<ProductDto>
                     {
                         Data = productDto,

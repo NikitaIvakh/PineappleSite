@@ -44,8 +44,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount = key.MinAmount,
                     }).OrderBy(key => key.CouponId).ToListAsync(cancellationToken);
 
-                    _memoryCache.Set(cacheKey, coupons);
-
                     if (coupons is null || coupons.Count == 0)
                     {
                         _logger.Warning(ErrorMessage.CouponsNotFound, coupons.Count);

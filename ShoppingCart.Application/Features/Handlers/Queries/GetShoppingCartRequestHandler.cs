@@ -109,8 +109,6 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                             }
                         }
 
-                        _memoryCache.Set(cacheKey, cartDto);
-
                         return new Result<CartDto>
                         {
                             Data = cartDto,

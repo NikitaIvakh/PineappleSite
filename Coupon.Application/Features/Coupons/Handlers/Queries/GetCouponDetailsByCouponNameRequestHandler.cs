@@ -41,8 +41,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         DiscountAmount = key.DiscountAmount,
                         MinAmount = key.MinAmount,
                     }).FirstOrDefaultAsync(key => key.CouponCode.ToLower() == request.CouponCode.ToLower(), cancellationToken);
-
-                    _memoryCache.Set(cacheKey, coupon);
                 }
 
                 if (coupon is null)

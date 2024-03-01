@@ -77,8 +77,6 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                     }
                 }
 
-                _memoryCache.Set(cacheKey, usersWithRoles);
-
                 return new CollectionResult<UserWithRolesDto>
                 {
                     Data = usersWithRoles,

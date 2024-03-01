@@ -48,8 +48,6 @@ namespace Order.Application.Features.Handlers.Requests
 
                     else
                     {
-                        _memoryCache.Set(cacheKey, orderHeader);
-
                         return new Result<OrderHeaderDto>
                         {
                             SuccessMessage = "Заказ успешно получен",

@@ -54,8 +54,6 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                         Roles = roles.ToList()
                     };
 
-                    _memoryCache.Set(cacheKey, userWithRoles);
-
                     return new Result<UserWithRolesDto>
                     {
                         Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
