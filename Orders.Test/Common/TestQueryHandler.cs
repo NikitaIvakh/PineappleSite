@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
+using Moq;
 using Order.Application.Mapping;
 using Order.Infrastructure;
 
@@ -9,9 +12,12 @@ namespace Orders.Test.Common
     {
         protected ApplicationDbContext Context;
         protected IMapper Mapper;
+        protected IMemoryCache MemoryCache;
+        protected IHttpContextAccessor HttpContextAccessor;
 
         public TestQueryHandler()
         {
+            var httpContextAccessorObjet = new Mock<IHttpContextAccessor>();
             Context = OrdersDbContextFactory.Create();
 
             var mapperConfiguration = new MapperConfiguration(options =>
@@ -20,6 +26,8 @@ namespace Orders.Test.Common
             });
 
             Mapper = mapperConfiguration.CreateMapper();
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
+            HttpContextAccessor = httpContextAccessorObjet.Object;
         }
 
         public void Dispose()
