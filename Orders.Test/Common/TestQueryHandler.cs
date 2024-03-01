@@ -3,7 +3,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Order.Application.Mapping;
+using Order.Domain.Entities;
+using Order.Domain.Interfaces.Repository;
 using Order.Infrastructure;
+using Order.Infrastructure.Repository.Implementation;
 
 namespace Orders.Test.Common
 {
@@ -14,6 +17,8 @@ namespace Orders.Test.Common
         protected IMapper Mapper;
         protected IMemoryCache MemoryCache;
         protected IHttpContextAccessor HttpContextAccessor;
+        protected IBaseRepository<OrderHeader> OrderHeader;
+        protected IBaseRepository<OrderDetails> OrderDetails;
 
         public TestQueryHandler()
         {
@@ -28,6 +33,8 @@ namespace Orders.Test.Common
             Mapper = mapperConfiguration.CreateMapper();
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
             HttpContextAccessor = httpContextAccessorObjet.Object;
+            OrderHeader = new BaseRepository<OrderHeader>(Context);
+            OrderDetails = new BaseRepository<OrderDetails>(Context);
         }
 
         public void Dispose()
