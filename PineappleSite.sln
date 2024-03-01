@@ -135,6 +135,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PineappleSite.Gateway", "Pi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PineappleSite.Infrastructure.RabbitMQ", "PineappleSite.Infrastructure.RabbitMQ\PineappleSite.Infrastructure.RabbitMQ.csproj", "{1823A466-1C53-4E93-971F-252281F6B3B5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Orders.Test", "Orders.Test\Orders.Test.csproj", "{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -269,6 +271,10 @@ Global
 		{1823A466-1C53-4E93-971F-252281F6B3B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1823A466-1C53-4E93-971F-252281F6B3B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1823A466-1C53-4E93-971F-252281F6B3B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -336,6 +342,7 @@ Global
 		{838F3D18-AAFB-4D24-933C-3B3EAD103DA5} = {EF19B8E3-5A1F-4A1E-91B6-37CCCAD606C8}
 		{672D70A0-867D-4D77-B05A-4304D94B7AD8} = {8F44A0A8-8570-41BE-9596-59F843F05B60}
 		{1823A466-1C53-4E93-971F-252281F6B3B5} = {3740069D-0363-4E96-90E0-A045A195566F}
+		{0FAF1580-7AC1-4194-BFD0-DAF94B1BABC6} = {A2386247-DED2-4A4C-B106-618991EE389C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {776AE2A6-AA1F-4163-ABA1-F06593D92A9E}
