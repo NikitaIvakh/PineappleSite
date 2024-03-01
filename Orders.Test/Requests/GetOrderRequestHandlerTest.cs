@@ -31,5 +31,24 @@ namespace Orders.Test.Requests
             result?.Data?.Email.Should().Be("email");
             result?.Data?.PhoneNumber.Should().Be("375445679090");
         }
+
+        [Fact]
+        public async Task GetOrderRequestHandlerTest_FailOrWrong()
+        {
+            // Arrange
+            var handler = new GetOrderRequestHandler(OrderHeader, Mapper, MemoryCache);
+            var orderId = 999999;
+
+            // Act
+            var result = await handler.Handle(new GetOrderRequest
+            {
+                OrderId = orderId,
+            }, CancellationToken.None);
+
+            // Assert
+            result.IsSuccess.Should().BeFalse();
+            result.ErrorMessage.Should().Be("Заказ не найден");
+            result.SuccessMessage.Should().BeNullOrEmpty();
+        }
     }
 }
