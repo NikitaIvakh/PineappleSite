@@ -23,13 +23,13 @@ namespace Coupon.Infrastructure.DependencyInjection
 
             services.AddScoped<IBaseRepository<CouponEntity>, BaseRepository<CouponEntity>>();
             services.AddScoped(sp => new DbConnectionFactory(connectionString));
-            services.AddHealthChecks().AddSqlServer(connectionString).AddDbContextCheck<ApplicationDbContext>();
+            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void RegisterConnectionString(this IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("CouponConnectionString");
-            services.AddDbContext<ApplicationDbContext>(options => { options.UseSqlServer(connectionString); });
+            services.AddDbContext<ApplicationDbContext>(options => { options.UseNpgsql(connectionString); });
         }
 
         private static void MigrationsInit(this IServiceCollection services)
