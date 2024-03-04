@@ -10,6 +10,7 @@ namespace Coupon.Infrastructure.Configuration
         {
             builder.ToTable("Coupons");
             builder.HasKey(key => key.CouponId);
+            builder.Property(key => key.CouponId).ValueGeneratedOnAdd();
             builder.Property(key => key.CouponCode).HasColumnType("varchar(255)").IsRequired();
 
             SeedData(builder);
