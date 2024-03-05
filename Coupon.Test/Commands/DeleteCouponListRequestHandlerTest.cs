@@ -3,7 +3,6 @@ using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Domain.DTOs;
 using Coupon.Test.Common;
 using FluentAssertions;
-using Shouldly;
 using Xunit;
 
 namespace Coupon.Test.Commands
