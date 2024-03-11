@@ -99,8 +99,9 @@ namespace PineappleSite.Presentation.Controllers
 
                     string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
                     FavouriteResult<FavouriteViewModel> result = await _favoriteService.GetFavouruteProductsAsync(userId);
+                    var allFavouriteProducts = result.Data.FavouriteDetails.FindAll(key => key.ProductId == productViewModel.Id);
 
-                    if (result is null || result.Data.FavouriteDetails.Count == 0 || result.Data.FavouriteDetails.FirstOrDefault().ProductId != product.Data.Id)
+                    if (result is null || result.Data.FavouriteDetails.Count == 0 || allFavouriteProducts.Count == 0)
                     {
                         var favouriteProduct1 = new ProductFavouriteViewModel
                         {
