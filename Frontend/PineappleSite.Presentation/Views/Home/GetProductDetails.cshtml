@@ -51,7 +51,6 @@
                         @{
                             if (Model.Favourite != null && Model.Favourite.FavouriteDetails != null && Model.Favourite.FavouriteDetails.Any(fd => fd.ProductId == Model.Product.Id))
                             {
-
                                 <button hidden asp-action="AddToFavorites" asp-controller="Home" value="@Model.Product.Id type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;">@Localizer["AddToFavorites"]</button>
                             }
 
