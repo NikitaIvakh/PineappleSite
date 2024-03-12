@@ -53,6 +53,23 @@ namespace Product.Application.Features.Commands.Handlers
                     else
                     {
                         await _repository.DeleteListAsync(products);
+
+                        foreach (var product in products)
+                        {
+                            if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                            {
+                                var fileName = product.Id;
+                                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
+
+                                var files = Directory.GetFiles(filePath, fileName + ".*");
+
+                                foreach (var file in files)
+                                {
+                                    File.Delete(file);
+                                }
+                            }
+                        }
+
                         return new CollectionResult<ProductDto>
                         {
                             Count = products.Count,

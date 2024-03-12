@@ -53,14 +53,15 @@ namespace Product.Application.Features.Commands.Handlers
                     {
                         if (!string.IsNullOrEmpty(product.ImageLocalPath))
                         {
-                            string fileName = product.Id + ".jpg";
-                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath, fileName);
+                            var fileName = product.Id;
+                            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
 
-                            if (File.Exists(filePath))
+                            var files = Directory.GetFiles(filePath, fileName + ".*");
+
+                            foreach (var file in files)
                             {
-                                File.Delete(filePath);
+                                File.Delete(file);
                             }
-
                         }
 
                         await _repository.DeleteAsync(product);

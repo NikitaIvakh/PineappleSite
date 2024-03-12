@@ -94,7 +94,9 @@ namespace Product.Application.Features.Commands.Handlers
                             FileInfo fileInfo = new(directoryLocation);
 
                             if (fileInfo.Exists)
+                            {
                                 fileInfo.Delete();
+                            }
 
                             var fileDirectory = Path.Combine(filePath, fileName);
                             using (FileStream fileStream = new(fileDirectory, FileMode.Create))

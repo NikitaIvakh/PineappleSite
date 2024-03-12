@@ -85,17 +85,18 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             if (!string.IsNullOrEmpty(product.ImageLocalPath))
                             {
-                                var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                                FileInfo fileInfo = new(oldFilePathDirectory);
+                                var fileNameToDelete = product.Id.ToString();
+                                var filePathToDelete = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
 
-                                if (fileInfo.Exists)
-                                    fileInfo.Delete();
+                                var files = Directory.GetFiles(filePathToDelete, fileNameToDelete + ".*");
+
+                                foreach (var file in files)
+                                {
+                                    File.Delete(file);
+                                }
                             }
 
-                            Random random = new();
-                            int randomNumber = random.Next(1, 120001);
-
-                            string fileName = $"{product.Id}{randomNumber}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                            string fileName = $"{product.Id}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
                             string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
@@ -128,11 +129,15 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             if (!string.IsNullOrEmpty(product.ImageLocalPath))
                             {
-                                var oldFilePasthDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                                FileInfo fileInfo = new(oldFilePasthDirectory);
+                                var fileNameToDelete = product.Id;
+                                var filePathToDelete = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
 
-                                if (fileInfo.Exists)
-                                    fileInfo.Delete();
+                                var files = Directory.GetFiles(filePathToDelete, fileNameToDelete + ".*");
+
+                                foreach (var file in files)
+                                {
+                                    File.Delete(file);
+                                }
                             }
 
                             request.UpdateProduct.ImageUrl = product.ImageUrl;
