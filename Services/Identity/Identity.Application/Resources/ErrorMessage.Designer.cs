@@ -115,6 +115,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Передан неверный токен.
+        /// </summary>
+        internal static string InvalidAccessOrRefreshToken {
+            get {
+                return ResourceManager.GetString("InvalidAccessOrRefreshToken", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ваша фамилия введена некорректно.
         /// </summary>
         internal static string LastNameError {

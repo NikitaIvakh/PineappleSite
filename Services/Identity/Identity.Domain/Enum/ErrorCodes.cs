@@ -11,6 +11,7 @@
         UserCanNotBeCreated = 410,
         EmailAddressAlreadyExists = 411,
         PasswordsDoNotMatch = 412,
+        InvalidAccessOrRefreshToken = 413,
         InternalServerError = 500,
         AccountLoginError = 501,
         ErrorLoggingOutOfTheAccount = 502,

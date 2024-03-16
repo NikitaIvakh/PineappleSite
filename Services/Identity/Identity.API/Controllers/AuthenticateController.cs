@@ -43,5 +43,18 @@ namespace Identity.API.Controllers
             _registerLogger.LogError($"LogDebugError ================ Регистрация не удалась: {registerRequest.Email}");
             return BadRequest(register.ValidationErrors);
         }
+
+        [HttpPost("RefreshToken")]
+        public async Task<ActionResult<Result<ObjectResult>>> RefreshToken([FromBody] TokenModelDto tokenModel)
+        {
+            var command = await _mediator.Send(new RefreshTokenRequest { TokenModelDto = tokenModel });
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
+        }
     }
 }
