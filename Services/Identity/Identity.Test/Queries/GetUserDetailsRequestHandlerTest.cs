@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
-using Identity.Application.Features.Identities.Commands.Queries;
-using Identity.Application.Features.Identities.Requests.Queries;
+using Identity.Application.Features.Users.Commands.Queries;
+using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;

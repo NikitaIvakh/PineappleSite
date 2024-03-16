@@ -151,6 +151,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Введенные пароли не совпадают.
+        /// </summary>
+        internal static string PasswordsDoNotMatch {
+            get {
+                return ResourceManager.GetString("PasswordsDoNotMatch", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка регистрации.
         /// </summary>
         internal static string RegistrationLoginError {

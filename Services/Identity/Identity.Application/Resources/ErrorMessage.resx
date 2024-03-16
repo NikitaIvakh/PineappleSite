@@ -147,6 +147,9 @@
   <data name="PasswordError" xml:space="preserve">
     <value>Пароль введен неверно</value>
   </data>
+  <data name="PasswordsDoNotMatch" xml:space="preserve">
+    <value>Введенные пароли не совпадают</value>
+  </data>
   <data name="RegistrationLoginError" xml:space="preserve">
     <value>Ошибка регистрации</value>
   </data>

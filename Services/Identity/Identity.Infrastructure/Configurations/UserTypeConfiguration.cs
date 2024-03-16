@@ -9,6 +9,14 @@ namespace Identity.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<ApplicationUser> builder)
         {
+            builder.Property(key => key.Age).IsRequired(false);
+            builder.Property(key => key.Description).IsRequired(false);
+
+            SeedData(builder);
+        }
+
+        private static void SeedData(EntityTypeBuilder<ApplicationUser> builder)
+        {
             var hasher = new PasswordHasher<ApplicationUser>();
             builder.HasData(new ApplicationUser
             {

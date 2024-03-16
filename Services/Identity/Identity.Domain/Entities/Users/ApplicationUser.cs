@@ -8,7 +8,7 @@ namespace Identity.Domain.Entities.Users
 
         public string LastName { get; set; } = null!;
 
-        public string Description { get; set; } = null!;
+        public string? Description { get; set; }
 
         public int? Age { get; set; }
 
