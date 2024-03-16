@@ -2,7 +2,7 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Identities.Requests.Commands
+namespace Identity.Application.Features.Users.Requests.Handlers
 {
     public class DeleteUserListRequest : IRequest<Result<bool>>
     {

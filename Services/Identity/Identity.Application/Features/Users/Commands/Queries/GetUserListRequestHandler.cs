@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Identity.Application.Features.Identities.Requests.Queries;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
@@ -10,8 +9,9 @@ using Identity.Application.Resources;
 using Identity.Domain.Enum;
 using Microsoft.Extensions.Caching.Memory;
 using Identity.Domain.DTOs.Authentications;
+using Identity.Application.Features.Users.Requests.Queries;
 
-namespace Identity.Application.Features.Identities.Commands.Queries
+namespace Identity.Application.Features.Users.Commands.Queries
 {
     public class GetUserListRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<GetUserListRequest, CollectionResult<UserWithRolesDto>>
     {

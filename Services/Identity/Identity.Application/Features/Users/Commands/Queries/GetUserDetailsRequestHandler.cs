@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.Features.Identities.Requests.Queries;
+using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
-namespace Identity.Application.Features.Identities.Commands.Queries
+namespace Identity.Application.Features.Users.Commands.Queries
 {
     public class GetUserDetailsRequestHandler(UserManager<ApplicationUser> userManager, ILogger logger, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<GetUserDetailsRequest, Result<UserWithRolesDto>>
     {

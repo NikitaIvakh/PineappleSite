@@ -1,4 +1,4 @@
-﻿using Identity.Application.Features.Identities.Requests.Commands;
+﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Identities;
@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
-namespace Identity.Application.Features.Identities.Commands.Commands
+namespace Identity.Application.Features.Users.Commands.Handlers
 {
     public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger) : IRequestHandler<UpdateUserProfileRequest, Result<UserWithRolesDto>>
     {

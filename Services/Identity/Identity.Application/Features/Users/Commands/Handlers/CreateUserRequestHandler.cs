@@ -1,5 +1,5 @@
 ﻿using Identity.Application.Extecsions;
-using Identity.Application.Features.Identities.Requests.Commands;
+using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
@@ -9,7 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace Identity.Application.Features.Identities.Commands.Commands
+namespace Identity.Application.Features.Users.Commands.Handlers
 {
     public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator) : IRequestHandler<CreateUserRequest, Result<ApplicationUser>>
     {

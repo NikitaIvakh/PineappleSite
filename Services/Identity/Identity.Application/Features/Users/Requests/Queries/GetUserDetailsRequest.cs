@@ -2,7 +2,7 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Identities.Requests.Queries
+namespace Identity.Application.Features.Users.Requests.Queries
 {
     public class GetUserDetailsRequest : IRequest<Result<UserWithRolesDto>>
     {

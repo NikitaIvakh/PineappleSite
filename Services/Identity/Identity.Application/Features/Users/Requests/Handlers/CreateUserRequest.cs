@@ -3,7 +3,7 @@ using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Identities.Requests.Commands
+namespace Identity.Application.Features.Users.Requests.Handlers
 {
     public class CreateUserRequest : IRequest<Result<ApplicationUser>>
     {

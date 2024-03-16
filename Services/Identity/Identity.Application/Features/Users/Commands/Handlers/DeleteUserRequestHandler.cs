@@ -7,9 +7,9 @@ using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
 using Microsoft.AspNetCore.Identity;
-using Identity.Application.Features.Identities.Requests.Commands;
+using Identity.Application.Features.Users.Requests.Handlers;
 
-namespace Identity.Application.Features.Identities.Commands.Commands
+namespace Identity.Application.Features.Users.Commands.Handlers
 {
     public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserRequest, Result<DeleteUserDto>>
     {

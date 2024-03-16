@@ -1,5 +1,5 @@
-﻿using Identity.Application.Features.Identities.Requests.Commands;
-using Identity.Application.Features.Identities.Requests.Queries;
+﻿using Identity.Application.Features.Users.Requests.Handlers;
+using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.ResultIdentity;

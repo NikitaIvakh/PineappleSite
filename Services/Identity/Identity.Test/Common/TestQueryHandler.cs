@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Identity.Application.Features.Identities.Commands.Queries;
+using Identity.Application.Features.Users.Commands.Queries;
 using Identity.Application.Profiles;
 using Identity.Domain.Entities.Users;
 using Identity.Infrastructure;

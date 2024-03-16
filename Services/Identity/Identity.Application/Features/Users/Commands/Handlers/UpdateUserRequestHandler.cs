@@ -1,5 +1,5 @@
 ﻿using Identity.Application.Extecsions;
-using Identity.Application.Features.Identities.Requests.Commands;
+using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
@@ -10,7 +10,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Serilog;
 
-namespace Identity.Application.Features.Identities.Commands.Commands
+namespace Identity.Application.Features.Users.Commands.Handlers
 {
     public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger) : IRequestHandler<UpdateUserRequest, Result<RegisterResponseDto>>
     {
