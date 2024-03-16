@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class AuthenticateController(IIdentityService identityService) : Controller
+    public class AuthenticateController(IIdentityService identityService, IHttpContextAccessor httpContextAccessor) : Controller
     {
         private readonly IIdentityService _identityService = identityService;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
         [HttpGet]
         public ActionResult Login(string returnUrl = null)
@@ -72,22 +75,20 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        public async Task<ActionResult> Logout(string returnUrl)
         {
-            var returnUrl = Url.Content("/");
-            var response = await _identityService.LogoutAsync();
+            returnUrl ??= Url.Content("/");
+            var result = _httpContextAccessor.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
-            if (response.IsSuccess)
+            if (result.IsCompletedSuccessfully)
             {
-                TempData["success"] = response.SuccessMessage;
+                TempData["success"] = "Вы успешно вышли из аккаунта";
+                _httpContextAccessor.HttpContext!.Response.Cookies.Delete("JWTToken");
+                _httpContextAccessor.HttpContext!.Response.Cookies.Delete("AuthenticateCookie");
                 return LocalRedirect(returnUrl);
             }
 
-            else
-            {
-                TempData["error"] = response.ErrorMessage;
-                return LocalRedirect(returnUrl);
-            }
+            return LocalRedirect(returnUrl);
         }
     }
 }

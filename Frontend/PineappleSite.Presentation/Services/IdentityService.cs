@@ -9,8 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class IdentityService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper,
-        IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IIdentityService
+    public class IdentityService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IIdentityService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IIdentityClient _identityClient = identityClient;
@@ -28,13 +27,20 @@ namespace PineappleSite.Presentation.Services
 
                 if (authResponse.IsSuccess)
                 {
-                    if (authResponse.Data.Token != string.Empty)
+                    if (!string.IsNullOrWhiteSpace(authResponse.Data.JwtToken))
                     {
-                        var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.Token);
-                        var claims = ParseClaim(tokenContent);
-                        var user = new ClaimsPrincipal(new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme));
-                        var login = _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
-                        _localStorageService.SetStorageValue("token", authResponse.Data.Token);
+                        var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.JwtToken);
+                        var user = new ClaimsPrincipal(new ClaimsIdentity(tokenContent.Claims, CookieAuthenticationDefaults.AuthenticationScheme));
+                        await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+
+                        var cookieOptions = new CookieOptions
+                        {
+                            Expires = DateTime.UtcNow.AddHours(1),
+                            Secure = true,
+                            HttpOnly = true,
+                        };
+
+                        _httpContextAccessor.HttpContext!.Response.Cookies.Append("JWTToken", tokenContent.RawData, cookieOptions);
 
                         return new IdentityResult<AuthResponseViewModel>
                         {
@@ -87,7 +93,7 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
-                //AddBearerToken();
+                AddBearerToken();
                 RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
                 RegisterResponseDtoResult registerResponse = await _identityClient.RegisterAsync(registerRequest);
 
@@ -102,12 +108,6 @@ namespace PineappleSite.Presentation.Services
                         };
 
                         await LoginAsync(authRequest);
-
-                        return new IdentityResult<RegisterResponseViewModel>
-                        {
-                            SuccessMessage = registerResponse.SuccessMessage,
-                            Data = _mapper.Map<RegisterResponseViewModel>(registerResponse),
-                        };
                     }
 
                     else
@@ -137,7 +137,10 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<RegisterResponseViewModel>();
+                return new IdentityResult<RegisterResponseViewModel>()
+                {
+                    SuccessMessage = registerResponse.SuccessMessage,
+                };
             }
 
             catch (IdentityExceptions exceptions)
@@ -150,57 +153,129 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<bool>> LogoutAsync()
+        public async Task<IdentityResult<ObjectResult>> RefreshTokenAsync(TokenModelViewModel tokenModelViewModel)
         {
             try
             {
-                //AddBearerToken();
-                BooleanResult logoutResult = await _identityClient.LogoutAsync();
+                TokenModelDto tokenModelDto = _mapper.Map<TokenModelDto>(tokenModelViewModel);
+                ObjectResultResult apiResponse = await _identityClient.RefreshTokenAsync(tokenModelDto);
 
-                if (logoutResult.IsSuccess)
+                if (apiResponse.IsSuccess)
                 {
-                    _localStorageService.ClearStorage(["token"]);
-                    await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    return new IdentityResult<bool>
+                    return new IdentityResult<ObjectResult>
                     {
-                        Data = true,
-                        SuccessMessage = logoutResult.SuccessMessage,
+                        Data = apiResponse.Data,
+                        SuccessMessage = apiResponse.SuccessMessage,
                     };
                 }
 
                 else
                 {
-                    foreach (var error in logoutResult.ValidationErrors)
+                    foreach (var error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<bool>
+                        return new IdentityResult<ObjectResult>
                         {
-                            ErrorCode = logoutResult.ErrorCode,
-                            ErrorMessage = logoutResult.ErrorMessage,
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                             ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
 
-                return new IdentityResult<bool>();
+                return new IdentityResult<ObjectResult>();
             }
 
             catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<bool>
+                return new IdentityResult<ObjectResult>
                 {
-                    ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
+                    ValidationErrors = exceptions.Response
                 };
             }
         }
 
-        private static IEnumerable<Claim> ParseClaim(JwtSecurityToken tokenContent)
+        public async Task<IdentityResult> RevokeTokenAsync(string userName)
         {
-            var claims = tokenContent.Claims.ToList();
-            claims.Add(new Claim(ClaimTypes.Name, tokenContent.Subject));
+            try
+            {
+                UnitResult apiResponse = await _identityClient.RevokeTokenAsync(userName);
 
-            return claims;
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityResult();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult
+                {
+                    ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
+                    ValidationErrors = exceptions.Response,
+                };
+            }
+        }
+
+        public async Task<IdentityResult> RevokeAllTokensAsync()
+        {
+            try
+            {
+                var apiResponse = await _identityClient.RevokeAllTokensAsync();
+
+                if (apiResponse.IsSuccess)
+                {
+                    return new IdentityResult
+                    {
+                        SuccessMessage = apiResponse.SuccessMessage,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in apiResponse.ValidationErrors)
+                    {
+                        return new IdentityResult
+                        {
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ValidationErrors = error + Environment.NewLine,
+                        };
+                    }
+                }
+
+                return new IdentityResult();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                return new IdentityResult
+                {
+                    ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
+                    ValidationErrors = exceptions.Response,
+                };
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using PineappleSite.Presentation.Models.Identities;
+using PineappleSite.Presentation.Services;
 using PineappleSite.Presentation.Services.Identities;
 
 namespace PineappleSite.Presentation.Contracts
@@ -9,6 +10,10 @@ namespace PineappleSite.Presentation.Contracts
 
         Task<IdentityResult<RegisterResponseViewModel>> RegisterAsync(RegisterRequestViewModel registerRequestViewModel);
 
-        Task<IdentityResult<bool>> LogoutAsync();
+        Task<IdentityResult<ObjectResult>> RefreshTokenAsync(TokenModelViewModel tokenModelViewModel);
+
+        Task<IdentityResult> RevokeTokenAsync(string userName);
+
+        Task<IdentityResult> RevokeAllTokensAsync();
     }
 }

@@ -18,7 +18,7 @@ applicationBuilder.Services.AddControllersWithViews().AddViewLocalization().AddD
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddHttpClient();
 
-applicationBuilder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
+applicationBuilder.Services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
 
 applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7777"));
 applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient => identityClient.BaseAddress = new Uri("https://localhost:7777"));
@@ -42,6 +42,9 @@ applicationBuilder.Services.AddAuthentication(CookieAuthenticationDefaults.Authe
         options.ExpireTimeSpan = TimeSpan.FromHours(10);
         options.LoginPath = "/Authenticate/Login";
         options.AccessDeniedPath = "/Authenticate/AccessDenied";
+        options.Cookie.Name = "AuthenticateCookie";
+        options.Cookie.HttpOnly = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
     });
 
 applicationBuilder.Services.AddLocalization(options =>
