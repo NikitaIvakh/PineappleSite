@@ -223,12 +223,12 @@ namespace PineappleSite.Presentation.Controllers
 
         public async Task<ActionResult> Profile()
         {
-            string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+            string userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
             var user = await _userService.GetUserAsync(userId);
 
             var updateUserPrifile = new UpdateUserProfileViewModel
             {
-                Id = user.Data.User.Id,
+                Id = user.Data!.User.Id,
                 FirstName = user.Data.User.FirstName,
                 LastName = user.Data.User.LastName,
                 EmailAddress = user.Data.User.Email,

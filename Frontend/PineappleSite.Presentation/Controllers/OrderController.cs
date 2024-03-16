@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Utility;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -19,7 +20,7 @@ namespace PineappleSite.Presentation.Controllers
         public async Task<ActionResult> GetAllOrders(string status)
         {
             IEnumerable<OrderHeaderViewModel> orderHeaderDtos;
-            string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+            string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()!.Value!;
 
             var response = await _orderService.GetAllOrdersAsync(userId);
 
@@ -56,7 +57,7 @@ namespace PineappleSite.Presentation.Controllers
             try
             {
                 OrderHeaderViewModel orderHeaderDto = new();
-                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()!.Value!;
 
                 var response = await _orderService.GetOrderAsync(orderId);
 

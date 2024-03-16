@@ -3,6 +3,7 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -184,9 +185,10 @@ namespace PineappleSite.Presentation.Services
             AddBearerToken();
             try
             {
-                string userId = _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+                string userId = _httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value!;
 
                 FileParameter avatarFileParameter = null;
+
                 if (updateUserProfile.Avatar is not null)
                 {
                     avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);

@@ -11,6 +11,7 @@ using PineappleSite.Presentation.Services.Favorites;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -97,7 +98,7 @@ namespace PineappleSite.Presentation.Controllers
                         ImageLocalPath = product.Data.ImageLocalPath,
                     };
 
-                    string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                    string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                     FavouriteResult<FavouriteViewModel> result = await _favoriteService.GetFavouruteProductsAsync(userId);
                     var allFavouriteProducts = result.Data.FavouriteDetails.FindAll(key => key.ProductId == productViewModel.Id);
 
@@ -157,7 +158,7 @@ namespace PineappleSite.Presentation.Controllers
             {
                 CartHeader = new CartHeaderViewModel
                 {
-                    UserId = User.Claims.Where(key => key.Type == "uid").FirstOrDefault()?.Value,
+                    UserId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value,
                 },
             };
 
@@ -194,7 +195,7 @@ namespace PineappleSite.Presentation.Controllers
             {
                 FavouriteHeader = new FavouriteHeaderViewModel
                 {
-                    UserId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value,
+                    UserId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value,
                 },
             };
 
