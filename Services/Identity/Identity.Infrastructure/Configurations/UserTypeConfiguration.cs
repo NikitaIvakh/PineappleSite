@@ -23,6 +23,7 @@ namespace Identity.Infrastructure.Configurations
                 EmailConfirmed = true,
                 Description = "Test",
                 Age = 24,
+                SecurityStamp = Guid.NewGuid().ToString(),
             },
 
             new ApplicationUser
@@ -38,6 +39,7 @@ namespace Identity.Infrastructure.Configurations
                 EmailConfirmed = true,
                 Description = "Test",
                 Age = 24,
+                SecurityStamp = Guid.NewGuid().ToString(),
             });
         }
     }

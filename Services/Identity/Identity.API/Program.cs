@@ -9,13 +9,12 @@ WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
-applicationBuilder.Services.ConfigureIdentityService(applicationBuilder.Configuration);
+applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
 applicationBuilder.Host.UseSerilog((context, logConfig) =>
 {
@@ -53,6 +52,7 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 });
 
 webApplication.UseRouting();
+webApplication.UseAuthentication();
 webApplication.UseAuthorization();
 
 webApplication.UseCors();

@@ -1,60 +1,80 @@
-﻿using Identity.Application.Services;
-using Identity.Domain.Entities.Users;
-using Identity.Domain.Interface;
+﻿using Identity.Domain.Entities.Users;
 using Identity.Infrastructure.Health;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Identity.Infrastructure.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void ConfigureIdentityService(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureInfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
-            services.RegisterServices(configuration);
-            services.RegisterDBConnectionString(configuration);
-            services.ApplyMigration();
+            RegisterServices(services);
+            RegisterDBConnectionString(services, configuration);
+            ConfigureAuthentication(services, configuration);
+            ApplyMigration(services);
         }
 
-        private static void RegisterServices(this IServiceCollection services, IConfiguration configuration)
+        private static void RegisterServices(IServiceCollection services)
+        {
+            services.AddIdentity<ApplicationUser, IdentityRole<string>>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddUserManager<UserManager<ApplicationUser>>()
+                .AddSignInManager<SignInManager<ApplicationUser>>();
+
+            services.AddScoped<RoleManager<IdentityRole<string>>>();
+        }
+
+        private static void RegisterDBConnectionString(IServiceCollection services, IConfiguration configuration)
         {
             var connectionString = configuration.GetConnectionString("IdentityConnextionString");
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            services.AddDbContext<ApplicationDbContext>(config =>
             {
-                options.Password.RequireDigit = false;
-                options.Password.RequiredLength = 5;
-                options.Password.RequireNonAlphanumeric = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireLowercase = false;
-            })
-                .AddEntityFrameworkStores<PineAppleIdentityDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddScoped<RoleManager<IdentityRole>>();
-            services.AddScoped<ITokenProvider, TokenProvider>();
-
-            services.AddScoped(scope => new DbConnectionFactory(connectionString));
-            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<PineAppleIdentityDbContext>();
-        }
-
-        private static void RegisterDBConnectionString(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<PineAppleIdentityDbContext>(config =>
-            {
-                config.UseNpgsql(configuration.GetConnectionString("IdentityConnextionString"),
-                config => config.MigrationsAssembly(typeof(PineAppleIdentityDbContext).Assembly.FullName));
+                config.UseNpgsql(connectionString);
             });
+
+            services.AddScoped(scope => new DbConnectionFactory(connectionString!));
+            services.AddHealthChecks().AddNpgSql(connectionString!).AddDbContextCheck<ApplicationDbContext>();
         }
 
-        private static void ApplyMigration(this IServiceCollection services)
+        private static void ConfigureAuthentication(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).
+                AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = configuration["Jwt:Issuer"],
+                        ValidAudience = configuration["Jwt:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!)),
+                    };
+                });
+        }
+
+        private static void ApplyMigration(IServiceCollection services)
         {
             var scope = services.BuildServiceProvider();
             using var serviceProvider = scope.CreateScope();
-            var context = serviceProvider.ServiceProvider.GetRequiredService<PineAppleIdentityDbContext>();
-            context.Database.Migrate();
+            var db = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+            if (db.Database.GetPendingMigrations().Any())
+            {
+                db.Database.Migrate();
+            }
         }
     }
 }

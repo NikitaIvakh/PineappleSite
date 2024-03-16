@@ -8,12 +8,11 @@ namespace Identity.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AuthenticateController(IMediator mediator, ILogger<AuthResponseDto> authLogger, ILogger<RegisterResponseDto> registerLogger, ILogger<LogoutUserRequest> LogourLogger) : ControllerBase
+    public class AuthenticateController(IMediator mediator, ILogger<AuthResponseDto> authLogger, ILogger<RegisterResponseDto> registerLogger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
         private readonly ILogger<AuthResponseDto> _authLogger = authLogger;
         private readonly ILogger<RegisterResponseDto> _registerLogger = registerLogger;
-        private readonly ILogger<LogoutUserRequest> _logourLogger = LogourLogger;
 
         [HttpPost("Login")]
         public async Task<ActionResult<Result<AuthResponseDto>>> Login([FromBody] AuthRequestDto authRequest)
@@ -37,27 +36,12 @@ namespace Identity.API.Controllers
 
             if (register.IsSuccess)
             {
-                _registerLogger.LogDebug($"LogDebug ================ Уcпешная регистрация: {registerRequest.EmailAddress}");
+                _registerLogger.LogDebug($"LogDebug ================ Уcпешная регистрация: {registerRequest.Email}");
                 return Ok(register);
             }
 
-            _registerLogger.LogError($"LogDebugError ================ Регистрация не удалась: {registerRequest.EmailAddress}");
+            _registerLogger.LogError($"LogDebugError ================ Регистрация не удалась: {registerRequest.Email}");
             return BadRequest(register.ValidationErrors);
-        }
-
-        [HttpPost("Logout")]
-        public async Task<ActionResult<Result<bool>>> Logout()
-        {
-            var command = await _mediator.Send(new LogoutUserRequest());
-
-            if (command.IsSuccess)
-            {
-                _logourLogger.LogDebug("LogDebug ================ Уcпешный выход из аккаунта");
-                return Ok(command);
-            }
-
-            _registerLogger.LogError($"LogDebugError ================ Выход из аккаунта не удался");
-            return BadRequest(command.ErrorMessage);
         }
     }
 }

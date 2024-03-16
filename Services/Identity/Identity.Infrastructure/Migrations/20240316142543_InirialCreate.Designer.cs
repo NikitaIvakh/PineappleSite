@@ -3,6 +3,7 @@ using System;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,10 +11,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Identity.Infrastructure.Migrations
 {
-    [DbContext(typeof(PineAppleIdentityDbContext))]
-    partial class PineAppleIdentityDbContextModelSnapshot : ModelSnapshot
+    [DbContext(typeof(ApplicationDbContext))]
+    [Migration("20240316142543_InirialCreate")]
+    partial class InirialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +41,7 @@ namespace Identity.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -84,6 +88,12 @@ namespace Identity.Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("boolean");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("RefreshTokenExpiresTime")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("text");
 
@@ -111,7 +121,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "25ddf450-3fc0-4453-8202-7e0f79c03d9c",
+                            ConcurrencyStamp = "5e658894-78f5-4d53-a1b0-6ed60f96fa21",
                             Description = "Test",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
@@ -120,9 +130,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEM0IC+GjDvQgwAe9mt1PP321KFLQo2veHtrHdqrGrJEI7dwf6ZWMdepZccFXlwjIlg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEE8RRetUm+3eXCPQpthLMBz1B80Uu52KiiKtxkiUOuCwNpXs4tVNsMT8m/Kf+W00lQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "9edec5a0-9e71-4d36-bf8b-2fe4b608b5c7",
+                            RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "55547e60-c44e-49b0-8ebe-b431dd0a343c",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         },
@@ -131,7 +142,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "a50e51a2-f5f5-4a73-ad62-e93f523a3fd7",
+                            ConcurrencyStamp = "05f1feac-f374-448e-be76-8cb914456f02",
                             Description = "Test",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
@@ -140,15 +151,16 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJkkWN1uJN5gSOLA/FgpYXNlgLRjnYflmUdV2591SUp1JT+US0Lh15WDAYaLeOBDUw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEYjifE5hbwWYwn4u4O95MV0bSXVLCjzYD8RWwrj0KSsAoPGamW4BgKXuiI9uvXQ7g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "42f8626c-54c2-465f-b84b-98214a8b892a",
+                            RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            SecurityStamp = "fa247f7e-505a-4845-b9a1-d1d2f453158a",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
                 });
 
-            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<string>", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
@@ -156,6 +168,11 @@ namespace Identity.Infrastructure.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("text");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
@@ -173,19 +190,9 @@ namespace Identity.Infrastructure.Migrations
 
                     b.ToTable("AspNetRoles", (string)null);
 
-                    b.HasData(
-                        new
-                        {
-                            Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                            Name = "Employee",
-                            NormalizedName = "EMPLOYEE"
-                        },
-                        new
-                        {
-                            Id = "cbc43a8e-f7bb-4445-baaf-1add431ffbbf",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        });
+                    b.HasDiscriminator<string>("Discriminator").HasValue("IdentityRole<string>");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -306,9 +313,30 @@ namespace Identity.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
+                {
+                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole<string>");
+
+                    b.HasDiscriminator().HasValue("IdentityRole");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
+                            Name = "Employee",
+                            NormalizedName = "EMPLOYEE"
+                        },
+                        new
+                        {
+                            Id = "cbc43a8e-f7bb-4445-baaf-1add431ffbbf",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        });
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<string>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -335,7 +363,7 @@ namespace Identity.Infrastructure.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole<string>", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)

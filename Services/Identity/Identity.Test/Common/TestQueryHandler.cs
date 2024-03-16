@@ -16,7 +16,7 @@ namespace Identity.Test.Common
 {
     public class TestQueryHandler : IDisposable
     {
-        protected PineAppleIdentityDbContext Context;
+        protected ApplicationDbContext Context;
         protected IMapper Mapper;
         protected ILogger GetUsersLogger;
         protected ILogger GetUserLogger;

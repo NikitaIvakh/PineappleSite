@@ -1,56 +1,49 @@
-﻿using Identity.Application.Features.Identities.Requests.Commands;
+﻿using Identity.Application.Extecsions;
+using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
+using Identity.Application.Services;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interface;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class LoginUserRequestHandler(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IOptions<JwtSettings> options, IAuthRequestDtoValidator authValidator, ITokenProvider tokenProvider,
-        IHttpContextAccessor httpContextAccessor, ILogger logger) : IRequestHandler<LoginUserRequest, Result<AuthResponseDto>>
+    public class LoginUserRequestHandler(UserManager<ApplicationUser> userManager, IAuthRequestDtoValidator authValidator, ApplicationDbContext context, ITokenService tokenService, IConfiguration configuration) : IRequestHandler<LoginUserRequest, Result<AuthResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
-        private readonly JwtSettings _jwtSettings = options.Value;
+        private readonly ApplicationDbContext _context = context;
+        private readonly ITokenService _tokenService = tokenService;
+        private readonly IConfiguration _configuration = configuration;
         private readonly IAuthRequestDtoValidator _authValidator = authValidator;
-        private readonly ITokenProvider _tokenProvider = tokenProvider;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
-        private readonly ILogger _logger = logger.ForContext<LoginUserRequestHandler>();
 
         public async Task<Result<AuthResponseDto>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var validator = await _authValidator.ValidateAsync(request.AuthRequest, cancellationToken);
+                var validationResult = await _authValidator.ValidateAsync(request.AuthRequest, cancellationToken);
 
-                if (!validator.IsValid)
+                if (!validationResult.IsValid)
                 {
-                    var errorMessages = new Dictionary<string, List<string>>()
+                    var existErrorMessages = new Dictionary<string, List<string>>
                     {
-                        {"Email",  validator.Errors.Select(key => key.ErrorMessage).ToList()},
-                        {"Password",  validator.Errors.Select(key => key.ErrorMessage).ToList()},
+                        {"Email", validationResult.Errors.Select(key => key.ErrorMessage).ToList() },
+                        {"Password", validationResult.Errors.Select(key => key.ErrorMessage).ToList() },
                     };
 
-                    foreach (var error in errorMessages)
+                    foreach (var error in existErrorMessages)
                     {
-                        if (errorMessages.TryGetValue(error.Key, out var message))
+                        if (existErrorMessages.TryGetValue(error.Key, out var message))
                         {
                             return new Result<AuthResponseDto>
                             {
+                                Data = null,
                                 ValidationErrors = message,
                                 ErrorMessage = ErrorMessage.AccountLoginError,
                                 ErrorCode = (int)ErrorCodes.AccountLoginError,
@@ -60,9 +53,10 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     return new Result<AuthResponseDto>
                     {
+                        Data = null,
                         ErrorMessage = ErrorMessage.AccountLoginError,
                         ErrorCode = (int)ErrorCodes.AccountLoginError,
-                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
+                        ValidationErrors = [ErrorMessage.AccountLoginError],
                     };
                 }
 
@@ -76,113 +70,63 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
+                            ValidationErrors = [ErrorMessage.UserNotFound]
                         };
                     }
 
                     else
                     {
-                        var result = await _signInManager.CheckPasswordSignInAsync(user, request.AuthRequest.Password, false);
+                        var isValidPassword = await _userManager.CheckPasswordAsync(user, request.AuthRequest.Password);
 
-                        if (!result.Succeeded)
+                        if (!isValidPassword)
                         {
                             return new Result<AuthResponseDto>
                             {
-                                ErrorMessage = ErrorMessage.AccountLoginError,
                                 ErrorCode = (int)ErrorCodes.AccountLoginError,
-                                ValidationErrors = validator.Errors.Select(_ => _.ErrorMessage).ToList(),
+                                ErrorMessage = ErrorMessage.AccountLoginError,
+                                ValidationErrors = [ErrorMessage.AccountLoginError]
                             };
                         }
 
                         else
                         {
-                            JwtSecurityToken jwtSecurityToken = await GenerateTokenAsync(user);
-                            AuthResponseDto authResponse = new()
-                            {
-                                Id = user.Id,
-                                Email = user.Email,
-                                UserName = user.UserName,
-                                Token = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
-                            };
+                            var roleIds = await _context.UserRoles.Where(key => key.UserId == user.Id).Select(key => key.RoleId).ToListAsync(cancellationToken);
+                            var roles = await _context.Roles.Where(key => roleIds.Contains(key.Id)).ToListAsync(cancellationToken);
 
-                            SingInUserAsync(authResponse);
-                            _tokenProvider.SetToken(authResponse.Token);
+                            var accessToken = _tokenService.CreateToken(user, roles);
+                            user.RefreshToken = _configuration.GenerateRefreshToken();
+                            user.RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(int.Parse(_configuration.GetSection("Jwt:RefreshTokenValidityInDays").Value!));
+
+                            await _context.SaveChangesAsync(cancellationToken);
 
                             return new Result<AuthResponseDto>
                             {
-                                Data = authResponse,
-                                SuccessMessage = "Уcпешный вход в аккаунт",
+                                Data = new AuthResponseDto
+                                {
+                                    FirstName = user.FirstName,
+                                    LastName = user.LastName,
+                                    UsertName = user.UserName!,
+                                    Email = user.Email!,
+                                    JwtToken = accessToken,
+                                    RefreshToken = user.RefreshToken,
+                                },
+
+                                SuccessMessage = "Вы успешно вошли в аккаунт"
                             };
                         }
                     }
-
                 }
             }
 
             catch (Exception exception)
             {
-                _logger.Warning(exception, exception.Message);
                 return new Result<AuthResponseDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
-        }
-
-        private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
-        {
-            var userClaims = await _userManager.GetClaimsAsync(user);
-            var role = await _userManager.GetRolesAsync(user);
-            var roleClaims = new List<Claim>();
-
-            for (int i = 0; i < role.Count; i++)
-            {
-                roleClaims.Add(new Claim(ClaimTypes.Role, role[i]));
-            }
-
-            var claims = new[]
-            {
-                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id),
-            }.Union(userClaims).Union(roleClaims);
-
-            var symmericSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
-            var signingCredintials = new SigningCredentials(symmericSecurityKey, SecurityAlgorithms.HmacSha256);
-
-            var jwtSecurityToken = new JwtSecurityToken(
-            issuer: _jwtSettings.Issuer,
-                audience: _jwtSettings.Audience,
-                claims: claims,
-                expires: DateTime.Now.AddMinutes(_jwtSettings.DurationMinutes),
-                signingCredentials: signingCredintials);
-
-            return jwtSecurityToken;
-        }
-
-        private async void SingInUserAsync(AuthResponseDto authResponse)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            var jwt = handler.ReadJwtToken(authResponse.Token);
-            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            var tokenCookieValue = authResponse.Token;
-            _httpContextAccessor.HttpContext?.Response.Cookies.Append("TokenCookie", tokenCookieValue, new CookieOptions
-            {
-                HttpOnly = true,
-                Secure = false, // Измените на true в продакшн среде, если используется HTTPS
-                Expires = DateTime.UtcNow.AddDays(1),
-                SameSite = SameSiteMode.None,
-                Path = "/"
-            });
-
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Sub).Value));
-            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Email).Value));
-            identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.First(key => key.Type == JwtRegisteredClaimNames.Email).Value));
-
-            var principal = new ClaimsPrincipal(identity);
-            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }

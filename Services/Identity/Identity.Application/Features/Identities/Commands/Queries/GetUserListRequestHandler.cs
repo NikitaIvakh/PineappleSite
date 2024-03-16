@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Identity.Application.Features.Identities.Requests.Queries;
-using Identity.Application.Utilities;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
@@ -10,7 +9,7 @@ using Serilog;
 using Identity.Application.Resources;
 using Identity.Domain.Enum;
 using Microsoft.Extensions.Caching.Memory;
-using System.Linq;
+using Identity.Domain.DTOs.Authentications;
 
 namespace Identity.Application.Features.Identities.Commands.Queries
 {
@@ -31,18 +30,18 @@ namespace Identity.Application.Features.Identities.Commands.Queries
                     return new CollectionResult<UserWithRolesDto>
                     {
                         Data = usersWithRoles,
-                        Count = usersWithRoles.Count
+                        Count = usersWithRoles!.Count
                     };
                 }
 
-                usersWithRoles = new List<UserWithRolesDto>();
+                usersWithRoles = [];
                 var currentUser = await _userManager.FindByIdAsync(request.UserId);
 
                 if (currentUser is not null)
                 {
                     var roles = await _userManager.GetRolesAsync(currentUser);
 
-                    if (roles.Contains(StaticDetails.AdministratorRole))
+                    if (roles.Contains(RoleConsts.Administrator))
                     {
                         var users = await _userManager.Users.ToListAsync(cancellationToken);
 

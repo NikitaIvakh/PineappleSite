@@ -8,9 +8,9 @@ namespace Identity.Application.Validators
 {
     public class IUpdateUserProfileDto : AbstractValidator<UpdateUserProfileDto>
     {
-        private readonly PineAppleIdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public IUpdateUserProfileDto(PineAppleIdentityDbContext context)
+        public IUpdateUserProfileDto(ApplicationDbContext context)
         {
             _context = context;
 

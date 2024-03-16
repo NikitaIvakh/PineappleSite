@@ -6,11 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace Identity.Application.Validators
 {
-    public class IRegisterRequestDtoValidator : AbstractValidator<IRegisterRequestDto>
+    public class IRegisterRequestDtoValidator : AbstractValidator<RegisterRequestDto>
     {
-        private readonly PineAppleIdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public IRegisterRequestDtoValidator(PineAppleIdentityDbContext context)
+        public IRegisterRequestDtoValidator(ApplicationDbContext context)
         {
             _context = context;
 
@@ -26,14 +26,12 @@ namespace Identity.Application.Validators
 
             RuleFor(key => key.UserName)
                 .NotNull().NotEmpty().WithMessage("Имя пользователя не может быть пустым")
-                .When(key => !string.IsNullOrEmpty(key.UserName))
                 .MinimumLength(5).WithMessage("Длина строки имени пользователя должна быть более 5 символов")
                 .MaximumLength(50).WithMessage("Длина строки имени пользователя не должна превышать 50 символов")
                 .MustAsync(BeUniqueUserName).WithMessage("Такое имя пользователя уже существует");
 
-            RuleFor(key => key.EmailAddress)
+            RuleFor(key => key.Email)
                 .NotNull().NotEmpty().WithMessage("Адрес электронной почты не может быть пустым")
-                .When(key => !string.IsNullOrEmpty(key.EmailAddress))
                 .MinimumLength(2).WithMessage("Адрес электронной почты должн быть более 2 символов")
                 .MaximumLength(50).WithMessage("Адрес электронной почты не может превышать 50 символов")
                 .MustAsync(BeUniqueEmailAddress).WithMessage("Такой адрес электронной почты уже используется")

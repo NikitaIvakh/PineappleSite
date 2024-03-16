@@ -106,8 +106,6 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                                 var userRoles = await _userManager.GetRolesAsync(user);
                                 await _userManager.RemoveFromRolesAsync(user, userRoles);
 
-                                var roleName = request.CreateUser.Roles.GetDisplayName();
-                                await _userManager.AddToRoleAsync(user, roleName);
 
                                 await _userManager.UpdateAsync(user);
 

@@ -8,9 +8,9 @@ namespace Identity.Application.Validators
 {
     public class ICreateUserDtoValidation : AbstractValidator<CreateUserDto>
     {
-        private readonly PineAppleIdentityDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public ICreateUserDtoValidation(PineAppleIdentityDbContext context)
+        public ICreateUserDtoValidation(ApplicationDbContext context)
         {
             _context = context;
 

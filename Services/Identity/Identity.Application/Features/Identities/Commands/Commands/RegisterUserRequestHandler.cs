@@ -75,11 +75,11 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             FirstName = request.RegisterRequest.FirstName,
                             LastName = request.RegisterRequest.LastName,
                             UserName = request.RegisterRequest.UserName,
-                            Email = request.RegisterRequest.EmailAddress,
+                            Email = request.RegisterRequest.Email,
                             EmailConfirmed = true,
                         };
 
-                        var existsEmail = await _userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
+                        var existsEmail = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
 
                         if (existsEmail is null)
                         {

@@ -2,12 +2,16 @@
 {
     public class AuthResponseDto
     {
-        public string Id { get; set; }
+        public string FirstName { get; set; } = null!;
 
-        public string UserName { get; set; }
+        public string LastName { get; set; } = null!;
 
-        public string Email { get; set; }
+        public string UsertName { get; set; } = null!;
 
-        public string Token { get; set; }
+        public string Email { get; set; } = null!;
+
+        public string JwtToken { get; set; } = null!;
+
+        public string RefreshToken { get; set; } = null!;
     }
 }
