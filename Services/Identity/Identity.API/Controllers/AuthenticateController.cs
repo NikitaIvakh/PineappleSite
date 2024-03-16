@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Identity.Domain.ResultIdentity;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Application.Features.Identities.Requests.Commands;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace Identity.API.Controllers
 {
@@ -51,9 +52,26 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _authLogger.LogDebug($"LogDebug ================ Токен успешно обновлен: {tokenModel}");
                 return Ok(command);
             }
 
+            _registerLogger.LogError($"LogDebugError ================ Обновить токен не удалось: {tokenModel}");
+            return BadRequest(command.ErrorMessage);
+        }
+
+        [HttpPost("RevokeToken/{userName}")]
+        public async Task<ActionResult<Result<Unit>>> RevokeToken(string userName)
+        {
+            var command = await _mediator.Send(new RevorkeTokenRequest { UserName = userName });
+
+            if (command.IsSuccess)
+            {
+                _authLogger.LogDebug($"LogDebug ================ Токен успешно удален: {userName}");
+                return Ok(command);
+            }
+
+            _registerLogger.LogError($"LogDebugError ================ Удалить токен не удалось: {userName}");
             return BadRequest(command.ErrorMessage);
         }
     }
