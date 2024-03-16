@@ -118,7 +118,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<AuthResponseDto>
                 {
