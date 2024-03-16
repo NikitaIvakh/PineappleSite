@@ -74,5 +74,18 @@ namespace Identity.API.Controllers
             _registerLogger.LogError($"LogDebugError ================ Удалить токен не удалось: {userName}");
             return BadRequest(command.ErrorMessage);
         }
+
+        [HttpPost("RevokeAllTokens")]
+        public async Task<ActionResult<Result<Unit>>> RevokeAllTokens()
+        {
+            var command = await _mediator.Send(new RevokeAllTokensRequest());
+
+            if (command.IsSuccess)
+            {
+                return Ok(command);
+            }
+
+            return BadRequest(command.ErrorMessage);
+        }
     }
 }
