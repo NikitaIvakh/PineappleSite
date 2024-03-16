@@ -153,8 +153,17 @@
   <data name="Previous" xml:space="preserve">
     <value>Previous</value>
   </data>
+  <data name="RefreshToken" xml:space="preserve">
+    <value>RefreshToken</value>
+  </data>
   <data name="Registered users" xml:space="preserve">
     <value>Registered users</value>
+  </data>
+  <data name="RevokeAllTokens" xml:space="preserve">
+    <value>Revoke all tokens</value>
+  </data>
+  <data name="RevokeToken" xml:space="preserve">
+    <value>RevokeToken</value>
   </data>
   <data name="Role" xml:space="preserve">
     <value>Role</value>

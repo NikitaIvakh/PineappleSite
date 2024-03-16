@@ -82,6 +82,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             var existsRoles = await _userManager.GetRolesAsync(user);
                             await _userManager.RemoveFromRolesAsync(user, existsRoles);
 
+                            await _userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
+                            await _userManager.UpdateAsync(user);
 
                             return new Result<RegisterResponseDto>
                             {

@@ -4,6 +4,7 @@ using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using PineappleSite.Presentation.Utility;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -23,7 +24,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
 
                 if (result.IsSuccess)
@@ -75,7 +76,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userid = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string? userid = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userid);
 
                 if (result.IsSuccess)
@@ -127,7 +128,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 var response = await _shoppingCartService.RemoveCartDetailsAsync(productId);
 
                 if (response.IsSuccess)
@@ -154,7 +155,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
 
                 if (result.IsSuccess)
@@ -275,7 +276,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 CartResult<CartViewModel> response = await _shoppingCartService.GetCartAsync(userId);
 
                 if (response.IsSuccess)
@@ -328,7 +329,7 @@ namespace PineappleSite.Presentation.Controllers
 
         private async Task<CartResult<CartViewModel>> GetShoppingCartAfterAuthenticate()
         {
-            string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+            string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
             CartResult<CartViewModel> result = await _shoppingCartService.GetCartAsync(userId);
 
             if (result.IsSuccess)

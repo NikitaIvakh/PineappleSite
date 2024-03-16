@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Services.Favorites;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Controllers
 {
@@ -15,7 +16,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 FavouriteResult<FavouriteViewModel> result = await _favoriteService.GetFavouruteProductsAsync(userId);
 
                 if (result.IsSuccess)
@@ -51,7 +52,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string userId = User.Claims.Where(key => key.Type == "uid")?.FirstOrDefault()?.Value;
+                string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 FavouriteResult<FavouriteViewModel> response = await _favoriteService.FavouruteRemoveProductsAsync(productId);
 
                 if (response.IsSuccess)

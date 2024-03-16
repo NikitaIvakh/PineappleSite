@@ -18,7 +18,6 @@ namespace Identity.Application.Features.Identities.Commands.Commands
             {
                 var user = await _userManager.FindByNameAsync(request.UserName);
 
-
                 if (user is null)
                 {
                     return new Result<Unit>

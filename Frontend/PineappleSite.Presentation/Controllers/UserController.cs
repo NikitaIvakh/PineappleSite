@@ -4,26 +4,29 @@ using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Controllers
 {
-    public class UserController(IUserService userService) : Controller
+    public class UserController(IUserService userService, IIdentityService identityService, IHttpContextAccessor contextAccessor) : Controller
     {
         private readonly IUserService _userService = userService;
+        private readonly IIdentityService _identityService = identityService;
+        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
         // GET: UserController
         public async Task<ActionResult> Index(string searchUser, string currentFilter, int? pageNumber)
         {
             try
             {
-                string userId = User.Claims.FirstOrDefault(key => key.Type == "uid")?.Value;
+                string userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
                 var users = await _userService.GetAllUsersAsync(userId);
 
                 if (users.IsSuccess)
                 {
                     if (!string.IsNullOrEmpty(searchUser))
                     {
-                        var searchUsers = users.Data.Where(
+                        var searchUsers = users.Data!.Where(
                             key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
                             key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
                             key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
@@ -39,7 +42,7 @@ namespace PineappleSite.Presentation.Controllers
                     ViewData["CurrentFilter"] = currentFilter;
 
                     int pageSize = 10;
-                    var filteredUsers = users.Data.AsQueryable();
+                    var filteredUsers = users.Data!.AsQueryable();
                     var paginatedUsers = PaginatedList<UserWithRolesViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
 
                     return View(paginatedUsers);
@@ -71,7 +74,7 @@ namespace PineappleSite.Presentation.Controllers
                 {
                     UserWithRolesViewModel userWithRolesViewModel = new()
                     {
-                        User = user.Data.User,
+                        User = user.Data!.User,
                         Roles = user.Data.Roles,
                     };
 
@@ -280,6 +283,97 @@ namespace PineappleSite.Presentation.Controllers
             {
                 TempData["error"] = response.ErrorMessage;
                 return RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RefreshToken()
+        {
+            try
+            {
+                string jwtToken = _contextAccessor.HttpContext!.Request.Cookies["JWTToken"]!;
+                string refreshToken = _contextAccessor.HttpContext!.Request.Cookies["RefreshToken"]!;
+
+                TokenModelViewModel tokenModelViewModel = new()
+                {
+                    AccessToken = jwtToken,
+                    RefreshToken = refreshToken,
+                };
+
+                var response = await _identityService.RefreshTokenAsync(tokenModelViewModel);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.SuccessMessage;
+                    return RedirectToAction("Index", "User");
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction("Index", "User");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> RevokeToken(string userName)
+        {
+            try
+            {
+                var response = await _identityService.RevokeTokenAsync(userName);
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.SuccessMessage;
+                    return RedirectToAction("Index", "User");
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction("Index", "User");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(userName);
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RevokeAllTokens()
+        {
+            try
+            {
+                var response = await _identityService.RevokeAllTokensAsync();
+
+                if (response.IsSuccess)
+                {
+                    TempData["success"] = response.SuccessMessage;
+                    return RedirectToAction("Index", "User");
+                }
+
+                else
+                {
+                    TempData["error"] = response.ErrorMessage;
+                    return RedirectToAction("Index", "User");
+                }
+            }
+
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View();
             }
         }
     }

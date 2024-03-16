@@ -295,6 +295,48 @@
     },
 
     {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/RefreshToken",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/RefreshToken",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/RevokeToken/{userName}",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/RevokeToken/{userName}",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/Authenticate/RevokeAllTokens",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/Authenticate/RevokeAllTokens",
+      "UpstreamHttpMethod": [ "POST" ]
+    },
+
+    {
       //"Order.API": "https://localhost:7017"
       "DownstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
       "DownstreamScheme": "https",
