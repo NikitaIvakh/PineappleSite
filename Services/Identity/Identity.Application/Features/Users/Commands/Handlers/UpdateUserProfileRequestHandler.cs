@@ -93,19 +93,18 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         {
                             if (!string.IsNullOrEmpty(user.ImageLocalPath))
                             {
-                                var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), user.ImageLocalPath);
-                                FileInfo fileInfo = new(oldFilePathDirectory);
+                                var fileNameFromDatabase = user.Id;
+                                var filePathPromDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
 
-                                if (fileInfo.Exists)
+                                var files = Directory.GetFiles(filePathPromDatabase, fileNameFromDatabase + ".*");
+
+                                foreach (var file in files)
                                 {
-                                    fileInfo.Delete();
+                                    File.Delete(file);
                                 }
                             }
 
-                            Random random = new();
-                            int randomNumber = random.Next(1, 120001);
-
-                            string fileName = $"{user.Id}{randomNumber}" + Path.GetExtension(request.UpdateUserProfile.Avatar.FileName);
+                            string fileName = $"{user.Id}" + Path.GetExtension(request.UpdateUserProfile.Avatar.FileName);
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
                             var directory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
@@ -121,9 +120,28 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 request.UpdateUserProfile.Avatar.CopyTo(fileStream);
                             }
 
-                            var baseUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
-                            user.ImageUrl = baseUrl + "/UserImages/" + fileName;
+                            var baseUrl = $"{_httpContextAccessor.HttpContext!.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host.Value}{_httpContextAccessor.HttpContext.Request.PathBase.Value}";
+                            user.ImageUrl = Path.Combine(baseUrl, "UserImages", fileName);
                             user.ImageLocalPath = filePath;
+                        }
+
+                        else
+                        {
+                            if (!string.IsNullOrEmpty(user.ImageLocalPath))
+                            {
+                                var fileToDelete = user.Id;
+                                var filePathToDelete = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
+
+                                var files = Directory.GetFiles(filePathToDelete, fileToDelete + ".*");
+
+                                foreach (var file in files)
+                                {
+                                    File.Delete(file);
+                                }
+
+                                request.UpdateUserProfile.ImageUrl = user.ImageUrl;
+                                request.UpdateUserProfile.ImageLocalPath = user.ImageLocalPath;
+                            }
                         }
 
                         var result = await _userManager.UpdateAsync(user);
