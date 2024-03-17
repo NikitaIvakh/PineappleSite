@@ -29,18 +29,26 @@ namespace PineappleSite.Presentation.Services
                 {
                     if (!string.IsNullOrWhiteSpace(authResponse.Data.JwtToken))
                     {
-                        var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.JwtToken);
-                        var user = new ClaimsPrincipal(new ClaimsIdentity(tokenContent.Claims, CookieAuthenticationDefaults.AuthenticationScheme));
-                        await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
-
-                        var cookieOptions = new CookieOptions
+                        try
                         {
-                            Expires = DateTime.UtcNow.AddHours(1),
-                            Secure = true,
-                            HttpOnly = true,
-                        };
+                            var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.JwtToken);
+                            var user = new ClaimsPrincipal(new ClaimsIdentity(tokenContent.Claims, CookieAuthenticationDefaults.AuthenticationScheme));
+                            await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
 
-                        _httpContextAccessor.HttpContext!.Response.Cookies.Append("JWTToken", tokenContent.RawData, cookieOptions);
+                            var cookieOptions = new CookieOptions
+                            {
+                                Expires = DateTime.UtcNow.AddHours(1),
+                                Secure = true,
+                                HttpOnly = true,
+                            };
+
+                            _httpContextAccessor.HttpContext!.Response.Cookies.Append("JWTToken", tokenContent.RawData, cookieOptions);
+                        }
+
+                        catch (Exception ex)
+                        {
+                            await Console.Out.WriteLineAsync($"Ошибка: {ex.Message}");
+                        }
 
                         return new IdentityResult<AuthResponseViewModel>
                         {

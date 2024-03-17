@@ -92,6 +92,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 LastName = request.CreateUser.LastName,
                                 Email = request.CreateUser.EmailAddress,
                                 UserName = request.CreateUser.UserName,
+                                EmailConfirmed = true,
                             };
 
                             if (!string.IsNullOrEmpty(request.CreateUser.Password))
