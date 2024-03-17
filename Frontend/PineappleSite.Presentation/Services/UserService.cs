@@ -22,7 +22,7 @@ namespace PineappleSite.Presentation.Services
                 UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
                 UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
 
-                if (users.IsSuccess || user.IsSuccess)
+                if (users.IsSuccess)
                 {
                     return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
                 }
