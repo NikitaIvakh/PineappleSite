@@ -76,7 +76,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                     else
                     {
-                        var isValidPassword = await _userManager.CheckPasswordAsync(user, request.AuthRequest.Password);
+                        var isValidPassword = await _userManager.CheckPasswordAsync(user, request.AuthRequest.Password.Trim());
 
                         if (!isValidPassword)
                         {
@@ -103,10 +103,10 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             {
                                 Data = new AuthResponseDto
                                 {
-                                    FirstName = user.FirstName,
-                                    LastName = user.LastName,
-                                    UsertName = user.UserName!,
-                                    Email = user.Email!,
+                                    FirstName = user.FirstName.Trim(),
+                                    LastName = user.LastName.Trim(),
+                                    UsertName = user.UserName!.Trim(),
+                                    Email = user.Email!.Trim(),
                                     JwtToken = accessToken,
                                     RefreshToken = user.RefreshToken,
                                 },

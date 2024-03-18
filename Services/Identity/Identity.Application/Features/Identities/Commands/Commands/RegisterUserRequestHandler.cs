@@ -62,17 +62,17 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     var user = new ApplicationUser
                     {
                         Id = Guid.NewGuid().ToString(),
-                        FirstName = request.RegisterRequest.FirstName,
-                        LastName = request.RegisterRequest.LastName,
-                        UserName = request.RegisterRequest.UserName,
-                        Email = request.RegisterRequest.Email,
+                        FirstName = request.RegisterRequest.FirstName.Trim(),
+                        LastName = request.RegisterRequest.LastName.Trim(),
+                        UserName = request.RegisterRequest.UserName.Trim(),
+                        Email = request.RegisterRequest.Email.Trim(),
                         EmailConfirmed = true,
                     };
 
                     var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.RegisterRequest.Password);
                     user.PasswordHash = passwordHasher;
 
-                    if (request.RegisterRequest.Password == request.RegisterRequest.PasswordConfirm)
+                    if (request.RegisterRequest.Password.Trim() == request.RegisterRequest.PasswordConfirm.Trim())
                     {
                         var result = await _userManager.CreateAsync(user, request.RegisterRequest.Password);
 

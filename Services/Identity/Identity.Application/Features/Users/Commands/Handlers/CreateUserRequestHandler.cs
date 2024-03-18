@@ -88,10 +88,10 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             var user = new ApplicationUser
                             {
                                 Id = Guid.NewGuid().ToString(),
-                                FirstName = request.CreateUser.FirstName,
-                                LastName = request.CreateUser.LastName,
-                                Email = request.CreateUser.EmailAddress,
-                                UserName = request.CreateUser.UserName,
+                                FirstName = request.CreateUser.FirstName.Trim(),
+                                LastName = request.CreateUser.LastName.Trim(),
+                                Email = request.CreateUser.EmailAddress.Trim(),
+                                UserName = request.CreateUser.UserName.Trim(),
                                 EmailConfirmed = true,
                             };
 
@@ -105,10 +105,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                             if (result.Succeeded)
                             {
-                                var userRoles = await _userManager.GetRolesAsync(user);
-                                await _userManager.RemoveFromRolesAsync(user, userRoles);
                                 await _userManager.AddToRoleAsync(user, request.CreateUser.Roles.ToString());
-
                                 await _userManager.UpdateAsync(user);
 
                                 return new Result<ApplicationUser>

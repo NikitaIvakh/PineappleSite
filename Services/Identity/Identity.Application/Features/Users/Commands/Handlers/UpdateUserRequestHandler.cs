@@ -70,10 +70,10 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     else
                     {
-                        user.FirstName = request.UpdateUser.FirstName;
-                        user.LastName = request.UpdateUser.LastName;
-                        user.Email = request.UpdateUser.EmailAddress;
-                        user.UserName = request.UpdateUser.UserName;
+                        user.FirstName = request.UpdateUser.FirstName.Trim();
+                        user.LastName = request.UpdateUser.LastName.Trim();
+                        user.Email = request.UpdateUser.EmailAddress.Trim();
+                        user.UserName = request.UpdateUser.UserName.Trim();
 
                         var result = await _userManager.UpdateAsync(user);
 

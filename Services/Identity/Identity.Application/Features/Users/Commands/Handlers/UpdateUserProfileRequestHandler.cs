@@ -74,11 +74,11 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     else
                     {
-                        user.FirstName = request.UpdateUserProfile.FirstName;
-                        user.LastName = request.UpdateUserProfile.LastName;
-                        user.Email = request.UpdateUserProfile.EmailAddress;
-                        user.UserName = request.UpdateUserProfile.UserName;
-                        user.Description = request.UpdateUserProfile.Description;
+                        user.FirstName = request.UpdateUserProfile.FirstName.Trim();
+                        user.LastName = request.UpdateUserProfile.LastName.Trim();
+                        user.Email = request.UpdateUserProfile.EmailAddress.Trim();
+                        user.UserName = request.UpdateUserProfile.UserName.Trim();
+                        user.Description = request.UpdateUserProfile.Description.Trim();
                         user.Age = request.UpdateUserProfile.Age;
 
                         if (!string.IsNullOrEmpty(request.UpdateUserProfile.Password))
