@@ -7,7 +7,7 @@ namespace PineappleSite.Presentation.Utility
         public enum UserRoles
         {
             [Display(Name = "Пользователь")]
-            Employee = 1,
+            User = 1,
 
             [Display(Name = "Администратор")]
             Administrator = 2
@@ -15,7 +15,7 @@ namespace PineappleSite.Presentation.Utility
 
 
         public const string RoleAdmin = "Administrator";
-        public const string RoleEmployee = "Employee";
+        public const string RoleUser = "User";
         public const string UserAdmin = "admin@localhost.com";
 
         public const string Status_Pending = "Ожидается";

@@ -35,7 +35,6 @@
                 </div>
                 <div class="col-6 text-end">
                     <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new user"]</a>
-                    <button asp-action="RevokeAllTokens" class="btn btn-outline-primary"><i class="bi bi-trash"></i> @Localizer["RevokeAllTokens"]</button> 
                     <br />  <br />
                     <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
                     <div class="col-12 form-text">
@@ -46,9 +45,10 @@
                 <thead>
                     <tr>
                         <th></th>
+                        <th>@Localizer["FirstName"]</th>
+                        <th>@Localizer["LastName"]</th>
                         <th>@Localizer["UserName"]</th>
                         <th>@Localizer["Role"]</th>
-                        <th>@Localizer["RevokeToken"]</th>
                         <th>@Localizer["Update"]</th>
                         <th>@Localizer["Delete"]</th>
                     </tr>
@@ -64,6 +64,8 @@
                                 <td>
                                     <input type="checkbox" name="selectedUserIds" value="@item.User.Id" />
                                 </td>
+                                <td>@item.User.FirstName</td>
+                                <td>@item.User.LastName</td>
                                 <td>@item.User.UserName</td>
                                 <td>
                                     @{
@@ -72,11 +74,6 @@
                                             @role
                                         }
                                     }
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-success" asp-action="RevokeToken" asp-route-userName="@item.User.UserName">
-                                        @Localizer["RevokeToken"]
-                                    </button>
                                 </td>
                                 <td>
                                     <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.User.Id">
