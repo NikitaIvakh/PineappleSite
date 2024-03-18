@@ -12,7 +12,7 @@ namespace ShoppingCart.Test.Commands
         public async Task RemoveShoppingCartDetailsRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new RemoveShoppingCartDetailsRequestHandler(CartHeader, CartDetails, Mapper);
+            var handler = new RemoveShoppingCartDetailsRequestHandler(CartHeader, CartDetails, Mapper, MemoryCache);
             var productId = 2;
 
             // Act

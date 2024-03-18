@@ -12,7 +12,7 @@ namespace Favourite.Test.Commands
         public async Task RemoveFavoriteRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new RemoveFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, Mapper);
+            var handler = new RemoveFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, Mapper, MemoryCache);
             var productId = 13;
 
             // Act

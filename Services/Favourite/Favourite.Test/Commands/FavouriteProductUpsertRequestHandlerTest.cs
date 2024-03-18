@@ -13,7 +13,7 @@ namespace Favourite.Test.Commands
         public async Task FavouriteProductUpsertRequestHandlerTest_Success_Empty()
         {
             // Arrange
-            var handler = new FavouriteProductUpsertRequestHandler(FavouriteHeader, FavouriteDetails, Mapper);
+            var handler = new FavouriteProductUpsertRequestHandler(FavouriteHeader, FavouriteDetails, Mapper, MemoryCache);
             FavouriteHeaderDto favouriteHeaderDto = new()
             {
                 FavouriteHeaderId = 2,
@@ -48,7 +48,7 @@ namespace Favourite.Test.Commands
         public async Task FavouriteProductUpsertRequestHandlerTest_Success_NotEmpty()
         {
             // Arrange
-            var handler = new FavouriteProductUpsertRequestHandler(FavouriteHeader, FavouriteDetails, Mapper);
+            var handler = new FavouriteProductUpsertRequestHandler(FavouriteHeader, FavouriteDetails, Mapper, MemoryCache);
             FavouriteHeaderDto favouriteHeaderDto = new()
             {
                 FavouriteHeaderId = 3,

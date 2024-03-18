@@ -15,7 +15,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 3,
@@ -48,7 +48,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 999,
@@ -74,7 +74,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_CouponCodeIsNotValid()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 3,
@@ -100,7 +100,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_DiscountAmountIsNotValid()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 3,
@@ -126,7 +126,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_MinAmountIsNotValid()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 3,
@@ -152,7 +152,7 @@ namespace Coupon.Test.Commands
         public async Task UpdateCouponRequestHandlerTest_AllPropertiesIsNotValid_Without_CouponId()
         {
             // Arrange
-            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper);
+            var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, UpdateLogger, Mapper, MemoryCache);
             var updateCouponDto = new UpdateCouponDto
             {
                 CouponId = 3,

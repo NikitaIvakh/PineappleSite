@@ -14,7 +14,7 @@ namespace Coupon.Test.Commands
         public async Task DeleteCouponRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new DeleteCouponRequestHandler(Repository, DeleteLogger, Mapper, DeleteValidator);
+            var handler = new DeleteCouponRequestHandler(Repository, DeleteLogger, Mapper, DeleteValidator, MemoryCache);
             var deleteCoupon = new DeleteCouponDto
             {
                 Id = 3,
@@ -37,7 +37,7 @@ namespace Coupon.Test.Commands
         public async Task DeleteCouponRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new DeleteCouponRequestHandler(Repository, DeleteLogger, Mapper, DeleteValidator);
+            var handler = new DeleteCouponRequestHandler(Repository, DeleteLogger, Mapper, DeleteValidator, MemoryCache);
             var deleteCoupon = new DeleteCouponDto
             {
                 Id = 88,

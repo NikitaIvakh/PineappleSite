@@ -16,7 +16,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_Success()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor);
+            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor, MemoryCache);
             var createProductDto = new CreateProductDto
             {
                 Name = "name",
@@ -48,7 +48,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidName()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor);
+            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor, MemoryCache);
             var createProductDto = new CreateProductDto
             {
                 Name = "na",
@@ -74,7 +74,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidDescription()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor);
+            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor, MemoryCache);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",
@@ -108,7 +108,7 @@ namespace Product.Test.Commands
         public async Task CreateProductRequestHanlderTest_FailOrWrongInputValidPrice()
         {
             // Arrange
-            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor);
+            var handler = new CreateProductDtoRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, HttpContextAccessor, MemoryCache);
             var createProductDto = new CreateProductDto
             {
                 Name = "valid name",

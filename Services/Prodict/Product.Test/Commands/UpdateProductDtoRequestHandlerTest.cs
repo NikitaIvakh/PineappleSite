@@ -17,7 +17,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor);
+            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor, MemoryCache);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,
@@ -52,7 +52,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongId()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor);
+            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor, MemoryCache);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 999,
@@ -78,7 +78,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongInputValidName()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor);
+            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor, MemoryCache);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,
@@ -105,7 +105,7 @@ namespace Product.Test.Commands
         public async Task UpdateProductDtoRequestHandlerTest_FailOrWrongInputValidDescription()
         {
             // Arrange
-            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor);
+            var handler = new UpdateProductDtoRequestHandler(Repository, UpdateLogger, Mapper, UpdateValidator, HttpContextAccessor, MemoryCache);
             var updateProductDto = new UpdateProductDto
             {
                 Id = 4,

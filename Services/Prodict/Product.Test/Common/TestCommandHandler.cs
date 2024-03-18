@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Product.Application.DTOs.Validator;
 using Product.Application.Features.Commands.Handlers;
@@ -22,6 +23,7 @@ namespace Product.Test.Common
         protected ILogger UpdateLogger;
         protected ILogger DeleteLogger;
         protected ILogger DeleteListLogger;
+        protected IMemoryCache MemoryCache;
         #endregion
 
         #region ValidEntities
@@ -48,6 +50,8 @@ namespace Product.Test.Common
             UpdateValidator = new IUpdateProductDtoValidator();
             DeleteValidator = new IDeleteProductDtoValidator();
             DeleteProductsValidator = new IDeleteProductsDtoValidator();
+
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

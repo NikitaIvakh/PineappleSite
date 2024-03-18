@@ -14,7 +14,7 @@ namespace Orders.Test.Requests
         public async Task GetOrderListRequestHandlerTest_Fail()
         {
             // Arrange
-            var handler = new GetOrderListRequestHandler(OrderHeader, HttpContextAccessor, Mapper, MemoryCache);
+            var handler = new GetOrderListRequestHandler(OrderHeader, Mapper, MemoryCache, UserService);
             string userId = "8e445865-a24d-4543-a6c6-9443d048cdb9";
 
             // Mock HttpContext

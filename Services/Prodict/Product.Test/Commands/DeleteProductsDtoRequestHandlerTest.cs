@@ -14,7 +14,7 @@ namespace Product.Test.Commands
         public async Task DeleteProductsDtoRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new DeleteProductsDtoRequestHandler(Repository, DeleteProductsValidator, DeleteListLogger, Mapper);
+            var handler = new DeleteProductsDtoRequestHandler(Repository, DeleteProductsValidator, DeleteListLogger, Mapper, MemoryCache);
             var deleteProducts = new DeleteProductsDto
             {
                 ProductIds = new List<int> { 1, 2 },
@@ -36,7 +36,7 @@ namespace Product.Test.Commands
         public async Task DeleteProductsDtoRequestHandlerTest_FailOrWrongIds()
         {
             // Arrange
-            var handler = new DeleteProductsDtoRequestHandler(Repository, DeleteProductsValidator, DeleteListLogger, Mapper);
+            var handler = new DeleteProductsDtoRequestHandler(Repository, DeleteProductsValidator, DeleteListLogger, Mapper, MemoryCache);
             var deleteProducts = new DeleteProductsDto
             {
                 ProductIds = new List<int>(),

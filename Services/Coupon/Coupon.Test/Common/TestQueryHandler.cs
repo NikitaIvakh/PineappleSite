@@ -5,11 +5,9 @@ using Xunit;
 using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Serilog;
-using Coupon.Application.Features.Coupons.Handlers.Commands;
 using Coupon.Infrastructure.Repository;
 using Coupon.Application.Features.Coupons.Handlers.Queries;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
 
 namespace Coupon.Test.Common
 {

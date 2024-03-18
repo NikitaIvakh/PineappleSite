@@ -8,6 +8,7 @@ using Favourite.Infrastructure;
 using Favourite.Application.Mapping;
 using Moq;
 using Favourite.Infrastructure.Repository.Implement;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Favourite.Test.Common
 {
@@ -19,6 +20,7 @@ namespace Favourite.Test.Common
         protected IBaseRepositiry<FavouriteHeader> FavouriteHeader;
         protected IBaseRepositiry<FavouriteDetails> FavouriteDetails;
         protected IProductService ProductService;
+        protected IMemoryCache MemoryCache;
 
         public TestCommandHandler()
         {
@@ -38,6 +40,8 @@ namespace Favourite.Test.Common
             FavouriteHeader = new BaseRepository<FavouriteHeader>(Context);
             FavouriteDetails = new BaseRepository<FavouriteDetails>(Context);
             ProductService = productMock.Object;
+
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var mapperConfiguration = new MapperConfiguration(config =>
             {

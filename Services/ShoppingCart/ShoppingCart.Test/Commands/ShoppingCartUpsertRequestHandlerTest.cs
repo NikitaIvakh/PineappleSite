@@ -13,7 +13,7 @@ namespace ShoppingCart.Test.Commands
         public async Task ShoppingCartUpsertRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new ShoppingCartUpsertRequestHandler(CartHeader, CartDetails, Mapper);
+            var handler = new ShoppingCartUpsertRequestHandler(CartHeader, CartDetails, Mapper, MemoryCache);
             CartHeaderDto cartHeaderDto = new()
             {
                 CartHeaderId = 2,
@@ -52,7 +52,7 @@ namespace ShoppingCart.Test.Commands
         public async Task ShoppingCartUpsertRequestHandlerTest_Success_NewUser()
         {
             // Arrange
-            var handler = new ShoppingCartUpsertRequestHandler(CartHeader, CartDetails, Mapper);
+            var handler = new ShoppingCartUpsertRequestHandler(CartHeader, CartDetails, Mapper, MemoryCache);
             CartHeaderDto cartHeaderDto = new()
             {
                 CartHeaderId = 3,

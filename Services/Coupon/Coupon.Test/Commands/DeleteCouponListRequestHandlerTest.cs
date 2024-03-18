@@ -13,7 +13,7 @@ namespace Coupon.Test.Commands
         public async Task DeleteCouponListRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new DeleteCouponListRequestHandler(Repository, DeleteListLogger, Mapper, DeleteListValidator);
+            var handler = new DeleteCouponListRequestHandler(Repository, DeleteListLogger, Mapper, DeleteListValidator, MemoryCache);
             var deleteCouponList = new DeleteCouponListDto
             {
                 CouponIds = [1, 2, 3],
@@ -35,7 +35,7 @@ namespace Coupon.Test.Commands
         [Fact]
         public async Task DeleteCouponListRequestHandlerTest_EmptyList()
         {
-            var handler = new DeleteCouponListRequestHandler(Repository, DeleteListLogger, Mapper, DeleteListValidator);
+            var handler = new DeleteCouponListRequestHandler(Repository, DeleteListLogger, Mapper, DeleteListValidator, MemoryCache);
             var deleteCouponList = new DeleteCouponListDto
             {
                 CouponIds = [],

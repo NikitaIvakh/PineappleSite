@@ -16,7 +16,7 @@ namespace Coupon.Test.Commands
         public async Task CreareCouponRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, MemoryCache);
             var createCoupon = new CreateCouponDto
             {
                 CouponCode = "Test 123",
@@ -49,7 +49,7 @@ namespace Coupon.Test.Commands
         public async Task CreateCouponRequestHandlerTest_MinAmount_Error()
         {
             // Arrange
-            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, MemoryCache);
             var createCoupon = new CreateCouponDto
             {
                 CouponCode = "Test",
@@ -74,7 +74,7 @@ namespace Coupon.Test.Commands
         public async Task CreateCouponRequestHandlerTest_DiscountAmount_Error()
         {
             // Arrange
-            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, MemoryCache);
             var createCoupon = new CreateCouponDto
             {
                 CouponCode = "Test",
@@ -99,7 +99,7 @@ namespace Coupon.Test.Commands
         public async Task CreateCouponRequestHandlerTest_CouponCode_Error()
         {
             // Arrange
-            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, MemoryCache);
             var createCoupon = new CreateCouponDto
             {
                 CouponCode = "Test 12349 TestTestTestTestTestTestTestTestTestTestTest",
@@ -124,7 +124,7 @@ namespace Coupon.Test.Commands
         public async Task CreareCouponRequestHandlerTest_CouponAlreadyExists()
         {
             // Arrange
-            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator);
+            var handler = new CreateCouponRequestHandler(Repository, CreateLogger, Mapper, CreateValidator, MemoryCache);
             var createCoupon = new CreateCouponDto
             {
                 CouponCode = "10OFF",

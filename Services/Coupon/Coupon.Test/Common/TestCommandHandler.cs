@@ -6,6 +6,7 @@ using Coupon.Domain.Entities;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure;
 using Coupon.Infrastructure.Repository;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Serilog;
 
@@ -24,6 +25,7 @@ namespace Coupon.Test.Common
         protected ILogger DeleteLogger;
         protected ILogger DeleteListLogger;
         protected IMapper Mapper;
+        protected IMemoryCache MemoryCache;
 
         public TestCommandHandler()
         {
@@ -38,6 +40,8 @@ namespace Coupon.Test.Common
             UpdateValidator = new UpdateValidator(Context);
             DeleteValidator = new DeleteValidator(Context);
             DeleteListValidator = new DeleteListValidator();
+
+            MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
             var configurationProvider = new MapperConfiguration(cfg =>
             {
