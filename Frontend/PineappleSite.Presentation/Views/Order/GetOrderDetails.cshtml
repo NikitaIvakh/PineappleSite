@@ -1,5 +1,6 @@
 ﻿@using Microsoft.IdentityModel.JsonWebTokens
 @using PineappleSite.Presentation.Utility
+@using System.Security.Claims
 @model PineappleSite.Presentation.Models.Orders.OrderHeaderViewModel
 
 @{
@@ -43,7 +44,7 @@
                             </div>
 
                             @{
-                                if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
+                                if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                 {
                                     <div class="row my-1">
                                         <div class="col-3">@Localizer["Session Id"]</div>
@@ -94,7 +95,7 @@
                             @{
                                 if (Model.Status == StaticDetails.Status_Approved)
                                 {
-                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
+                                    if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                     {
                                         <button asp-action="OrderReadyForPickup" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["The order is ready"]</button>
                                     }
@@ -102,7 +103,7 @@
 
                                 if (Model.Status == StaticDetails.Status_ReadyForPickup)
                                 {
-                                    if (User.Claims.Where(key => key.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value == StaticDetails.UserAdmin)
+                                    if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                     {
                                         <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["Complete the order"]</button>
                                     }
@@ -124,3 +125,12 @@
 @section Scripts {
     <script src="~/js/orders/orderIndex.js"></script>
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input').on('input', function () {
+            $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+</script>

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Order.Domain.DTOs;
-using Order.Domain.Entities;
 using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Requests.Requests

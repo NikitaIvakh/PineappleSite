@@ -18,7 +18,7 @@ namespace Order.Application.Features.Handlers.Requests
         private readonly IMapper _mapper = mapper;
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "cacheOrderDetailsKey";
+        private readonly string cacheKey = "cacheOrderListKey";
 
         public async Task<Result<OrderHeaderDto>> Handle(GetOrderRequest request, CancellationToken cancellationToken)
         {
@@ -48,6 +48,8 @@ namespace Order.Application.Features.Handlers.Requests
 
                     else
                     {
+                        _memoryCache.Set(cacheKey, orderHeader);
+
                         return new Result<OrderHeaderDto>
                         {
                             SuccessMessage = "Заказ успешно получен",

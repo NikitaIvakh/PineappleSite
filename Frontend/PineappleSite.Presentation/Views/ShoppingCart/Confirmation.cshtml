@@ -10,3 +10,12 @@
     <h4 class="text-warning pb-3" style="color:aqua">@Localizer["Order number"] - @Model</h4>
     <img src="~/images/order.PNG" width="80%" />
 </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input').on('input', function () {
+            $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+</script>

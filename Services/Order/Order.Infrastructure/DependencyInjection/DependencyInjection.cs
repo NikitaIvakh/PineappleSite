@@ -26,6 +26,7 @@ namespace Order.Infrastructure.DependencyInjection
             services.AddScoped<IBaseRepository<OrderHeader>, BaseRepository<OrderHeader>>();
             services.AddScoped<IBaseRepository<OrderDetails>, BaseRepository<OrderDetails>>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IUserService, UserService>();
 
             services.AddScoped(scope => new DbConnectionFactory(connectionString));
             services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();

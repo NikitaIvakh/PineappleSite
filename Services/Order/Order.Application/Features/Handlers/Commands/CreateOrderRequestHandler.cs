@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Resources;
 using Order.Application.Utility;
@@ -12,11 +13,14 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Handlers.Commands
 {
-    public class CreateOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IOrderValidator orderValidator) : IRequestHandler<CreateOrderRequest, Result<OrderHeaderDto>>
+    public class CreateOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IOrderValidator orderValidator, IMemoryCache memoryCache) : IRequestHandler<CreateOrderRequest, Result<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IMapper _mapper = mapper;
         private readonly IOrderValidator _orderValidator = orderValidator;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheOrderListKey";
 
         public async Task<Result<OrderHeaderDto>> Handle(CreateOrderRequest request, CancellationToken cancellationToken)
         {
@@ -66,6 +70,9 @@ namespace Order.Application.Features.Handlers.Commands
 
                     orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
 
+                    _memoryCache.Remove(orderHeaderDto);
+                    _memoryCache.Set(cacheKey, orderHeaderDto);
+
                     return new Result<OrderHeaderDto>
                     {
                         Data = orderHeaderDto,
@@ -78,9 +85,9 @@ namespace Order.Application.Features.Handlers.Commands
             {
                 return new Result<OrderHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ValidationErrors = [exception.Message],
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message },
+                    ErrorMessage = ErrorMessages.InternalServerError,
                 };
             }
         }

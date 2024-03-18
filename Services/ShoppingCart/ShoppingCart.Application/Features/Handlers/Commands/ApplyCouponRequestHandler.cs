@@ -47,7 +47,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     else
                     {
-                        cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode;
+                        cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode.Trim();
                         await _cartHeaderRepository.UpdateAsync(cartHeader);
 
                         return new Result<CartHeaderDto>
