@@ -7,14 +7,18 @@ using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Results;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Favourite.Application.Features.Handlers.Commands
 {
-    public class FavouriteProductUpsertRequestHandler(IBaseRepositiry<FavouriteHeader> headerRepository, IBaseRepositiry<FavouriteDetails> detailsRepository, IMapper mapper) : IRequestHandler<FavouriteProductUpsertRequest, Result<FavouriteHeaderDto>>
+    public class FavouriteProductUpsertRequestHandler(IBaseRepositiry<FavouriteHeader> headerRepository, IBaseRepositiry<FavouriteDetails> detailsRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<FavouriteProductUpsertRequest, Result<FavouriteHeaderDto>>
     {
         private readonly IBaseRepositiry<FavouriteHeader> _favouriteHeaderRepository = headerRepository;
         private readonly IBaseRepositiry<FavouriteDetails> _favouriteDetailsRepository = detailsRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "FavouritesCacheKey";
 
         public async Task<Result<FavouriteHeaderDto>> Handle(FavouriteProductUpsertRequest request, CancellationToken cancellationToken)
         {
@@ -29,6 +33,15 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteHeader.FavouriteHeaderId;
                     await _favouriteDetailsRepository.CreateAsync(_mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First()));
+
+                    var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
+                    var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
+
+                    _memoryCache.Remove(getAllheaders);
+                    _memoryCache.Remove(getAlldetails);
+
+                    _memoryCache.Set(cacheKey, getAllheaders);
+                    _memoryCache.Set(cacheKey, getAlldetails);
 
                     return new Result<FavouriteHeaderDto>
                     {

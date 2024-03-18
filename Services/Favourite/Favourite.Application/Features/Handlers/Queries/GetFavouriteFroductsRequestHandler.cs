@@ -21,7 +21,7 @@ namespace Favourite.Application.Features.Handlers.Queries
         private readonly IMapper _mapper = mapper;
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "cacheGetFavouritekey";
+        private readonly string cacheKey = "FavouritesCacheKey";
 
         public async Task<Result<FavouriteDto>> Handle(GetFavouriteFroductsRequest request, CancellationToken cancellationToken)
         {
@@ -97,6 +97,15 @@ namespace Favourite.Application.Features.Handlers.Queries
                             {
                                 item.Product = products?.Data?.FirstOrDefault(key => key.Id == item.ProductId);
                             }
+
+                            var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
+                            var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
+
+                            _memoryCache.Remove(getAllheaders);
+                            _memoryCache.Remove(getAlldetails);
+
+                            _memoryCache.Set(cacheKey, getAllheaders);
+                            _memoryCache.Set(cacheKey, getAlldetails);
 
                             return new Result<FavouriteDto>
                             {

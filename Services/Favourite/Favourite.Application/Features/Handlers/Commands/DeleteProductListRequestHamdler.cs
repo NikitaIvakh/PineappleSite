@@ -7,14 +7,18 @@ using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Results;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Favourite.Application.Features.Handlers.Commands
 {
-    public class DeleteProductListRequestHamdler(IBaseRepositiry<FavouriteHeader> favouriteHeaderRepository, IBaseRepositiry<FavouriteDetails> favouriteDetailsRepository, IMapper mapper) : IRequestHandler<DeleteProductListRequest, Result<FavouriteHeaderDto>>
+    public class DeleteProductListRequestHamdler(IBaseRepositiry<FavouriteHeader> favouriteHeaderRepository, IBaseRepositiry<FavouriteDetails> favouriteDetailsRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<DeleteProductListRequest, Result<FavouriteHeaderDto>>
     {
         private readonly IBaseRepositiry<FavouriteHeader> _favouriteHeaderRepository = favouriteHeaderRepository;
         private readonly IBaseRepositiry<FavouriteDetails> _favouriteDetailsRepository = favouriteDetailsRepository;
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "FavouritesCacheKey";
 
         public async Task<Result<FavouriteHeaderDto>> Handle(DeleteProductListRequest request, CancellationToken cancellationToken)
         {
@@ -47,6 +51,15 @@ namespace Favourite.Application.Features.Handlers.Commands
                             await _favouriteHeaderRepository.DeleteAsync(favouriteHeaderFromDb);
                         }
                     }
+
+                    var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
+                    var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
+
+                    _memoryCache.Remove(getAllheaders);
+                    _memoryCache.Remove(getAlldetails);
+
+                    _memoryCache.Set(cacheKey, getAllheaders);
+                    _memoryCache.Set(cacheKey, getAlldetails);
 
                     return new Result<FavouriteHeaderDto>
                     {
