@@ -74,8 +74,8 @@ namespace Product.Application.Features.Commands.Handlers
 
                     else
                     {
-                        product.Name = request.UpdateProduct.Name;
-                        product.Description = request.UpdateProduct.Description;
+                        product.Name = request.UpdateProduct.Name.Trim();
+                        product.Description = request.UpdateProduct.Description.Trim();
                         product.ProductCategory = request.UpdateProduct.ProductCategory;
                         product.Price = request.UpdateProduct.Price;
 

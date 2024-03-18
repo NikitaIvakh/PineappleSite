@@ -77,8 +77,8 @@ namespace Product.Application.Features.Commands.Handlers
                     {
                         product = new ProductEntity
                         {
-                            Name = request.CreateProduct.Name,
-                            Description = request.CreateProduct.Description,
+                            Name = request.CreateProduct.Name.Trim(),
+                            Description = request.CreateProduct.Description.Trim(),
                             ProductCategory = request.CreateProduct.ProductCategory,
                             Price = request.CreateProduct.Price,
                         };
