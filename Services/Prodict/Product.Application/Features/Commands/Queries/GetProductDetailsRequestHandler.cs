@@ -18,7 +18,7 @@ namespace Product.Application.Features.Commands.Queries
         private readonly ILogger _logger = logger.ForContext<GetProductDetailsRequestHandler>();
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "cacheProducDetailsKey";
+        private readonly string cacheKey = "cacheProductKey";
 
         public async Task<Result<ProductDto>> Handle(GetProductDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -55,6 +55,8 @@ namespace Product.Application.Features.Commands.Queries
 
                 else
                 {
+                    _memoryCache.Set(cacheKey, productDto);
+
                     return new Result<ProductDto>
                     {
                         Data = productDto,

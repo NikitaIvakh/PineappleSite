@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Product.Application.DTOs.Validator;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Resources;
@@ -13,12 +14,15 @@ using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class DeleteProductsDtoRequestHandler(IBaseRepository<ProductEntity> repository, IDeleteProductsDtoValidator validations, ILogger logger, IMapper mapper) : IRequestHandler<DeleteProductsDtoRequest, CollectionResult<ProductDto>>
+    public class DeleteProductsDtoRequestHandler(IBaseRepository<ProductEntity> repository, IDeleteProductsDtoValidator validations, ILogger logger, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<DeleteProductsDtoRequest, CollectionResult<ProductDto>>
     {
         private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly IDeleteProductsDtoValidator _deleteProductsValid = validations;
         private readonly ILogger _logger = logger.ForContext<DeleteProductsDtoRequestHandler>();
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheProductKey";
 
         public async Task<CollectionResult<ProductDto>> Handle(DeleteProductsDtoRequest request, CancellationToken cancellationToken)
         {
@@ -68,7 +72,14 @@ namespace Product.Application.Features.Commands.Handlers
                                     File.Delete(file);
                                 }
                             }
+
+                            _memoryCache.Remove(product);
                         }
+
+                        var productsCache = await _repository.GetAll().ToListAsync(cancellationToken);
+
+                        _memoryCache.Remove(productsCache);
+                        _memoryCache.Set(cacheKey, productsCache);
 
                         return new CollectionResult<ProductDto>
                         {

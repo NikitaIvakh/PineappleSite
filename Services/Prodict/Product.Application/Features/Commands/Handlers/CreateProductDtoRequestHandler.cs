@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Product.Application.DTOs.Validator;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Resources;
@@ -14,13 +15,16 @@ using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class CreateProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMapper mapper, ICreateProductDtoValidator createValidator, IHttpContextAccessor httpContextAccessor) : IRequestHandler<CreateProductDtoRequest, Result<ProductDto>>
+    public class CreateProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, ILogger logger, IMapper mapper, ICreateProductDtoValidator createValidator, IHttpContextAccessor httpContextAccessor, IMemoryCache memoryCache) : IRequestHandler<CreateProductDtoRequest, Result<ProductDto>>
     {
         private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly IMapper _mapper = mapper;
         private readonly ILogger _logger = logger.ForContext<CreateProductDtoRequestHandler>();
         private readonly ICreateProductDtoValidator _createValidator = createValidator;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheProductKey";
 
         public async Task<Result<ProductDto>> Handle(CreateProductDtoRequest request, CancellationToken cancellationToken)
         {
@@ -110,6 +114,13 @@ namespace Product.Application.Features.Commands.Handlers
 
                             await _repository.UpdateAsync(product);
 
+                            var products = await _repository.GetAll().ToListAsync(cancellationToken);
+
+                            _memoryCache.Remove(product);
+                            _memoryCache.Remove(products);
+                            _memoryCache.Set(cacheKey, product);
+                            _memoryCache.Set(cacheKey, products);
+
                             return new Result<ProductDto>
                             {
                                 SuccessMessage = "Продукт успешно добавлен",
@@ -119,6 +130,13 @@ namespace Product.Application.Features.Commands.Handlers
 
                         else
                         {
+                            var products = await _repository.GetAll().ToListAsync(cancellationToken);
+
+                            _memoryCache.Remove(product);
+                            _memoryCache.Remove(products);
+                            _memoryCache.Set(cacheKey, product);
+                            _memoryCache.Set(cacheKey, products);
+
                             product.ImageUrl = "https://placehold.co/600x400";
                             await _repository.UpdateAsync(product);
 

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Product.Application.DTOs.Validator;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Resources;
@@ -13,12 +14,15 @@ using Serilog;
 
 namespace Product.Application.Features.Commands.Handlers
 {
-    public class DeleteProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, IDeleteProductDtoValidator deleteValidator, ILogger logger, IMapper mapper) : IRequestHandler<DeleteProductDtoRequest, Result<ProductDto>>
+    public class DeleteProductDtoRequestHandler(IBaseRepository<ProductEntity> repository, IDeleteProductDtoValidator deleteValidator, ILogger logger, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<DeleteProductDtoRequest, Result<ProductDto>>
     {
         private readonly IBaseRepository<ProductEntity> _repository = repository;
         private readonly IDeleteProductDtoValidator _deleteValidator = deleteValidator;
         private readonly ILogger _logger = logger.ForContext<DeleteProductDtoRequestHandler>();
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheProductKey";
 
         public async Task<Result<ProductDto>> Handle(DeleteProductDtoRequest request, CancellationToken cancellationToken)
         {
@@ -66,6 +70,13 @@ namespace Product.Application.Features.Commands.Handlers
 
                         await _repository.DeleteAsync(product);
                     }
+
+                    var products = await _repository.GetAll().ToListAsync(cancellationToken);
+
+                    _memoryCache.Remove(product);
+                    _memoryCache.Remove(products);
+                    _memoryCache.Set(cacheKey, product);
+                    _memoryCache.Set(cacheKey, products);
 
                     return new Result<ProductDto>
                     {
