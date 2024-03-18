@@ -9,17 +9,21 @@ using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
+    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly ILogger _logger = logger.ForContext<CreateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
         private readonly CreateValidator _createValidator = createValidator;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "couponsCacheKey";
 
         public async Task<Result<CouponDto>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
         {
@@ -111,6 +115,12 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             }
                         }
 
+                        _memoryCache.Remove(cacheKey);
+                        var coupons = await _repository.GetAllAsync().ToListAsync(cancellationToken);
+
+                        _memoryCache.Set(cacheKey, coupon);
+                        _memoryCache.Set(cacheKey, coupons);
+
                         return new Result<CouponDto>
                         {
                             Data = _mapper.Map<CouponDto>(coupon),
@@ -123,6 +133,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
             catch (Exception exception)
             {
                 _logger.Error(exception, exception.Message);
+                _memoryCache.Remove(cacheKey);
                 return new Result<CouponDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,

@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
-using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
@@ -19,7 +18,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
         private readonly ILogger _logger = logger.ForContext<GetCouponDetailsRequestHandler>();
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "couponCacheKey";
+        private readonly string cacheKey = "couponsCacheKey";
 
         public async Task<Result<CouponDto>> Handle(GetCouponDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -56,6 +55,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
                     else
                     {
+                        _memoryCache.Set(cacheKey, coupon);
+
                         return new Result<CouponDto>
                         {
                             Data = coupon,
@@ -67,6 +68,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
+                _memoryCache.Remove(cacheKey);
                 return new Result<CouponDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,

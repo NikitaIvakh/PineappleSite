@@ -9,16 +9,20 @@ using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class UpdateCouponRequestHandler(IBaseRepository<CouponEntity> repository, UpdateValidator updateValidator, ILogger logger, IMapper mapper) : IRequestHandler<UpdateCouponRequest, Result<CouponDto>>
+    public class UpdateCouponRequestHandler(IBaseRepository<CouponEntity> repository, UpdateValidator updateValidator, ILogger logger, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<UpdateCouponRequest, Result<CouponDto>>
     {
         private readonly IBaseRepository<CouponEntity> _repository = repository;
         private readonly UpdateValidator _updateValidator = updateValidator;
         private readonly ILogger _logger = logger.ForContext<UpdateCouponRequestHandler>();
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "couponsCacheKey";
 
         public async Task<Result<CouponDto>> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
         {
@@ -76,6 +80,13 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         coupon.MinAmount = request.UpdateCoupon.MinAmount;
 
                         await _repository.UpdateAsync(coupon);
+
+                        var coupons = await _repository.GetAllAsync().ToListAsync(cancellationToken);
+
+                        _memoryCache.Remove(coupon);
+                        _memoryCache.Remove(coupons);
+
+                        _memoryCache.Set(cacheKey, coupons);
 
                         return new Result<CouponDto>
                         {
