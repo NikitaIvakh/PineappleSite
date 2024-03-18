@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Resources;
 using ShoppingCart.Domain.DTOs;
@@ -10,11 +11,15 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class RemoveShoppingCartDetailsRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper) : IRequestHandler<RemoveShoppingCartDetailsRequest, Result<CartHeaderDto>>
+    public class RemoveShoppingCartDetailsRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<RemoveShoppingCartDetailsRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
+
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheGetShoppingCartKey";
 
         public async Task<Result<CartHeaderDto>> Handle(RemoveShoppingCartDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -46,6 +51,15 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                             await _cartHeaderRepository.DeleteAsync(cartHeader);
                         }
                     }
+
+                    var getAllheaders = _cartHeaderRepository.GetAll().ToList();
+                    var getAlldetails = _cartDetailsRepository.GetAll().ToList();
+
+                    _memoryCache.Remove(getAllheaders);
+                    _memoryCache.Remove(getAlldetails);
+
+                    _memoryCache.Set(cacheKey, getAllheaders);
+                    _memoryCache.Set(cacheKey, getAlldetails);
 
                     return new Result<CartHeaderDto>
                     {

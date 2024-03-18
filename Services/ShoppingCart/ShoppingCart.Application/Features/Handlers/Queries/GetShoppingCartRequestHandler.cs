@@ -90,7 +90,6 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
 
                         if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
                         {
-                            // TODO Check valid coupon
                             var coupon = await _couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
 
                             if (coupon.Data is null)
@@ -108,6 +107,8 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                                 cartDto.CartHeader.Discount = coupon.Data.DiscountAmount;
                             }
                         }
+
+                        _memoryCache.Set(cacheKey, cartDto);
 
                         return new Result<CartDto>
                         {

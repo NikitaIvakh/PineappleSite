@@ -68,6 +68,15 @@ namespace Favourite.Application.Features.Handlers.Commands
                         request.FavouriteDto.FavouriteDetails.First().FavouriteDetailsId = favouriteDetails.FavouriteDetailsId;
                     }
 
+                    var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
+                    var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
+
+                    _memoryCache.Remove(getAllheaders);
+                    _memoryCache.Remove(getAlldetails);
+
+                    _memoryCache.Set(cacheKey, getAllheaders);
+                    _memoryCache.Set(cacheKey, getAlldetails);
+
                     return new Result<FavouriteHeaderDto>
                     {
                         SuccessMessage = "Продукт успешно добавлен в избранное",
