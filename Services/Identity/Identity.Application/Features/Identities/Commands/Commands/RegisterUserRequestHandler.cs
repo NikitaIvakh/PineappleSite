@@ -102,7 +102,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                             else
                             {
-                                await _userManager.AddToRoleAsync(user, RoleConsts.Employee);
+                                await _userManager.AddToRoleAsync(user, RoleConsts.User);
                                 await _context.SaveChangesAsync(cancellationToken);
 
                                 return new Result<RegisterResponseDto>

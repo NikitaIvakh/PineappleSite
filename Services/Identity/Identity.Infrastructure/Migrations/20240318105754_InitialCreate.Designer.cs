@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240316142543_InirialCreate")]
-    partial class InirialCreate
+    [Migration("20240318105754_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,7 +41,6 @@ namespace Identity.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
@@ -121,7 +120,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "5e658894-78f5-4d53-a1b0-6ed60f96fa21",
+                            ConcurrencyStamp = "b53a8963-be89-4458-9b8a-21cf760e5057",
                             Description = "Test",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
@@ -130,10 +129,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEE8RRetUm+3eXCPQpthLMBz1B80Uu52KiiKtxkiUOuCwNpXs4tVNsMT8m/Kf+W00lQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN96/+EZRFwam35lA5NRyyty770U1QteT9TQCESKeDLOs0LrLR1j/YFDTt5TYRkQyQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "55547e60-c44e-49b0-8ebe-b431dd0a343c",
+                            SecurityStamp = "654566b3-443f-4d7a-b177-5e8d0d30d50f",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         },
@@ -142,7 +141,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "05f1feac-f374-448e-be76-8cb914456f02",
+                            ConcurrencyStamp = "b6f19f47-d90a-4539-82fa-eb74d44122d5",
                             Description = "Test",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
@@ -151,10 +150,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEYjifE5hbwWYwn4u4O95MV0bSXVLCjzYD8RWwrj0KSsAoPGamW4BgKXuiI9uvXQ7g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENvP8lPow8c592I3p/JX5vYbaBSkqvcnV6DzVWwGp2UY48hgcfqKCTJ1s8yX9eWTeA==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "fa247f7e-505a-4845-b9a1-d1d2f453158a",
+                            SecurityStamp = "6fe30a45-c68b-4c7c-bfa8-7c01246b591f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
@@ -323,8 +322,8 @@ namespace Identity.Infrastructure.Migrations
                         new
                         {
                             Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                            Name = "Employee",
-                            NormalizedName = "EMPLOYEE"
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {

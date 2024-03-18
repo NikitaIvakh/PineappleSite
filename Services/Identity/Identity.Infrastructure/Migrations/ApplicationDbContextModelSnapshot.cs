@@ -117,7 +117,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "a75560c1-65a8-48a0-88e6-70188fe78d80",
+                            ConcurrencyStamp = "b53a8963-be89-4458-9b8a-21cf760e5057",
                             Description = "Test",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
@@ -126,10 +126,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAuVHLlFwvOk5mlcqzy4DT1k+6wTnCKS09Mep4yWX+aaP/LPEIQfKRNWEPYoGlckRA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN96/+EZRFwam35lA5NRyyty770U1QteT9TQCESKeDLOs0LrLR1j/YFDTt5TYRkQyQ==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "4aa9d5a9-226b-4f08-bc72-3e0a33acc6aa",
+                            SecurityStamp = "654566b3-443f-4d7a-b177-5e8d0d30d50f",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         },
@@ -138,7 +138,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "4c7d01a4-ca4e-4212-b6b6-684db8a22c0b",
+                            ConcurrencyStamp = "b6f19f47-d90a-4539-82fa-eb74d44122d5",
                             Description = "Test",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
@@ -147,10 +147,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEC1CJaFeay2qnVsmdjTaMMghn4cxisnCAIPV+B9fJuk3Jdlu3CNqB7lXcl8wGJ0RSA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENvP8lPow8c592I3p/JX5vYbaBSkqvcnV6DzVWwGp2UY48hgcfqKCTJ1s8yX9eWTeA==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "70c40524-ca25-48a1-a50c-06e3674728e5",
+                            SecurityStamp = "6fe30a45-c68b-4c7c-bfa8-7c01246b591f",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
@@ -319,8 +319,8 @@ namespace Identity.Infrastructure.Migrations
                         new
                         {
                             Id = "cac43a6e-f7bb-4448-baaf-1add431ccbbf",
-                            Name = "Employee",
-                            NormalizedName = "EMPLOYEE"
+                            Name = "User",
+                            NormalizedName = "USER"
                         },
                         new
                         {
