@@ -19,7 +19,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
         private readonly ILogger _logger = logger.ForContext<GetUserListRequest>();
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "cacheUserListKey";
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<CollectionResult<UserWithRolesDto>> Handle(GetUserListRequest request, CancellationToken cancellationToken)
         {
@@ -75,6 +75,10 @@ namespace Identity.Application.Features.Users.Commands.Queries
                         usersWithRoles.Add(userWithRoles);
                     }
                 }
+
+                var usersCache = await _userManager.Users.ToListAsync(cancellationToken);
+                _memoryCache.Set(cacheKey, usersCache);
+                _memoryCache.Set(cacheKey, usersWithRoles);
 
                 return new CollectionResult<UserWithRolesDto>
                 {

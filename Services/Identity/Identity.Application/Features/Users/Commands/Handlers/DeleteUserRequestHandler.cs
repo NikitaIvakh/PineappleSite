@@ -8,14 +8,19 @@ using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
 using Microsoft.AspNetCore.Identity;
 using Identity.Application.Features.Users.Requests.Handlers;
+using Microsoft.Extensions.Caching.Memory;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger) : IRequestHandler<DeleteUserRequest, Result<DeleteUserDto>>
+    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<DeleteUserRequest, Result<DeleteUserDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<DeleteUserRequestHandler>();
         private readonly IDeleteUserDtoValidator _deleteValidator = deleteValidator;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<DeleteUserDto>> Handle(DeleteUserRequest request, CancellationToken cancellationToken)
         {
@@ -61,6 +66,13 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                         else
                         {
+
+                            _memoryCache.Remove(user);
+
+                            var users = await _userManager.Users.ToListAsync(cancellationToken);
+                            _memoryCache.Set(cacheKey, users);
+                            _memoryCache.Set(cacheKey, user);
+
                             return new Result<DeleteUserDto>
                             {
                                 Data = request.DeleteUser,

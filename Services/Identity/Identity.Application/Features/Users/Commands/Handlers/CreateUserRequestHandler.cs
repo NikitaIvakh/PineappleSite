@@ -8,13 +8,17 @@ using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator) : IRequestHandler<CreateUserRequest, Result<ApplicationUser>>
+    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<ApplicationUser>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ICreateUserDtoValidation _createValidator = createValidator;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<ApplicationUser>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
         {
@@ -114,6 +118,12 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                     SuccessMessage = "Пользователь успешно создан",
                                 };
                             }
+
+                            _memoryCache.Remove(user);
+
+                            var users = await _userManager.Users.ToListAsync(cancellationToken);
+                            _memoryCache.Set(cacheKey, users);
+                            _memoryCache.Set(cacheKey, user);
 
                             return new Result<ApplicationUser>
                             {

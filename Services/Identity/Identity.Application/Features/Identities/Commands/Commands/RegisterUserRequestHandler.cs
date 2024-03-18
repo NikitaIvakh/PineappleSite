@@ -8,16 +8,21 @@ using Identity.Domain.ResultIdentity;
 using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class RegisterUserRequestHandler(UserManager<ApplicationUser> userManager, IRegisterRequestDtoValidator validationRules, ILogger logger, ApplicationDbContext context) : IRequestHandler<RegisterUserRequest, Result<RegisterResponseDto>>
+    public class RegisterUserRequestHandler(UserManager<ApplicationUser> userManager, IRegisterRequestDtoValidator validationRules, ILogger logger, ApplicationDbContext context, IMemoryCache memoryCache) : IRequestHandler<RegisterUserRequest, Result<RegisterResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IRegisterRequestDtoValidator _registerValidator = validationRules;
         private readonly ApplicationDbContext _context = context;
         private readonly ILogger _logger = logger.ForContext<RegisterUserRequestHandler>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<RegisterResponseDto>> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
         {
@@ -104,6 +109,12 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                             {
                                 await _userManager.AddToRoleAsync(user, RoleConsts.User);
                                 await _context.SaveChangesAsync(cancellationToken);
+
+                                _memoryCache.Remove(user);
+
+                                var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
+                                _memoryCache.Set(cacheKey, usersCache1);
+                                _memoryCache.Set(cacheKey, user);
 
                                 return new Result<RegisterResponseDto>
                                 {

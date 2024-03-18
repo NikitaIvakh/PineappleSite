@@ -8,15 +8,20 @@ using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger) : IRequestHandler<UpdateUserRequest, Result<RegisterResponseDto>>
+    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<UpdateUserRequest, Result<RegisterResponseDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
         private readonly ILogger _logger = logger.ForContext<UpdateUserRequest>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<RegisterResponseDto>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
@@ -84,6 +89,12 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                             await _userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
                             await _userManager.UpdateAsync(user);
+
+                            _memoryCache.Remove(user);
+
+                            var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
+                            _memoryCache.Set(cacheKey, usersCache1);
+                            _memoryCache.Set(cacheKey, user);
 
                             return new Result<RegisterResponseDto>
                             {

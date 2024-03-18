@@ -8,16 +8,21 @@ using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger) : IRequestHandler<UpdateUserProfileRequest, Result<UserWithRolesDto>>
+    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<UserWithRolesDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserProfileDto _updateUserProfileDto = updateUserProfileDto;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogger _logger = logger.ForContext<UpdateUserProfileRequestHandler>();
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<UserWithRolesDto>> Handle(UpdateUserProfileRequest request, CancellationToken cancellationToken)
         {
@@ -155,6 +160,12 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 Roles = existsRoles,
                             };
 
+                            _memoryCache.Remove(user);
+
+                            var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
+                            _memoryCache.Set(cacheKey, usersCache1);
+                            _memoryCache.Set(cacheKey, user);
+
                             return new Result<UserWithRolesDto>
                             {
                                 Data = userWithRoles,
@@ -162,6 +173,12 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             };
                         }
                     }
+
+                    _memoryCache.Remove(user);
+
+                    var usersCache2 = await _userManager.Users.ToListAsync(cancellationToken);
+                    _memoryCache.Set(cacheKey, usersCache2);
+                    _memoryCache.Set(cacheKey, user);
 
                     return new Result<UserWithRolesDto>
                     {

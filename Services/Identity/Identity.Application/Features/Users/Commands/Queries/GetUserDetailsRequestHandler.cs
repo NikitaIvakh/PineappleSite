@@ -20,7 +20,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
         private readonly IMapper _mapper = mapper;
         private readonly IMemoryCache _memoryCache = memoryCache;
 
-        private readonly string cacheKey = "cacheGetUserKey";
+        private readonly string cacheKey = "СacheUserKey";
 
         public async Task<Result<UserWithRolesDto>> Handle(GetUserDetailsRequest request, CancellationToken cancellationToken)
         {
@@ -53,6 +53,9 @@ namespace Identity.Application.Features.Users.Commands.Queries
                         User = user,
                         Roles = roles.ToList()
                     };
+
+                    var users = await _userManager.Users.ToListAsync(cancellationToken);
+                    _memoryCache.Set(cacheKey, users);
 
                     return new Result<UserWithRolesDto>
                     {
