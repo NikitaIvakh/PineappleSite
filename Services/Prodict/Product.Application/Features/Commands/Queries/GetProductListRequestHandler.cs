@@ -30,6 +30,7 @@ namespace Product.Application.Features.Commands.Queries
                     {
                         Data = products,
                         Count = products.Count,
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
 
@@ -52,7 +53,8 @@ namespace Product.Application.Features.Commands.Queries
                         return new CollectionResult<ProductDto>
                         {
                             Data = [],
-                            SuccessMessage = "Пока продуктов нет!"
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.ProductsNotFound,
                         };
                     }
 
@@ -64,6 +66,7 @@ namespace Product.Application.Features.Commands.Queries
                         {
                             Data = products,
                             Count = products.Count,
+                            SuccessCode = (int)SuccessCode.Ok,
                         };
                     }
                 }
@@ -77,6 +80,7 @@ namespace Product.Application.Features.Commands.Queries
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.ProductPriceNotValid]
                 };
             }
         }

@@ -29,6 +29,7 @@ namespace Product.Application.Features.Commands.Queries
                     return new Result<ProductDto>
                     {
                         Data = productDto,
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
 
@@ -50,6 +51,7 @@ namespace Product.Application.Features.Commands.Queries
                     {
                         ErrorMessage = ErrorMessage.ProductNotFound,
                         ErrorCode = (int)ErrorCodes.ProductNotFound,
+                        ValidationErrors = [ErrorMessage.ProductNotFound]
                     };
                 }
 
@@ -60,6 +62,7 @@ namespace Product.Application.Features.Commands.Queries
                     return new Result<ProductDto>
                     {
                         Data = productDto,
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
             }
@@ -72,6 +75,7 @@ namespace Product.Application.Features.Commands.Queries
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

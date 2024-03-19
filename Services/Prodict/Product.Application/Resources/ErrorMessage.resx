@@ -160,6 +160,9 @@
     <value>Продукты не могут быть удалены</value>
   </data>
   <data name="ProductsNotFound" xml:space="preserve">
-    <value>Продукт не найдены</value>
+    <value>Продукты не найдены</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
 </root>

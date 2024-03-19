@@ -187,11 +187,20 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Ищет локализованную строку, похожую на Продукт не найдены.
+        ///   Ищет локализованную строку, похожую на Продукты не найдены.
         /// </summary>
         internal static string ProductsNotFound {
             get {
                 return ResourceManager.GetString("ProductsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на .
+        /// </summary>
+        internal static string String1 {
+            get {
+                return ResourceManager.GetString("String1", resourceCulture);
             }
         }
     }

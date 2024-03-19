@@ -73,6 +73,7 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.ProductNotUpdatedNull,
                             ErrorCode = (int)ErrorCodes.ProductNotUpdatedNull,
+                            ValidationErrors = [ErrorMessage.ProductNotUpdatedNull]
                         };
                     }
 
@@ -131,8 +132,9 @@ namespace Product.Application.Features.Commands.Handlers
 
                             return new Result<ProductDto>
                             {
-                                SuccessMessage = "Продукт успешно обновлен",
+                                SuccessCode = (int)SuccessCode.Updated,
                                 Data = _mapper.Map<ProductDto>(product),
+                                SuccessMessage = SuccessMessage.ProductsSuccessfullyUpdated,
                             };
                         }
 
@@ -165,8 +167,9 @@ namespace Product.Application.Features.Commands.Handlers
 
                             return new Result<ProductDto>
                             {
-                                SuccessMessage = "Продукт успешно обновлен",
+                                SuccessCode = (int)SuccessCode.Updated,
                                 Data = _mapper.Map<ProductDto>(product),
+                                SuccessMessage = SuccessMessage.ProductsSuccessfullyUpdated,
                             };
                         }
                     }
@@ -180,6 +183,7 @@ namespace Product.Application.Features.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

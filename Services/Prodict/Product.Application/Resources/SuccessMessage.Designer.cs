@@ -59,5 +59,50 @@ namespace Product.Application.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Пока продуктов нет.
+        /// </summary>
+        internal static string ProductsNotFound {
+            get {
+                return ResourceManager.GetString("ProductsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукты успешно удалены.
+        /// </summary>
+        internal static string ProductsSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("ProductsSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукт успешно обновлен.
+        /// </summary>
+        internal static string ProductsSuccessfullyUpdated {
+            get {
+                return ResourceManager.GetString("ProductsSuccessfullyUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукт успешно добавлен.
+        /// </summary>
+        internal static string ProductSuccessfullyAdded {
+            get {
+                return ResourceManager.GetString("ProductSuccessfullyAdded", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукт успешно удален.
+        /// </summary>
+        internal static string ProductSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("ProductSuccessfullyDeleted", resourceCulture);
+            }
+        }
     }
 }

@@ -32,11 +32,30 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var existErrorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"Id", validator.Errors.Select(key => key.ErrorMessage).ToList() },
+                    };
+
+                    foreach (var error in existErrorMessages)
+                    {
+                        if (existErrorMessages.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new Result<ProductDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.ProductNotDeleted,
+                                ErrorCode = (int)ErrorCodes.ProductNotDeleted,
+                            };
+                        }
+                    }
+
                     _logger.Warning($"Ошибка валидации");
                     return new Result<ProductDto>
                     {
                         ErrorMessage = ErrorMessage.ProductNotDeleted,
                         ErrorCode = (int)ErrorCodes.ProductNotDeleted,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList()
                     };
                 }
 
@@ -50,6 +69,7 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.ProductNotFound,
                             ErrorCode = (int)ErrorCodes.ProductNotFound,
+                            ValidationErrors = [ErrorMessage.ProductNotFound]
                         };
                     }
 
@@ -80,8 +100,9 @@ namespace Product.Application.Features.Commands.Handlers
 
                     return new Result<ProductDto>
                     {
+                        SuccessCode = (int)SuccessCode.Deleted,
                         Data = _mapper.Map<ProductDto>(product),
-                        SuccessMessage = "Продукт успешно удален",
+                        SuccessMessage = SuccessMessage.ProductSuccessfullyDeleted,
                     };
                 }
             }
@@ -93,6 +114,7 @@ namespace Product.Application.Features.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

@@ -32,6 +32,24 @@ namespace Product.Application.Features.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var existsErrorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"ProductIds", validator.Errors.Select(key => key.ErrorMessage).ToList() }
+                    };
+
+                    foreach (var error in existsErrorMessages)
+                    {
+                        if (existsErrorMessages.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new CollectionResult<ProductDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.ProductsNotDeleted,
+                                ErrorCode = (int)ErrorCodes.ProductsNotDeleted,
+                            };
+                        }
+                    }
+
                     _logger.Warning($"Ошибка валидации");
                     return new CollectionResult<ProductDto>
                     {
@@ -49,8 +67,9 @@ namespace Product.Application.Features.Commands.Handlers
                     {
                         return new CollectionResult<ProductDto>
                         {
-                            ErrorMessage = ErrorMessage.ProductsNotDeleted,
-                            ErrorCode = (int)ErrorCodes.ProductsNotDeleted,
+                            ErrorMessage = ErrorMessage.ProductsNotFound,
+                            ErrorCode = (int)ErrorCodes.ProductsNotFound,
+                            ValidationErrors = [ErrorMessage.ProductsNotFound]
                         };
                     }
 
@@ -84,7 +103,8 @@ namespace Product.Application.Features.Commands.Handlers
                         return new CollectionResult<ProductDto>
                         {
                             Count = products.Count,
-                            SuccessMessage = "Продукты успешно удалены",
+                            SuccessCode = (int)SuccessCode.Deleted,
+                            SuccessMessage = SuccessMessage.ProductsSuccessfullyDeleted,
                             Data = _mapper.Map<IReadOnlyCollection<ProductDto>>(products),
                         };
                     }
@@ -98,6 +118,7 @@ namespace Product.Application.Features.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

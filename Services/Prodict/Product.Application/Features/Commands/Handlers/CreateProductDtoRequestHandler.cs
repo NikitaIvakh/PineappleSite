@@ -48,9 +48,9 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             return new Result<ProductDto>
                             {
+                                ValidationErrors = errorException,
                                 ErrorMessage = ErrorMessage.ProductNotCreated,
                                 ErrorCode = (int)ErrorCodes.ProductNotCreated,
-                                ValidationErrors = errorException,
                             };
                         }
                     }
@@ -74,6 +74,7 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.ProductAlreadyExists,
                             ErrorCode = (int)ErrorCodes.ProductAlreadyExists,
+                            ValidationErrors = [ErrorMessage.ProductAlreadyExists]
                         };
                     }
 
@@ -123,8 +124,9 @@ namespace Product.Application.Features.Commands.Handlers
 
                             return new Result<ProductDto>
                             {
-                                SuccessMessage = "Продукт успешно добавлен",
+                                SuccessCode = (int)SuccessCode.Created,
                                 Data = _mapper.Map<ProductDto>(product),
+                                SuccessMessage = SuccessMessage.ProductSuccessfullyAdded,
                             };
                         }
 
@@ -142,8 +144,9 @@ namespace Product.Application.Features.Commands.Handlers
 
                             return new Result<ProductDto>
                             {
-                                SuccessMessage = "Продукт успешно добавлен",
+                                SuccessCode = (int)SuccessCode.Created,
                                 Data = _mapper.Map<ProductDto>(product),
+                                SuccessMessage = SuccessMessage.ProductSuccessfullyAdded,
                             };
                         };
                     }
@@ -158,6 +161,7 @@ namespace Product.Application.Features.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

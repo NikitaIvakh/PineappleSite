@@ -7,7 +7,7 @@ namespace Product.Application.DTOs.Validator
     {
         public IDeleteProductDtoValidator()
         {
-            RuleFor(key => key.Id).NotEmpty().NotNull();
+            RuleFor(key => key.Id).NotEmpty().NotNull().WithMessage("Идентификатор продукта не может быть пустым");
         }
     }
 }
