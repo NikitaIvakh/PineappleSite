@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Identity.Domain.ResultIdentity;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Application.Features.Identities.Requests.Commands;
-using Microsoft.AspNetCore.Identity.Data;
 
 namespace Identity.API.Controllers
 {
