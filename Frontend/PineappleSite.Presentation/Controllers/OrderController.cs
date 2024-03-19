@@ -72,7 +72,11 @@ namespace PineappleSite.Presentation.Controllers
 
                     else
                     {
-                        TempData["error"] = response.ErrorMessage;
+                        foreach (var error in response.ValidationErrors!)
+                        {
+                            TempData["error"] = error;
+                        }
+
                         return RedirectToAction(nameof(OrderIndex));
                     }
                 }

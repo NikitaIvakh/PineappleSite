@@ -13,7 +13,7 @@ namespace PineappleSite.Presentation.Services.Orders
         {
             if (ordersExceptions.StatusCode == 400)
             {
-                return new OrderResult<OrderHeaderViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = ordersExceptions.Response, };
+                return new OrderResult<OrderHeaderViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = [ordersExceptions.Response], };
             }
 
             else if (ordersExceptions.StatusCode == 404)

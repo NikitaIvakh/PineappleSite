@@ -24,6 +24,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderCollectionResult<OrderHeaderViewModel>
                     {
+                        SuccessCode = result.SuccessCode,
                         SuccessMessage = result.SuccessMessage,
                         Data = _mapper.Map<IReadOnlyCollection<OrderHeaderViewModel>>(result.Data),
                     };
@@ -35,7 +36,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderCollectionResult<OrderHeaderViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = result.ErrorCode,
                             ErrorMessage = result.ErrorMessage,
                         };
@@ -51,7 +52,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = "An error occurred while deserializing the response.",
                     ErrorCode = 500,
-                    ValidationErrors = ex.Message,
+                    ValidationErrors = [ex.Message],
                 };
             }
 
@@ -61,7 +62,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = exceptions.Message,
+                    ValidationErrors = [exceptions.Response],
                 };
             }
         }
@@ -76,8 +77,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderResult<OrderHeaderViewModel>
                     {
-                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
+                        SuccessCode = response.SuccessCode,
                         SuccessMessage = response.SuccessMessage,
+                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
                     };
                 }
 
@@ -87,9 +89,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderResult<OrderHeaderViewModel>
                         {
-                            ValidationErrors = error,
-                            ErrorMessage = response.ErrorMessage,
+                            ValidationErrors = [error],
                             ErrorCode = response.ErrorCode,
+                            ErrorMessage = response.ErrorMessage,
                         };
                     }
                 }
@@ -101,8 +103,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new OrderResult<OrderHeaderViewModel>
                 {
+                    ErrorCode = exception.StatusCode,
                     ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -118,8 +121,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderResult<OrderHeaderViewModel>
                     {
-                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
+                        SuccessCode = response.SuccessCode,
                         SuccessMessage = response.SuccessMessage,
+                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
                     };
                 }
 
@@ -129,7 +133,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderResult<OrderHeaderViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = response.ErrorCode,
                             ErrorMessage = response.ErrorMessage,
                         };
@@ -143,8 +147,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new OrderResult<OrderHeaderViewModel>
                 {
+                    ErrorCode = exception.StatusCode,
                     ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -160,8 +165,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderResult<StripeRequestViewModel>
                     {
-                        Data = _mapper.Map<StripeRequestViewModel>(response.Data),
+                        SuccessCode = response.SuccessCode,
                         SuccessMessage = response.SuccessMessage,
+                        Data = _mapper.Map<StripeRequestViewModel>(response.Data),
                     };
                 }
 
@@ -171,7 +177,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderResult<StripeRequestViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = response.ErrorCode,
                             ErrorMessage = response.ErrorMessage,
                         };
@@ -186,7 +192,8 @@ namespace PineappleSite.Presentation.Services
                 return new OrderResult<StripeRequestViewModel>
                 {
                     ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode
+                    ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -201,6 +208,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderResult<OrderHeaderViewModel>
                     {
+                        SuccessCode = response.SuccessCode,
                         SuccessMessage = response.SuccessMessage,
                         Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
                     };
@@ -212,7 +220,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderResult<OrderHeaderViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = response.ErrorCode,
                             ErrorMessage = response.ErrorMessage,
                         };
@@ -228,6 +236,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -242,6 +251,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new OrderResult<OrderHeaderViewModel>
                     {
+                        SuccessCode = response.SuccessCode,
                         SuccessMessage = response.SuccessMessage,
                         Data = _mapper.Map<OrderHeaderViewModel>(response),
                     };
@@ -253,7 +263,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new OrderResult<OrderHeaderViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = response.ErrorCode,
                             ErrorMessage = response.ErrorMessage,
                         };
@@ -269,6 +279,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
