@@ -45,7 +45,7 @@ namespace Coupon.Test.Queries
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Купон не найден");
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ValidationErrors.ShouldBeNull();
+            result.ValidationErrors.Should().Equal("Купон не найден");
         }
     }
 }

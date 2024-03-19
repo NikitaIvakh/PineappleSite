@@ -46,8 +46,6 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
                 if (coupon is null)
                 {
-                    _logger.Warning($"Купон с {request.CouponCode} не найден");
-                    _memoryCache.Remove(coupon!);
                     _memoryCache.Remove(cacheKey);
                     return new Result<CouponDto>
                     {

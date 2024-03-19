@@ -142,7 +142,7 @@ namespace Coupon.Test.Commands
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Такой купон уже существует");
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ValidationErrors.Should().BeNullOrEmpty();
+            result.ValidationErrors.Should().Equal("Такой купон уже существует");
         }
     }
 }

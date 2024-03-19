@@ -65,9 +65,9 @@ namespace Coupon.Test.Commands
 
             // Assert
             result.IsSuccess.ShouldBeFalse();
-            result.ErrorMessage.ShouldBe("Такого купона не существует");
+            result.ErrorMessage.ShouldBe("Купон не найден");
             result.SuccessMessage.Should().BeNullOrEmpty();
-            result.ValidationErrors.Should().BeNullOrEmpty();
+            result.ValidationErrors.Should().Equal("Купон не найден");
         }
 
         [Fact]
