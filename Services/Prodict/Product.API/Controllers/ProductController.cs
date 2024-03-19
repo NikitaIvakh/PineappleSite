@@ -78,42 +78,52 @@ namespace Product.API.Controllers
         }
 
         // PUT api/<ProductController>/5
-        [HttpPut("{id}")]
-        public async Task<ActionResult<Result<ProductDto>>> Put([FromForm] UpdateProductDto updateProductDto)
+        [HttpPut("{productId}")]
+        public async Task<ActionResult<Result<ProductDto>>> Put(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
-            var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
-
-            if (command.IsSuccess)
+            if (productId == updateProductDto.Id)
             {
-                _logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
-                return Ok(command);
-            }
+                var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
 
-            _logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
+                if (command.IsSuccess)
+                {
+                    _logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
+                    return Ok(command);
+                }
+
+                _logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
             return NoContent();
         }
 
         // DELETE api/<ProductController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Result<ProductDto>>> Delete([FromBody] DeleteProductDto deleteProductDto)
+        [HttpDelete("{productId}")]
+        public async Task<ActionResult<Result<ProductDto>>> Delete(int productId, [FromBody] DeleteProductDto deleteProductDto)
         {
-            var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
-
-            if (command.IsSuccess)
+            if (productId == deleteProductDto.Id)
             {
-                _logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
-                return Ok(command);
-            }
+                var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
 
-            _logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
+                if (command.IsSuccess)
+                {
+                    _logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
+                    return Ok(command);
+                }
+
+                _logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
             return NoContent();
