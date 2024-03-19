@@ -13,7 +13,7 @@ namespace PineappleSite.Presentation.Services.Products
         {
             if (productExceptions.StatusCode == 400)
             {
-                return new ProductResultViewModel<ProductViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = productExceptions.Response };
+                return new ProductResultViewModel<ProductViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = [productExceptions.Response] };
             }
 
             else if (productExceptions.StatusCode == 404)

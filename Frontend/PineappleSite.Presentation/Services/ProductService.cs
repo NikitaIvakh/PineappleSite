@@ -2,6 +2,7 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Services.Products;
+using System;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -28,9 +29,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductsCollectionResultViewModel<ProductViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = products.ErrorCode,
                             ErrorMessage = products.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -44,6 +45,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -68,9 +70,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductResultViewModel<ProductViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = product.ErrorCode,
                             ErrorMessage = product.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -84,6 +86,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -109,8 +112,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new ProductResultViewModel<ProductViewModel>
                     {
-                        Data = _mapper.Map<ProductViewModel>(apiREsponse.Data),
+                        SuccessCode = apiREsponse.SuccessCode,
                         SuccessMessage = apiREsponse.SuccessMessage,
+                        Data = _mapper.Map<ProductViewModel>(apiREsponse.Data),
                     };
                 }
 
@@ -120,8 +124,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductResultViewModel<ProductViewModel>
                         {
-                            ErrorMessage = error,
-                            ValidationErrors = error + Environment.NewLine
+                            ValidationErrors = [error],
+                            ErrorCode = apiREsponse.ErrorCode,
+                            ErrorMessage = apiREsponse.ErrorMessage,
                         };
                     }
                 }
@@ -135,6 +140,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response]
                 };
             }
         }
@@ -144,13 +150,14 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 FileParameter avatarFileParameter = null;
+
                 if (product.Avatar is not null)
                 {
                     avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
                 }
 
                 ProductDtoResult apiResponse = await _productClient.ProductPUTAsync(
-                    id.ToString(),
+                    id,
                     product.Id,
                     product.Name,
                     product.Description,
@@ -164,6 +171,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new ProductResultViewModel<ProductViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
                     };
@@ -175,8 +183,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductResultViewModel<ProductViewModel>
                         {
-                            ErrorMessage = error,
-                            ValidationErrors = error + Environment.NewLine,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -188,8 +197,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new ProductResultViewModel<ProductViewModel>
                 {
-                    ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ErrorMessage = exception.Response,
+                    ValidationErrors = [exception.Response]
                 };
             }
         }
@@ -199,12 +209,13 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 DeleteProductDto deleteProductDto = _mapper.Map<DeleteProductDto>(product);
-                ProductDtoResult apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id.ToString(), deleteProductDto);
+                ProductDtoResult apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id, deleteProductDto);
 
                 if (apiResponse.IsSuccess)
                 {
                     return new ProductResultViewModel<ProductViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
                     };
@@ -216,8 +227,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductResultViewModel<ProductViewModel>
                         {
-                            ErrorMessage = error,
-                            ValidationErrors = error + Environment.NewLine,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -231,6 +243,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response]
                 };
             }
         }
@@ -246,6 +259,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new ProductsCollectionResultViewModel<ProductViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<IReadOnlyCollection<ProductViewModel>>(apiResponse.Data),
                     };
@@ -257,8 +271,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ProductsCollectionResultViewModel<ProductViewModel>
                         {
-                            ErrorMessage = error,
-                            ValidationErrors = error + Environment.NewLine,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -272,6 +287,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response]
                 };
             }
         }

@@ -60,21 +60,21 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(int productId, int? id, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(int productId, int? id, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(int productId, DeleteProductDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(int productId, DeleteProductDto body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -126,7 +126,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -327,7 +327,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -407,7 +407,7 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
@@ -466,15 +466,15 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(int productId, int? id, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath)
         {
-            return ProductPUTAsync(id, productId, name, description, productCategory, price, avatar, imageUrl, imageLocalPath, System.Threading.CancellationToken.None);
+            return ProductPUTAsync(productId, id, name, description, productCategory, price, avatar, imageUrl, imageLocalPath, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(string id, int? productId, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductPUTAsync(int productId, int? id, string name, string description, ProductCategory? productCategory, double? price, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -601,18 +601,18 @@ namespace PineappleSite.Presentation.Services.Products
 
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body)
+        public virtual System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(int productId, DeleteProductDto body)
         {
-            return ProductDELETE2Async(id, body, System.Threading.CancellationToken.None);
+            return ProductDELETE2Async(productId, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="ProductExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(string id, DeleteProductDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<ProductDtoResult> ProductDELETE2Async(int productId, DeleteProductDto body, System.Threading.CancellationToken cancellationToken)
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
+            if (productId == null)
+                throw new System.ArgumentNullException("productId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -628,12 +628,12 @@ namespace PineappleSite.Presentation.Services.Products
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Product");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(productId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -757,7 +757,7 @@ namespace PineappleSite.Presentation.Services.Products
                     var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
                     if (field != null)
                     {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
+                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
                             as System.Runtime.Serialization.EnumMemberAttribute;
                         if (attribute != null)
                         {
@@ -769,17 +769,17 @@ namespace PineappleSite.Presentation.Services.Products
                     return converted == null ? string.Empty : converted;
                 }
             }
-            else if (value is bool)
+            else if (value is bool) 
             {
                 return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
             }
             else if (value is byte[])
             {
-                return System.Convert.ToBase64String((byte[])value);
+                return System.Convert.ToBase64String((byte[]) value);
             }
             else if (value.GetType().IsArray)
             {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
+                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
                 return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
             }
 
@@ -848,14 +848,17 @@ namespace PineappleSite.Presentation.Services.Products
         [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsSuccess { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
         [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
@@ -874,14 +877,17 @@ namespace PineappleSite.Presentation.Services.Products
         [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsSuccess { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
         [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
@@ -895,12 +901,12 @@ namespace PineappleSite.Presentation.Services.Products
     public partial class FileParameter
     {
         public FileParameter(System.IO.Stream data)
-            : this(data, null, null)
+            : this (data, null, null)
         {
         }
 
         public FileParameter(System.IO.Stream data, string fileName)
-            : this(data, fileName, null)
+            : this (data, fileName, null)
         {
         }
 
@@ -957,10 +963,10 @@ namespace PineappleSite.Presentation.Services.Products
 
 }
 
-#pragma warning restore 108
-#pragma warning restore 114
-#pragma warning restore 472
-#pragma warning restore 612
+#pragma warning restore  108
+#pragma warning restore  114
+#pragma warning restore  472
+#pragma warning restore  612
 #pragma warning restore 1573
 #pragma warning restore 1591
 #pragma warning restore 8073
