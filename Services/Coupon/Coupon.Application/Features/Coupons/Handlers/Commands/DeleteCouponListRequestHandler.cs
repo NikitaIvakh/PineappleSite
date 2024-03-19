@@ -11,7 +11,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
-using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
@@ -33,6 +32,24 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 if (!result.IsValid)
                 {
+                    var existMessage = new Dictionary<string, List<string>>
+                    {
+                        {"CouponIds", result.Errors.Select(key => key.ErrorMessage).ToList() }
+                    };
+
+                    foreach (var error in existMessage)
+                    {
+                        if (existMessage.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new CollectionResult<CouponDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
+                                ErrorCode = (int)ErrorCodes.CouponNotDeletedListCatch,
+                            };
+                        }
+                    }
+
                     return new CollectionResult<CouponDto>
                     {
                         ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
@@ -45,12 +62,13 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     var coupons = await _repository.GetAllAsync().Where(key => request.DeleteCoupon.CouponIds.Contains(key.CouponId)).ToListAsync(cancellationToken);
 
-                    if (coupons.Count == 0)
+                    if (coupons is null || coupons.Count == 0)
                     {
                         return new CollectionResult<CouponDto>
                         {
                             ErrorMessage = ErrorMessage.CouponsNotFound,
                             ErrorCode = (int)ErrorCodes.CouponsNotFound,
+                            ValidationErrors = [ErrorMessage.CouponsNotFound]
                         };
                     }
 
@@ -70,7 +88,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         return new CollectionResult<CouponDto>
                         {
                             Count = coupons.Count,
-                            SuccessMessage = "Купоны успешно удалены",
+                            SuccessCode = (int)SuccessCode.Deleted,
+                            SuccessMessage = SuccessMessage.CouponsDeletedSuccessfully,
                             Data = _mapper.Map<IReadOnlyCollection<CouponDto>>(coupons),
                         };
                     }
@@ -82,8 +101,9 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 _logger.Error(exception, exception.Message);
                 return new CollectionResult<CouponDto>
                 {
-                    ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                    ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }
