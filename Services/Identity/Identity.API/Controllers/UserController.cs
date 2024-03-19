@@ -5,6 +5,7 @@ using Identity.Domain.DTOs.Identities;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Identity.API.Controllers
 {
@@ -29,7 +30,12 @@ namespace Identity.API.Controllers
             }
 
             _userWithRolesLogger.LogError($"LogDebugError ================ Выод пользователей не удался: {userId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // GET api/<UserController>/5
@@ -45,7 +51,12 @@ namespace Identity.API.Controllers
             }
 
             _userWithRolesLogger.LogError($"LogDebugError ================ Получить пользователея не удалось: {id}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("CreateUser")]
@@ -60,7 +71,12 @@ namespace Identity.API.Controllers
             }
 
             _userWithRolesLogger.LogError($"LogDebugError ================ Удалить пользователея не удалось: {createUserDto.UserName}");
-            return BadRequest(command.ValidationErrors);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // PUT api/<UserController>/5
@@ -76,54 +92,90 @@ namespace Identity.API.Controllers
             }
 
             _userWithRolesLogger.LogError($"LogDebugError ================ Обновить пользователеля не удалось: {updateUser.Id}");
-            return BadRequest(command.ValidationErrors);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // PUT api/<UserController>/5
         [HttpPut("UpdateUserProfile/{userId}")]
-        public async Task<ActionResult<Result<UserWithRolesDto>>> UpdateUserProfile([FromForm] UpdateUserProfileDto updateUserProfile)
+        public async Task<ActionResult<Result<UserWithRolesDto>>> UpdateUserProfile(string userId, [FromForm] UpdateUserProfileDto updateUserProfile)
         {
-            var command = await _mediator.Send(new UpdateUserProfileRequest { UpdateUserProfile = updateUserProfile });
-
-            if (command.IsSuccess)
+            if (userId == updateUserProfile.Id)
             {
-                _userWithRolesLogger.LogDebug($"LogDebug ================ Профиль пользователя успешно обновлен: {updateUserProfile.Id}");
-                return Ok(command);
+                var command = await _mediator.Send(new UpdateUserProfileRequest { UpdateUserProfile = updateUserProfile });
+
+                if (command.IsSuccess)
+                {
+                    _userWithRolesLogger.LogDebug($"LogDebug ================ Профиль пользователя успешно обновлен: {updateUserProfile.Id}");
+                    return Ok(command);
+                }
+
+                _userWithRolesLogger.LogError($"LogDebugError ================ Обновить профиль пользователеля не удалось: {updateUserProfile.Id}");
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
-            _userWithRolesLogger.LogError($"LogDebugError ================ Обновить профиль пользователеля не удалось: {updateUserProfile.Id}");
-            return BadRequest(command.ValidationErrors);
+            else
+            {
+                return NoContent();
+            }
         }
 
         // DELETE api/<UserController>/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Result<DeleteUserDto>>> Delete([FromBody] DeleteUserDto deleteUserDto)
+        [HttpDelete("{userId}")]
+        public async Task<ActionResult<Result<DeleteUserDto>>> Delete(string userId, [FromBody] DeleteUserDto deleteUserDto)
         {
-            var command = await _mediator.Send(new DeleteUserRequest { DeleteUser = deleteUserDto });
-
-            if (command.IsSuccess)
+            if (userId == deleteUserDto.Id)
             {
-                _deleteLogger.LogDebug($"LogDebug ================ Пользователя успешно удален: {deleteUserDto.Id}");
-                return Ok(command);
+                var command = await _mediator.Send(new DeleteUserRequest { DeleteUser = deleteUserDto });
+
+                if (command.IsSuccess)
+                {
+                    _deleteLogger.LogDebug($"LogDebug ================ Пользователя успешно удален: {deleteUserDto.Id}");
+                    return Ok(command);
+                }
+
+                _deleteLogger.LogError($"LogDebugError ================ Удалить пользователеля не удалось: {deleteUserDto.Id}");
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
-            _deleteLogger.LogError($"LogDebugError ================ Удалить пользователеля не удалось: {deleteUserDto.Id}");
-            return BadRequest(command.ErrorMessage);
+            else
+            {
+                return NoContent();
+            }
         }
 
         [HttpDelete()]
         public async Task<ActionResult<Result<bool>>> Delete([FromBody] DeleteUserListDto deleteUserListDto)
         {
-            var comamnd = await _mediator.Send(new DeleteUserListRequest { DeleteUserList = deleteUserListDto });
+            var command = await _mediator.Send(new DeleteUserListRequest { DeleteUserList = deleteUserListDto });
 
-            if (comamnd.IsSuccess)
+            if (command.IsSuccess)
             {
                 _boolLogger.LogDebug($"LogDebug ================ Пользователи успешно удалены: {deleteUserListDto.UserIds}");
-                return Ok(comamnd);
+                return Ok(command);
             }
 
             _deleteLogger.LogError($"LogDebugError ================ Удалить пользователелей не удалось: {deleteUserListDto.UserIds}");
-            return BadRequest(comamnd.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }

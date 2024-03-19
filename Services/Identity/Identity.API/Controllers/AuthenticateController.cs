@@ -26,7 +26,12 @@ namespace Identity.API.Controllers
             }
 
             _authLogger.LogError($"LogDebugError ================ Войти в аккаунт не удалось: {authRequest.Email}");
-            return BadRequest(login.ErrorMessage);
+            foreach (var error in login.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("Register")]
@@ -41,7 +46,12 @@ namespace Identity.API.Controllers
             }
 
             _registerLogger.LogError($"LogDebugError ================ Регистрация не удалась: {registerRequest.Email}");
-            return BadRequest(register.ValidationErrors);
+            foreach (var error in register.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("RefreshToken")]
@@ -56,7 +66,12 @@ namespace Identity.API.Controllers
             }
 
             _registerLogger.LogError($"LogDebugError ================ Обновить токен не удалось: {tokenModel}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("RevokeToken/{userName}")]
@@ -71,7 +86,12 @@ namespace Identity.API.Controllers
             }
 
             _registerLogger.LogError($"LogDebugError ================ Удалить токен не удалось: {userName}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("RevokeAllTokens")]
@@ -81,10 +101,17 @@ namespace Identity.API.Controllers
 
             if (command.IsSuccess)
             {
+                _authLogger.LogDebug($"LogDebug ================ Токены успешно удалены");
                 return Ok(command);
             }
 
-            return BadRequest(command.ErrorMessage);
+            _authLogger.LogError($"LogDebugError ================ Токены не могут быть удалены");
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }
