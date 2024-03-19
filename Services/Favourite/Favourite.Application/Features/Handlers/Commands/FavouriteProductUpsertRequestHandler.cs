@@ -45,8 +45,9 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Продукт успешно добавлен в избранное",
+                        SuccessCode = (int)SuccessCode.Created,
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeader),
+                        SuccessMessage = SuccessMessage.FroductSuccessfullyAddedToFavourite,
                     };
                 }
 
@@ -79,19 +80,20 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Продукт успешно добавлен в избранное",
+                        SuccessCode = (int)SuccessCode.Created,
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeaderFromDb),
+                        SuccessMessage = SuccessMessage.FroductSuccessfullyAddedToFavourite,
                     };
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<FavouriteHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

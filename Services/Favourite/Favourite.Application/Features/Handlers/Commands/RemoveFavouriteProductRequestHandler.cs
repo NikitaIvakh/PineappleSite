@@ -31,8 +31,9 @@ namespace Favourite.Application.Features.Handlers.Commands
                 {
                     return new Result<FavouriteHeaderDto>
                     {
-                        ErrorMessage = ErrorMessages.ProductNotFound,
                         ErrorCode = (int)ErrorCodes.ProductNotFound,
+                        ErrorMessage = ErrorMessages.ProductNotFound,
+                        ValidationErrors = [ErrorMessages.ProductNotFound]
                     };
                 }
 
@@ -49,8 +50,9 @@ namespace Favourite.Application.Features.Handlers.Commands
                         {
                             return new Result<FavouriteHeaderDto>
                             {
-                                ErrorMessage = ErrorMessages.FavouriteHeaderNotFound,
                                 ErrorCode = (int)ErrorCodes.FavouriteHeaderNotFound,
+                                ErrorMessage = ErrorMessages.FavouriteHeaderNotFound,
+                                ValidationErrors = [ErrorMessages.FavouriteHeaderNotFound]
                             };
                         }
 
@@ -71,19 +73,20 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Продукт успешно удален",
+                        SuccessCode = (int)SuccessCode.Deleted,
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeader),
+                        SuccessMessage = SuccessMessage.ProductSuccessfullyDeleted,
                     };
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<FavouriteHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

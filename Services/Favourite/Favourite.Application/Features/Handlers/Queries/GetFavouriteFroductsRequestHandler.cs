@@ -54,7 +54,8 @@ namespace Favourite.Application.Features.Handlers.Queries
                                 FavouriteDetails = new List<FavouriteDetailsDto>(),
                             },
 
-                            SuccessMessage = "В избранном никаких товаров нет",
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.ThereAreNoFavouriteProducts,
                         };
                     }
 
@@ -79,7 +80,8 @@ namespace Favourite.Application.Features.Handlers.Queries
                                     FavouriteDetails = new List<FavouriteDetailsDto>(),
                                 },
 
-                                SuccessMessage = "В избранном никаких товаров нет",
+                                SuccessCode = (int)SuccessCode.Ok,
+                                SuccessMessage = SuccessMessage.ThereAreNoFavouriteProducts,
                             };
                         }
 
@@ -110,21 +112,22 @@ namespace Favourite.Application.Features.Handlers.Queries
                             return new Result<FavouriteDto>
                             {
                                 Data = favouriteDto,
-                                SuccessMessage = "Ваши избранные товары",
+                                SuccessCode = (int)SuccessCode.Ok,
+                                SuccessMessage = SuccessMessage.FavouriteProducts,
                             };
                         }
                     }
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 _memoryCache.Remove(cacheKey);
                 return new Result<FavouriteDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

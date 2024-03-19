@@ -34,6 +34,7 @@ namespace Favourite.Application.Features.Handlers.Commands
                         Data = new FavouriteHeaderDto(),
                         ErrorCode = (int)ErrorCodes.ProductsNotFound,
                         ErrorMessage = ErrorMessages.ProductsNotFound,
+                        ValidationErrors = [ErrorMessages.ProductsNotFound]
                     };
                 }
 
@@ -63,8 +64,9 @@ namespace Favourite.Application.Features.Handlers.Commands
 
                     return new Result<FavouriteHeaderDto>
                     {
-                        SuccessMessage = "Продукты успешно удалены",
+                        SuccessCode = (int)SuccessCode.Deleted,
                         Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeader),
+                        SuccessMessage = SuccessMessage.ProductsSuccessfullyDeleted,
                     };
                 }
             }
@@ -75,7 +77,7 @@ namespace Favourite.Application.Features.Handlers.Commands
                 {
                     ErrorCode = (int)ErrorCodes.InternalServerError,
                     ErrorMessage = ErrorMessages.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }
