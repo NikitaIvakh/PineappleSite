@@ -29,7 +29,13 @@ namespace Favourite.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения избранных товаров: {userId}");
-            return BadRequest(request.ErrorMessage);
+
+            foreach (var error in request.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<FavouriteController>
@@ -45,7 +51,12 @@ namespace Favourite.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка обновления избранного товара: {favouriteDto.FavouriteHeader.FavouriteHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<FavouriteController>/5
@@ -61,7 +72,12 @@ namespace Favourite.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления избранного товара: {productId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpDelete("DeleteProductList")]
@@ -76,7 +92,12 @@ namespace Favourite.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления избранных товаров: {deleteFavouriteProducts.ProductIds}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }
