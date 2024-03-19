@@ -39,6 +39,11 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ErrorMessage.ru-RU1.resx</DependentUpon>
     </Compile>
+    <Compile Update="Resources\SuccessMessage.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SuccessMessage.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +58,10 @@
     <EmbeddedResource Update="Resources\ErrorMessage.ru-RU1.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessage.ru-RU1.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\SuccessMessage.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SuccessMessage.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

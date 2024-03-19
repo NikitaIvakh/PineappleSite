@@ -78,6 +78,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }
