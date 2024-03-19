@@ -50,6 +50,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         {
                             ErrorMessage = ErrorMessage.CouponNotFound,
                             ErrorCode = (int)ErrorCodes.CouponNotFound,
+                            ValidationErrors = [ErrorMessage.CouponNotFound]
                         };
                     }
 
