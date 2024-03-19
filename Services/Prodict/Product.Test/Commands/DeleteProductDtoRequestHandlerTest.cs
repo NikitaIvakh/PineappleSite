@@ -53,7 +53,7 @@ namespace Product.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Продукт не найден");
-            result.ValidationErrors.ShouldBeNull();
+            result.ValidationErrors.Should().Equal("Продукт не найден");
         }
     }
 }

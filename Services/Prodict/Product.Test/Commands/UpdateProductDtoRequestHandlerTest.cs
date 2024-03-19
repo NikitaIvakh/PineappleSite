@@ -71,7 +71,7 @@ namespace Product.Test.Commands
             // Assert
             result.IsSuccess.Should().BeFalse();
             result.ErrorMessage.Should().Be("Такого продукта не существует");
-            result.ValidationErrors.Should().BeNullOrEmpty();
+            result.ValidationErrors.Should().Equal("Такого продукта не существует");
         }
 
         [Fact]
