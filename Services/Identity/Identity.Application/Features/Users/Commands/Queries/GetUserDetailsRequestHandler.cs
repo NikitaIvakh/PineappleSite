@@ -30,6 +30,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
                 {
                     return new Result<UserWithRolesDto>
                     {
+                        SuccessCode = (int)SuccessCode.Ok,
                         Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
                     };
                 }
@@ -42,6 +43,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
                     {
                         ErrorMessage = ErrorMessage.UserNotFound,
                         ErrorCode = (int)ErrorCodes.UserNotFound,
+                        ValidationErrors = [ErrorMessage.UserNotFound]
                     };
                 }
 
@@ -59,6 +61,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
 
                     return new Result<UserWithRolesDto>
                     {
+                        SuccessCode = (int)SuccessCode.Ok,
                         Data = _mapper.Map<UserWithRolesDto>(userWithRoles),
                     };
                 }
@@ -72,6 +75,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

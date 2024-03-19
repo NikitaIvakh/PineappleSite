@@ -117,76 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AccountLoginError" xml:space="preserve">
-    <value>Неправильно введен логин или пароль</value>
+  <data name="SuccessfullyLogin" xml:space="preserve">
+    <value>Вы успешно вошли в аккаунт</value>
   </data>
-  <data name="EmailAddressAlreadyExists" xml:space="preserve">
-    <value>Такой почтовый адрес уже существует</value>
+  <data name="SuccessfullyRegister" xml:space="preserve">
+    <value>Вы успешно зарегистрировались</value>
   </data>
-  <data name="EmailAddressError" xml:space="preserve">
-    <value>Почтовый адрес введен неверно</value>
+  <data name="TokensSuccessfullyDeleted" xml:space="preserve">
+    <value>Токены всех пользователей успешно удалены</value>
   </data>
-  <data name="ErrorLoggingOutOfTheAccount" xml:space="preserve">
-    <value>Ошибка выхода из аккаунта</value>
+  <data name="TokenSuccessfullyDeleted" xml:space="preserve">
+    <value>Токен пользователя успешно удален</value>
   </data>
-  <data name="FirstNameError" xml:space="preserve">
-    <value>Ваше имя введено некорректно</value>
+  <data name="TokensUpdatedSuccessfully" xml:space="preserve">
+    <value>Токены успешно обновлены</value>
   </data>
-  <data name="InternalServerError" xml:space="preserve">
-    <value>Ошибка на стороне сервера</value>
+  <data name="UserProfileSuccessfullyUpdated" xml:space="preserve">
+    <value>Профиль пользователя успешно обновлен</value>
   </data>
-  <data name="InvalidAccessOrRefreshToken" xml:space="preserve">
-    <value>Передан неверный токен</value>
+  <data name="UsersSuccessfullyDeleted" xml:space="preserve">
+    <value>Пользователи успешно удалены</value>
   </data>
-  <data name="LastNameError" xml:space="preserve">
-    <value>Ваша фамилия введена некорректно</value>
+  <data name="UserSuccessfullyCreated" xml:space="preserve">
+    <value>Пользователь успешно создан</value>
   </data>
-  <data name="LoginOrPasswordIsNotValid" xml:space="preserve">
-    <value>Неправильно введен логин или пароль</value>
+  <data name="UserSuccessfullyDeleted" xml:space="preserve">
+    <value>Пользователь успешно удален</value>
   </data>
-  <data name="LogoutError" xml:space="preserve">
-    <value>Ошибка выхода из аккаунта</value>
-  </data>
-  <data name="PasswordError" xml:space="preserve">
-    <value>Пароль введен неверно</value>
-  </data>
-  <data name="PasswordsDoNotMatch" xml:space="preserve">
-    <value>Введенные пароли не совпадают</value>
-  </data>
-  <data name="RegistrationLoginError" xml:space="preserve">
-    <value>Ошибка регистрации</value>
-  </data>
-  <data name="ThisEmailAddressIsAlreadyExists" xml:space="preserve">
-    <value>Такой электронный адрес уже используется</value>
-  </data>
-  <data name="ThisUserNameAlreadyExists" xml:space="preserve">
-    <value>Такое имя пользователя уже используется</value>
-  </data>
-  <data name="UpdateProdileError" xml:space="preserve">
-    <value>Ошибка обновления профиля</value>
-  </data>
-  <data name="UserAlreadyExists" xml:space="preserve">
-    <value>Такой пользователь уже существует</value>
-  </data>
-  <data name="UserCanNotBeCreated" xml:space="preserve">
-    <value>Пользовтаель не может быть создан</value>
-  </data>
-  <data name="UserCanNotDeleted" xml:space="preserve">
-    <value>Пользователь не может быть удален</value>
-  </data>
-  <data name="UserNameError" xml:space="preserve">
-    <value>Отображаемое имя на сайте введено неверно</value>
-  </data>
-  <data name="UserNotFound" xml:space="preserve">
-    <value>Такого пользователя не существует</value>
-  </data>
-  <data name="UsersConNotDeleted" xml:space="preserve">
-    <value>Пользователи не могут быть удалены</value>
-  </data>
-  <data name="UsersNotFound" xml:space="preserve">
-    <value>Пользователи не найдены</value>
-  </data>
-  <data name="UserUpdateError" xml:space="preserve">
-    <value>Ошибка обновления пользователя</value>
+  <data name="UserSuccessfullyUpdated" xml:space="preserve">
+    <value>Пользователь успешно обновлен</value>
   </data>
 </root>

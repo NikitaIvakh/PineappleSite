@@ -64,79 +64,112 @@ namespace Identity.Application.Features.Identities.Commands.Commands
 
                 else
                 {
-                    var user = new ApplicationUser
+                    var existsEmail = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
+
+                    if (existsEmail is not null)
                     {
-                        Id = Guid.NewGuid().ToString(),
-                        FirstName = request.RegisterRequest.FirstName.Trim(),
-                        LastName = request.RegisterRequest.LastName.Trim(),
-                        UserName = request.RegisterRequest.UserName.Trim(),
-                        Email = request.RegisterRequest.Email.Trim(),
-                        EmailConfirmed = true,
-                    };
+                        return new Result<RegisterResponseDto>
+                        {
+                            Data = null,
+                            ErrorMessage = ErrorMessage.EmailAddressAlreadyExists,
+                            ErrorCode = (int)ErrorCodes.EmailAddressAlreadyExists,
+                            ValidationErrors = [ErrorMessage.EmailAddressAlreadyExists]
+                        };
+                    }
 
-                    var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.RegisterRequest.Password);
-                    user.PasswordHash = passwordHasher;
-
-                    if (request.RegisterRequest.Password.Trim() == request.RegisterRequest.PasswordConfirm.Trim())
+                    else
                     {
-                        var result = await _userManager.CreateAsync(user, request.RegisterRequest.Password);
+                        var existsUserName = await _userManager.FindByNameAsync(request.RegisterRequest.UserName);
 
-                        if (!result.Succeeded)
+                        if (existsUserName is not null)
                         {
                             return new Result<RegisterResponseDto>
                             {
-                                ErrorCode = (int)ErrorCodes.RegistrationLoginError,
-                                ErrorMessage = ErrorMessage.RegistrationLoginError,
-                                ValidationErrors = [ErrorMessage.RegistrationLoginError]
+                                Data = null,
+                                ErrorMessage = ErrorMessage.ThisUserNameAlreadyExists,
+                                ErrorCode = (int)ErrorCodes.ThisUserNameAlreadyExists,
+                                ValidationErrors = [ErrorMessage.ThisUserNameAlreadyExists]
                             };
                         }
 
                         else
                         {
-                            var userFromDb = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
+                            var user = new ApplicationUser
+                            { 
+                                Id = Guid.NewGuid().ToString(),
+                                FirstName = request.RegisterRequest.FirstName.Trim(),
+                                LastName = request.RegisterRequest.LastName.Trim(),
+                                UserName = request.RegisterRequest.UserName.Trim(),
+                                Email = request.RegisterRequest.Email.Trim(),
+                                EmailConfirmed = true,
+                            };
 
-                            if (userFromDb is null)
+                            var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.RegisterRequest.Password);
+                            user.PasswordHash = passwordHasher;
+
+                            if (request.RegisterRequest.Password.Trim() == request.RegisterRequest.PasswordConfirm.Trim())
                             {
-                                return new Result<RegisterResponseDto>
+                                var result = await _userManager.CreateAsync(user, request.RegisterRequest.Password);
+
+                                if (!result.Succeeded)
                                 {
-                                    ErrorCode = (int)ErrorCodes.UserNotFound,
-                                    ErrorMessage = ErrorMessage.UserNotFound,
-                                    ValidationErrors = [ErrorMessage.UserNotFound]
-                                };
+                                    return new Result<RegisterResponseDto>
+                                    {
+                                        ErrorCode = (int)ErrorCodes.RegistrationLoginError,
+                                        ErrorMessage = ErrorMessage.RegistrationLoginError,
+                                        ValidationErrors = [ErrorMessage.RegistrationLoginError]
+                                    };
+                                }
+
+                                else
+                                {
+                                    var userFromDb = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
+
+                                    if (userFromDb is null)
+                                    {
+                                        return new Result<RegisterResponseDto>
+                                        {
+                                            ErrorCode = (int)ErrorCodes.UserNotFound,
+                                            ErrorMessage = ErrorMessage.UserNotFound,
+                                            ValidationErrors = [ErrorMessage.UserNotFound]
+                                        };
+                                    }
+
+                                    else
+                                    {
+                                        await _userManager.AddToRoleAsync(user, RoleConsts.User);
+                                        await _context.SaveChangesAsync(cancellationToken);
+
+                                        _memoryCache.Remove(user);
+
+                                        var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
+                                        _memoryCache.Set(cacheKey, usersCache1);
+                                        _memoryCache.Set(cacheKey, user);
+
+                                        return new Result<RegisterResponseDto>
+                                        {
+                                            Data = new RegisterResponseDto
+                                            {
+                                                UserId = userFromDb.Id,
+                                            },
+
+                                            SuccessCode = (int)SuccessCode.Ok,
+                                            SuccessMessage = SuccessMessage.SuccessfullyRegister,
+                                        };
+                                    }
+                                }
                             }
 
                             else
                             {
-                                await _userManager.AddToRoleAsync(user, RoleConsts.User);
-                                await _context.SaveChangesAsync(cancellationToken);
-
-                                _memoryCache.Remove(user);
-
-                                var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
-                                _memoryCache.Set(cacheKey, usersCache1);
-                                _memoryCache.Set(cacheKey, user);
-
                                 return new Result<RegisterResponseDto>
                                 {
-                                    Data = new RegisterResponseDto
-                                    {
-                                        UserId = userFromDb.Id,
-                                    },
-
-                                    SuccessMessage = "Вы успешно зарегистрировались",
+                                    ErrorCode = (int)ErrorCodes.PasswordsDoNotMatch,
+                                    ErrorMessage = ErrorMessage.PasswordsDoNotMatch,
+                                    ValidationErrors = [ErrorMessage.PasswordsDoNotMatch]
                                 };
                             }
                         }
-                    }
-
-                    else
-                    {
-                        return new Result<RegisterResponseDto>
-                        {
-                            ErrorCode = (int)ErrorCodes.PasswordsDoNotMatch,
-                            ErrorMessage = ErrorMessage.PasswordsDoNotMatch,
-                            ValidationErrors = [ErrorMessage.PasswordsDoNotMatch]
-                        };
                     }
                 }
             }

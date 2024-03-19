@@ -56,7 +56,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         Data = null,
                         ErrorMessage = ErrorMessage.AccountLoginError,
                         ErrorCode = (int)ErrorCodes.AccountLoginError,
-                        ValidationErrors = [ErrorMessage.AccountLoginError],
+                        ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
                 }
 
@@ -111,7 +111,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                                     RefreshToken = user.RefreshToken,
                                 },
 
-                                SuccessMessage = "Вы успешно вошли в аккаунт"
+                                SuccessCode = (int)SuccessCode.Ok,
+                                SuccessMessage = SuccessMessage.SuccessfullyLogin,
                             };
                         }
                     }

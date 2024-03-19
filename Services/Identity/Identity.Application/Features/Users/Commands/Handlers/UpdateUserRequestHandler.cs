@@ -1,5 +1,4 @@
-﻿using Identity.Application.Extecsions;
-using Identity.Application.Features.Users.Requests.Handlers;
+﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
@@ -98,8 +97,9 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                             return new Result<RegisterResponseDto>
                             {
+                                SuccessCode = (int)SuccessCode.Updated,
                                 Data = new RegisterResponseDto { UserId = user.Id },
-                                SuccessMessage = "Успешное обновление пользователя",
+                                SuccessMessage = SuccessMessage.UserSuccessfullyUpdated,
                             };
                         }
 
@@ -109,6 +109,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             {
                                 ErrorMessage = ErrorMessage.UserUpdateError,
                                 ErrorCode = (int)ErrorCodes.UserUpdateError,
+                                ValidationErrors = [ErrorMessage.UserUpdateError]
                             };
                         }
                     }
@@ -122,6 +123,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

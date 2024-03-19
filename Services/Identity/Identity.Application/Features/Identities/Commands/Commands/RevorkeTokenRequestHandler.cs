@@ -37,7 +37,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     return new Result<Unit>
                     {
                         Data = Unit.Value,
-                        SuccessMessage = "Токен пользователя успешно удален",
+                        SuccessCode = (int)SuccessCode.Deleted,
+                        SuccessMessage = SuccessMessage.TokenSuccessfullyDeleted,
                     };
                 }
             }

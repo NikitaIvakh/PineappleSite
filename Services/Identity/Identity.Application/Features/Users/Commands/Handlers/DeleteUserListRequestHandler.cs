@@ -2,7 +2,6 @@
 using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
@@ -31,6 +30,24 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var existErrorMessage = new Dictionary<string, List<string>>
+                    {
+                       {"UserIds", validator.Errors.Select(key => key.ErrorMessage).ToList() }
+                    };
+
+                    foreach (var error in existErrorMessage)
+                    {
+                        if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new Result<bool>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.UsersConNotDeleted,
+                                ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
+                            };
+                        }
+                    }
+
                     return new Result<bool>
                     {
                         ErrorMessage = ErrorMessage.UsersConNotDeleted,
@@ -49,6 +66,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.UsersNotFound,
                             ErrorCode = (int)ErrorCodes.UsersNotFound,
+                            ValidationErrors = [ErrorMessage.UsersNotFound]
                         };
                     }
 
@@ -64,6 +82,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 {
                                     ErrorMessage = ErrorMessage.UsersConNotDeleted,
                                     ErrorCode = (int)ErrorCodes.UsersConNotDeleted,
+                                    ValidationErrors = [ErrorMessage.UsersConNotDeleted]
                                 };
                             }
                         }
@@ -82,7 +101,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     return new Result<bool>
                     {
                         Data = true,
-                        SuccessMessage = "Пользователи успешно удалены",
+                        SuccessCode = (int)SuccessCode.Deleted,
+                        SuccessMessage = SuccessMessage.UsersSuccessfullyDeleted,
                     };
                 }
             }
@@ -94,6 +114,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

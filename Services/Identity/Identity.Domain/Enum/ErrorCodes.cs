@@ -12,6 +12,7 @@
         EmailAddressAlreadyExists = 411,
         PasswordsDoNotMatch = 412,
         InvalidAccessOrRefreshToken = 413,
+        ThisUserNameAlreadyExists = 414,
         InternalServerError = 500,
         AccountLoginError = 501,
         ErrorLoggingOutOfTheAccount = 502,

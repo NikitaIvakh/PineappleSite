@@ -7,7 +7,7 @@ namespace Identity.Application.Validators
     {
         public IDeleteUserListDtoValidator()
         {
-            RuleFor(key => key.UserIds).NotNull().NotEmpty().NotEqual([]);
+            RuleFor(key => key.UserIds).NotNull().NotEmpty().NotEqual([]).WithMessage("Идентификаторы не могут быть пустыми");
         }
     }
 }

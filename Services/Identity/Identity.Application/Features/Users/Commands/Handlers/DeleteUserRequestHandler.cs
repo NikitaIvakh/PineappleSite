@@ -30,6 +30,24 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                 if (!validator.IsValid)
                 {
+                    var existErrorMessage = new Dictionary<string, List<string>>
+                    {
+                        {"Id", validator.Errors.Select(key => key.ErrorMessage).ToList() }
+                    };
+
+                    foreach (var error in existErrorMessage)
+                    {
+                        if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new Result<DeleteUserDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.UserCanNotDeleted,
+                                ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
+                            };
+                        }
+                    }
+
                     return new Result<DeleteUserDto>
                     {
                         ErrorMessage = ErrorMessage.UserCanNotDeleted,
@@ -48,6 +66,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
+                            ValidationErrors = [ErrorMessage.UserNotFound]
                         };
                     }
 
@@ -61,12 +80,12 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             {
                                 ErrorMessage = ErrorMessage.UserCanNotDeleted,
                                 ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
+                                ValidationErrors = [ErrorMessage.UserCanNotDeleted]
                             };
                         }
 
                         else
                         {
-
                             _memoryCache.Remove(user);
 
                             var users = await _userManager.Users.ToListAsync(cancellationToken);
@@ -76,7 +95,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             return new Result<DeleteUserDto>
                             {
                                 Data = request.DeleteUser,
-                                SuccessMessage = "Пользователь успешно удален",
+                                SuccessCode = (int)SuccessCode.Deleted,
+                                SuccessMessage = SuccessMessage.UserSuccessfullyDeleted,
                             };
                         }
                     }
@@ -90,6 +110,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

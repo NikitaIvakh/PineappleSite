@@ -1,5 +1,4 @@
-﻿using Identity.Application.Extecsions;
-using Identity.Application.Features.Users.Requests.Handlers;
+﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
@@ -56,6 +55,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         Data = null,
                         ErrorMessage = ErrorMessage.UserCanNotBeCreated,
                         ErrorCode = (int)ErrorCodes.UserCanNotBeCreated,
+                        ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList()
                     };
                 }
 
@@ -70,6 +70,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             Data = null,
                             ErrorMessage = ErrorMessage.UserAlreadyExists,
                             ErrorCode = (int)ErrorCodes.UserAlreadyExists,
+                            ValidationErrors = [ErrorMessage.UserAlreadyExists]
                         };
                     }
 
@@ -84,6 +85,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 Data = null,
                                 ErrorMessage = ErrorMessage.EmailAddressAlreadyExists,
                                 ErrorCode = (int)ErrorCodes.EmailAddressAlreadyExists,
+                                ValidationErrors = [ErrorMessage.EmailAddressAlreadyExists]
                             };
                         }
 
@@ -112,10 +114,17 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 await _userManager.AddToRoleAsync(user, request.CreateUser.Roles.ToString());
                                 await _userManager.UpdateAsync(user);
 
+                                _memoryCache.Remove(user);
+
+                                var users1 = await _userManager.Users.ToListAsync(cancellationToken);
+                                _memoryCache.Set(cacheKey, users1);
+                                _memoryCache.Set(cacheKey, user);
+
                                 return new Result<ApplicationUser>
                                 {
                                     Data = user,
-                                    SuccessMessage = "Пользователь успешно создан",
+                                    SuccessCode = (int)SuccessCode.Created,
+                                    SuccessMessage = SuccessMessage.UserSuccessfullyCreated,
                                 };
                             }
 
@@ -130,19 +139,20 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 Data = user,
                                 ErrorMessage = ErrorMessage.UserCanNotBeCreated,
                                 ErrorCode = (int)ErrorCodes.UserCanNotBeCreated,
+                                ValidationErrors = [ErrorMessage.UserCanNotBeCreated]
                             };
                         }
                     }
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<ApplicationUser>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message },
+                    ValidationErrors = [ErrorMessage.InternalServerError],
                 };
             };
         }

@@ -74,6 +74,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
+                            ValidationErrors = [ErrorMessage.UserNotFound]
                         };
                     }
 
@@ -169,7 +170,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             return new Result<UserWithRolesDto>
                             {
                                 Data = userWithRoles,
-                                SuccessMessage = "Профиль успешно обновлен",
+                                SuccessCode = (int)SuccessCode.Updated,
+                                SuccessMessage = SuccessMessage.UserProfileSuccessfullyUpdated,
                             };
                         }
                     }
@@ -182,7 +184,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     return new Result<UserWithRolesDto>
                     {
-                        SuccessMessage = "Профиль пользователя успешно обновлен",
+                        SuccessCode = (int)SuccessCode.Updated,
+                        SuccessMessage = SuccessMessage.UserProfileSuccessfullyUpdated,
                     };
                 }
             }
@@ -194,6 +197,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

@@ -68,7 +68,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                                 refreshToken = newRefreshToken,
                             }),
 
-                            SuccessMessage = "Токены успешно обновлены"
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.TokensUpdatedSuccessfully,
                         };
                     }
                 }

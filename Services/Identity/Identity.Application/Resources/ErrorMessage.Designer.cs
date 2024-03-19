@@ -187,6 +187,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Такое имя пользователя уже используется.
+        /// </summary>
+        internal static string ThisUserNameAlreadyExists {
+            get {
+                return ResourceManager.GetString("ThisUserNameAlreadyExists", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Ошибка обновления профиля.
         /// </summary>
         internal static string UpdateProdileError {

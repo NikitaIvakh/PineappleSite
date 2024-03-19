@@ -41,12 +41,13 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                     return new Result<Unit>
                     {
                         Data = Unit.Value,
-                        SuccessMessage = "Токены всех пользователей успешно удалены",
+                        SuccessCode = (int)SuccessCode.Deleted,
+                        SuccessMessage = SuccessMessage.TokensSuccessfullyDeleted,
                     };
                 }
             }
 
-            catch (Exception ex)
+            catch
             {
                 return new Result<Unit>
                 {

@@ -51,6 +51,7 @@ namespace Identity.Application.Features.Users.Commands.Queries
                             {
                                 ErrorMessage = ErrorMessage.UsersNotFound,
                                 ErrorCode = (int)ErrorCodes.UsersNotFound,
+                                ValidationErrors = [ErrorMessage.UsersNotFound]
                             };
                         }
 
@@ -83,7 +84,8 @@ namespace Identity.Application.Features.Users.Commands.Queries
                 return new CollectionResult<UserWithRolesDto>
                 {
                     Data = usersWithRoles,
-                    Count = usersWithRoles.Count
+                    Count = usersWithRoles.Count,
+                    SuccessCode = (int)SuccessCode.Ok,
                 };
             }
 
@@ -94,7 +96,8 @@ namespace Identity.Application.Features.Users.Commands.Queries
                 return new CollectionResult<UserWithRolesDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }
