@@ -3,7 +3,6 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Services;
 using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
-using System.Reflection;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using PineappleSite.Presentation.Services.Favorites;

@@ -33,9 +33,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new IdentityCollectionResult<UserWithRolesViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = users.ErrorCode,
                             ErrorMessage = users.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -49,6 +49,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response],
                 };
             }
         }
@@ -74,9 +75,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new IdentityResult<UserWithRolesViewModel>
                         {
-                            ErrorMessage = user.ErrorMessage,
+                            ValidationErrors = [error],
                             ErrorCode = user.ErrorCode,
-                            ValidationErrors = error + Environment.NewLine,
+                            ErrorMessage = user.ErrorMessage,
                         };
                     }
                 }
@@ -88,8 +89,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new IdentityResult<UserWithRolesViewModel>
                 {
-                    ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response],
                 };
             }
         }
@@ -119,7 +121,7 @@ namespace PineappleSite.Presentation.Services
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
+                            ValidationErrors = [error],
                         };
                     }
                 }
@@ -131,8 +133,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new IdentityResult<UserWithRolesViewModel>
                 {
-                    ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ErrorMessage = exception.Response,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -162,7 +165,7 @@ namespace PineappleSite.Presentation.Services
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
+                            ValidationErrors = [error],
                         };
                     }
                 }
@@ -174,8 +177,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new IdentityResult<RegisterResponseViewModel>
                 {
-                    ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ErrorMessage = exception.Response,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -202,8 +206,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new IdentityResult<UserWithRolesViewModel>
                     {
-                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse),
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse),
                     };
                 }
 
@@ -213,9 +218,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new IdentityResult<UserWithRolesViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -227,8 +232,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new IdentityResult<UserWithRolesViewModel>
                 {
-                    ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ErrorMessage = exception.Response,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -256,9 +262,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new IdentityResult<DeleteUserViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -272,6 +278,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exception.Response,
                     ErrorCode = exception.StatusCode,
+                    ValidationErrors = [exception.Response],
                 };
             }
         }
@@ -299,9 +306,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new IdentityResult<bool>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -315,6 +322,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response],
                 };
             }
         }

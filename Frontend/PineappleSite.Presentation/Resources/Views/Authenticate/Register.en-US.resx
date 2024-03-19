@@ -132,6 +132,9 @@
   <data name="Password" xml:space="preserve">
     <value>Password</value>
   </data>
+  <data name="PasswordConfirm" xml:space="preserve">
+    <value>Password confirm</value>
+  </data>
   <data name="Register" xml:space="preserve">
     <value>Register</value>
   </data>

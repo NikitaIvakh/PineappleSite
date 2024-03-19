@@ -39,8 +39,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="EmailAddress" />
-                    <span class="text-danger" asp-validation-for="EmailAddress"></span>
+                    <input class="form-control" asp-for="Email" />
+                    <span class="text-danger" asp-validation-for="Email"></span>
                 </div>
             </div>
             <div class="row">
@@ -67,6 +67,22 @@
                     </div>
                 </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <label class="control-label pt-2" style="font-size:20px;" asp-for="PasswordConfirm">@Localizer["PasswordConfirm"]</label>
+                </div>
+                <div class="col-6 pb-3">
+                    <div class="input-group">
+                        <input asp-for="PasswordConfirm" type="password" class="form-control" />
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-secondary" id="togglePasswordConfirm">
+                                <i class="fa fa-eye"></i> @Localizer["Show"]
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <span asp-validation-for="PasswordConfirm" class="text-danger"></span>
             </div>
             <div class="col-5 offset-1">
                 <a class="btn-primary btn form-control" asp-controller="Home" asp-action="Index">@Localizer["Go Back"]</a>

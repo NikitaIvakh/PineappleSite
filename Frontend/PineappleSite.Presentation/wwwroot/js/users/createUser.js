@@ -15,3 +15,20 @@ $(document).ready(function () {
         }
     });
 });
+
+$(document).ready(function () {
+    $('#togglePasswordConfirm').click(function () {
+        var passwordInput = $('input[name="PasswordConfirm"]');
+        var passwordType = passwordInput.attr('type');
+
+        if (passwordType === 'password') {
+            passwordInput.attr('type', 'text');
+            $('#togglePasswordConfirm i').removeClass('fa-eye').addClass('fa-eye-slash');
+            $('#togglePasswordConfirm').text('Скрыть');
+        } else {
+            passwordInput.attr('type', 'password');
+            $('#togglePasswordConfirm i').removeClass('fa-eye-slash').addClass('fa-eye');
+            $('#togglePasswordConfirm').text('Показать');
+        }
+    });
+});

@@ -12,7 +12,7 @@ namespace PineappleSite.Presentation.Services.Identities
         {
             if (identityExceptions.StatusCode == 400)
             {
-                return new IdentityResult() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = identityExceptions.Response };
+                return new IdentityResult() { ErrorMessage = "Произошли ошибки валидации.", ValidationErrors = [identityExceptions.Response] };
             }
 
             else if (identityExceptions.StatusCode == 404)
