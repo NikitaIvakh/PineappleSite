@@ -9,7 +9,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
-using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
@@ -52,6 +51,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     {
                         ErrorMessage = ErrorMessage.CouponNotFound,
                         ErrorCode = (int)ErrorCodes.CouponNotFound,
+                        ValidationErrors = [ErrorMessage.CouponNotFound]
                     };
                 }
 
