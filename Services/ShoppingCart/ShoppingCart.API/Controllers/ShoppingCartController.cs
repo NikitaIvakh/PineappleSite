@@ -27,7 +27,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения корзины: {userId}");
-            return BadRequest(request.ErrorMessage);
+            foreach (var error in request.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<ShoppingCartController>
@@ -43,7 +48,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка добавления товара в корзину: {cartDto.CartHeader.CartHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("ApplyCoupon")]
@@ -58,7 +68,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка применения купона: {cartDto.CartHeader.CartHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("RemoveCoupon")]
@@ -73,7 +88,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {cartDto.CartHeader.CartHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<ShoppingCartController>/5
@@ -89,7 +109,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления продукта из корзины: {productId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpDelete("RemoveDetailsList")]
@@ -104,7 +129,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления продуктов из корзины: {deleteProductList.ProductIds}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpPost("RabbitMQShoppingCartRequest")]
@@ -119,7 +149,12 @@ namespace ShoppingCart.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка добавления письма в очередь: {cartDto.CartHeader.CartHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }
