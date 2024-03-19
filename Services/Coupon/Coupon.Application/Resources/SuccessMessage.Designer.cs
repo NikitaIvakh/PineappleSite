@@ -61,6 +61,15 @@ namespace Coupon.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Купон успешно удален.
+        /// </summary>
+        internal static string CouponDeletedSuccessfully {
+            get {
+                return ResourceManager.GetString("CouponDeletedSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Купоны успешно удалены.
         /// </summary>
         internal static string CouponsDeletedSuccessfully {

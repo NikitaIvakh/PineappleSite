@@ -32,6 +32,24 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 if (!result.IsValid)
                 {
+                    var existErrorMessages = new Dictionary<string, List<string>>
+                    {
+                        {"Id", result.Errors.Select(key => key.ErrorMessage).ToList() },
+                    };
+
+                    foreach (var error in existErrorMessages)
+                    {
+                        if (existErrorMessages.TryGetValue(error.Key, out var errorMessage))
+                        {
+                            return new Result<CouponDto>
+                            {
+                                ValidationErrors = errorMessage,
+                                ErrorMessage = ErrorMessage.CouponNotDeleted,
+                                ErrorCode = (int)ErrorCodes.CouponNotDeleted,
+                            };
+                        }
+                    }
+
                     return new Result<CouponDto>
                     {
                         ErrorMessage = ErrorMessage.CouponNotDeleted,
@@ -48,9 +66,10 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         return new Result<CouponDto>
                         {
+                            Data = null,
                             ErrorMessage = ErrorMessage.CouponNotFound,
                             ErrorCode = (int)ErrorCodes.CouponNotFound,
-                            Data = null,
+                            ValidationErrors = [ErrorMessage.CouponNotFound]
                         };
                     }
 
@@ -67,7 +86,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         return new Result<CouponDto>
                         {
                             Data = _mapper.Map<CouponDto>(coupon),
-                            SuccessMessage = "Купон успешно удален",
+                            SuccessCode = (int)SuccessCode.Deleted,
+                            SuccessMessage = SuccessMessage.CouponDeletedSuccessfully,
                         };
                     }
                 }
@@ -79,8 +99,9 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 _memoryCache.Remove(cacheKey);
                 return new Result<CouponDto>
                 {
-                    ErrorMessage = ErrorMessage.CouponNotDeletedCatch,
-                    ErrorCode = (int)ErrorCodes.CouponNotDeletedCatch,
+                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }
