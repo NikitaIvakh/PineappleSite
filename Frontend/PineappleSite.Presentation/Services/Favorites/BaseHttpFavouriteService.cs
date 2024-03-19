@@ -13,7 +13,7 @@ namespace PineappleSite.Presentation.Services.Favorites
         {
             if (favoritesExceptions.StatusCode == 400)
             {
-                return new FavouriteResult<FavouriteViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = favoritesExceptions.Response, };
+                return new FavouriteResult<FavouriteViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = [favoritesExceptions.Response], };
             }
 
             else if (favoritesExceptions.StatusCode == 404)

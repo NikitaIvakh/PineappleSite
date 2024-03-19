@@ -23,10 +23,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     FavouriteResult<FavouriteViewModel> result = new()
                     {
-                        Data = _mapper.Map<FavouriteViewModel>(favouriteProducts.Data),
-                        ErrorCode = favouriteProducts.ErrorCode,
-                        ErrorMessage = favouriteProducts.ErrorMessage,
+                        SuccessCode = favouriteProducts.SuccessCode,
                         SuccessMessage = favouriteProducts.SuccessMessage,
+                        Data = _mapper.Map<FavouriteViewModel>(favouriteProducts.Data),
                     };
 
                     return result;
@@ -38,7 +37,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new FavouriteResult<FavouriteViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = favouriteProducts.ErrorCode,
                             ErrorMessage = favouriteProducts.ErrorMessage,
                         };
@@ -54,6 +53,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -70,8 +70,9 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new FavouriteResult<FavouriteViewModel>
                     {
-                        Data = _mapper.Map<FavouriteViewModel>(apiResponse.Data),
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
+                        Data = _mapper.Map<FavouriteViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -81,7 +82,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new FavouriteResult<FavouriteViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
@@ -97,6 +98,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             };
         }
@@ -112,6 +114,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new FavouriteResult<FavouriteViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<FavouriteViewModel>(apiResponse.Data),
                     };
@@ -123,7 +126,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new FavouriteResult<FavouriteViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
@@ -139,6 +142,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -154,6 +158,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new FavouriteResult<FavouriteViewModel>
                     {
+                        SuccessCode = apiResult.SuccessCode,
                         SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<FavouriteViewModel>(apiResult.Data),
                     };
@@ -165,7 +170,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new FavouriteResult<FavouriteViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResult.ErrorCode,
                             ErrorMessage = apiResult.ErrorMessage,
                         };
@@ -181,6 +186,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }

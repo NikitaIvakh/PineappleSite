@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Services.Favorites;
@@ -35,7 +34,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = result.ErrorMessage;
+                    foreach (var error in result.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -52,7 +55,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 FavouriteResult<FavouriteViewModel> response = await _favoriteService.FavouruteRemoveProductsAsync(productId);
 
                 if (response.IsSuccess)
@@ -63,7 +66,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.ErrorMessage;
+                    foreach (var error in response.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
