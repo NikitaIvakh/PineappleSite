@@ -68,8 +68,9 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         return new Result<CouponDto>
                         {
-                            ErrorMessage = ErrorMessage.CouponNotUpdatedNull,
-                            ErrorCode = (int)ErrorCodes.CouponNotUpdatedNull,
+                            ErrorMessage = ErrorMessage.CouponNotFound,
+                            ErrorCode = (int)ErrorCodes.CouponNotFound,
+                            ValidationErrors = [ErrorMessage.CouponNotFound]
                         };
                     }
 
@@ -91,7 +92,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         return new Result<CouponDto>
                         {
                             Data = _mapper.Map<CouponDto>(coupon),
-                            SuccessMessage = "Купон успешно обновлен",
+                            SuccessCode = (int)SuccessCode.Updated,
+                            SuccessMessage = SuccessMessage.CouponUpdatedSuccessfully,
                         };
                     }
                 }
@@ -104,6 +106,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }

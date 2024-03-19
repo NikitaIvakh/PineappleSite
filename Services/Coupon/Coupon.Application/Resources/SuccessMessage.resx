@@ -126,4 +126,7 @@
   <data name="CouponSuccessfullyCreated" xml:space="preserve">
     <value>Купон успешно создан</value>
   </data>
+  <data name="CouponUpdatedSuccessfully" xml:space="preserve">
+    <value>Купон успешно обновлен</value>
+  </data>
 </root>
