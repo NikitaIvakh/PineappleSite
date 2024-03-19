@@ -28,8 +28,9 @@ namespace Order.Application.Features.Handlers.Requests
                 {
                     return new Result<OrderHeaderDto>
                     {
-                        SuccessMessage = "Заказ успешно получен",
+                        SuccessCode = (int)SuccessCode.Ok,
                         Data = _mapper.Map<OrderHeaderDto>(orderHeader),
+                        SuccessMessage = SuccessMessage.OrderSuccessfullyReceived,
                     };
                 }
 
@@ -43,6 +44,7 @@ namespace Order.Application.Features.Handlers.Requests
                         {
                             ErrorMessage = ErrorMessages.OrderNotFound,
                             ErrorCode = (int)ErrorCodes.OrderNotFound,
+                            ValidationErrors = [ErrorMessages.OrderNotFound]
                         };
                     }
 
@@ -52,21 +54,22 @@ namespace Order.Application.Features.Handlers.Requests
 
                         return new Result<OrderHeaderDto>
                         {
-                            SuccessMessage = "Заказ успешно получен",
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.OrderSuccessfullyReceived,
                             Data = _mapper.Map<OrderHeaderDto>(orderHeader),
                         };
                     }
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 _memoryCache.Remove(cacheKey);
                 return new Result<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

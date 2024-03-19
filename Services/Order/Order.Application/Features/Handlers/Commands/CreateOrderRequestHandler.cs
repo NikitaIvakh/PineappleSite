@@ -76,7 +76,8 @@ namespace Order.Application.Features.Handlers.Commands
                     return new Result<OrderHeaderDto>
                     {
                         Data = orderHeaderDto,
-                        SuccessMessage = "Заказ успешно создан",
+                        SuccessCode = (int)SuccessCode.Created,
+                        SuccessMessage = SuccessMessage.OrderSuccessfullyCreated,
                     };
                 }
             }

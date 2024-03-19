@@ -40,8 +40,9 @@ namespace Order.Application.Features.Handlers.Commands
 
                 return new Result<OrderHeaderDto>
                 {
-                    SuccessMessage = "Оплата прошла успешно!",
+                    SuccessCode = (int)SuccessCode.Ok,
                     Data = _mapper.Map<OrderHeaderDto>(orderHeader),
+                    SuccessMessage = SuccessMessage.ThePaymentWasSuccessful,
                 };
             }
 

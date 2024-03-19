@@ -43,18 +43,19 @@ namespace Order.Application.Features.Handlers.Commands
 
                 return new Result<OrderHeaderDto>
                 {
+                    SuccessCode = (int)SuccessCode.Updated,
                     Data = _mapper.Map<OrderHeaderDto>(orderHeader),
-                    SuccessMessage = "Статус заказа умпешно обновлен",
+                    SuccessMessage = SuccessMessage.OrderStatusSuccessfullyUpdated,
                 };
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

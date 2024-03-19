@@ -32,7 +32,8 @@ namespace Order.Application.Features.Handlers.Requests
                     return new CollectionResult<OrderHeaderDto>
                     {
                         Count = orderHeader.Count,
-                        SuccessMessage = "Список заказов",
+                        SuccessCode = (int)SuccessCode.Ok,
+                        SuccessMessage = SuccessMessage.OrderList,
                         Data = _mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(orderHeader),
                     };
                 }
@@ -51,19 +52,20 @@ namespace Order.Application.Features.Handlers.Requests
                 return new CollectionResult<OrderHeaderDto>
                 {
                     Count = orderHeader.Count,
-                    SuccessMessage = "Список заказов",
+                    SuccessCode = (int)SuccessCode.Ok,
+                    SuccessMessage = SuccessMessage.OrderList,
                     Data = _mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(orderHeader),
                 };
             }
 
-            catch (Exception exception)
+            catch
             {
                 _memoryCache.Remove(cacheKey);
                 return new CollectionResult<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

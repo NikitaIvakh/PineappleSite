@@ -76,17 +76,18 @@ namespace Order.Application.Features.Handlers.Commands
                 return new Result<StripeRequestDto>
                 {
                     Data = request.StripeRequest,
-                    SuccessMessage = "Оплата прошла успешно",
+                    SuccessCode = (int)SuccessCode.Ok,
+                    SuccessMessage = SuccessMessage.ThePaymentWasSuccessful,
                 };
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<StripeRequestDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }
