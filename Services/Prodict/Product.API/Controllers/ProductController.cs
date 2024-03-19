@@ -27,7 +27,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения продуктов");
-            return BadRequest(query);
+            foreach (var error in query.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // GET api/<ProductController>/5
@@ -43,7 +48,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения продукта: {id}");
-            return BadRequest(query.ErrorMessage);
+            foreach (var error in query.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<ProductController>
@@ -59,7 +69,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка добавления продукта: {createProductDto.Name}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // PUT api/<ProductController>/5
@@ -75,7 +90,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<ProductController>/5
@@ -91,7 +111,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // DELETE api/<ProductController>/
@@ -107,7 +132,12 @@ namespace Product.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления продуктов: {deleteProductsDto.ProductIds}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }
