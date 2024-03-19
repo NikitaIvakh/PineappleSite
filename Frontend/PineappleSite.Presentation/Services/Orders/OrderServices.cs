@@ -861,6 +861,9 @@ namespace PineappleSite.Presentation.Services.Orders
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
 
@@ -886,6 +889,9 @@ namespace PineappleSite.Presentation.Services.Orders
 
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
@@ -967,6 +973,9 @@ namespace PineappleSite.Presentation.Services.Orders
 
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
