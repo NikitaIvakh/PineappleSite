@@ -19,6 +19,7 @@ namespace Coupon.API.Controllers
         public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
+
             if (query.IsSuccess)
             {
                 _logger.LogDebug("LogDebug ================ Купоны успешно получены");
@@ -26,7 +27,12 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError("LogDebugError ================ Ошибка получения купонов");
-            return BadRequest(query.ErrorMessage);
+            foreach (var error in query.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // GET api/<CouponController>/5
@@ -42,7 +48,12 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения купона: {id}");
-            return BadRequest(query.ErrorMessage);
+            foreach (var error in query.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         [HttpGet("GetCouponByCode/{couponCode}")]
@@ -57,7 +68,12 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения купона: {couponCode}");
-            return BadRequest(query.ErrorMessage);
+            foreach (var error in query.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<CouponController>
@@ -73,39 +89,71 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка создания купона: {createCouponDto.CouponCode}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Result<CouponDto>>> Put([FromBody] UpdateCouponDto updateCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
         {
-            var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
-
-            if (command.IsSuccess)
+            if (id == updateCouponDto.CouponId)
             {
-                _logger.LogDebug($"LogDebug ================ Купон успешно обновлен: {updateCouponDto.CouponId}");
-                return Ok(command);
+                var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
+
+                if (command.IsSuccess)
+                {
+                    _logger.LogDebug($"LogDebug ================ Купон успешно обновлен: {updateCouponDto.CouponId}");
+                    return Ok(command);
+                }
+
+                _logger.LogError($"LogDebugError ================ Ошибка обновления купона: {updateCouponDto.CouponId}");
+
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
-            _logger.LogError($"LogDebugError ================ Ошибка обновления купона: {updateCouponDto.CouponId}");
-            return BadRequest(command.ValidationErrors);
+            else
+            {
+                return NoContent();
+            }
         }
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Result<CouponDto>>> Delete([FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Delete(int id, [FromBody] DeleteCouponDto deleteCouponDto)
         {
-            var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
-
-            if (command.IsSuccess)
+            if (id == deleteCouponDto.Id)
             {
-                _logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.Id}");
-                return Ok(command);
+                var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
+
+                if (command.IsSuccess)
+                {
+                    _logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.Id}");
+                    return Ok(command);
+                }
+
+                _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.Id}");
+                foreach (var error in command.ValidationErrors!)
+                {
+                    return BadRequest(error);
+                }
+
+                return NoContent();
             }
 
-            _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.Id}");
-            return BadRequest(command.ErrorMessage);
+            else
+            {
+                return NoContent();
+            }
         }
 
         // DELETE api/<CouponController>/5
@@ -121,7 +169,12 @@ namespace Coupon.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления купонов: {deleteCouponListDto.CouponIds}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }

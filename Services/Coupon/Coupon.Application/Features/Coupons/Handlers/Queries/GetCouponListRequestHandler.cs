@@ -30,7 +30,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     return new CollectionResult<CouponDto>
                     {
                         Data = coupons,
-                        Count = coupons!.Count
+                        Count = coupons!.Count,
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
 
@@ -64,7 +65,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         return new CollectionResult<CouponDto>
                         {
                             Data = coupons,
-                            Count = coupons.Count
+                            Count = coupons.Count,
+                            SuccessCode = (int)SuccessCode.Ok,
                         };
                     }
                 }

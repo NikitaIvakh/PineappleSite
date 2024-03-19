@@ -29,6 +29,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     return new Result<CouponDto>
                     {
                         Data = coupon,
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
 
@@ -61,6 +62,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         return new Result<CouponDto>
                         {
                             Data = coupon,
+                            SuccessCode = (int)SuccessCode.Ok,
                         };
                     }
                 }
