@@ -33,7 +33,7 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                     return new Result<CartDto>
                     {
                         Data = cartDto,
-                        SuccessMessage = "Ваша корзина с товарами",
+                        SuccessCode = (int)SuccessCode.Ok,
                     };
                 }
 
@@ -58,7 +58,8 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                                 CartDetails = new List<CartDetailsDto>(),
                             },
 
-                            SuccessMessage = "Ваша корзина пуста! Добавьте товары"
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.ShoppingCartIsEmpty,
                         };
                     }
 
@@ -97,7 +98,8 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                                 return new Result<CartDto>
                                 {
                                     Data = cartDto,
-                                    SuccessMessage = ErrorMessages.CouponNotFound,
+                                    ErrorMessage = ErrorMessages.CouponNotFound,
+                                    ValidationErrors = [ErrorMessages.CouponNotFound]
                                 };
                             }
 
@@ -113,20 +115,21 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                         return new Result<CartDto>
                         {
                             Data = cartDto,
-                            SuccessMessage = "Ваша корзина с товарами",
+                            SuccessCode = (int)SuccessCode.Ok,
+                            SuccessMessage = SuccessMessage.YourShoppingCart,
                         };
                     }
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 _memoryCache.Remove(cacheKey);
                 return new Result<CartDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [exception.Message]
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

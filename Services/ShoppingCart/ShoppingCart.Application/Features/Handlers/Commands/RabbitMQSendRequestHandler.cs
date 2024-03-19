@@ -33,18 +33,19 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                     return new Result<bool>
                     {
                         Data = true,
-                        SuccessMessage = "Сообщение успешно отправлено",
+                        SuccessCode = (int)SuccessCode.Created,
+                        SuccessMessage = SuccessMessage.MessageSentSuccessfully,
                     };
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<bool>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

@@ -59,5 +59,77 @@ namespace ShoppingCart.Application.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Купон успешно применен.
+        /// </summary>
+        internal static string CouponSuccessfullyApplied {
+            get {
+                return ResourceManager.GetString("CouponSuccessfullyApplied", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Купон успешно удален.
+        /// </summary>
+        internal static string CouponSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("CouponSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Сообщение успешно отправлено.
+        /// </summary>
+        internal static string MessageSentSuccessfully {
+            get {
+                return ResourceManager.GetString("MessageSentSuccessfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукты успешно удалены.
+        /// </summary>
+        internal static string ProductsSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("ProductsSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Товар успешно добавлен в корзину.
+        /// </summary>
+        internal static string ProductSuccessfullyAddedShoppingCart {
+            get {
+                return ResourceManager.GetString("ProductSuccessfullyAddedShoppingCart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Продукт успешно удален.
+        /// </summary>
+        internal static string ProductSuccessfullyDeleted {
+            get {
+                return ResourceManager.GetString("ProductSuccessfullyDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ваша корзина пуста! Добавьте товары.
+        /// </summary>
+        internal static string ShoppingCartIsEmpty {
+            get {
+                return ResourceManager.GetString("ShoppingCartIsEmpty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Ваша корзина с товарами.
+        /// </summary>
+        internal static string YourShoppingCart {
+            get {
+                return ResourceManager.GetString("YourShoppingCart", resourceCulture);
+            }
+        }
     }
 }

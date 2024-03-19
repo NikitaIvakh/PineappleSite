@@ -25,8 +25,9 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                 {
                     return new Result<CartHeaderDto>
                     {
-                        ErrorMessage = ErrorMessages.CartHeaderNotFound,
                         ErrorCode = (int)ErrorCodes.CartHeaderNotFound,
+                        ErrorMessage = ErrorMessages.CartHeaderNotFound,
+                        ValidationErrors = [ErrorMessages.CartHeaderNotFound]
                     };
                 }
 
@@ -37,19 +38,20 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     return new Result<CartHeaderDto>
                     {
-                        SuccessMessage = "Купон успешно удален",
+                        SuccessCode = (int)SuccessCode.Deleted,
                         Data = _mapper.Map<CartHeaderDto>(cartHeader),
+                        SuccessMessage = SuccessMessage.CouponSuccessfullyDeleted,
                     };
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<CartHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }

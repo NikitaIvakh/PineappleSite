@@ -46,8 +46,9 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     return new Result<CartHeaderDto>
                     {
+                        SuccessCode = (int)SuccessCode.Created,
                         Data = _mapper.Map<CartHeaderDto>(cartHeader),
-                        SuccessMessage = "Товар успешно добавлен в корзину",
+                        SuccessMessage = SuccessMessage.ProductSuccessfullyAddedShoppingCart,
                     };
                 }
 
@@ -83,19 +84,20 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     return new Result<CartHeaderDto>
                     {
+                        SuccessCode = (int)SuccessCode.Created,
                         Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
-                        SuccessMessage = "Товар успешно добавлен в корзину",
+                        SuccessMessage = SuccessMessage.ProductSuccessfullyAddedShoppingCart,
                     };
                 }
             }
 
-            catch (Exception exception)
+            catch
             {
                 return new Result<CartHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = new List<string> { exception.Message }
+                    ErrorMessage = ErrorMessages.InternalServerError,
+                    ValidationErrors = [ErrorMessages.InternalServerError]
                 };
             }
         }
