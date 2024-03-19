@@ -59,5 +59,14 @@ namespace Coupon.Application.Resources {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Купон успешно создан.
+        /// </summary>
+        internal static string CouponSuccessfullyCreated {
+            get {
+                return ResourceManager.GetString("CouponSuccessfullyCreated", resourceCulture);
+            }
+        }
     }
 }

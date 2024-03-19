@@ -72,6 +72,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             Data = null,
                             ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
                             ErrorMessage = ErrorMessage.CouponAlreadyExists,
+                            ValidationErrors = [ErrorMessage.CouponAlreadyExists]
                         };
                     }
 
@@ -124,7 +125,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         return new Result<CouponDto>
                         {
                             Data = _mapper.Map<CouponDto>(coupon),
-                            SuccessMessage = "Купон успешно создан",
+                            SuccessCode = (int)SuccessCode.Created,
+                            SuccessMessage = SuccessMessage.CouponSuccessfullyCreated,
                         };
                     }
                 }
@@ -138,6 +140,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
+                    ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
         }
