@@ -29,7 +29,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения заказов: {userId}");
-            return BadRequest(request.ErrorMessage);
+            foreach (var error in request.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // GET api/<OrderController>/5
@@ -45,7 +50,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка получения заказа: {orderId}");
-            return BadRequest(request.ErrorMessage);
+            foreach (var error in request.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<OrderController>
@@ -61,7 +71,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка удаления заказа: {cartDto.CartHeader.CartHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<OrderController>
@@ -77,7 +92,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка создания сессии для оплаты: {stripeRequestDto.StripeSessionId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<OrderController>
@@ -93,7 +113,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Оплата не успешно прошла валидацию: {orderHeaderId}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
 
         // POST api/<OrderController>
@@ -109,7 +134,12 @@ namespace Order.API.Controllers
             }
 
             _logger.LogError($"LogDebugError ================ Ошибка обновления статуса заказа: {orderHeaderId} - {newStatus}");
-            return BadRequest(command.ErrorMessage);
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
         }
     }
 }
