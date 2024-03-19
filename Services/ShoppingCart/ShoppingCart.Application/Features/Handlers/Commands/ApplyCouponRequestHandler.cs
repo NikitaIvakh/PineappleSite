@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Resources;
 using ShoppingCart.Domain.DTOs;
@@ -11,11 +12,14 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands
 {
-    public class ApplyCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper, ICouponService couponService) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
+    public class ApplyCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper, ICouponService couponService, IMemoryCache memoryCache) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
     {
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly ICouponService _couponService = couponService;
         private readonly IMapper _mapper = mapper;
+        private readonly IMemoryCache _memoryCache = memoryCache;
+
+        private readonly string cacheKey = "cacheGetShoppingCartKey";
 
         public async Task<Result<CartHeaderDto>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
         {
@@ -51,6 +55,13 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
                     {
                         cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode.Trim();
                         await _cartHeaderRepository.UpdateAsync(cartHeader);
+
+                        var getAllheaders = _cartHeaderRepository.GetAll().ToList();
+
+                        _memoryCache.Remove(getAllheaders);
+                        _memoryCache.Remove(cartHeader!);
+
+                        _memoryCache.Set(cacheKey, getAllheaders);
 
                         return new Result<CartHeaderDto>
                         {

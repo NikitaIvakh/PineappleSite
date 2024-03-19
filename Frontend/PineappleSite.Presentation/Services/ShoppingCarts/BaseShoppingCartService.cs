@@ -13,7 +13,7 @@ namespace PineappleSite.Presentation.Services.ShoppingCarts
         {
             if (exceptions.StatusCode == 400)
             {
-                return new CartResult<CartViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = exceptions.Response, };
+                return new CartResult<CartViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = [exceptions.Response], };
             }
 
             else if (exceptions.StatusCode == 404)

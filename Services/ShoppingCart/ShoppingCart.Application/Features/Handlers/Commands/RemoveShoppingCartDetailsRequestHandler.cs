@@ -16,7 +16,6 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
         private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
         private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
         private readonly IMapper _mapper = mapper;
-
         private readonly IMemoryCache _memoryCache = memoryCache;
 
         private readonly string cacheKey = "cacheGetShoppingCartKey";
@@ -58,6 +57,8 @@ namespace ShoppingCart.Application.Features.Handlers.Commands
 
                     _memoryCache.Remove(getAllheaders);
                     _memoryCache.Remove(getAlldetails);
+                    _memoryCache.Remove(cartDetails);
+                    _memoryCache.Remove(cartHeader!);
 
                     _memoryCache.Set(cacheKey, getAllheaders);
                     _memoryCache.Set(cacheKey, getAlldetails);

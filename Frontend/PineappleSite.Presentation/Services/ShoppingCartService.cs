@@ -37,7 +37,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = result.ErrorCode,
                             ErrorMessage = result.ErrorMessage,
                         };
@@ -53,6 +53,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -69,6 +70,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CartResult<CartViewModel>
                     {
+                        SuccessCode = apiResult.SuccessCode,
                         SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
@@ -80,7 +82,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResult.ErrorCode,
                             ErrorMessage = apiResult.ErrorMessage,
                         };
@@ -96,6 +98,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -112,6 +115,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CartResult<CartViewModel>
                     {
+                        SuccessCode = apiResult.SuccessCode,
                         SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
@@ -123,7 +127,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResult.ErrorCode,
                             ErrorMessage = apiResult.ErrorMessage,
                         };
@@ -139,6 +143,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -155,6 +160,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CartResult<CartViewModel>
                     {
+                        SuccessCode = apiResult.SuccessCode,
                         SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
@@ -166,7 +172,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResult.ErrorCode,
                             ErrorMessage = apiResult.ErrorMessage,
                         };
@@ -182,6 +188,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -197,6 +204,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CartResult<CartViewModel>
                     {
+                        SuccessCode = apiResult.SuccessCode,
                         SuccessMessage = apiResult.SuccessMessage,
                         Data = _mapper.Map<CartViewModel>(apiResult.Data),
                     };
@@ -208,7 +216,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResult.ErrorCode,
                             ErrorMessage = apiResult.ErrorMessage,
                         };
@@ -224,6 +232,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -251,7 +260,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<CartViewModel>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
@@ -267,6 +276,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -284,6 +294,7 @@ namespace PineappleSite.Presentation.Services
                     return new CartResult<bool>
                     {
                         Data = apiResponse.Data,
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                     };
                 }
@@ -294,7 +305,7 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CartResult<bool>
                         {
-                            ValidationErrors = error,
+                            ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
@@ -310,7 +321,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = exceptions.Message,
+                    ValidationErrors = [exceptions.Response],
                 };
             }
         }
