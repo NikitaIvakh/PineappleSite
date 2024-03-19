@@ -2,6 +2,7 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
+using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace PineappleSite.Presentation.Services
 {
@@ -29,9 +30,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CollectionResultViewModel<CouponViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = coupons.ErrorCode,
                             ErrorMessage = coupons.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -45,6 +46,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -60,6 +62,8 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new ResultViewModel<CouponViewModel>
                     {
+                        SuccessCode = coupon.SuccessCode,
+                        SuccessMessage = coupon.SuccessMessage,
                         Data = _mapper.Map<CouponViewModel>(coupon.Data),
                     };
                 }
@@ -70,9 +74,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ResultViewModel<CouponViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = coupon.ErrorCode,
                             ErrorMessage = coupon.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -86,6 +90,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -108,9 +113,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ResultViewModel<CouponViewModel>
                         {
+                            ValidationErrors = [error],
                             ErrorCode = coupon.ErrorCode,
                             ErrorMessage = coupon.ErrorMessage,
-                            ValidationErrors = error + Environment.NewLine,
                         };
                     }
                 }
@@ -125,6 +130,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     ErrorMessage = exceptions.Response,
                     ErrorCode = exceptions.StatusCode,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -141,6 +147,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new ResultViewModel<CouponViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
@@ -152,9 +159,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ResultViewModel<CouponViewModel>
                         {
-                            ErrorMessage = error,
-                            ValidationErrors = error + Environment.NewLine,
-                            ErrorCode = 407,
+                            ValidationErrors = [error],
+                            ErrorMessage = apiResponse.ErrorMessage,
+                            ErrorCode = apiResponse.ErrorCode,
                         };
                     }
                 }
@@ -166,8 +173,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new ResultViewModel<CouponViewModel>
                 {
-                    ErrorCode = 500,
+                    ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -178,12 +186,13 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 UpdateCouponDto updateCouponDto = _mapper.Map<UpdateCouponDto>(updateCoupon);
-                CouponDtoResult apiResponse = await _couponClient.CouponPUTAsync(updateCouponDto.CouponId.ToString(), updateCouponDto);
+                CouponDtoResult apiResponse = await _couponClient.CouponPUTAsync(updateCouponDto.CouponId, updateCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
                     return new ResultViewModel<CouponViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
@@ -195,8 +204,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ResultViewModel<CouponViewModel>
                         {
-                            ErrorMessage = error,
-                            ErrorCode = 407,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -208,8 +218,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new ResultViewModel<CouponViewModel>
                 {
-                    ErrorCode = 500,
+                    ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -220,12 +231,13 @@ namespace PineappleSite.Presentation.Services
             try
             {
                 DeleteCouponDto deleteCouponDto = _mapper.Map<DeleteCouponDto>(deleteCoupon);
-                CouponDtoResult apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponDto.Id.ToString(), deleteCouponDto);
+                CouponDtoResult apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponDto.Id, deleteCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
                     return new ResultViewModel<CouponViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
@@ -237,8 +249,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new ResultViewModel<CouponViewModel>
                         {
-                            ErrorMessage = error,
-                            ErrorCode = 407,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -250,8 +263,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new ResultViewModel<CouponViewModel>
                 {
+                    ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
-                    ErrorCode = 500,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }
@@ -268,6 +282,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     return new CollectionResultViewModel<CouponViewModel>
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                         Data = _mapper.Map<IReadOnlyCollection<CouponViewModel>>(apiResponse.Data),
                     };
@@ -279,8 +294,9 @@ namespace PineappleSite.Presentation.Services
                     {
                         return new CollectionResultViewModel<CouponViewModel>
                         {
-                            ErrorMessage = error,
-                            ErrorCode = 407,
+                            ValidationErrors = [error],
+                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
@@ -292,8 +308,9 @@ namespace PineappleSite.Presentation.Services
             {
                 return new CollectionResultViewModel<CouponViewModel>
                 {
-                    ErrorCode = 500,
+                    ErrorCode = exceptions.StatusCode,
                     ErrorMessage = exceptions.Response,
+                    ValidationErrors = [exceptions.Response]
                 };
             }
         }

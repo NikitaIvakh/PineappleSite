@@ -49,7 +49,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = coupons.ErrorMessage;
+                    foreach (var error in coupons.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return View();
                 }
             }
@@ -81,7 +85,11 @@ namespace PineappleSite.Presentation.Controllers
 
             else
             {
-                TempData["error"] = coupon.ErrorMessage;
+                foreach (var error in coupon.ValidationErrors!)
+                {
+                    TempData["error"] = error;
+                }
+
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -109,7 +117,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.ErrorMessage;
+                    foreach (var error in response.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return RedirectToAction(nameof(Create));
                 }
             }
@@ -128,7 +140,7 @@ namespace PineappleSite.Presentation.Controllers
             if (coupon.IsSuccess)
             {
                 UpdateCouponViewModel couponViewModel = new()
-                { 
+                {
                     CouponId = coupon.Data.CouponId,
                     CouponCode = coupon.Data.CouponCode,
                     DiscountAmount = coupon.Data.DiscountAmount,
@@ -140,7 +152,11 @@ namespace PineappleSite.Presentation.Controllers
 
             else
             {
-                TempData["error"] = coupon.ErrorMessage;
+                foreach (var error in coupon.ValidationErrors!)
+                {
+                    TempData["error"] = error;
+                }
+
                 return RedirectToAction(nameof(Index));
             }
         }
@@ -162,7 +178,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.ErrorMessage;
+                    foreach (var error in response.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return RedirectToAction(nameof(Edit));
                 }
             }
@@ -196,7 +216,11 @@ namespace PineappleSite.Presentation.Controllers
 
                 else
                 {
-                    TempData["error"] = response.ErrorMessage;
+                    foreach (var error in response.ValidationErrors!)
+                    {
+                        TempData["error"] = error;
+                    }
+
                     return RedirectToAction(nameof(Index));
                 }
             }
@@ -226,7 +250,11 @@ namespace PineappleSite.Presentation.Controllers
 
             else
             {
-                TempData["error"] = response.ErrorMessage;
+                foreach (var error in response.ValidationErrors!)
+                {
+                    TempData["error"] = error;
+                }
+
                 return RedirectToAction(nameof(Index));
             }
         }

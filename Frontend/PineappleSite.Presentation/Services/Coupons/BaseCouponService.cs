@@ -12,7 +12,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         {
             if (couponExceptions.StatusCode == 400)
             {
-                return new ResultViewModel<CouponDto>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = couponExceptions.Response,  };
+                return new ResultViewModel<CouponDto>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = [couponExceptions.Response], };
             }
 
             else if (couponExceptions.StatusCode == 404)

@@ -42,21 +42,21 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(string id, UpdateCouponDto body);
+        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(string id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(string id, DeleteCouponDto body);
+        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(string id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
@@ -276,7 +276,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(string id, UpdateCouponDto body)
+        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body)
         {
             return CouponPUTAsync(id, body, System.Threading.CancellationToken.None);
         }
@@ -284,7 +284,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(string id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -362,7 +362,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(string id, DeleteCouponDto body)
+        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body)
         {
             return CouponDELETEAsync(id, body, System.Threading.CancellationToken.None);
         }
@@ -370,7 +370,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(string id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (id == null)
                 throw new System.ArgumentNullException("id");
@@ -829,6 +829,9 @@ namespace PineappleSite.Presentation.Services.Coupons
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
 
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
 
@@ -854,6 +857,9 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
