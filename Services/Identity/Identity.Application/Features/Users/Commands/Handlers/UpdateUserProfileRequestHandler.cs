@@ -133,21 +133,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                         else
                         {
-                            if (!string.IsNullOrEmpty(user.ImageLocalPath))
-                            {
-                                var fileToDelete = user.Id;
-                                var filePathToDelete = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
-
-                                var files = Directory.GetFiles(filePathToDelete, fileToDelete + ".*");
-
-                                foreach (var file in files)
-                                {
-                                    File.Delete(file);
-                                }
-
-                                request.UpdateUserProfile.ImageUrl = user.ImageUrl;
-                                request.UpdateUserProfile.ImageLocalPath = user.ImageLocalPath;
-                            }
+                            request.UpdateUserProfile.ImageUrl = user.ImageUrl;
+                            request.UpdateUserProfile.ImageLocalPath = user.ImageLocalPath;
                         }
 
                         var result = await _userManager.UpdateAsync(user);
