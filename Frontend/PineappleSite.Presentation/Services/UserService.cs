@@ -1,13 +1,16 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
+using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
+using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
 using System.Security.Claims;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IUserService
+    public class UserService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : BaseIdentityService(localStorageService, identityClient, httpContextAccessor), IUserService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IIdentityClient _identityClient = identityClient;
@@ -17,39 +20,75 @@ namespace PineappleSite.Presentation.Services
         public async Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
         {
             AddBearerToken();
-            try
+            if (_httpContextAccessor.HttpContext!.User.Identity!.IsAuthenticated)
             {
-                UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
-                UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
-
-                if (users.IsSuccess)
+                try
                 {
-                    return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+                    UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
+                    UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
+
+                    if (users.IsSuccess)
+                    {
+                        return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+                    }
+
+                    else
+                    {
+                        foreach (var error in users.ValidationErrors)
+                        {
+                            return new IdentityCollectionResult<UserWithRolesViewModel>
+                            {
+                                ValidationErrors = [error],
+                                ErrorCode = users.ErrorCode,
+                                ErrorMessage = users.ErrorMessage,
+                            };
+                        }
+                    }
+
+                    return new IdentityCollectionResult<UserWithRolesViewModel>();
                 }
 
-                else
+                catch (IdentityExceptions exceptions)
                 {
-                    foreach (var error in users.ValidationErrors)
+                    if (exceptions.StatusCode == 403)
                     {
                         return new IdentityCollectionResult<UserWithRolesViewModel>
                         {
-                            ValidationErrors = [error],
-                            ErrorCode = users.ErrorCode,
-                            ErrorMessage = users.ErrorMessage,
+                            ErrorCode = exceptions.StatusCode,
+                            ErrorMessage = exceptions.Response,
+                            ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                        };
+                    }
+
+                    else if (exceptions.StatusCode == 401)
+                    {
+                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        {
+                            ErrorCode = exceptions.StatusCode,
+                            ErrorMessage = exceptions.Response,
+                            ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                        };
+                    }
+
+                    else
+                    {
+                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        {
+                            ErrorMessage = exceptions.Response,
+                            ErrorCode = exceptions.StatusCode,
+                            ValidationErrors = [exceptions.Response]
                         };
                     }
                 }
-
-                return new IdentityCollectionResult<UserWithRolesViewModel>();
             }
 
-            catch (IdentityExceptions exceptions)
+            else
             {
                 return new IdentityCollectionResult<UserWithRolesViewModel>
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response],
+                    ErrorCode = 401,
+                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
                 };
             }
         }
@@ -87,12 +126,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<UserWithRolesViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response],
-                };
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -129,14 +191,37 @@ namespace PineappleSite.Presentation.Services
                 return new IdentityResult<UserWithRolesViewModel>();
             }
 
-            catch (IdentityExceptions exception)
+            catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<UserWithRolesViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exception.StatusCode,
-                    ErrorMessage = exception.Response,
-                    ValidationErrors = [exception.Response],
-                };
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -173,14 +258,37 @@ namespace PineappleSite.Presentation.Services
                 return new IdentityResult<RegisterResponseViewModel>();
             }
 
-            catch (IdentityExceptions exception)
+            catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<RegisterResponseViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exception.StatusCode,
-                    ErrorMessage = exception.Response,
-                    ValidationErrors = [exception.Response],
-                };
+                    return new IdentityResult<RegisterResponseViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<RegisterResponseViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<RegisterResponseViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -228,14 +336,37 @@ namespace PineappleSite.Presentation.Services
                 return new IdentityResult<UserWithRolesViewModel>();
             }
 
-            catch (IdentityExceptions exception)
+            catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<UserWithRolesViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exception.StatusCode,
-                    ErrorMessage = exception.Response,
-                    ValidationErrors = [exception.Response],
-                };
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<UserWithRolesViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -272,14 +403,37 @@ namespace PineappleSite.Presentation.Services
                 return new IdentityResult<DeleteUserViewModel>();
             }
 
-            catch (IdentityExceptions exception)
+            catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<DeleteUserViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode,
-                    ValidationErrors = [exception.Response],
-                };
+                    return new IdentityResult<DeleteUserViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<DeleteUserViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<DeleteUserViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -318,12 +472,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (IdentityExceptions exceptions)
             {
-                return new IdentityResult<bool>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response],
-                };
+                    return new IdentityResult<bool>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<bool>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<bool>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
     }

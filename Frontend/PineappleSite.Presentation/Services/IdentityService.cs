@@ -9,7 +9,8 @@ using System.IdentityModel.Tokens.Jwt;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class IdentityService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseIdentityService(localStorageService, identityClient), IIdentityService
+    public class IdentityService(ILocalStorageService localStorageService, IIdentityClient identityClient, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        : BaseIdentityService(localStorageService, identityClient, httpContextAccessor), IIdentityService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IIdentityClient _identityClient = identityClient;
@@ -21,7 +22,6 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
-                AddBearerToken();
                 AuthRequestDto authRequest = _mapper.Map<AuthRequestDto>(authRequestViewModel);
                 AuthResponseDtoResult authResponse = await _identityClient.LoginAsync(authRequest);
 
@@ -103,7 +103,6 @@ namespace PineappleSite.Presentation.Services
         {
             try
             {
-                AddBearerToken();
                 RegisterRequestDto registerRequest = _mapper.Map<RegisterRequestDto>(registerRequestViewModel);
                 RegisterResponseDtoResult registerResponse = await _identityClient.RegisterAsync(registerRequest);
 

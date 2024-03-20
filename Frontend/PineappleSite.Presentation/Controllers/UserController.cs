@@ -19,7 +19,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
+                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
                 var users = await _userService.GetAllUsersAsync(userId);
 
                 if (users.IsSuccess)
