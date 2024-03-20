@@ -35,8 +35,9 @@ namespace PineappleSite.Presentation.Services.Coupons
             {
                 return new ResultViewModel<CouponDto>()
                 {
+                    ErrorCode = 500,
                     ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
-                    ErrorCode = 500
+                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
                 };
             }
         }

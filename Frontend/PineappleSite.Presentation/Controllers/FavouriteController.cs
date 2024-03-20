@@ -39,7 +39,7 @@ namespace PineappleSite.Presentation.Controllers
                         TempData["error"] = error;
                     }
 
-                    return RedirectToAction(nameof(Index));
+                    return RedirectToAction("Index", "Home");
                 }
             }
 

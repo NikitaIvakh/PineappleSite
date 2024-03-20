@@ -9,9 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Coupon.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = StaticDetails.RoleAdministrator)]
     public class CouponController(IMediator mediator, ILogger<CouponDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
@@ -19,6 +19,7 @@ namespace Coupon.API.Controllers
 
         // GET: api/<CouponController>
         [HttpGet("Coupons")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
@@ -40,6 +41,7 @@ namespace Coupon.API.Controllers
 
         // GET api/<CouponController>/5
         [HttpGet("{id}")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> GetCoupon(int id)
         {
             var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
@@ -59,6 +61,7 @@ namespace Coupon.API.Controllers
             return NoContent();
         }
 
+        [Authorize]
         [HttpGet("GetCouponByCode/{couponCode}")]
         public async Task<ActionResult<Result<CouponDto>>> GetCouponByCode(string couponCode)
         {
@@ -81,6 +84,7 @@ namespace Coupon.API.Controllers
 
         // POST api/<CouponController>
         [HttpPost]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Post([FromBody] CreateCouponDto createCouponDto)
         {
             var command = await _mediator.Send(new CreateCouponRequest { CreateCoupon = createCouponDto });
@@ -102,6 +106,7 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
         {
             if (id == updateCouponDto.CouponId)
@@ -132,6 +137,7 @@ namespace Coupon.API.Controllers
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Delete(int id, [FromBody] DeleteCouponDto deleteCouponDto)
         {
             if (id == deleteCouponDto.Id)
@@ -161,6 +167,7 @@ namespace Coupon.API.Controllers
 
         // DELETE api/<CouponController>/5
         [HttpDelete("DeleteCouponList")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<CollectionResult<CouponDto>>> DeleteCouponList([FromBody] DeleteCouponListDto deleteCouponListDto)
         {
             var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });

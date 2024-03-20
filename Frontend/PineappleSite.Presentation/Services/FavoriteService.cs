@@ -3,57 +3,72 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Services.Favorites;
+using System;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class FavoriteService(ILocalStorageService localStorageService, IFavoritesClient favoritesClient, IMapper mapper) : BaseHttpFavouriteService(localStorageService, favoritesClient), IFavoriteService
+    public class FavoriteService(ILocalStorageService localStorageService, IFavoritesClient favoritesClient, IMapper mapper, IHttpContextAccessor contextAccessor) : BaseHttpFavouriteService(localStorageService, favoritesClient, contextAccessor), IFavoriteService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IFavoritesClient _favoritesClient = favoritesClient;
         private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
         public async Task<FavouriteResult<FavouriteViewModel>> GetFavouruteProductsAsync(string userId)
         {
             AddBearerToken();
-            try
+            if (_contextAccessor.HttpContext!.User.Identity!.IsAuthenticated)
             {
-                FavouriteDtoResult favouriteProducts = await _favoritesClient.GetFavouriteProductsAsync(userId);
-
-                if (favouriteProducts.IsSuccess)
+                try
                 {
-                    FavouriteResult<FavouriteViewModel> result = new()
-                    {
-                        SuccessCode = favouriteProducts.SuccessCode,
-                        SuccessMessage = favouriteProducts.SuccessMessage,
-                        Data = _mapper.Map<FavouriteViewModel>(favouriteProducts.Data),
-                    };
+                    FavouriteDtoResult favouriteProducts = await _favoritesClient.GetFavouriteProductsAsync(userId);
 
-                    return result;
-                }
-
-                else
-                {
-                    foreach (var error in favouriteProducts.ValidationErrors)
+                    if (favouriteProducts.IsSuccess)
                     {
-                        return new FavouriteResult<FavouriteViewModel>
+                        FavouriteResult<FavouriteViewModel> result = new()
                         {
-                            ValidationErrors = [error],
-                            ErrorCode = favouriteProducts.ErrorCode,
-                            ErrorMessage = favouriteProducts.ErrorMessage,
+                            SuccessCode = favouriteProducts.SuccessCode,
+                            SuccessMessage = favouriteProducts.SuccessMessage,
+                            Data = _mapper.Map<FavouriteViewModel>(favouriteProducts.Data),
                         };
+
+                        return result;
                     }
+
+                    else
+                    {
+                        foreach (var error in favouriteProducts.ValidationErrors)
+                        {
+                            return new FavouriteResult<FavouriteViewModel>
+                            {
+                                ValidationErrors = [error],
+                                ErrorCode = favouriteProducts.ErrorCode,
+                                ErrorMessage = favouriteProducts.ErrorMessage,
+                            };
+                        }
+                    }
+
+                    return new FavouriteResult<FavouriteViewModel>();
                 }
 
-                return new FavouriteResult<FavouriteViewModel>();
+                catch (FavoritesExceptions exceptions)
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
 
-            catch (FavoritesExceptions exceptions)
+            else
             {
                 return new FavouriteResult<FavouriteViewModel>
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
+                    ErrorCode = 401,
+                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
                 };
             }
         }
@@ -94,13 +109,36 @@ namespace PineappleSite.Presentation.Services
 
             catch (FavoritesExceptions exceptions)
             {
-                return new FavouriteResult<FavouriteViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
-            };
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
+            }
         }
 
         public async Task<FavouriteResult<FavouriteViewModel>> FavouruteRemoveProductsAsync(int productUd)
@@ -138,17 +176,41 @@ namespace PineappleSite.Presentation.Services
 
             catch (FavoritesExceptions exceptions)
             {
-                return new FavouriteResult<FavouriteViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
         public async Task<FavouriteResult<FavouriteViewModel>> FavouruteRemoveProductsListAsync(DeleteProductsViewModel deleteProductsViewModel)
         {
+            AddBearerToken();
             try
             {
                 var favouriteDto = _mapper.Map<DeleteFavouriteProducts>(deleteProductsViewModel);
@@ -182,12 +244,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (FavoritesExceptions exceptions)
             {
-                return new FavouriteResult<FavouriteViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new FavouriteResult<FavouriteViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
     }

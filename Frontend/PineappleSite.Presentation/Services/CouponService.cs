@@ -109,12 +109,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new ResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -149,12 +172,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new ResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -194,12 +240,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new ResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -239,12 +308,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new ResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -284,12 +376,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new ResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -329,12 +444,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new CollectionResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
     }
