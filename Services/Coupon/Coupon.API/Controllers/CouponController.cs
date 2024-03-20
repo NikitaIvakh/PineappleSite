@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Coupon.API.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class CouponController(IMediator mediator, ILogger<CouponDto> logger) : ControllerBase
@@ -40,7 +39,6 @@ namespace Coupon.API.Controllers
         }
 
         // GET api/<CouponController>/5
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Result<CouponDto>>> GetCoupon(int id)
         {
@@ -61,7 +59,6 @@ namespace Coupon.API.Controllers
             return NoContent();
         }
 
-        [Authorize]
         [HttpGet("GetCouponByCode/{couponCode}")]
         public async Task<ActionResult<Result<CouponDto>>> GetCouponByCode(string couponCode)
         {

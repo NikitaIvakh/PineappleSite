@@ -28,10 +28,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
@@ -45,10 +42,7 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
-      "UpstreamHttpMethod": [ "GET" ],
-      "AuthenticationOptions": {
-        "AuthenticationProviderKey": "Bearer"
-      }
+      "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
@@ -675,4 +669,5 @@
   "GlobalConfiguration": {
     "BaseUrl": "https://localhost:7777"
   }
+}
 }
