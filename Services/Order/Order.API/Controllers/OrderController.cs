@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Order.API.Utility;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
@@ -9,6 +11,7 @@ using Order.Domain.ResultOrder;
 
 namespace Order.API.Controllers
 {
+    //[Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class OrderController(IMediator mediator, ILogger<OrderHeaderDto> logger) : ControllerBase
@@ -123,6 +126,7 @@ namespace Order.API.Controllers
 
         // POST api/<OrderController>
         [HttpPost("UpdateOrderStatus")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(int orderHeaderId, [FromBody] string newStatus)
         {
             var command = await _mediator.Send(new UpdateOrderStatusRequest { OrderHeaderId = orderHeaderId, NewStatus = newStatus });

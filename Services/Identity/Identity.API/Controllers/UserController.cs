@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Controllers
 {
-    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class UserController(IMediator mediator, ILogger<UserWithRolesDto> userWithRolesLogger, ILogger<DeleteUserDto> deleteLogger, ILogger<bool> boolLogger) : ControllerBase
@@ -41,7 +40,6 @@ namespace Identity.API.Controllers
         }
 
         // GET api/<UserController>/5
-        [Authorize]
         [HttpGet("GetUserById/{id}")]
         public async Task<ActionResult<Result<UserWithRolesDto>>> GetUserById(string id)
         {

@@ -11,7 +11,14 @@ namespace Order.Infrastructure.Repository.Services
 
         public async Task<CollectionResult<ProductDto>> GetProductListAsync()
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient("Product");
+            HttpClientHandler handler = new HttpClientHandler
+            {
+                UseDefaultCredentials = true
+            };
+
+            HttpClient httpClient = new HttpClient(handler);
+
+            httpClient = _httpClientFactory.CreateClient("Product");
             var response = await httpClient.GetAsync($"/api/Product");
 
             if (response.IsSuccessStatusCode)

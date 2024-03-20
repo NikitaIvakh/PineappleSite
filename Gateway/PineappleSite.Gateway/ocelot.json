@@ -240,7 +240,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/GetAllUsers",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -268,7 +271,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -282,7 +288,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/CreateUser",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -296,7 +305,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -310,7 +322,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -324,7 +339,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/User",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -380,7 +398,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -394,7 +415,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/GetOrder/{orderId}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -408,7 +432,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/CreateOrder",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -422,7 +449,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/CreateStripeSession",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -436,7 +466,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/ValidateStripeSession",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -450,7 +483,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Order/UpdateOrderStatus",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {

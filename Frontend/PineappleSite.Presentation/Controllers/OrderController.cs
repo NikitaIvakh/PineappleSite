@@ -20,7 +20,7 @@ namespace PineappleSite.Presentation.Controllers
         public async Task<ActionResult> GetAllOrders(string status)
         {
             IEnumerable<OrderHeaderViewModel> orderHeaderDtos;
-            string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()!.Value!;
+            string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
 
             var response = await _orderService.GetAllOrdersAsync(userId);
 
@@ -47,7 +47,14 @@ namespace PineappleSite.Presentation.Controllers
             }
 
             else
-                orderHeaderDtos = new List<OrderHeaderViewModel>();
+            {
+                foreach (var error in response!.ValidationErrors!)
+                {
+                    TempData["error"] = error;
+                }
+
+                return RedirectToAction("Index", "Home");
+            }
 
             return Json(new { data = orderHeaderDtos });
         }

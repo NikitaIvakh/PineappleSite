@@ -95,7 +95,6 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id)
         {
-            AddBearerToken();
             try
             {
                 UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(id);
