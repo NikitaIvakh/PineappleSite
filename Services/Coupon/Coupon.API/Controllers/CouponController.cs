@@ -40,8 +40,8 @@ namespace Coupon.API.Controllers
         }
 
         // GET api/<CouponController>/5
+        [Authorize]
         [HttpGet("{id}")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> GetCoupon(int id)
         {
             var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
