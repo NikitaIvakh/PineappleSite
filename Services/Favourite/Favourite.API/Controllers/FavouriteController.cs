@@ -3,12 +3,14 @@ using Favourite.Application.Features.Requests.Queries;
 using Favourite.Domain.DTOs;
 using Favourite.Domain.Results;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace Favourite.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class FavouriteController(IMediator mediator, ILogger<FavouriteDto> logger) : ControllerBase
