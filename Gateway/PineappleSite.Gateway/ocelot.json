@@ -28,7 +28,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -42,7 +45,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -56,7 +62,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -70,7 +79,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -84,7 +96,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -98,7 +113,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -112,7 +130,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/GetFavouriteProducts/{userid}",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -126,7 +147,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -140,7 +164,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/{productId}",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -154,7 +181,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Favourite/DeleteProductList",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
