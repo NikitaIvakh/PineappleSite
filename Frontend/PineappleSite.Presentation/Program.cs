@@ -1,14 +1,6 @@
-using Microsoft.AspNetCore.Authentication.Cookies;
-using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Services;
-using PineappleSite.Presentation.Services.Coupons;
-using PineappleSite.Presentation.Services.Identities;
-using PineappleSite.Presentation.Services.Products;
-using PineappleSite.Presentation.Services.ShoppingCarts;
-using PineappleSite.Presentation.Services.Favorites;
-using PineappleSite.Presentation.Services.Orders;
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
+using PineappleSite.Presentation;
 
 WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -16,35 +8,9 @@ WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
 applicationBuilder.Services.AddControllersWithViews().AddViewLocalization().AddDataAnnotationsLocalization();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddHttpClient();
-
 applicationBuilder.Services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
 
-applicationBuilder.Services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7777"));
-applicationBuilder.Services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient => identityClient.BaseAddress = new Uri("https://localhost:7777"));
-applicationBuilder.Services.AddHttpClient<IProductClient, ProductClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7777"));
-applicationBuilder.Services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
-applicationBuilder.Services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart => cart.BaseAddress = new Uri("https://localhost:7777"));
-applicationBuilder.Services.AddHttpClient<IOrderClient, OrderClient>(order => order.BaseAddress = new Uri("https://localhost:7777"));
-
-applicationBuilder.Services.AddSingleton<ILocalStorageService, LocalStorageService>();
-applicationBuilder.Services.AddScoped<ICouponService, CouponService>();
-applicationBuilder.Services.AddScoped<IUserService, UserService>();
-applicationBuilder.Services.AddScoped<IProductService, ProductService>();
-applicationBuilder.Services.AddScoped<IFavoriteService, FavoriteService>();
-applicationBuilder.Services.AddScoped<IShoppingCartService, ShoppingCartService>();
-applicationBuilder.Services.AddScoped<IOrderService, OrderService>();
-applicationBuilder.Services.AddTransient<IIdentityService, IdentityService>();
-
-applicationBuilder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.ExpireTimeSpan = TimeSpan.FromHours(10);
-        options.LoginPath = "/Authenticate/Login";
-        options.AccessDeniedPath = "/Authenticate/AccessDenied";
-        options.Cookie.Name = "AuthenticateCookie";
-        options.Cookie.HttpOnly = true;
-        options.Cookie.SecurePolicy = CookieSecurePolicy.None;
-    });
+applicationBuilder.Services.ConfigurePresentationServices();
 
 applicationBuilder.Services.AddLocalization(options =>
 {
