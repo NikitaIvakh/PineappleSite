@@ -90,7 +90,7 @@ namespace Product.Application.Features.Commands.Handlers
                         {
                             if (!string.IsNullOrEmpty(product.ImageLocalPath))
                             {
-                                var fileNameToDelete = product.Id.ToString();
+                                var fileNameToDelete = $"Id_{product.Id}*";
                                 var filePathToDelete = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
 
                                 var files = Directory.GetFiles(filePathToDelete, fileNameToDelete + ".*");
@@ -99,9 +99,14 @@ namespace Product.Application.Features.Commands.Handlers
                                 {
                                     File.Delete(file);
                                 }
+
+                                product.ImageUrl = null;
+                                product.ImageLocalPath = null;
+
+                                await _repository.UpdateAsync(product);
                             }
 
-                            string fileName = $"{product.Id}" + Path.GetExtension(request.UpdateProduct.Avatar.FileName);
+                            string fileName = $"Id_{product.Id}------{Guid.NewGuid()}"+ Path.GetExtension(request.UpdateProduct.Avatar.FileName);
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
                             string fileDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 

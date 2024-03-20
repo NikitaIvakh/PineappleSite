@@ -99,7 +99,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         {
                             if (!string.IsNullOrEmpty(user.ImageLocalPath))
                             {
-                                var fileNameFromDatabase = user.Id;
+                                var fileNameFromDatabase = $"Id_{user.Id}*";
                                 var filePathPromDatabase = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
 
                                 var files = Directory.GetFiles(filePathPromDatabase, fileNameFromDatabase + ".*");
@@ -108,9 +108,14 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 {
                                     File.Delete(file);
                                 }
+
+                                user.ImageUrl = null;
+                                user.ImageLocalPath = null;
+
+                                await _userManager.UpdateAsync(user);
                             }
 
-                            string fileName = $"{user.Id}" + Path.GetExtension(request.UpdateUserProfile.Avatar.FileName);
+                            string fileName = $"Id_{user.Id}------{Guid.NewGuid()}" + Path.GetExtension(request.UpdateUserProfile.Avatar.FileName);
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
                             var directory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
