@@ -110,7 +110,14 @@ namespace ShoppingCart.Application.Features.Handlers.Queries
                             }
                         }
 
-                        _memoryCache.Set(cacheKey, cartDto);
+                        var getAllheaders = _cartHeaderRepository.GetAll().ToList();
+                        var getAlldetails = _cartDetailsRepository.GetAll().ToList();
+
+                        _memoryCache.Remove(getAllheaders);
+                        _memoryCache.Remove(getAlldetails);
+
+                        _memoryCache.Set(cacheKey, getAllheaders);
+                        _memoryCache.Set(cacheKey, getAlldetails);
 
                         return new Result<CartDto>
                         {

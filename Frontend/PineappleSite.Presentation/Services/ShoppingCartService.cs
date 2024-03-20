@@ -6,11 +6,13 @@ using PineappleSite.Presentation.Services.ShoppingCarts;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class ShoppingCartService(ILocalStorageService localStorageService, IShoppingCartClient shoppingCartClient, IMapper mapper) : BaseShoppingCartService(localStorageService, shoppingCartClient), IShoppingCartService
+    public class ShoppingCartService(ILocalStorageService localStorageService, IShoppingCartClient shoppingCartClient, IMapper mapper, IHttpContextAccessor contextAccessor)
+        : BaseShoppingCartService(localStorageService, shoppingCartClient, contextAccessor), IShoppingCartService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IShoppingCartClient _shoppingCartClient = shoppingCartClient;
         private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
         public async Task<CartResult<CartViewModel>> GetCartAsync(string userId)
         {
@@ -49,12 +51,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -94,12 +119,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -139,12 +187,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -184,12 +255,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -228,12 +322,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
@@ -272,12 +389,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (ShoppingCartExceptions exceptions)
             {
-                return new CartResult<CartViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exceptions.StatusCode,
-                    ErrorMessage = exceptions.Response,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertShoppingCartExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CartResult<CartViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 

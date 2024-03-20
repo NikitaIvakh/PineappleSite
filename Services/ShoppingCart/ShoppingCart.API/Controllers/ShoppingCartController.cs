@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Features.Requests.Queries;
@@ -7,6 +8,7 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.API.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class ShoppingCartController(IMediator mediator, ILogger<CartDto> logger) : ControllerBase

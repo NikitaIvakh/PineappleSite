@@ -57,6 +57,7 @@ namespace Product.Application.Features.Commands.Queries
 
                 else
                 {
+                    _memoryCache.Remove(productDto);
                     _memoryCache.Set(cacheKey, productDto);
 
                     return new Result<ProductDto>

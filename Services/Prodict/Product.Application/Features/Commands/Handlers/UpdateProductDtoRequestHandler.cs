@@ -123,12 +123,8 @@ namespace Product.Application.Features.Commands.Handlers
 
                             await _repository.UpdateAsync(product);
 
-                            var products = await _repository.GetAll().ToListAsync(cancellationToken);
-
                             _memoryCache.Remove(product);
-                            _memoryCache.Remove(products);
                             _memoryCache.Set(cacheKey, product);
-                            _memoryCache.Set(cacheKey, products);
 
                             return new Result<ProductDto>
                             {
@@ -158,12 +154,8 @@ namespace Product.Application.Features.Commands.Handlers
 
                             await _repository.UpdateAsync(product);
 
-                            var products = await _repository.GetAll().ToListAsync(cancellationToken);
-
                             _memoryCache.Remove(product);
-                            _memoryCache.Remove(products);
                             _memoryCache.Set(cacheKey, product);
-                            _memoryCache.Set(cacheKey, products);
 
                             return new Result<ProductDto>
                             {

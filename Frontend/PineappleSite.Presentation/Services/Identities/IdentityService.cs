@@ -1356,7 +1356,7 @@ namespace PineappleSite.Presentation.Services.Identities
         public string RefreshToken { get; set; }
 
         [Newtonsoft.Json.JsonProperty("refreshTokenExpiresTime", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset RefreshTokenExpiresTime { get; set; }
+        public System.DateTime RefreshTokenExpiresTime { get; set; }
 
         [Newtonsoft.Json.JsonProperty("imageUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ImageUrl { get; set; }

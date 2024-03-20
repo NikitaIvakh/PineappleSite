@@ -60,6 +60,7 @@ namespace Product.Application.Features.Commands.Queries
 
                     else
                     {
+                        _memoryCache.Remove(products);
                         _memoryCache.Set(cacheKey, products);
 
                         return new CollectionResult<ProductDto>

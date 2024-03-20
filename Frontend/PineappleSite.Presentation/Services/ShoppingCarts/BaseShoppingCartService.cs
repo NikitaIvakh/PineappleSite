@@ -4,34 +4,50 @@ using System.Net.Http.Headers;
 
 namespace PineappleSite.Presentation.Services.ShoppingCarts
 {
-    public class BaseShoppingCartService(ILocalStorageService localStorageService, IShoppingCartClient shoppingCartClient)
+    public class BaseShoppingCartService(ILocalStorageService localStorageService, IShoppingCartClient shoppingCartClient, IHttpContextAccessor contextAccessor)
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IShoppingCartClient _shoppingCartClient = shoppingCartClient;
+        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
         public CartResult<CartViewModel> ConvertShoppingCartExceptions(ShoppingCartExceptions exceptions)
         {
-            if (exceptions.StatusCode == 400)
+            if (exceptions.StatusCode == 403)
             {
-                return new CartResult<CartViewModel>() { ErrorMessage = "Произошли ошибки валидации.", ErrorCode = 400, ValidationErrors = [exceptions.Response], };
+                return new CartResult<CartViewModel>
+                {
+                    ErrorCode = 403,
+                    ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
+                    ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
+                };
             }
 
-            else if (exceptions.StatusCode == 404)
+            else if (exceptions.StatusCode == 401)
             {
-                return new CartResult<CartViewModel>() { ErrorMessage = "Требуемый элемент не удалось найти.", ErrorCode = 404 };
+                return new CartResult<CartViewModel>
+                {
+                    ErrorCode = 401,
+                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
+                };
             }
 
             else
             {
-                return new CartResult<CartViewModel>() { ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.", ErrorCode = 500 };
+                return new CartResult<CartViewModel>
+                {
+                    ErrorCode = 500,
+                    ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
+                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
+                };
             }
         }
 
         protected void AddBearerToken()
         {
-            if (_localStorageService.Exists("token"))
+            if (_contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
             {
-                _shoppingCartClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _localStorageService.GetStorageValue<string>("token"));
+                _shoppingCartClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
             }
         }
     }
