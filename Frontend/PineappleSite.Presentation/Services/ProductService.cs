@@ -2,15 +2,16 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Services.Products;
-using System;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class ProductService(ILocalStorageService localStorageService, IProductClient productClient, IMapper mapper) : BaseProductService(localStorageService, productClient), IProductService
+    public class ProductService(ILocalStorageService localStorageService, IProductClient productClient, IMapper mapper, IHttpContextAccessor contextAccessor)
+        : BaseProductService(localStorageService, productClient, contextAccessor), IProductService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
         private readonly IProductClient _productClient = productClient;
         private readonly IMapper _mapper = mapper;
+        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
         public async Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync()
         {
@@ -93,6 +94,7 @@ namespace PineappleSite.Presentation.Services
 
         public async Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product)
         {
+            AddBearerToken();
             try
             {
                 FileParameter avatarFileParameter = null;
@@ -134,19 +136,43 @@ namespace PineappleSite.Presentation.Services
                 return new ProductResultViewModel<ProductViewModel>();
             }
 
-            catch (ProductExceptions exception)
+            catch (ProductExceptions exceptions)
             {
-                return new ProductResultViewModel<ProductViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode,
-                    ValidationErrors = [exception.Response]
-                };
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
         public async Task<ProductResultViewModel<ProductViewModel>> UpdateProductAsync(int id, UpdateProductViewModel product)
         {
+            AddBearerToken();
             try
             {
                 FileParameter avatarFileParameter = null;
@@ -193,19 +219,43 @@ namespace PineappleSite.Presentation.Services
                 return new ProductResultViewModel<ProductViewModel>();
             }
 
-            catch (ProductExceptions exception)
+            catch (ProductExceptions exceptions)
             {
-                return new ProductResultViewModel<ProductViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorCode = exception.StatusCode,
-                    ErrorMessage = exception.Response,
-                    ValidationErrors = [exception.Response]
-                };
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
         public async Task<ProductResultViewModel<ProductViewModel>> DeleteProductAsync(int id, DeleteProductViewModel product)
         {
+            AddBearerToken();
             try
             {
                 DeleteProductDto deleteProductDto = _mapper.Map<DeleteProductDto>(product);
@@ -237,19 +287,43 @@ namespace PineappleSite.Presentation.Services
                 return new ProductResultViewModel<ProductViewModel>();
             }
 
-            catch (ProductExceptions exception)
+            catch (ProductExceptions exceptions)
             {
-                return new ProductResultViewModel<ProductViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode,
-                    ValidationErrors = [exception.Response]
-                };
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ProductResultViewModel<ProductViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 
         public async Task<ProductsCollectionResultViewModel<ProductViewModel>> DeleteProductsAsync(DeleteProductsViewModel product)
         {
+            AddBearerToken();
             try
             {
                 DeleteProductsDto deleteProductsDto = _mapper.Map<DeleteProductsDto>(product);
@@ -281,14 +355,37 @@ namespace PineappleSite.Presentation.Services
                 return new ProductsCollectionResultViewModel<ProductViewModel>();
             }
 
-            catch (ProductExceptions exception)
+            catch (ProductExceptions exceptions)
             {
-                return new ProductsCollectionResultViewModel<ProductViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exception.Response,
-                    ErrorCode = exception.StatusCode,
-                    ValidationErrors = [exception.Response]
-                };
+                    return new ProductsCollectionResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new ProductsCollectionResultViewModel<ProductViewModel>()
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new ProductsCollectionResultViewModel<ProductViewModel>()
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
     }

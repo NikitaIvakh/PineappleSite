@@ -522,7 +522,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Product",
-      "UpstreamHttpMethod": [ "POST" ]
+      "UpstreamHttpMethod": [ "POST" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -536,7 +539,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Product/{id}",
-      "UpstreamHttpMethod": [ "PUT" ]
+      "UpstreamHttpMethod": [ "PUT" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -550,7 +556,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Product/{id}",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {
@@ -564,7 +573,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Product",
-      "UpstreamHttpMethod": [ "DELETE" ]
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {

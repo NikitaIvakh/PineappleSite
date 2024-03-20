@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Resources;
 using Order.Application.Utility;
@@ -12,7 +13,7 @@ using Stripe;
 
 namespace Order.Application.Features.Handlers.Commands
 {
-    public class UpdateOrderStatusRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper) : IRequestHandler<UpdateOrderStatusRequest, Result<OrderHeaderDto>>
+    public class UpdateOrderStatusRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<UpdateOrderStatusRequest, Result<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IMapper _mapper = mapper;

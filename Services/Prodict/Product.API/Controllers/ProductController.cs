@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Product.API.Utility;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 using Product.Domain.DTOs;
@@ -58,6 +60,7 @@ namespace Product.API.Controllers
 
         // POST api/<ProductController>
         [HttpPost]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<ProductDto>>> Post([FromForm] CreateProductDto createProductDto)
         {
             var command = await _mediator.Send(new CreateProductDtoRequest { CreateProduct = createProductDto });
@@ -79,6 +82,7 @@ namespace Product.API.Controllers
 
         // PUT api/<ProductController>/5
         [HttpPut("{productId}")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<ProductDto>>> Put(int productId, [FromForm] UpdateProductDto updateProductDto)
         {
             if (productId == updateProductDto.Id)
@@ -105,6 +109,7 @@ namespace Product.API.Controllers
 
         // DELETE api/<ProductController>/5
         [HttpDelete("{productId}")]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<ProductDto>>> Delete(int productId, [FromBody] DeleteProductDto deleteProductDto)
         {
             if (productId == deleteProductDto.Id)
@@ -131,6 +136,7 @@ namespace Product.API.Controllers
 
         // DELETE api/<ProductController>/
         [HttpDelete]
+        [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<CollectionResult<ProductDto>>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
         {
             var command = await _mediator.Send(new DeleteProductsDtoRequest { DeleteProducts = deleteProductsDto });

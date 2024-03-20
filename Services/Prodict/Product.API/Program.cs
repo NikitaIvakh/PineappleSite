@@ -34,6 +34,7 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
 
 applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
+applicationBuilder.Services.AddAppAuthenticate(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
 

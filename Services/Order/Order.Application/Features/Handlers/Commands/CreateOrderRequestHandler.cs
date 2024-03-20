@@ -13,14 +13,11 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Handlers.Commands
 {
-    public class CreateOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IOrderValidator orderValidator, IMemoryCache memoryCache) : IRequestHandler<CreateOrderRequest, Result<OrderHeaderDto>>
+    public class CreateOrderRequestHandler(IBaseRepository<OrderHeader> orderHeaderRepository, IMapper mapper, IOrderValidator orderValidator) : IRequestHandler<CreateOrderRequest, Result<OrderHeaderDto>>
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IMapper _mapper = mapper;
         private readonly IOrderValidator _orderValidator = orderValidator;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "cacheOrderListKey";
 
         public async Task<Result<OrderHeaderDto>> Handle(CreateOrderRequest request, CancellationToken cancellationToken)
         {
@@ -69,9 +66,6 @@ namespace Order.Application.Features.Handlers.Commands
                     OrderHeader orderCreated = await _orderHeaderRepository.CreateAsync(_mapper.Map<OrderHeader>(orderHeaderDto));
 
                     orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
-
-                    _memoryCache.Remove(orderHeaderDto);
-                    _memoryCache.Set(cacheKey, orderHeaderDto);
 
                     return new Result<OrderHeaderDto>
                     {
