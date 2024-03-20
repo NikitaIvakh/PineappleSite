@@ -60,6 +60,8 @@ namespace Product.Application.Features.Commands.Queries
 
                     else
                     {
+                        var getAllProducts = await _repository.GetAll().ToListAsync(cancellationToken);
+
                         _memoryCache.Remove(products);
                         _memoryCache.Set(cacheKey, products);
 
