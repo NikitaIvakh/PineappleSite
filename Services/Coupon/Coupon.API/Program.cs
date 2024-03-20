@@ -18,6 +18,7 @@ applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureApplicationService();
 applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
+
 applicationBuilder.Host.UseSerilog((context, logConfig) =>
 {
     logConfig.ReadFrom.Configuration(context.Configuration);
@@ -37,6 +38,7 @@ applicationBuilder.Services.AddCors(key =>
 
 applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
+applicationBuilder.Services.AddAddAuthenticated(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
 

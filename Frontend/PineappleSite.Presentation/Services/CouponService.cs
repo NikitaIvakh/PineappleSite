@@ -2,13 +2,13 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Services.Coupons;
-using static Microsoft.AspNetCore.Razor.Language.TagHelperMetadata;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class CouponService(ILocalStorageService localStorageService, ICouponClient couponClient, IMapper mapper) : BaseCouponService(localStorageService, couponClient), ICouponService
+    public class CouponService(ILocalStorageService localStorageService, ICouponClient couponClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseCouponService(localStorageService, couponClient, httpContextAccessor), ICouponService
     {
         private readonly ILocalStorageService _localStorageService = localStorageService;
+        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ICouponClient _couponClient = couponClient;
         private readonly IMapper _mapper = mapper;
 
@@ -42,12 +42,35 @@ namespace PineappleSite.Presentation.Services
 
             catch (CouponExceptions exceptions)
             {
-                return new CollectionResultViewModel<CouponViewModel>
+                if (exceptions.StatusCode == 403)
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
-                };
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertCouponExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new CollectionResultViewModel<CouponViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
             }
         }
 

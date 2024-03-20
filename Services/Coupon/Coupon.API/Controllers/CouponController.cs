@@ -1,14 +1,17 @@
-﻿using Coupon.Application.Features.Coupons.Requests.Commands;
+﻿using Coupon.API.Utility;
+using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.ResultCoupon;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Coupon.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = StaticDetails.RoleAdministrator)]
     public class CouponController(IMediator mediator, ILogger<CouponDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;

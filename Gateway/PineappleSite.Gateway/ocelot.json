@@ -11,7 +11,10 @@
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/Coupons",
-      "UpstreamHttpMethod": [ "GET" ]
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
     },
 
     {

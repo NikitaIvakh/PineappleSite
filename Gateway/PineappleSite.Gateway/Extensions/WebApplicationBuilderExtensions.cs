@@ -6,16 +6,8 @@ namespace PineappleSite.Gateway.Extensions
 {
     public static class WebApplicationBuilderExtensions
     {
-        public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder)
+        public static WebApplicationBuilder AddAppAuthentication(this WebApplicationBuilder builder, IConfiguration configuration)
         {
-            var settingsSession = builder.Configuration.GetSection("JwtSettings");
-
-            var secret = settingsSession.GetValue<string>("Key");
-            var issuer = settingsSession.GetValue<string>("Issuer");
-            var audience = settingsSession.GetValue<string>("Audience");
-
-            var secretKey = Encoding.ASCII.GetBytes(secret);
-
             builder.Services.AddAuthentication(key =>
             {
                 key.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -24,14 +16,18 @@ namespace PineappleSite.Gateway.Extensions
             {
                 key.TokenValidationParameters = new TokenValidationParameters
                 {
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidIssuer = issuer,
-                    IssuerSigningKey = new SymmetricSecurityKey(secretKey),
-                    ValidateAudience = true,
-                    ValidAudience = audience,
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!))
                 };
             });
+
+            builder.Services.AddAuthorizationBuilder()
+                .SetDefaultPolicy(new Microsoft.AspNetCore.Authorization.AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
 
             return builder;
         }

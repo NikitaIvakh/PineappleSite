@@ -54,14 +54,14 @@ namespace PineappleSite.Presentation.Controllers
                         TempData["error"] = error;
                     }
 
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View();
+                return RedirectToAction("Index", "Home");
             }
         }
 

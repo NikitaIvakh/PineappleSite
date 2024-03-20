@@ -11,7 +11,7 @@ applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 
-applicationBuilder.AddAppAuthentication();
+applicationBuilder.AddAppAuthentication(applicationBuilder.Configuration);
 applicationBuilder.Configuration.AddJsonFile("ocelot.json", optional: false, reloadOnChange: true);
 applicationBuilder.Services.AddOcelot(applicationBuilder.Configuration);
 
