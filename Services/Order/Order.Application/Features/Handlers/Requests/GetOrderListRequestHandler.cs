@@ -18,8 +18,8 @@ namespace Order.Application.Features.Handlers.Requests
     {
         private readonly IBaseRepository<OrderHeader> _orderHeaderRepository = orderHeaderRepository;
         private readonly IMapper _mapper = mapper;
-        private readonly IMemoryCache _memoryCache = memoryCache;
         private readonly IUserService _userService = userService;
+        private readonly IMemoryCache _memoryCache = memoryCache;
 
         private readonly string cacheKey = "cacheOrderListKey";
 
@@ -27,28 +27,16 @@ namespace Order.Application.Features.Handlers.Requests
         {
             try
             {
-                if (_memoryCache.TryGetValue(cacheKey, out List<OrderHeaderDto>? orderHeader))
-                {
-                    return new CollectionResult<OrderHeaderDto>
-                    {
-                        Count = orderHeader.Count,
-                        SuccessCode = (int)SuccessCode.Ok,
-                        SuccessMessage = SuccessMessage.OrderList,
-                        Data = _mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(orderHeader),
-                    };
-                }
-
+                List<OrderHeaderDto>? orderHeader;
                 string userId = request.UserId;
                 var user = await _userService.GetUserAsync(userId);
 
-                if (user.Data.Roles.Contains(StaticDetails.RoleAdmin))
+
+                if (user.Data!.Roles.Contains(StaticDetails.RoleAdmin))
                     orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).ToListAsync(cancellationToken));
 
                 else
                     orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).Where(key => key.UserId == request.UserId).ToListAsync(cancellationToken));
-
-                _memoryCache.Remove(orderHeader);
-                _memoryCache.Set(cacheKey, orderHeader);
 
                 return new CollectionResult<OrderHeaderDto>
                 {
@@ -61,7 +49,6 @@ namespace Order.Application.Features.Handlers.Requests
 
             catch
             {
-                _memoryCache.Remove(cacheKey);
                 return new CollectionResult<OrderHeaderDto>
                 {
                     ErrorMessage = ErrorMessages.InternalServerError,
