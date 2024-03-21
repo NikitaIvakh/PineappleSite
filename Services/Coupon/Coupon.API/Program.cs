@@ -38,6 +38,7 @@ applicationBuilder.Services.AddCors(key =>
 
 applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
+applicationBuilder.Services.AddSwaggerAuthentication();
 applicationBuilder.Services.AddAddAuthenticated(applicationBuilder.Configuration);
 
 WebApplication webApplication = applicationBuilder.Build();
