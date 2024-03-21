@@ -14,7 +14,7 @@ namespace Orders.Test.Commands
         public async Task CreateOrderRequestHandler_Success()
         {
             // Arrange
-            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator, MemoryCache);
+            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator);
             var cartDto = new CartDto
             {
                 CartHeader = new CartHeaderDto
@@ -74,7 +74,7 @@ namespace Orders.Test.Commands
         public async Task CreateOrderRequestHandler_FailOrWrongName()
         {
             // Arrange
-            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator, MemoryCache);
+            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator);
             var cartDto = new CartDto
             {
                 CartHeader = new CartHeaderDto
@@ -124,7 +124,7 @@ namespace Orders.Test.Commands
         public async Task CreateOrderRequestHandler_FailOrWrongEmail()
         {
             // Arrange
-            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator, MemoryCache);
+            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator);
             var cartDto = new CartDto
             {
                 CartHeader = new CartHeaderDto
@@ -174,7 +174,7 @@ namespace Orders.Test.Commands
         public async Task CreateOrderRequestHandler_FailOrWrongPhoneNumberl()
         {
             // Arrange
-            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator, MemoryCache);
+            var handler = new CreateOrderRequestHandler(OrderHeader, Mapper, CreateValidator);
             var cartDto = new CartDto
             {
                 CartHeader = new CartHeaderDto

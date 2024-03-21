@@ -11,7 +11,7 @@ namespace Orders.Test.Requests
         public async Task GetOrderRequestHandlerTest_Success()
         {
             // Arrange
-            var handler = new GetOrderRequestHandler(OrderHeader, Mapper, MemoryCache);
+            var handler = new GetOrderRequestHandler(OrderHeader, Mapper);
             var orderId = 1;
 
             // Act
@@ -36,7 +36,7 @@ namespace Orders.Test.Requests
         public async Task GetOrderRequestHandlerTest_FailOrWrong()
         {
             // Arrange
-            var handler = new GetOrderRequestHandler(OrderHeader, Mapper, MemoryCache);
+            var handler = new GetOrderRequestHandler(OrderHeader, Mapper);
             var orderId = 999999;
 
             // Act
