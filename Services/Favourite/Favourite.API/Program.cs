@@ -26,6 +26,7 @@ builder.Host.UseSerilog((context, logConfig) =>
 
 builder.Services.AddSwagger();
 builder.Services.AddMemoryCache();
+builder.Services.AddSwaggerAuthentication();
 builder.Services.AddAppAuthentication(builder.Configuration);
 
 var app = builder.Build();
