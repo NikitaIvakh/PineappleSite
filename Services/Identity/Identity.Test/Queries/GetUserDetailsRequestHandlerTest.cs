@@ -21,20 +21,18 @@ namespace Identity.Test.Queries
             // Act
             var result = await handler.Handle(new GetUserDetailsRequest
             {
-                Id = userId,
+                UserId = userId,
             }, CancellationToken.None);
 
             // Assert
             result.IsSuccess.Should().BeTrue();
             result.ErrorMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();
-            result.Should().BeOfType<Result<UserWithRolesDto>>();
+            result.Should().BeOfType<Result<GetUserDto>>();
 
-            result.Data.User.Email.Should().Be("user_test_@localhost.com");
-            result.Data.User.FirstName.Should().Be("System");
-            result.Data.User.LastName.Should().Be("User_Test_");
-            result.Data.User.Description.Should().Be("Test_Test");
-            result.Data.User.Age.Should().Be(24);
+            result.Data.EmailAddress.Should().Be("user_test_@localhost.com");
+            result.Data.FirstName.Should().Be("System");
+            result.Data.LastName.Should().Be("User_Test_");
         }
 
         [Fact]
@@ -47,7 +45,7 @@ namespace Identity.Test.Queries
             // Act
             var result = await handler.Handle(new GetUserDetailsRequest
             {
-                Id = userId,
+                UserId = userId,
             }, CancellationToken.None);
 
             // Assert

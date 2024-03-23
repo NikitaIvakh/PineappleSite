@@ -15,20 +15,16 @@ namespace Identity.Test.Queries
         {
             // Arrange
             var handler = new GetUserListRequestHandler(UserManager, GetUsersLogger, MemoryCache);
-            var userId = "8e445865-a24d-4543-a6c6-9443d048cdb9";
 
             // Act
-            var result = await handler.Handle(new GetUserListRequest
-            {
-                UserId = userId,
-            }, CancellationToken.None);
+            var result = await handler.Handle(new GetUserListRequest(), CancellationToken.None);
 
             // Assert
             result.Count.Should().Be(3);
             result.IsSuccess.Should().BeTrue();
             result.ErrorMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();
-            result.Should().BeOfType<CollectionResult<UserWithRolesDto>>();
+            result.Should().BeOfType<CollectionResult<GetAllUsersDto>>();
         }
     }
 }

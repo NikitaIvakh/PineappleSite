@@ -11,10 +11,10 @@ namespace Identity.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UserController(IMediator mediator, ILogger<UserWithRolesDto> userWithRolesLogger, ILogger<DeleteUserDto> deleteLogger, ILogger<bool> boolLogger) : ControllerBase
+    public class UserController(IMediator mediator, ILogger<GetUserDto> userWithRolesLogger, ILogger<DeleteUserDto> deleteLogger, ILogger<bool> boolLogger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-        private readonly ILogger<UserWithRolesDto> _userWithRolesLogger = userWithRolesLogger;
+        private readonly ILogger<GetUserDto> _userWithRolesLogger = userWithRolesLogger;
         private readonly ILogger<DeleteUserDto> _deleteLogger = deleteLogger;
         private readonly ILogger<bool> _boolLogger = boolLogger;
 
