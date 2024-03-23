@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<ApplicationUser>>
+    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<string>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ICreateUserDtoValidation _createValidator = createValidator;
@@ -19,7 +19,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
         private readonly string cacheKey = "СacheUserKey";
 
-        public async Task<Result<ApplicationUser>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<string>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -41,7 +41,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         if (existsErrors.TryGetValue(error.Key, out var errorMessages))
                         {
-                            return new Result<ApplicationUser>
+                            return new Result<string>
                             {
                                 ValidationErrors = errorMessages,
                                 ErrorMessage = ErrorMessage.UserCanNotBeCreated,
@@ -50,7 +50,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         }
                     }
 
-                    return new Result<ApplicationUser>
+                    return new Result<string>
                     {
                         Data = null,
                         ErrorMessage = ErrorMessage.UserCanNotBeCreated,
@@ -65,7 +65,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     if (userExists is not null)
                     {
-                        return new Result<ApplicationUser>
+                        return new Result<string>
                         {
                             Data = null,
                             ErrorMessage = ErrorMessage.UserAlreadyExists,
@@ -80,7 +80,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                         if (existsEmail is not null)
                         {
-                            return new Result<ApplicationUser>
+                            return new Result<string>
                             {
                                 Data = null,
                                 ErrorMessage = ErrorMessage.EmailAddressAlreadyExists,
@@ -120,9 +120,9 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                                 _memoryCache.Set(cacheKey, users1);
                                 _memoryCache.Set(cacheKey, user);
 
-                                return new Result<ApplicationUser>
+                                return new Result<string>
                                 {
-                                    Data = user,
+                                    Data = user.Id,
                                     SuccessCode = (int)SuccessCode.Created,
                                     SuccessMessage = SuccessMessage.UserSuccessfullyCreated,
                                 };
@@ -134,9 +134,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             _memoryCache.Set(cacheKey, users);
                             _memoryCache.Set(cacheKey, user);
 
-                            return new Result<ApplicationUser>
+                            return new Result<string>
                             {
-                                Data = user,
                                 ErrorMessage = ErrorMessage.UserCanNotBeCreated,
                                 ErrorCode = (int)ErrorCodes.UserCanNotBeCreated,
                                 ValidationErrors = [ErrorMessage.UserCanNotBeCreated]
@@ -148,7 +147,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
             catch
             {
-                return new Result<ApplicationUser>
+                return new Result<string>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,

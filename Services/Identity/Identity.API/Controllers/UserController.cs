@@ -62,7 +62,7 @@ namespace Identity.API.Controllers
 
         [HttpPost("CreateUser")]
         [Authorize(Roles = RoleConsts.Administrator)]
-        public async Task<ActionResult<Result<UserWithRolesDto>>> CreateUser([FromBody] CreateUserDto createUserDto)
+        public async Task<ActionResult<Result<string>>> CreateUser([FromBody] CreateUserDto createUserDto)
         {
             var command = await _mediator.Send(new CreateUserRequest { CreateUser = createUserDto });
 
