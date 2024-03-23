@@ -84,7 +84,7 @@ namespace Identity.API.Controllers
         // PUT api/<UserController>/5
         [HttpPut("{userId}")]
         [Authorize(Roles = RoleConsts.Administrator)]
-        public async Task<ActionResult<Result<RegisterResponseDto>>> Put(string userId, [FromBody] UpdateUserDto updateUser)
+        public async Task<ActionResult<Result<Unit>>> Put(string userId, [FromBody] UpdateUserDto updateUser)
         {
             if (userId == updateUser.Id)
             {

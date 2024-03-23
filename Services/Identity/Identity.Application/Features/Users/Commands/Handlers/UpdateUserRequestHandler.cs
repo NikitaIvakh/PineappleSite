@@ -1,7 +1,6 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
@@ -13,7 +12,8 @@ using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<UpdateUserRequest, Result<RegisterResponseDto>>
+    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache)
+        : IRequestHandler<UpdateUserRequest, Result<Unit>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
@@ -22,7 +22,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
         private readonly string cacheKey = "СacheUserKey";
 
-        public async Task<Result<RegisterResponseDto>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         if (errorMessages.TryGetValue(error.Key, out var message))
                         {
-                            return new Result<RegisterResponseDto>
+                            return new Result<Unit>
                             {
                                 ValidationErrors = message,
                                 ErrorMessage = ErrorMessage.UserUpdateError,
@@ -51,7 +51,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         }
                     }
 
-                    return new Result<RegisterResponseDto>
+                    return new Result<Unit>
                     {
                         ErrorMessage = ErrorMessage.UserUpdateError,
                         ErrorCode = (int)ErrorCodes.UserUpdateError,
@@ -65,7 +65,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     if (user is null)
                     {
-                        return new Result<RegisterResponseDto>
+                        return new Result<Unit>
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
@@ -95,17 +95,17 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             _memoryCache.Set(cacheKey, usersCache1);
                             _memoryCache.Set(cacheKey, user);
 
-                            return new Result<RegisterResponseDto>
+                            return new Result<Unit>
                             {
+                                Data = Unit.Value,
                                 SuccessCode = (int)SuccessCode.Updated,
-                                Data = new RegisterResponseDto { UserId = user.Id },
                                 SuccessMessage = SuccessMessage.UserSuccessfullyUpdated,
                             };
                         }
 
                         else
                         {
-                            return new Result<RegisterResponseDto>
+                            return new Result<Unit>
                             {
                                 ErrorMessage = ErrorMessage.UserUpdateError,
                                 ErrorCode = (int)ErrorCodes.UserUpdateError,
@@ -119,7 +119,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
-                return new Result<RegisterResponseDto>
+                return new Result<Unit>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
