@@ -138,6 +138,9 @@
   <data name="UsersSuccessfullyDeleted" xml:space="preserve">
     <value>Пользователи успешно удалены</value>
   </data>
+  <data name="UsersSuccessfullyGeted" xml:space="preserve">
+    <value>Пользователи успешно получены</value>
+  </data>
   <data name="UserSuccessfullyCreated" xml:space="preserve">
     <value>Пользователь успешно создан</value>
   </data>

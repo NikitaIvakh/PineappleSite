@@ -20,17 +20,17 @@ namespace Identity.API.Controllers
 
         [HttpGet("GetAllUsers")]
         [Authorize(Roles = RoleConsts.Administrator)]
-        public async Task<ActionResult<CollectionResult<UserWithRolesDto>>> GetAllUsers(string userId = "")
+        public async Task<ActionResult<CollectionResult<GetAllUsersDto>>> GetAllUsers()
         {
-            var command = await _mediator.Send(new GetUserListRequest() { UserId = userId });
+            var command = await _mediator.Send(new GetUserListRequest());
 
             if (command.IsSuccess)
             {
-                _userWithRolesLogger.LogDebug($"LogDebug ================ Уcпешный вывод пользователей: {userId}");
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Уcпешный вывод пользователей");
                 return Ok(command);
             }
 
-            _userWithRolesLogger.LogError($"LogDebugError ================ Выод пользователей не удался: {userId}");
+            _userWithRolesLogger.LogError($"LogDebugError ================ Выод пользователей не удался");
             foreach (var error in command.ValidationErrors!)
             {
                 return BadRequest(error);
