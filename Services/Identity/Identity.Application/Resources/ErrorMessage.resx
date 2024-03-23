@@ -171,6 +171,9 @@
   <data name="UserCanNotBeCreated" xml:space="preserve">
     <value>Пользовтаель не может быть создан</value>
   </data>
+  <data name="UserCanNotBeUpdated" xml:space="preserve">
+    <value>Профиль не может быть обновлен</value>
+  </data>
   <data name="UserCanNotDeleted" xml:space="preserve">
     <value>Пользователь не может быть удален</value>
   </data>

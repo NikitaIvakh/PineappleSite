@@ -14,7 +14,8 @@ using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<UserWithRolesDto>>
+    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger, IMemoryCache memoryCache)
+        : IRequestHandler<UpdateUserProfileRequest, Result<GetUserForUpdateDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserProfileDto _updateUserProfileDto = updateUserProfileDto;
@@ -24,7 +25,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
         private readonly string cacheKey = "СacheUserKey";
 
-        public async Task<Result<UserWithRolesDto>> Handle(UpdateUserProfileRequest request, CancellationToken cancellationToken)
+        public async Task<Result<GetUserForUpdateDto>> Handle(UpdateUserProfileRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         if (errorMessages.TryGetValue(error.Key, out var message))
                         {
-                            return new Result<UserWithRolesDto>
+                            return new Result<GetUserForUpdateDto>
                             {
                                 ValidationErrors = message,
                                 ErrorMessage = ErrorMessage.UpdateProdileError,
@@ -56,7 +57,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         }
                     }
 
-                    return new Result<UserWithRolesDto>
+                    return new Result<GetUserForUpdateDto>
                     {
                         ErrorMessage = ErrorMessage.UpdateProdileError,
                         ErrorCode = (int)ErrorCodes.UpdateProdileError,
@@ -70,7 +71,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     if (user is null)
                     {
-                        return new Result<UserWithRolesDto>
+                        return new Result<GetUserForUpdateDto>
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
@@ -82,8 +83,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         user.FirstName = request.UpdateUserProfile.FirstName.Trim();
                         user.LastName = request.UpdateUserProfile.LastName.Trim();
-                        user.Email = request.UpdateUserProfile.EmailAddress.Trim();
                         user.UserName = request.UpdateUserProfile.UserName.Trim();
+                        user.Email = request.UpdateUserProfile.EmailAddress.Trim();
                         user.Description = request.UpdateUserProfile.Description.Trim();
                         user.Age = request.UpdateUserProfile.Age;
 
@@ -147,45 +148,40 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         if (result.Succeeded)
                         {
                             var existsRoles = await _userManager.GetRolesAsync(user);
-                            var userWithRoles = new UserWithRolesDto
-                            {
-                                User = user,
-                                Roles = existsRoles,
-                            };
+                            var userWithRoles = new GetUserForUpdateDto(user.Id, user.FirstName, user.LastName, user.UserName, user.Email, existsRoles, user.Description, user.Age,
+                                request.UpdateUserProfile.Password!, user.ImageUrl!, user.ImageLocalPath!);
 
                             _memoryCache.Remove(user);
 
-                            var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
-                            _memoryCache.Set(cacheKey, usersCache1);
+                            var usersCache = await _userManager.Users.ToListAsync(cancellationToken);
+                            _memoryCache.Set(cacheKey, usersCache);
                             _memoryCache.Set(cacheKey, user);
 
-                            return new Result<UserWithRolesDto>
+                            return new Result<GetUserForUpdateDto>
                             {
                                 Data = userWithRoles,
                                 SuccessCode = (int)SuccessCode.Updated,
                                 SuccessMessage = SuccessMessage.UserProfileSuccessfullyUpdated,
                             };
                         }
+
+                        else
+                        {
+                            return new Result<GetUserForUpdateDto>
+                            {
+                                ErrorCode = (int)ErrorCodes.UserCanNotBeUpdated,
+                                ErrorMessage = ErrorMessage.UserCanNotBeUpdated,
+                                ValidationErrors = [ErrorMessage.UserCanNotBeUpdated]
+                            };
+                        }
                     }
-
-                    _memoryCache.Remove(user);
-
-                    var usersCache2 = await _userManager.Users.ToListAsync(cancellationToken);
-                    _memoryCache.Set(cacheKey, usersCache2);
-                    _memoryCache.Set(cacheKey, user);
-
-                    return new Result<UserWithRolesDto>
-                    {
-                        SuccessCode = (int)SuccessCode.Updated,
-                        SuccessMessage = SuccessMessage.UserProfileSuccessfullyUpdated,
-                    };
                 }
             }
 
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
-                return new Result<UserWithRolesDto>
+                return new Result<GetUserForUpdateDto>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,

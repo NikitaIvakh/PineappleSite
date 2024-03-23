@@ -223,6 +223,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Профиль не может быть обновлен.
+        /// </summary>
+        internal static string UserCanNotBeUpdated {
+            get {
+                return ResourceManager.GetString("UserCanNotBeUpdated", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Пользователь не может быть удален.
         /// </summary>
         internal static string UserCanNotDeleted {

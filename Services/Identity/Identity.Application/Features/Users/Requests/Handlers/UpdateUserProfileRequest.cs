@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Identity.Application.Features.Users.Requests.Handlers
 {
-    public class UpdateUserProfileRequest : IRequest<Result<UserWithRolesDto>>
+    public class UpdateUserProfileRequest : IRequest<Result<GetUserForUpdateDto>>
     {
-        public UpdateUserProfileDto UpdateUserProfile { get; set; }
+        public UpdateUserProfileDto UpdateUserProfile { get; set; } = null!;
     }
 }

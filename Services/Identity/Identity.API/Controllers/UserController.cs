@@ -111,7 +111,7 @@ namespace Identity.API.Controllers
         // PUT api/<UserController>/5
         [Authorize]
         [HttpPut("UpdateUserProfile/{userId}")]
-        public async Task<ActionResult<Result<UserWithRolesDto>>> UpdateUserProfile(string userId, [FromForm] UpdateUserProfileDto updateUserProfile)
+        public async Task<ActionResult<Result<GetUserForUpdateDto>>> UpdateUserProfile(string userId, [FromForm] UpdateUserProfileDto updateUserProfile)
         {
             if (userId == updateUserProfile.Id)
             {
