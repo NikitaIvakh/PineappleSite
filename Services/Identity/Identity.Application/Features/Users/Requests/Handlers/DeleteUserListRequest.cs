@@ -6,6 +6,6 @@ namespace Identity.Application.Features.Users.Requests.Handlers
 {
     public class DeleteUserListRequest : IRequest<Result<bool>>
     {
-        public DeleteUserListDto DeleteUserList { get; set; }
+        public DeleteUserListDto DeleteUserList { get; set; } = null!;
     }
 }
