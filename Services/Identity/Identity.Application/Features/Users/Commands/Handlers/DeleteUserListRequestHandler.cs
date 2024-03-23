@@ -5,6 +5,7 @@ using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,14 @@ using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<DeleteUserListRequest, Result<bool>>
+    public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache, ApplicationDbContext context)
+        : IRequestHandler<DeleteUserListRequest, Result<bool>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<DeleteUserListRequestHandler>();
         private readonly IDeleteUserListDtoValidator _deleteValidator = deleteValidator;
         private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly ApplicationDbContext _context = context;
 
         private readonly string cacheKey = "СacheUserKey";
 
@@ -88,6 +91,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         }
                     }
 
+                    await _context.SaveChangesAsync(cancellationToken);
                     _memoryCache.Remove(users);
 
                     var usersCache = await _userManager.Users.ToListAsync(cancellationToken);

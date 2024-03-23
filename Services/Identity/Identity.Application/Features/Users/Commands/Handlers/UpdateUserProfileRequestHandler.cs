@@ -5,6 +5,7 @@ using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -14,7 +15,7 @@ using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger, IMemoryCache memoryCache)
+    public class UpdateUserProfileRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserProfileDto updateUserProfileDto, IHttpContextAccessor httpContextAccessor, ILogger logger, IMemoryCache memoryCache, ApplicationDbContext context)
         : IRequestHandler<UpdateUserProfileRequest, Result<GetUserForUpdateDto>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
@@ -22,6 +23,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ILogger _logger = logger.ForContext<UpdateUserProfileRequestHandler>();
         private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly ApplicationDbContext _context = context;
 
         private readonly string cacheKey = "СacheUserKey";
 
@@ -156,6 +158,8 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             var usersCache = await _userManager.Users.ToListAsync(cancellationToken);
                             _memoryCache.Set(cacheKey, usersCache);
                             _memoryCache.Set(cacheKey, user);
+
+                            await _context.SaveChangesAsync(cancellationToken);
 
                             return new Result<GetUserForUpdateDto>
                             {

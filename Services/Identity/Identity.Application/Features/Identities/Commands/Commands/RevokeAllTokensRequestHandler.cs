@@ -3,15 +3,17 @@ using Identity.Application.Resources;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class RevokeAllTokensRequestHandler(UserManager<ApplicationUser> userManager) : IRequestHandler<RevokeAllTokensRequest, Result<Unit>>
+    public class RevokeAllTokensRequestHandler(UserManager<ApplicationUser> userManager, ApplicationDbContext context) : IRequestHandler<RevokeAllTokensRequest, Result<Unit>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly ApplicationDbContext _context = context;
 
         public async Task<Result<Unit>> Handle(RevokeAllTokensRequest request, CancellationToken cancellationToken)
         {
@@ -37,6 +39,8 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                         user.RefreshToken = null;
                         await _userManager.UpdateAsync(user);
                     }
+
+                    await _context.SaveChangesAsync(cancellationToken);
 
                     return new Result<Unit>
                     {

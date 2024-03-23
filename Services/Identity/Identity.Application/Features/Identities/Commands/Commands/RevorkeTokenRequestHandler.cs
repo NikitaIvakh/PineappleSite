@@ -3,14 +3,16 @@ using Identity.Application.Resources;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Identities.Commands.Commands
 {
-    public class RevorkeTokenRequestHandler(UserManager<ApplicationUser> userManager) : IRequestHandler<RevorkeTokenRequest, Result<Unit>>
+    public class RevorkeTokenRequestHandler(UserManager<ApplicationUser> userManager, ApplicationDbContext context) : IRequestHandler<RevorkeTokenRequest, Result<Unit>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
+        private readonly ApplicationDbContext _context = context;
 
         public async Task<Result<Unit>> Handle(RevorkeTokenRequest request, CancellationToken cancellationToken)
         {
@@ -33,6 +35,7 @@ namespace Identity.Application.Features.Identities.Commands.Commands
                 {
                     user.RefreshToken = null;
                     await _userManager.UpdateAsync(user);
+                    await _context.SaveChangesAsync(cancellationToken);
 
                     return new Result<Unit>
                     {

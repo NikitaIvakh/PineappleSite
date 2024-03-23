@@ -4,6 +4,7 @@ using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -12,13 +13,14 @@ using Serilog;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache)
+    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache, ApplicationDbContext context)
         : IRequestHandler<UpdateUserRequest, Result<Unit>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
         private readonly ILogger _logger = logger.ForContext<UpdateUserRequest>();
         private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly ApplicationDbContext _context = context;
 
         private readonly string cacheKey = "СacheUserKey";
 
@@ -88,6 +90,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                             await _userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
                             await _userManager.UpdateAsync(user);
+                            await _context.SaveChangesAsync(cancellationToken);
 
                             _memoryCache.Remove(user);
 

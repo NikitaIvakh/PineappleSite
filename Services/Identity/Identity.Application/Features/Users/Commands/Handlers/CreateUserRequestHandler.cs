@@ -4,6 +4,7 @@ using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
+using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<string>>
+    public class CreateUserRequestHandler(UserManager<ApplicationUser> userManager, ICreateUserDtoValidation createValidator, IMemoryCache memoryCache, ApplicationDbContext context) : IRequestHandler<CreateUserRequest, Result<string>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ICreateUserDtoValidation _createValidator = createValidator;
         private readonly IMemoryCache _memoryCache = memoryCache;
+        private readonly ApplicationDbContext _context = context;
 
         private readonly string cacheKey = "СacheUserKey";
 
@@ -113,6 +115,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             {
                                 await _userManager.AddToRoleAsync(user, request.CreateUser.Roles.ToString());
                                 await _userManager.UpdateAsync(user);
+                                await _context.SaveChangesAsync(cancellationToken);
 
                                 _memoryCache.Remove(user);
 
