@@ -32,6 +32,8 @@ namespace Identity.Infrastructure.Configurations
                 Description = "Test",
                 Age = 24,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                CreatedTime = DateTime.UtcNow,
+                ModifiedTime = null,
             },
 
             new ApplicationUser
@@ -48,6 +50,8 @@ namespace Identity.Infrastructure.Configurations
                 Description = "Test",
                 Age = 24,
                 SecurityStamp = Guid.NewGuid().ToString(),
+                CreatedTime = DateTime.UtcNow,
+                ModifiedTime = null,
             });
         }
     }

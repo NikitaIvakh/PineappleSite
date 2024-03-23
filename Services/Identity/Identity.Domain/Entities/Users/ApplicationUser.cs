@@ -19,5 +19,9 @@ namespace Identity.Domain.Entities.Users
         public string? ImageUrl { get; set; }
 
         public string? ImageLocalPath { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public DateTime? ModifiedTime { get; set; }
     }
 }

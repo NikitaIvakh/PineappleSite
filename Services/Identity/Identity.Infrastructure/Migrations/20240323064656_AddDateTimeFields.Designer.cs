@@ -3,6 +3,7 @@ using System;
 using Identity.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Identity.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240323064656_AddDateTimeFields")]
+    partial class AddDateTimeFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,8 +126,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "575be72e-2969-4362-a653-4e268cfd138b",
-                            CreatedTime = new DateTime(2024, 3, 23, 6, 48, 32, 199, DateTimeKind.Utc).AddTicks(7122),
+                            ConcurrencyStamp = "3fe38d31-1800-42d6-8d18-de9ff0ff33da",
                             Description = "Test",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
@@ -133,10 +135,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFyTRnFXqQksQPak07qhm9Ler0oO/0oagRISAzwflzlkEGGiDkd1RPzUvai3DoZ/AQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPNSGiImqWk9iiFZF1L8jZZq7aceWHWVLDlFnNH6NkVddSEofeO82YowAodmfoeB0w==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "0ec27a15-bddf-454b-969a-46bbfbba05b7",
+                            SecurityStamp = "f04faa3d-afda-4946-994f-4598b3ddc617",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         },
@@ -145,8 +147,7 @@ namespace Identity.Infrastructure.Migrations
                             Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
                             AccessFailedCount = 0,
                             Age = 24,
-                            ConcurrencyStamp = "c035a941-d015-4364-b16f-cba9cbedf86a",
-                            CreatedTime = new DateTime(2024, 3, 23, 6, 48, 32, 244, DateTimeKind.Utc).AddTicks(2702),
+                            ConcurrencyStamp = "90fecd3a-48a9-4f35-b208-56bb546c050e",
                             Description = "Test",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
@@ -155,10 +156,10 @@ namespace Identity.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP0JRe+5jVaqLCQgXrc+LFGMdWXNAhwh21U1NYIc9sUd5Ij9Z0RfB/AjC38rr/H63Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJxoqjGdpxMKBiS0W8SFW0iCj7GJbGU19VHTE+188TWyVQrcFyN5PFMtcv4TnzQScg==",
                             PhoneNumberConfirmed = false,
                             RefreshTokenExpiresTime = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            SecurityStamp = "023b865c-a0cb-4f48-ae57-e6e38438ff41",
+                            SecurityStamp = "2d790ca0-d12b-401c-9dbe-0d267071b804",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         });
