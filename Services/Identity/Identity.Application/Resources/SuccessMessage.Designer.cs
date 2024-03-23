@@ -151,6 +151,15 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Полььзователь успешно получен.
+        /// </summary>
+        internal static string UserSuccessfullyGeted {
+            get {
+                return ResourceManager.GetString("UserSuccessfullyGeted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Пользователь успешно обновлен.
         /// </summary>
         internal static string UserSuccessfullyUpdated {

@@ -40,18 +40,18 @@ namespace Identity.API.Controllers
         }
 
         // GET api/<UserController>/5
-        [HttpGet("GetUserById/{id}")]
-        public async Task<ActionResult<Result<UserWithRolesDto>>> GetUserById(string id)
+        [HttpGet("GetUserById/{userId}")]
+        public async Task<ActionResult<Result<GetUserDto>>> GetUserById(string userId)
         {
-            var command = await _mediator.Send(new GetUserDetailsRequest { Id = id });
+            var command = await _mediator.Send(new GetUserDetailsRequest { UserId = userId });
 
             if (command.IsSuccess)
             {
-                _userWithRolesLogger.LogDebug($"LogDebug ================ Пользователь успешно получен: {id}");
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Пользователь успешно получен: {userId}");
                 return Ok(command);
             }
 
-            _userWithRolesLogger.LogError($"LogDebugError ================ Получить пользователея не удалось: {id}");
+            _userWithRolesLogger.LogError($"LogDebugError ================ Получить пользователея не удалось: {userId}");
             foreach (var error in command.ValidationErrors!)
             {
                 return BadRequest(error);

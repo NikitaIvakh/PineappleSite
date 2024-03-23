@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Identity.Application.Features.Users.Requests.Queries
 {
-    public class GetUserDetailsRequest : IRequest<Result<UserWithRolesDto>>
+    public class GetUserDetailsRequest : IRequest<Result<GetUserDto>>
     {
-        public string Id { get; set; }
+        public string UserId { get; set; } = null!;
     }
 }

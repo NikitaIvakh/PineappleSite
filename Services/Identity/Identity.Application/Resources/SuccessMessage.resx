@@ -147,6 +147,9 @@
   <data name="UserSuccessfullyDeleted" xml:space="preserve">
     <value>Пользователь успешно удален</value>
   </data>
+  <data name="UserSuccessfullyGeted" xml:space="preserve">
+    <value>Полььзователь успешно получен</value>
+  </data>
   <data name="UserSuccessfullyUpdated" xml:space="preserve">
     <value>Пользователь успешно обновлен</value>
   </data>
