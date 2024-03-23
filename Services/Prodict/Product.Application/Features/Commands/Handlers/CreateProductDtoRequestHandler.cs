@@ -92,7 +92,7 @@ namespace Product.Application.Features.Commands.Handlers
 
                         if (request.CreateProduct.Avatar is not null)
                         {
-                            string fileName = product.Id + Path.GetExtension(request.CreateProduct.Avatar.FileName);
+                            string fileName = $"Id_{product.Id}------{Guid.NewGuid()}" + Path.GetExtension(request.CreateProduct.Avatar.FileName);
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
                             var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 

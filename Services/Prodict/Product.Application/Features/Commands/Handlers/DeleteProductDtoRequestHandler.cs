@@ -77,7 +77,7 @@ namespace Product.Application.Features.Commands.Handlers
                     {
                         if (!string.IsNullOrEmpty(product.ImageLocalPath))
                         {
-                            var fileName = product.Id;
+                            string fileName = $"Id_{product.Id}*";
                             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ProductImages");
 
                             var files = Directory.GetFiles(filePath, fileName + ".*");
