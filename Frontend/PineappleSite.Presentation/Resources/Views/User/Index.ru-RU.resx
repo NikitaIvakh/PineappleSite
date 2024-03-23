@@ -129,6 +129,9 @@
   <data name="Delete selected ones" xml:space="preserve">
     <value>Удалить выбранные</value>
   </data>
+  <data name="Details" xml:space="preserve">
+    <value>Детали</value>
+  </data>
   <data name="Do you really want to delete these records?" xml:space="preserve">
     <value>Вы действительно хотите удалить данные записи?</value>
   </data>

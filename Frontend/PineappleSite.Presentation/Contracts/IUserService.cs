@@ -6,17 +6,19 @@ namespace PineappleSite.Presentation.Contracts
 {
     public interface IUserService
     {
-        Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId);
+        Task<IdentityCollectionResult<GetAllUsersViewModel>> GetAllUsersAsync();
 
-        Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id);
+        Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id);
 
-        Task<IdentityResult<UserWithRolesViewModel>> CreateUserAsync(CreateUserViewModel createUserViewModel);
+        Task<IdentityResult<GetUserForUpdateViewModel>> GetUserAsync(string userId, string? Password);
 
-        Task<IdentityResult<RegisterResponseViewModel>> UpdateUserAsync(UpdateUserViewModel updateUserView);
+        Task<IdentityResult<string>> CreateUserAsync(CreateUserViewModel createUserViewModel);
 
-        Task<IdentityResult<UserWithRolesViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
+        Task<IdentityResult> UpdateUserAsync(UpdateUserViewModel updateUserView);
 
-        Task<IdentityResult<DeleteUserViewModel>> DeleteUserAsync(DeleteUserViewModel delete);
+        Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
+
+        Task<IdentityResult> DeleteUserAsync(DeleteUserViewModel delete);
 
         Task<IdentityResult<bool>> DeleteUsersAsync(DeleteUserListViewModel deleteUsers);
     }

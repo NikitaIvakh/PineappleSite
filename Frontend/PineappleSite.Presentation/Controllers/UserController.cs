@@ -19,20 +19,19 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
-                var users = await _userService.GetAllUsersAsync(userId);
+                var users = await _userService.GetAllUsersAsync();
 
                 if (users.IsSuccess)
                 {
                     if (!string.IsNullOrEmpty(searchUser))
                     {
                         var searchUsers = users.Data!.Where(
-                            key => key.User.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                            key.User.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                            key.User.Email.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
-                            key.User.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
+                            key => key.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.EmailAddress.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-                        users = new IdentityCollectionResult<UserWithRolesViewModel>
+                        users = new IdentityCollectionResult<GetAllUsersViewModel>
                         {
                             Data = searchUsers,
                         };
@@ -43,7 +42,7 @@ namespace PineappleSite.Presentation.Controllers
 
                     int pageSize = 10;
                     var filteredUsers = users.Data!.AsQueryable();
-                    var paginatedUsers = PaginatedList<UserWithRolesViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
+                    var paginatedUsers = PaginatedList<GetAllUsersViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
 
                     return View(paginatedUsers);
                 }
@@ -68,21 +67,16 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Details/5
-        public async Task<ActionResult> Details(string id)
+        public async Task<ActionResult> Details(string userId)
         {
             try
             {
-                IdentityResult<UserWithRolesViewModel> user = await _userService.GetUserAsync(id);
+                IdentityResult<GetUserViewModel> user = await _userService.GetUserAsync(userId);
 
                 if (user.IsSuccess)
                 {
-                    UserWithRolesViewModel userWithRolesViewModel = new()
-                    {
-                        User = user.Data!.User,
-                        Roles = user.Data.Roles,
-                    };
-
-                    return View(userWithRolesViewModel);
+                    GetUserViewModel getUserViewModel = user.Data!;
+                    return View(getUserViewModel);
                 }
 
                 else
@@ -116,7 +110,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                IdentityResult<UserWithRolesViewModel> response = await _userService.CreateUserAsync(createUserViewModel);
+                IdentityResult<string> response = await _userService.CreateUserAsync(createUserViewModel);
 
                 if (response.IsSuccess)
                 {
@@ -142,22 +136,21 @@ namespace PineappleSite.Presentation.Controllers
         }
 
         // GET: UserController/Edit/5
-        public async Task<ActionResult> Edit(string id)
+        public async Task<ActionResult> Edit(string userId)
         {
             try
             {
-                var userWithRoles = await _userService.GetUserAsync(id);
+                var userWithRoles = await _userService.GetUserAsync(userId);
 
                 if (userWithRoles.IsSuccess)
                 {
                     var updateUser = new UpdateUserViewModel
                     {
-                        Id = userWithRoles.Data.User.Id,
-                        FirstName = userWithRoles.Data.User.FirstName,
-                        LastName = userWithRoles.Data.User.LastName,
-                        EmailAddress = userWithRoles.Data.User.Email,
-                        UserName = userWithRoles.Data.User.UserName,
-                        UserRoles = userWithRoles.Data.User.UserRoles,
+                        Id = userWithRoles.Data.UserId,
+                        FirstName = userWithRoles.Data.FirstName,
+                        LastName = userWithRoles.Data.LastName,
+                        EmailAddress = userWithRoles.Data.EmailAddress,
+                        UserName = userWithRoles.Data.UserName,
                     };
 
                     return View(updateUser);
@@ -188,7 +181,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                IdentityResult<RegisterResponseViewModel> response = await _userService.UpdateUserAsync(updateUser);
+                IdentityResult response = await _userService.UpdateUserAsync(updateUser);
 
                 if (response.IsSuccess)
                 {
@@ -220,7 +213,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                IdentityResult<DeleteUserViewModel> response = await _userService.DeleteUserAsync(deleteUser);
+                IdentityResult response = await _userService.DeleteUserAsync(deleteUser);
 
                 if (response.IsSuccess)
                 {
@@ -245,23 +238,23 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        public async Task<ActionResult> Profile()
+        public async Task<ActionResult> Profile(string? Password)
         {
             string userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
-            var user = await _userService.GetUserAsync(userId);
+            var user = await _userService.GetUserAsync(userId, Password);
 
             var updateUserPrifile = new UpdateUserProfileViewModel
             {
-                Id = user.Data!.User.Id,
-                FirstName = user.Data.User.FirstName,
-                LastName = user.Data.User.LastName,
-                EmailAddress = user.Data.User.Email,
-                UserName = user.Data.User.UserName,
-                Description = user.Data.User.Description,
-                Age = user.Data.User.Age,
-                Roles = user.Data.Roles,
-                ImageUrl = user.Data.User.ImageUrl,
-                ImageLocalPath = user.Data.User.ImageLocalPath,
+                Id = user.Data.UserId,
+                FirstName = user.Data.FirstName,
+                LastName = user.Data.LastName,
+                EmailAddress = user.Data.EmailAddress,
+                UserName = user.Data.UserName,
+                Description = user.Data.Description,
+                Age = user.Data.Age,
+                Roles = user.Data.Role,
+                ImageUrl = user.Data.ImageUrl,
+                ImageLocalPath = user.Data.ImageLocalPath,
             };
 
             return View(updateUserPrifile);
@@ -271,7 +264,7 @@ namespace PineappleSite.Presentation.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Profile(UpdateUserProfileViewModel updateUserProfile)
         {
-            IdentityResult<UserWithRolesViewModel> response = await _userService.UpdateUserProfileAsync(updateUserProfile);
+            IdentityResult<GetUserForUpdateViewModel> response = await _userService.UpdateUserProfileAsync(updateUserProfile);
 
             if (response.IsSuccess)
             {

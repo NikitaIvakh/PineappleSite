@@ -1,5 +1,5 @@
 ﻿@using PineappleSite.Presentation.Models.Paginated
-@model PaginatedList<PineappleSite.Presentation.Models.Users.UserWithRolesViewModel>
+@model PaginatedList<PineappleSite.Presentation.Models.Users.GetAllUsersViewModel>
 
 @{
     ViewData["Title"] = Localizer["List of users"];
@@ -49,6 +49,7 @@
                         <th>@Localizer["LastName"]</th>
                         <th>@Localizer["UserName"]</th>
                         <th>@Localizer["Role"]</th>
+                        <th>@Localizer["Details"]</th>
                         <th>@Localizer["Update"]</th>
                         <th>@Localizer["Delete"]</th>
                     </tr>
@@ -62,26 +63,31 @@
                         {
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="selectedUserIds" value="@item.User.Id" />
+                                    <input type="checkbox" name="selectedUserIds" value="@item.UserId" />
                                 </td>
-                                <td>@item.User.FirstName</td>
-                                <td>@item.User.LastName</td>
-                                <td>@item.User.UserName</td>
+                                <td>@item.FirstName</td>
+                                <td>@item.LastName</td>
+                                <td>@item.UserName</td>
                                 <td>
                                     @{
-                                        foreach (var role in item.Roles)
+                                        foreach (var role in item.Role)
                                         {
                                             @role
                                         }
                                     }
                                 </td>
                                 <td>
-                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.User.Id">
+                                    <a class="btn btn-sm btn-success" asp-action="Details" asp-route-userId="@item.UserId">
+                                        @Localizer["Details"]
+                                    </a>
+                                </td>
+                                <td>
+                                    <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-userId="@item.UserId">
                                         <i class="bi bi-pencil-square"></i>
                                     </a>
                                 </td>
                                 <td>
-                                    <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.User.Id">
+                                    <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.UserId">
                                         <i class="bi bi-trash">Удалить</i>
                                     </button>
                                 </td>

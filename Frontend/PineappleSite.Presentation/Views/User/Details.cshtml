@@ -1,4 +1,4 @@
-﻿@model PineappleSite.Presentation.Models.Users.UserWithRolesViewModel
+﻿@model PineappleSite.Presentation.Models.Users.GetUserViewModel
 
 @{
     ViewData["Title"] = Localizer["User details"];
@@ -21,8 +21,8 @@
                     <label class="control-label pt-2" style="font-size:20px;" hidden>@Localizer["Id"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="User.Id" readonly hidden />
-                    <span class="text-danger" asp-validation-for="User.Id" hidden></span>
+                    <input class="form-control" asp-for="UserId" readonly hidden />
+                    <span class="text-danger" asp-validation-for="UserId" hidden></span>
                 </div>
             </div>
             <div class="row">
@@ -30,8 +30,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["FirstName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="User.FirstName" readonly />
-                    <span class="text-danger" asp-validation-for="User.LastName"></span>
+                    <input class="form-control" asp-for="FirstName" readonly />
+                    <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
             </div>
             <div class="row">
@@ -39,8 +39,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["LastName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="User.LastName" readonly />
-                    <span class="text-danger" asp-validation-for="User.LastName"></span>
+                    <input class="form-control" asp-for="LastName" readonly />
+                    <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
             </div>
             <div class="row">
@@ -48,8 +48,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="User.Email" readonly />
-                    <span class="text-danger" asp-validation-for="User.Email"></span>
+                    <input class="form-control" asp-for="EmailAddress" readonly />
+                    <span class="text-danger" asp-validation-for="EmailAddress"></span>
                 </div>
             </div>
             <div class="row">
@@ -57,8 +57,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["UserName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="User.UserName" readonly />
-                    <span class="text-danger" asp-validation-for="User.UserName"></span>
+                    <input class="form-control" asp-for="UserName" readonly />
+                    <span class="text-danger" asp-validation-for="UserName"></span>
                 </div>
             </div>
             <div class="row">
@@ -67,12 +67,12 @@
                 </div>
                 <div class="col-6 pb-3">
                     @{
-                        foreach (var role in Model.Roles)
+                        foreach (var role in Model.Role)
                         {
                             <input class="form-control" asp-for="@role" readonly />
                         }
                     }
-                    <span class="text-danger" asp-validation-for="Roles"></span>
+                    <span class="text-danger" asp-validation-for="Role"></span>
                 </div>
             </div>
             <div class="col-5 offset-3">

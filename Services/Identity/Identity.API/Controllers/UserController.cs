@@ -60,6 +60,27 @@ namespace Identity.API.Controllers
             return NoContent();
         }
 
+        // GET api/<UserController>/5
+        [HttpGet("GetUserForUpdate/{userId}")]
+        public async Task<ActionResult<Result<GetUserForUpdateDto>>> GetUserForUpdate(string userId, string? password)
+        {
+            var command = await _mediator.Send(new GetUserForUpdateRequest { UserId = userId, Password = password });
+
+            if (command.IsSuccess)
+            {
+                _userWithRolesLogger.LogDebug($"LogDebug ================ Профиль пользователя успешно получен: {userId}");
+                return Ok(command);
+            }
+
+            _userWithRolesLogger.LogError($"LogDebugError ================ Получить профиль пользователя не удалось: {userId}");
+            foreach (var error in command.ValidationErrors!)
+            {
+                return BadRequest(error);
+            }
+
+            return NoContent();
+        }
+
         [HttpPost("CreateUser")]
         [Authorize(Roles = RoleConsts.Administrator)]
         public async Task<ActionResult<Result<string>>> CreateUser([FromBody] CreateUserDto createUserDto)

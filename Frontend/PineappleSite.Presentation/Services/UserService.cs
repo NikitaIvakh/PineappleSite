@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models.Coupons;
-using PineappleSite.Presentation.Models.Identities;
 using PineappleSite.Presentation.Models.Users;
-using PineappleSite.Presentation.Services.Coupons;
 using PineappleSite.Presentation.Services.Identities;
 using System.Security.Claims;
 
@@ -17,26 +14,37 @@ namespace PineappleSite.Presentation.Services
         private readonly IMapper _mapper = mapper;
         private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
-        public async Task<IdentityCollectionResult<UserWithRolesViewModel>> GetAllUsersAsync(string userId)
+        public async Task<IdentityCollectionResult<GetAllUsersViewModel>> GetAllUsersAsync()
         {
             AddBearerToken();
             if (_httpContextAccessor.HttpContext!.User.Identity!.IsAuthenticated)
             {
                 try
                 {
-                    UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(userId);
-                    UserWithRolesDtoCollectionResult users = await _identityClient.GetAllUsersAsync(user.Data.User.Id);
+                    GetAllUsersDtoCollectionResult users = await _identityClient.GetAllUsersAsync();
+                    var userWithRole = new List<GetAllUsersViewModel>();
+
+                    foreach (var user in users.Data)
+                    {
+                        userWithRole.Add(new GetAllUsersViewModel(user.UserId, user.FirstName, user.LastName, user.UserName, user.EmailAddress, user.Role, user.CreatedTime, user.ModifiedTime));
+                    }
 
                     if (users.IsSuccess)
                     {
-                        return _mapper.Map<IdentityCollectionResult<UserWithRolesViewModel>>(users);
+                        return new IdentityCollectionResult<GetAllUsersViewModel>
+                        {
+                            Count = users.Count,
+                            SuccessCode = users.SuccessCode,
+                            SuccessMessage = users.SuccessMessage,
+                            Data = userWithRole,
+                        };
                     }
 
                     else
                     {
                         foreach (var error in users.ValidationErrors)
                         {
-                            return new IdentityCollectionResult<UserWithRolesViewModel>
+                            return new IdentityCollectionResult<GetAllUsersViewModel>
                             {
                                 ValidationErrors = [error],
                                 ErrorCode = users.ErrorCode,
@@ -45,14 +53,14 @@ namespace PineappleSite.Presentation.Services
                         }
                     }
 
-                    return new IdentityCollectionResult<UserWithRolesViewModel>();
+                    return new IdentityCollectionResult<GetAllUsersViewModel>();
                 }
 
                 catch (IdentityExceptions exceptions)
                 {
                     if (exceptions.StatusCode == 403)
                     {
-                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        return new IdentityCollectionResult<GetAllUsersViewModel>
                         {
                             ErrorCode = exceptions.StatusCode,
                             ErrorMessage = exceptions.Response,
@@ -62,7 +70,7 @@ namespace PineappleSite.Presentation.Services
 
                     else if (exceptions.StatusCode == 401)
                     {
-                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        return new IdentityCollectionResult<GetAllUsersViewModel>
                         {
                             ErrorCode = exceptions.StatusCode,
                             ErrorMessage = exceptions.Response,
@@ -72,7 +80,7 @@ namespace PineappleSite.Presentation.Services
 
                     else
                     {
-                        return new IdentityCollectionResult<UserWithRolesViewModel>
+                        return new IdentityCollectionResult<GetAllUsersViewModel>
                         {
                             ErrorMessage = exceptions.Response,
                             ErrorCode = exceptions.StatusCode,
@@ -84,7 +92,7 @@ namespace PineappleSite.Presentation.Services
 
             else
             {
-                return new IdentityCollectionResult<UserWithRolesViewModel>
+                return new IdentityCollectionResult<GetAllUsersViewModel>
                 {
                     ErrorCode = 401,
                     ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
@@ -93,17 +101,22 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<UserWithRolesViewModel>> GetUserAsync(string id)
+        public async Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id)
         {
+            AddBearerToken();
             try
             {
-                UserWithRolesDtoResult user = await _identityClient.GetUserByIdAsync(id);
+                GetUserDtoResult user = await _identityClient.GetUserByIdAsync(id);
+                var userWithRole = new GetUserViewModel(user.Data.UserId, user.Data.FirstName, user.Data.LastName, user.Data.UserName, user.Data.EmailAddress, user.Data.Role,
+                    user.Data.CreatedTime, user.Data.ModifiedTime);
 
                 if (user.IsSuccess)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserViewModel>
                     {
-                        Data = _mapper.Map<UserWithRolesViewModel>(user.Data)
+                        Data = userWithRole,
+                        SuccessCode = user.SuccessCode,
+                        SuccessMessage = user.SuccessMessage,
                     };
                 }
 
@@ -111,7 +124,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (var error in user.ValidationErrors)
                     {
-                        return new IdentityResult<UserWithRolesViewModel>
+                        return new IdentityResult<GetUserViewModel>
                         {
                             ValidationErrors = [error],
                             ErrorCode = user.ErrorCode,
@@ -120,14 +133,14 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<UserWithRolesViewModel>();
+                return new IdentityResult<GetUserViewModel>();
             }
 
             catch (IdentityExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -137,7 +150,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -147,7 +160,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserViewModel>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -157,19 +170,89 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<UserWithRolesViewModel>> CreateUserAsync(CreateUserViewModel createUserViewModel)
+        public async Task<IdentityResult<GetUserForUpdateViewModel>> GetUserAsync(string userId, string? Password)
+        {
+            AddBearerToken();
+            try
+            {
+                GetUserForUpdateDtoResult user = await _identityClient.GetUserForUpdateAsync(userId, Password);
+                GetUserForUpdateViewModel getUserForUpdateViewModel = new(user.Data.UserId, user.Data.FirstName, user.Data.LastName, user.Data.UserName, user.Data.EmailAddress, user.Data.Role, user.Data.Description, user.Data.Age,
+                    user.Data.Password, user.Data.ImageUrl, user.Data.ImageLocalPath);
+
+                if (user.IsSuccess)
+                {
+                    return new IdentityResult<GetUserForUpdateViewModel>
+                    {
+                        SuccessCode = user.SuccessCode,
+                        SuccessMessage = user.SuccessMessage,
+                        Data = getUserForUpdateViewModel,
+                    };
+                }
+
+                else
+                {
+                    foreach (var error in user.ValidationErrors)
+                    {
+                        return new IdentityResult<GetUserForUpdateViewModel>
+                        {
+                            ValidationErrors = [error],
+                            ErrorCode = user.ErrorCode,
+                            ErrorMessage = user.ErrorMessage,
+                        };
+                    }
+                }
+
+                return new IdentityResult<GetUserForUpdateViewModel>();
+            }
+
+            catch (IdentityExceptions exceptions)
+            {
+                if (exceptions.StatusCode == 403)
+                {
+                    return new IdentityResult<GetUserForUpdateViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else if (exceptions.StatusCode == 401)
+                {
+                    return new IdentityResult<GetUserForUpdateViewModel>
+                    {
+                        ErrorCode = exceptions.StatusCode,
+                        ErrorMessage = exceptions.Response,
+                        ValidationErrors = ConvertIdentityExceptions(exceptions).ValidationErrors,
+                    };
+                }
+
+                else
+                {
+                    return new IdentityResult<GetUserForUpdateViewModel>
+                    {
+                        ErrorMessage = exceptions.Response,
+                        ErrorCode = exceptions.StatusCode,
+                        ValidationErrors = [exceptions.Response]
+                    };
+                }
+            }
+        }
+
+        public async Task<IdentityResult<string>> CreateUserAsync(CreateUserViewModel createUserViewModel)
         {
             AddBearerToken();
             try
             {
                 CreateUserDto createUserDto = _mapper.Map<CreateUserDto>(createUserViewModel);
-                UserWithRolesDtoResult apiResponse = await _identityClient.CreateUserAsync(createUserDto);
+                StringResult apiResponse = await _identityClient.CreateUserAsync(createUserDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<string>
                     {
-                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse.Data),
+                        Data = apiResponse.Data,
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                     };
                 }
@@ -178,7 +261,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<UserWithRolesViewModel>
+                        return new IdentityResult<string>
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -187,14 +270,14 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<UserWithRolesViewModel>();
+                return new IdentityResult<string>();
             }
 
             catch (IdentityExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<string>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -204,7 +287,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<string>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -214,7 +297,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<string>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -224,19 +307,19 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<RegisterResponseViewModel>> UpdateUserAsync(UpdateUserViewModel updateUserView)
+        public async Task<IdentityResult> UpdateUserAsync(UpdateUserViewModel updateUserView)
         {
             AddBearerToken();
             try
             {
                 UpdateUserDto updateUserDto = _mapper.Map<UpdateUserDto>(updateUserView);
-                RegisterResponseDtoResult apiResponse = await _identityClient.UserPUTAsync(updateUserDto.Id, updateUserDto);
+                UnitResult apiResponse = await _identityClient.UserPUTAsync(updateUserView.Id, updateUserDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new IdentityResult<RegisterResponseViewModel>
+                    return new IdentityResult
                     {
-                        Data = _mapper.Map<RegisterResponseViewModel>(apiResponse),
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
                     };
                 }
@@ -245,7 +328,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<RegisterResponseViewModel>
+                        return new IdentityResult
                         {
                             ErrorCode = apiResponse.ErrorCode,
                             ErrorMessage = apiResponse.ErrorMessage,
@@ -254,14 +337,14 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<RegisterResponseViewModel>();
+                return new IdentityResult();
             }
 
             catch (IdentityExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new IdentityResult<RegisterResponseViewModel>
+                    return new IdentityResult
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -271,7 +354,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new IdentityResult<RegisterResponseViewModel>
+                    return new IdentityResult
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -281,7 +364,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new IdentityResult<RegisterResponseViewModel>
+                    return new IdentityResult
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -291,7 +374,7 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<UserWithRolesViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
+        public async Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
         {
             AddBearerToken();
             try
@@ -305,17 +388,20 @@ namespace PineappleSite.Presentation.Services
                     avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);
                 }
 
-                UserWithRolesDtoResult apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfile.Id, updateUserProfile?.FirstName, updateUserProfile?.LastName, updateUserProfile?.EmailAddress,
+                GetUserForUpdateDtoResult apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfile.Id, updateUserProfile?.FirstName, updateUserProfile?.LastName, updateUserProfile?.EmailAddress,
                     updateUserProfile?.UserName, updateUserProfile?.Password, updateUserProfile?.Description, updateUserProfile?.Age, avatarFileParameter, updateUserProfile?.ImageUrl, updateUserProfile?.ImageLocalPath
                 );
 
+                GetUserForUpdateViewModel getUserForUpdateViewModel = new(apiResponse.Data.UserId, apiResponse.Data.FirstName, apiResponse.Data.LastName, apiResponse.Data.UserName,
+                    apiResponse.Data.EmailAddress, apiResponse.Data.Role, apiResponse.Data.Description, apiResponse.Data.Age, apiResponse.Data.Password, apiResponse.Data.ImageUrl, apiResponse.Data.ImageLocalPath);
+
                 if (apiResponse.IsSuccess)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserForUpdateViewModel>
                     {
+                        Data = getUserForUpdateViewModel,
                         SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<UserWithRolesViewModel>(apiResponse),
                     };
                 }
 
@@ -323,7 +409,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<UserWithRolesViewModel>
+                        return new IdentityResult<GetUserForUpdateViewModel>
                         {
                             ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
@@ -332,14 +418,14 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<UserWithRolesViewModel>();
+                return new IdentityResult<GetUserForUpdateViewModel>();
             }
 
             catch (IdentityExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserForUpdateViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -349,7 +435,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserForUpdateViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -359,7 +445,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new IdentityResult<UserWithRolesViewModel>
+                    return new IdentityResult<GetUserForUpdateViewModel>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -369,20 +455,20 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<IdentityResult<DeleteUserViewModel>> DeleteUserAsync(DeleteUserViewModel delete)
+        public async Task<IdentityResult> DeleteUserAsync(DeleteUserViewModel delete)
         {
             AddBearerToken();
             try
             {
                 DeleteUserDto deleteUserDto = _mapper.Map<DeleteUserDto>(delete);
-                DeleteUserDtoResult apiResponse = await _identityClient.UserDELETEAsync(deleteUserDto.Id, deleteUserDto);
+                UnitResult apiResponse = await _identityClient.UserDELETEAsync(deleteUserDto.Id, deleteUserDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new IdentityResult<DeleteUserViewModel>
+                    return new IdentityResult
                     {
+                        SuccessCode = apiResponse.SuccessCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<DeleteUserViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -390,7 +476,7 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new IdentityResult<DeleteUserViewModel>
+                        return new IdentityResult
                         {
                             ValidationErrors = [error],
                             ErrorCode = apiResponse.ErrorCode,
@@ -399,14 +485,14 @@ namespace PineappleSite.Presentation.Services
                     }
                 }
 
-                return new IdentityResult<DeleteUserViewModel>();
+                return new IdentityResult();
             }
 
             catch (IdentityExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new IdentityResult<DeleteUserViewModel>
+                    return new IdentityResult
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -416,7 +502,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new IdentityResult<DeleteUserViewModel>
+                    return new IdentityResult
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -426,7 +512,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new IdentityResult<DeleteUserViewModel>
+                    return new IdentityResult
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,

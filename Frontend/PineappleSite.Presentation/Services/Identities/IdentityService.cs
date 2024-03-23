@@ -69,57 +69,66 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoCollectionResult> GetAllUsersAsync(string userId);
+        System.Threading.Tasks.Task<GetAllUsersDtoCollectionResult> GetAllUsersAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoCollectionResult> GetAllUsersAsync(string userId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetAllUsersDtoCollectionResult> GetAllUsersAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> GetUserByIdAsync(string id);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> GetUserByIdAsync(string id, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> CreateUserAsync(CreateUserDto body);
+        System.Threading.Tasks.Task<GetUserDtoResult> GetUserByIdAsync(string userId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> CreateUserAsync(CreateUserDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetUserDtoResult> GetUserByIdAsync(string userId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RegisterResponseDtoResult> UserPUTAsync(string userId, UpdateUserDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<RegisterResponseDtoResult> UserPUTAsync(string userId, UpdateUserDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeleteUserDtoResult> UserDELETEAsync(string userId, DeleteUserDto body);
+        System.Threading.Tasks.Task<GetUserForUpdateDtoResult> GetUserForUpdateAsync(string userId, string password);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<DeleteUserDtoResult> UserDELETEAsync(string userId, DeleteUserDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetUserForUpdateDtoResult> GetUserForUpdateAsync(string userId, string password, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath);
+        System.Threading.Tasks.Task<StringResult> CreateUserAsync(CreateUserDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UserWithRolesDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<StringResult> CreateUserAsync(CreateUserDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UserPUTAsync(string userId, UpdateUserDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UserPUTAsync(string userId, UpdateUserDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UserDELETEAsync(string userId, DeleteUserDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UserDELETEAsync(string userId, DeleteUserDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
@@ -184,7 +193,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Authenticate");
@@ -267,7 +276,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Authenticate");
@@ -350,7 +359,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Authenticate");
@@ -433,7 +442,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Authenticate");
@@ -515,7 +524,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Authenticate");
@@ -574,15 +583,15 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserWithRolesDtoCollectionResult> GetAllUsersAsync(string userId)
+        public virtual System.Threading.Tasks.Task<GetAllUsersDtoCollectionResult> GetAllUsersAsync()
         {
-            return GetAllUsersAsync(userId, System.Threading.CancellationToken.None);
+            return GetAllUsersAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserWithRolesDtoCollectionResult> GetAllUsersAsync(string userId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetAllUsersDtoCollectionResult> GetAllUsersAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -594,18 +603,12 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetAllUsers");
-                    urlBuilder_.Append('?');
-                    if (userId != null)
-                    {
-                        urlBuilder_.Append(System.Uri.EscapeDataString("userId") + "=").Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
-                    }
-                    urlBuilder_.Length--;
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -630,7 +633,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UserWithRolesDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetAllUsersDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -659,18 +662,18 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserWithRolesDtoResult> GetUserByIdAsync(string id)
+        public virtual System.Threading.Tasks.Task<GetUserDtoResult> GetUserByIdAsync(string userId)
         {
-            return GetUserByIdAsync(id, System.Threading.CancellationToken.None);
+            return GetUserByIdAsync(userId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserWithRolesDtoResult> GetUserByIdAsync(string id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetUserDtoResult> GetUserByIdAsync(string userId, System.Threading.CancellationToken cancellationToken)
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
+            if (userId == null)
+                throw new System.ArgumentNullException("userId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -682,14 +685,14 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetUserById");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -714,7 +717,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UserWithRolesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetUserDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -743,7 +746,97 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserWithRolesDtoResult> CreateUserAsync(CreateUserDto body)
+        public virtual System.Threading.Tasks.Task<GetUserForUpdateDtoResult> GetUserForUpdateAsync(string userId, string password)
+        {
+            return GetUserForUpdateAsync(userId, password, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<GetUserForUpdateDtoResult> GetUserForUpdateAsync(string userId, string password, System.Threading.CancellationToken cancellationToken)
+        {
+            if (userId == null)
+                throw new System.ArgumentNullException("userId");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    request_.Method = new System.Net.Http.HttpMethod("GET");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    urlBuilder_.Append("api");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("User");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("GetUserForUpdate");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userId, System.Globalization.CultureInfo.InvariantCulture)));
+            urlBuilder_.Append('?');
+            if (password != null)
+            {
+                urlBuilder_.Append(System.Uri.EscapeDataString("password") + "=").Append(System.Uri.EscapeDataString(ConvertToString(password, System.Globalization.CultureInfo.InvariantCulture))).Append("&");
+            }
+            urlBuilder_.Length--;
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<GetUserForUpdateDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new IdentityExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<StringResult> CreateUserAsync(CreateUserDto body)
         {
             return CreateUserAsync(body, System.Threading.CancellationToken.None);
         }
@@ -751,7 +844,7 @@ namespace PineappleSite.Presentation.Services.Identities
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserWithRolesDtoResult> CreateUserAsync(CreateUserDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<StringResult> CreateUserAsync(CreateUserDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -767,7 +860,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
@@ -797,7 +890,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UserWithRolesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<StringResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -826,7 +919,7 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<RegisterResponseDtoResult> UserPUTAsync(string userId, UpdateUserDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> UserPUTAsync(string userId, UpdateUserDto body)
         {
             return UserPUTAsync(userId, body, System.Threading.CancellationToken.None);
         }
@@ -834,7 +927,7 @@ namespace PineappleSite.Presentation.Services.Identities
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<RegisterResponseDtoResult> UserPUTAsync(string userId, UpdateUserDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> UserPUTAsync(string userId, UpdateUserDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -853,7 +946,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
@@ -883,7 +976,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<RegisterResponseDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UnitResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -912,7 +1005,7 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<DeleteUserDtoResult> UserDELETEAsync(string userId, DeleteUserDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> UserDELETEAsync(string userId, DeleteUserDto body)
         {
             return UserDELETEAsync(userId, body, System.Threading.CancellationToken.None);
         }
@@ -920,7 +1013,7 @@ namespace PineappleSite.Presentation.Services.Identities
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<DeleteUserDtoResult> UserDELETEAsync(string userId, DeleteUserDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> UserDELETEAsync(string userId, DeleteUserDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -939,7 +1032,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
@@ -969,7 +1062,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<DeleteUserDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<UnitResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -998,7 +1091,7 @@ namespace PineappleSite.Presentation.Services.Identities
 
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UserWithRolesDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath)
+        public virtual System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath)
         {
             return UpdateUserProfileAsync(userId, id, firstName, lastName, emailAddress, userName, password, description, age, avatar, imageUrl, imageLocalPath, System.Threading.CancellationToken.None);
         }
@@ -1006,7 +1099,7 @@ namespace PineappleSite.Presentation.Services.Identities
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UserWithRolesDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath, System.Threading.CancellationToken cancellationToken)
         {
             if (userId == null)
                 throw new System.ArgumentNullException("userId");
@@ -1081,7 +1174,7 @@ namespace PineappleSite.Presentation.Services.Identities
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<UserWithRolesDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetUserForUpdateDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -1134,7 +1227,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
-
+                
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("User");
@@ -1261,7 +1354,7 @@ namespace PineappleSite.Presentation.Services.Identities
                     var field = System.Reflection.IntrospectionExtensions.GetTypeInfo(value.GetType()).GetDeclaredField(name);
                     if (field != null)
                     {
-                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute))
+                        var attribute = System.Reflection.CustomAttributeExtensions.GetCustomAttribute(field, typeof(System.Runtime.Serialization.EnumMemberAttribute)) 
                             as System.Runtime.Serialization.EnumMemberAttribute;
                         if (attribute != null)
                         {
@@ -1273,97 +1366,23 @@ namespace PineappleSite.Presentation.Services.Identities
                     return converted == null ? string.Empty : converted;
                 }
             }
-            else if (value is bool)
+            else if (value is bool) 
             {
                 return System.Convert.ToString((bool)value, cultureInfo).ToLowerInvariant();
             }
             else if (value is byte[])
             {
-                return System.Convert.ToBase64String((byte[])value);
+                return System.Convert.ToBase64String((byte[]) value);
             }
             else if (value.GetType().IsArray)
             {
-                var array = System.Linq.Enumerable.OfType<object>((System.Array)value);
+                var array = System.Linq.Enumerable.OfType<object>((System.Array) value);
                 return string.Join(",", System.Linq.Enumerable.Select(array, o => ConvertToString(o, cultureInfo)));
             }
 
             var result = System.Convert.ToString(value, cultureInfo);
             return result == null ? "" : result;
         }
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class ApplicationUser
-    {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Id { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string UserName { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("normalizedUserName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NormalizedUserName { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("email", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Email { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("normalizedEmail", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string NormalizedEmail { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("emailConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool EmailConfirmed { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("passwordHash", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PasswordHash { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("securityStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SecurityStamp { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("concurrencyStamp", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ConcurrencyStamp { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("phoneNumber", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string PhoneNumber { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("phoneNumberConfirmed", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool PhoneNumberConfirmed { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("twoFactorEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool TwoFactorEnabled { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("lockoutEnd", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTimeOffset? LockoutEnd { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("lockoutEnabled", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool LockoutEnabled { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("accessFailedCount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int AccessFailedCount { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string FirstName { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string LastName { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string Description { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("age", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? Age { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string RefreshToken { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("refreshTokenExpiresTime", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.DateTime RefreshTokenExpiresTime { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("imageUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ImageUrl { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("imageLocalPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ImageLocalPath { get; set; }
-
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
@@ -1708,32 +1727,6 @@ namespace PineappleSite.Presentation.Services.Identities
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class DeleteUserDtoResult
-    {
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ErrorMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? ErrorCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SuccessCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public DeleteUserDto Data { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class DeleteUserListDto
     {
         [Newtonsoft.Json.JsonProperty("userIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -1950,6 +1943,183 @@ namespace PineappleSite.Presentation.Services.Identities
         _16 = 16,
 
         _28 = 28,
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetAllUsersDto
+    {
+        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FirstName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string LastName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string EmailAddress { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Role { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("createdTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset? CreatedTime { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("modifiedTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset? ModifiedTime { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetAllUsersDtoCollectionResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<GetAllUsersDto> Data { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Count { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetUserDto
+    {
+        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FirstName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string LastName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string EmailAddress { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Role { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("createdTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset? CreatedTime { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("modifiedTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.DateTimeOffset? ModifiedTime { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetUserDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public GetUserDto Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetUserForUpdateDto
+    {
+        [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string FirstName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string LastName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string UserName { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string EmailAddress { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> Role { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Description { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("age", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? Age { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Password { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("imageUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ImageUrl { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("imageLocalPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ImageLocalPath { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetUserForUpdateDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public GetUserForUpdateDto Data { get; set; }
 
     }
 
@@ -2661,6 +2831,32 @@ namespace PineappleSite.Presentation.Services.Identities
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class StringResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? ErrorCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? SuccessCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class StructLayoutAttribute
     {
         [Newtonsoft.Json.JsonProperty("typeId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -3282,82 +3478,16 @@ namespace PineappleSite.Presentation.Services.Identities
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class UserWithRolesDto
-    {
-        [Newtonsoft.Json.JsonProperty("user", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public ApplicationUser User { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("roles", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> Roles { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class UserWithRolesDtoCollectionResult
-    {
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ErrorMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? ErrorCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SuccessCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<UserWithRolesDto> Data { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Count { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class UserWithRolesDtoResult
-    {
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ErrorMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? ErrorCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SuccessCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public UserWithRolesDto Data { get; set; }
-
-    }
-
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class FileParameter
     {
         public FileParameter(System.IO.Stream data)
-            : this(data, null, null)
+            : this (data, null, null)
         {
         }
 
         public FileParameter(System.IO.Stream data, string fileName)
-            : this(data, fileName, null)
+            : this (data, fileName, null)
         {
         }
 
@@ -3414,10 +3544,10 @@ namespace PineappleSite.Presentation.Services.Identities
 
 }
 
-#pragma warning restore 108
-#pragma warning restore 114
-#pragma warning restore 472
-#pragma warning restore 612
+#pragma warning restore  108
+#pragma warning restore  114
+#pragma warning restore  472
+#pragma warning restore  612
 #pragma warning restore 1573
 #pragma warning restore 1591
 #pragma warning restore 8073

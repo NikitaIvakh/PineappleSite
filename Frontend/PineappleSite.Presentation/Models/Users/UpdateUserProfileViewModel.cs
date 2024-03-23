@@ -35,7 +35,7 @@ namespace PineappleSite.Presentation.Models.Users
         [Range(18, 120, ErrorMessage = "Возраст должен быть больше 18, но меньше 120")]
         public int? Age { get; set; }
 
-        public IList<string> Roles { get; set; }
+        public ICollection<string> Roles { get; set; }
 
         public IFormFile? Avatar { get; set; }
 
