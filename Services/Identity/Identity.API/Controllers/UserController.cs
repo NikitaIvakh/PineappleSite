@@ -141,7 +141,7 @@ namespace Identity.API.Controllers
         // DELETE api/<UserController>/5
         [HttpDelete("{userId}")]
         [Authorize(Roles = RoleConsts.Administrator)]
-        public async Task<ActionResult<Result<DeleteUserDto>>> Delete(string userId, [FromBody] DeleteUserDto deleteUserDto)
+        public async Task<ActionResult<Result<Unit>>> Delete(string userId, [FromBody] DeleteUserDto deleteUserDto)
         {
             if (userId == deleteUserDto.Id)
             {

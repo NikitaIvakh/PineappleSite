@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Identity.Application.Features.Users.Requests.Handlers
 {
-    public class DeleteUserRequest : IRequest<Result<DeleteUserDto>>
+    public class DeleteUserRequest : IRequest<Result<Unit>>
     {
-        public DeleteUserDto DeleteUser { get; set; }
+        public DeleteUserDto DeleteUser { get; set; } = null!;
     }
 }

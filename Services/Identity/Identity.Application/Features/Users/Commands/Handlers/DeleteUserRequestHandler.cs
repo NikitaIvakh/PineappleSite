@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
-    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<DeleteUserRequest, Result<DeleteUserDto>>
+    public class DeleteUserRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache) : IRequestHandler<DeleteUserRequest, Result<Unit>>
     {
         private readonly UserManager<ApplicationUser> _userManager = userManager;
         private readonly ILogger _logger = logger.ForContext<DeleteUserRequestHandler>();
@@ -22,7 +22,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
         private readonly string cacheKey = "СacheUserKey";
 
-        public async Task<Result<DeleteUserDto>> Handle(DeleteUserRequest request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(DeleteUserRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -39,7 +39,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
                         {
-                            return new Result<DeleteUserDto>
+                            return new Result<Unit>
                             {
                                 ValidationErrors = errorMessage,
                                 ErrorMessage = ErrorMessage.UserCanNotDeleted,
@@ -48,7 +48,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                         }
                     }
 
-                    return new Result<DeleteUserDto>
+                    return new Result<Unit>
                     {
                         ErrorMessage = ErrorMessage.UserCanNotDeleted,
                         ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
@@ -62,7 +62,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                     if (user is null)
                     {
-                        return new Result<DeleteUserDto>
+                        return new Result<Unit>
                         {
                             ErrorMessage = ErrorMessage.UserNotFound,
                             ErrorCode = (int)ErrorCodes.UserNotFound,
@@ -76,7 +76,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
 
                         if (!result.Succeeded)
                         {
-                            return new Result<DeleteUserDto>
+                            return new Result<Unit>
                             {
                                 ErrorMessage = ErrorMessage.UserCanNotDeleted,
                                 ErrorCode = (int)ErrorCodes.UserCanNotDeleted,
@@ -92,9 +92,9 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                             _memoryCache.Set(cacheKey, users);
                             _memoryCache.Set(cacheKey, user);
 
-                            return new Result<DeleteUserDto>
+                            return new Result<Unit>
                             {
-                                Data = request.DeleteUser,
+                                Data = Unit.Value,
                                 SuccessCode = (int)SuccessCode.Deleted,
                                 SuccessMessage = SuccessMessage.UserSuccessfullyDeleted,
                             };
@@ -106,7 +106,7 @@ namespace Identity.Application.Features.Users.Commands.Handlers
             catch (Exception exception)
             {
                 _logger.Warning(exception, exception.Message);
-                return new Result<DeleteUserDto>
+                return new Result<Unit>
                 {
                     ErrorMessage = ErrorMessage.InternalServerError,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
