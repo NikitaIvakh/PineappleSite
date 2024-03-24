@@ -77,6 +77,24 @@ namespace Identity.Application.Features.Users.Commands.Handlers
                     {
                         foreach (var user in users)
                         {
+                            if (!string.IsNullOrEmpty(user.ImageLocalPath))
+                            {
+                                string fileName = $"Id_{user.Id}*";
+                                string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
+
+                                var getAllFiels = Directory.GetFiles(filePath, fileName + ".*");
+
+                                foreach (var file in getAllFiels)
+                                {
+                                    File.Delete(file);
+                                }
+
+                                user.ImageUrl = null;
+                                user.ImageLocalPath = null;
+
+                                await _userManager.UpdateAsync(user);
+                            }
+
                             var result = await _userManager.DeleteAsync(user);
 
                             if (!result.Succeeded)
