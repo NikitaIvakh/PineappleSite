@@ -3,7 +3,6 @@ using MediatR;
 using Identity.Domain.Enum;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
 using Microsoft.AspNetCore.Identity;
