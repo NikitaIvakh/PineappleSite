@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Serilog;
 
-
 namespace Identity.Application.Features.Users.Commands.Handlers
 {
     public class DeleteUserListRequestHandler(UserManager<ApplicationUser> userManager, IDeleteUserListDtoValidator deleteValidator, ILogger logger, IMemoryCache memoryCache, ApplicationDbContext context)
