@@ -126,6 +126,9 @@
   <data name="Complete the order" xml:space="preserve">
     <value>Complete the order</value>
   </data>
+  <data name="Delivery Address" xml:space="preserve">
+    <value>Delivery Address</value>
+  </data>
   <data name="Delivery Date" xml:space="preserve">
     <value>Delivery Date</value>
   </data>
