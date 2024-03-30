@@ -10,7 +10,7 @@ namespace Coupon.Infrastructure.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void ConfigureInfrastructureServive(this IServiceCollection services, IConfiguration configuration)
+        public static void ConfigureInfrastructureService(this IServiceCollection services, IConfiguration configuration)
         {
             services.RepositoriesInit(configuration);
             services.RegisterConnectionString(configuration);

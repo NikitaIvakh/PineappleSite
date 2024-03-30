@@ -17,7 +17,7 @@ applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddSwaggerGen();
 
 applicationBuilder.Services.ConfigureApplicationService();
-applicationBuilder.Services.ConfigureInfrastructureServive(applicationBuilder.Configuration);
+applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 
 applicationBuilder.Host.UseSerilog((context, logConfig) =>
 {
