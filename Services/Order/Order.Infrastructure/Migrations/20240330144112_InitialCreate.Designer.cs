@@ -12,7 +12,7 @@ using Order.Infrastructure;
 namespace Order.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240308153719_InitialCreate")]
+    [Migration("20240330144112_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -64,8 +64,14 @@ namespace Order.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderHeaderId"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
                     b.Property<string>("CouponCode")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeliveryDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Discount")
                         .HasColumnType("double precision");

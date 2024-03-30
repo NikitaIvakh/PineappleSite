@@ -120,6 +120,15 @@
   <data name="Creating an order" xml:space="preserve">
     <value>Создание заказа</value>
   </data>
+  <data name="Delivery Address" xml:space="preserve">
+    <value>Адрес доставки...</value>
+  </data>
+  <data name="Delivery Date" xml:space="preserve">
+    <value>Дата доставки</value>
+  </data>
+  <data name="Delivery Time" xml:space="preserve">
+    <value>Время доставки</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Почта...</value>
   </data>
@@ -143,6 +152,9 @@
   </data>
   <data name="Return to the shopping cart" xml:space="preserve">
     <value>Вернуться в корзину</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value />
   </data>
   <data name="The order is accepted" xml:space="preserve">
     <value>Когда заказ будет готов, мы Вам перезвоним. Если вы сделаете заказ, когда ресторан будет закрыт, мы свяжемся с Вами на следующий день для уточнения деталей.</value>

@@ -9,7 +9,8 @@ namespace Order.Application.Mapping
         public MappingProfile()
         {
             CreateMap<OrderHeaderDto, CartHeaderDto>()
-                .ForMember(key => key.CartTotal, cart => cart.MapFrom(src => src.OrderTotal)).ReverseMap();
+                .ForMember(key => key.CartTotal, cart => cart.MapFrom(src => src.OrderTotal)).ReverseMap()
+                .ForMember(key => key.DeliveryDate, cart => cart.MapFrom(src => src.DeliveryDate)).ReverseMap();
 
             CreateMap<CartDetailsDto, OrderDetailsDto>()
             .ForMember(key => key.ProductName, order => order.MapFrom(src => src.Product.Name))

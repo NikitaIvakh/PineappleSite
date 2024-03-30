@@ -61,8 +61,14 @@ namespace Order.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("OrderHeaderId"));
 
+                    b.Property<string>("Address")
+                        .HasColumnType("text");
+
                     b.Property<string>("CouponCode")
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("DeliveryDate")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("Discount")
                         .HasColumnType("double precision");

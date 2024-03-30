@@ -8,7 +8,6 @@ using Order.Domain.Interfaces.Repository;
 using Order.Domain.Interfaces.Services;
 using Order.Infrastructure;
 using Order.Infrastructure.Repository.Implementation;
-using Order.Infrastructure.Repository.Services;
 
 namespace Orders.Test.Common
 {
@@ -42,25 +41,19 @@ namespace Orders.Test.Common
             var userServiceObject = new Mock<IUserService>();
 
             userServiceObject.Setup(mock => mock.GetUserAsync("tetsuserid"))
-                .ReturnsAsync(new Order.Domain.ResultOrder.Result<Order.Domain.DTOs.UserWithRolesDto>
+                .ReturnsAsync(new Order.Domain.ResultOrder.Result<Order.Domain.DTOs.GetUserDto>
                 {
-                    Data = new Order.Domain.DTOs.UserWithRolesDto
-                    {
-                        User = new Order.Domain.DTOs.ApplicationUserDto
-                        {
-                            Id = "test1",
-                            FirstName = "test1",
-                            LastName = "test1",
-                            Age = 25,
-                            Description = "test1test1test1test1",
-                            RefreshToken = "test1test1test1test1refreshToken",
-                            RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(6),
-                            ImageUrl = "ImageUrl",
-                            ImageLocalPath = "ImageLocalPath"
-                        },
-
-                        Roles = ["Administrator"]
-                    }
+                    Data = new Order.Domain.DTOs.GetUserDto
+                    (
+                        UserId: "test1",
+                        FirstName: "test1",
+                        LastName: "test1",
+                        UserName: "TestUsername",
+                        EmailAddress: "EmailAddress@gmail.com",
+                        Role: ["Administrator"],
+                        CreatedTime: DateTime.Now,
+                        ModifiedTime: DateTime.Now
+                    )
                 });
 
             UserService = userServiceObject.Object;

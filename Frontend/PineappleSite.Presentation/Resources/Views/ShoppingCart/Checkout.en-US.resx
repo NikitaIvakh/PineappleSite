@@ -120,6 +120,15 @@
   <data name="Creating an order" xml:space="preserve">
     <value>Creating an order</value>
   </data>
+  <data name="Delivery Address" xml:space="preserve">
+    <value>Delivery address...</value>
+  </data>
+  <data name="Delivery Date" xml:space="preserve">
+    <value>Delivery date</value>
+  </data>
+  <data name="Delivery Time" xml:space="preserve">
+    <value>Delivery time</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Email...</value>
   </data>

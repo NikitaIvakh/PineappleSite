@@ -19,6 +19,10 @@
 
         public string? PhoneNumber { get; set; }
 
+        public string? Address { get; set; }
+
+        public DateTime? DeliveryDate { get; set; }
+
 
         public DateTime OrderTime { get; set; }
 

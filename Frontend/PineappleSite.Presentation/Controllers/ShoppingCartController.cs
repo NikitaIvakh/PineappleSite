@@ -189,6 +189,8 @@ namespace PineappleSite.Presentation.Controllers
                             CouponCode = result.Data.CartHeader.CouponCode,
                             Discount = result.Data.CartHeader.Discount,
                             CartTotal = result.Data.CartHeader.CartTotal,
+                            Address = result.Data.CartHeader.Address,
+                            DeliveryDate = result.Data.CartHeader.DeliveryDate,
                         },
 
                         CartDetails = result.Data.CartDetails,
@@ -221,10 +223,16 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
+                var deliveryDate = cartViewModel.CartHeader.DeliveryDate;
+                var deliveryDateUtc = DateTime.SpecifyKind((DateTime)deliveryDate, DateTimeKind.Utc);
+                cartViewModel.CartHeader.DeliveryDate = deliveryDateUtc;
+
                 CartResult<CartViewModel> cart = await GetShoppingCartAfterAuthenticate();
                 cart.Data.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
                 cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
                 cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
+                cart.Data.CartHeader.Address = cartViewModel.CartHeader.Address;
+                cart.Data.CartHeader.DeliveryDate = cartViewModel.CartHeader.DeliveryDate;
                 cartViewModel.CartDetails = cart.Data.CartDetails;
                 cartViewModel.CartHeader.CouponCode = cart.Data.CartHeader.CouponCode;
                 cartViewModel.CartHeader.Discount = cart.Data.CartHeader.Discount;

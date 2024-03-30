@@ -14,6 +14,7 @@ namespace PineappleSite.Presentation.Models.Orders
 
         public double OrderTotal { get; set; }
 
+
         [Required(ErrorMessage = "Поле с именем не может быть пустым")]
         [MaxLength(45, ErrorMessage = "Поле не может превышать 45 символов")]
         [MinLength(2, ErrorMessage = "Имя должно быть более 2 символов")]
@@ -30,6 +31,11 @@ namespace PineappleSite.Presentation.Models.Orders
         [MaxLength(12, ErrorMessage = "Номер телефона не должен превышать 12 символов")]
         [MinLength(7, ErrorMessage = "Номер телефона должен быть более 7 символов")]
         public string? PhoneNumber { get; set; }
+
+        public string? Address { get; set; }
+
+        public DateTime? DeliveryDate { get; set; }
+
 
         public DateTime OrderTime { get; set; }
 

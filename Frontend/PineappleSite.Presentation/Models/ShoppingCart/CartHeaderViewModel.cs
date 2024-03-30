@@ -31,5 +31,9 @@ namespace PineappleSite.Presentation.Models.ShoppingCart
         [MaxLength(12, ErrorMessage = "Номер телефона не должен превышать 12 символов")]
         [MinLength(7, ErrorMessage = "Номер телефона должен быть более 7 символов")]
         public string? PhoneNumber { get; set; }
+
+        public string? Address { get; set; }
+
+        public DateTime? DeliveryDate { get; set; }
     }
 }
