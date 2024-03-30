@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.Extensions.Caching.Memory;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Resources;
 using Order.Application.Utility;
@@ -32,6 +31,7 @@ namespace Order.Application.Features.Handlers.Commands
                         {"Name", validResult.Errors.Select(key => key.ErrorMessage).ToList() },
                         {"Email", validResult.Errors.Select(key => key.ErrorMessage).ToList() },
                         {"PhoneNumber", validResult.Errors.Select(key => key.ErrorMessage).ToList() },
+                        {"Address", validResult.Errors.Select(key => key.ErrorMessage).ToList() },
                     };
 
                     foreach (var error in exceptionsError)

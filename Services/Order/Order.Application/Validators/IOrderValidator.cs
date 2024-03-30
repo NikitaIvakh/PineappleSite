@@ -25,6 +25,11 @@ namespace Order.Application.Validators
                 .MinimumLength(2).WithMessage("Номер телефона должен быть более 7 символов")
                 .MaximumLength(15).WithMessage("Номер телефона не должен превышать 12 символов")
                 .MustAsync(BeValidMobilePhoneOrStandartPhone).WithMessage("Номер телефона не верного формата");
+
+            RuleFor(key => key.Address)
+                .NotEmpty().NotNull().WithMessage("Адрес доставки не может быть пустым")
+                .MinimumLength(2).WithMessage("Адрес доставки должен быть более 2 символов")
+                .MaximumLength(250).WithMessage("Адрес доставки не должен превышать 250 символов");
         }
 
         private Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)

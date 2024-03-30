@@ -32,8 +32,12 @@ namespace PineappleSite.Presentation.Models.Orders
         [MinLength(7, ErrorMessage = "Номер телефона должен быть более 7 символов")]
         public string? PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "Адрес доставки не может быть пустым")]
+        [MinLength(2, ErrorMessage = "Адрес доставки должен быть более 2 символов")]
+        [MaxLength(250, ErrorMessage = "Адрес доставки не должен превышать 250 символов")]
         public string? Address { get; set; }
 
+        [Required(ErrorMessage = "Сроки доставки обязательны к запонению")]
         public DateTime? DeliveryDate { get; set; }
 
 
