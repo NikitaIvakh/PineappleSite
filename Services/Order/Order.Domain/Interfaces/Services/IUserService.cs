@@ -5,6 +5,6 @@ namespace Order.Domain.Interfaces.Services
 {
     public interface IUserService
     {
-        Task<Result<UserWithRolesDto>> GetUserAsync(string userId);
+        Task<Result<GetUserDto>> GetUserAsync(string userId);
     }
 }

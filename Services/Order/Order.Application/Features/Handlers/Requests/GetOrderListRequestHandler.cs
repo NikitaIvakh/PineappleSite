@@ -29,10 +29,9 @@ namespace Order.Application.Features.Handlers.Requests
             {
                 List<OrderHeaderDto>? orderHeader;
                 string userId = request.UserId;
-                var user = await _userService.GetUserAsync(userId);
+                Result<GetUserDto> user = await _userService.GetUserAsync(userId);
 
-
-                if (user.Data!.Roles.Contains(StaticDetails.RoleAdmin))
+                if (user.Data!.Role.Contains(StaticDetails.RoleAdmin))
                     orderHeader = _mapper.Map<List<OrderHeaderDto>>(await _orderHeaderRepository.GetAll().Include(key => key.OrderDetails).ToListAsync(cancellationToken));
 
                 else

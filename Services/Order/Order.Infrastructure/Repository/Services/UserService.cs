@@ -9,7 +9,7 @@ namespace Order.Infrastructure.Repository.Services
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
-        public async Task<Result<UserWithRolesDto>> GetUserAsync(string userId)
+        public async Task<Result<GetUserDto>> GetUserAsync(string userId)
         {
             HttpClient httpClient = _httpClientFactory.CreateClient("User");
             var response = await httpClient.GetAsync($"/api/User/GetUserById/{userId}");
@@ -24,10 +24,10 @@ namespace Order.Infrastructure.Repository.Services
                 };
 
                 var options = jsonSerializerOptions;
-                return await JsonSerializer.DeserializeAsync<Result<UserWithRolesDto>>(stream, options);
+                return await JsonSerializer.DeserializeAsync<Result<GetUserDto>>(stream, options);
             }
 
-            return new Result<UserWithRolesDto>();
+            return new Result<GetUserDto>();
         }
     }
 }
