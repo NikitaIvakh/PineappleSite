@@ -28,6 +28,7 @@ namespace Orders.Test.Commands
                     Name = "name",
                     PhoneNumber = "375445678909",
                     Email = "email@gmail.com",
+                    Address = "test address",
                 },
 
                 CartDetails =
@@ -68,6 +69,8 @@ namespace Orders.Test.Commands
             getCreatedOrder?.Name.Should().Be("name");
             getCreatedOrder?.PhoneNumber.Should().Be("375445678909");
             getCreatedOrder?.Email.Should().Be("email@gmail.com");
+            getCreatedOrder?.Address.Should().Be("test address");
+            getCreatedOrder?.Email.Should().Be("email@gmail.com");
         }
 
         [Fact]
@@ -88,6 +91,8 @@ namespace Orders.Test.Commands
                     Name = "n",
                     PhoneNumber = "375445678909",
                     Email = "email@gmail.com",
+                    Address = "test address",
+                    DeliveryDate = DateTime.UtcNow,
                 },
 
                 CartDetails =
@@ -138,6 +143,8 @@ namespace Orders.Test.Commands
                     Name = "name",
                     PhoneNumber = "375445678909",
                     Email = "email",
+                    Address = "test address",
+                    DeliveryDate = DateTime.UtcNow,
                 },
 
                 CartDetails =
@@ -188,6 +195,8 @@ namespace Orders.Test.Commands
                     Name = "name",
                     PhoneNumber = "37",
                     Email = "email@gmail.com",
+                    Address = "test address",
+                    DeliveryDate = DateTime.UtcNow,
                 },
 
                 CartDetails =

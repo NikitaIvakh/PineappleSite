@@ -24,6 +24,8 @@ namespace Orders.Test.Common
                 Name = "name",
                 Email = "email@gmail.com",
                 PhoneNumber = "375445679090",
+                Address = "test address",
+                DeliveryDate = DateTime.UtcNow,
 
                 OrderTime = DateTime.Now,
                 Status = StaticDetails.Status_Pending,
