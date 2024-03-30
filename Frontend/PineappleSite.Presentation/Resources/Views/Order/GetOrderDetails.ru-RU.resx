@@ -126,6 +126,9 @@
   <data name="Complete the order" xml:space="preserve">
     <value>Завершить заказ</value>
   </data>
+  <data name="Delivery Date" xml:space="preserve">
+    <value>Дата доставки</value>
+  </data>
   <data name="Email" xml:space="preserve">
     <value>Почта</value>
   </data>

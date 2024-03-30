@@ -37,7 +37,6 @@ namespace PineappleSite.Presentation.Models.Orders
         [MaxLength(250, ErrorMessage = "Адрес доставки не должен превышать 250 символов")]
         public string? Address { get; set; }
 
-        [Required(ErrorMessage = "Сроки доставки обязательны к запонению")]
         public DateTime? DeliveryDate { get; set; }
 
 
