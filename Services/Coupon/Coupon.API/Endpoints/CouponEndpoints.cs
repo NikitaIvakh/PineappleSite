@@ -6,7 +6,7 @@ using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using ILogger = Serilog.ILogger;
+using static Coupon.API.Utility.StaticDetails;
 
 namespace Coupon.API.Endpoints;
 
@@ -17,13 +17,13 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
     {
         var group = app.MapGroup("api/coupons");
 
-        group.MapGet("", GetCoupons).WithName(nameof(GetCoupons));
+        group.MapGet("", GetCoupons).WithName(nameof(GetCoupons)).RequireAuthorization(RoleAdministrator);
         group.MapGet("{couponId:int}", GetCouponById).WithName(nameof(GetCouponById));
         group.MapGet("{couponCode}", GetCouponByCode).WithName(nameof(GetCouponByCode));
-        group.MapPost("", CreateCoupon).WithName(nameof(CreateCoupon));
-        group.MapPut("{couponId:int}", UpdateCoupon).WithName(nameof(UpdateCoupon));
-        group.MapDelete("{couponId:int}", DeleteCoupon).WithName(nameof(DeleteCoupon));
-        group.MapDelete("", DeleteCoupons).WithName(nameof(DeleteCoupons));
+        group.MapPost("", CreateCoupon).WithName(nameof(CreateCoupon)).RequireAuthorization(RoleAdministrator);
+        group.MapPut("{couponId:int}", UpdateCoupon).WithName(nameof(UpdateCoupon)).RequireAuthorization(RoleAdministrator);
+        group.MapDelete("{couponId:int}", DeleteCoupon).WithName(nameof(DeleteCoupon)).RequireAuthorization(RoleAdministrator);
+        group.MapDelete("", DeleteCoupons).WithName(nameof(DeleteCoupons)).RequireAuthorization(RoleAdministrator);
     }
 
     private async Task<Results<Ok<CollectionResult<GetCouponsDto>>, BadRequest<string>>> GetCoupons(
