@@ -1,6 +1,8 @@
 using Carter;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
+using Serilog;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,14 @@ builder.Services.AddCarter();
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureService(builder.Configuration);
+
+builder.Host.UseSerilog((context, logConfig) =>
+{
+    logConfig.ReadFrom.Configuration(context.Configuration);
+    logConfig.WriteTo.Console();
+});
+
+StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 // TO serilog, swagger
 
@@ -23,5 +33,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapCarter();
+app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
 app.Run();
