@@ -13,9 +13,6 @@ namespace Coupon.API.Endpoints;
 public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDto> coupon)
     : ICarterModule
 {
-    private ILogger<GetCouponsDto> _coupons = coupons;
-    private ILogger<GetCouponDto> _coupon = coupon;
-
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/coupons");
@@ -36,11 +33,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (request.IsSuccess)
         {
-            _coupons.LogDebug("LogDebug ====================== Купоны успешно получены");
+            coupons.LogDebug("LogDebug ====================== Купоны успешно получены");
             return TypedResults.Ok(request);
         }
         
-        _coupons.LogDebug("LogDebug ====================== Ошибка получения купонов");
+        coupons.LogDebug("LogDebug ====================== Ошибка получения купонов");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
@@ -51,11 +48,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (request.IsSuccess)
         {
-            _coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponId}");
+            coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponId}");
             return TypedResults.Ok(request);
         }
 
-        _coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponId}");
+        coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
@@ -66,11 +63,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (request.IsSuccess)
         {
-            _coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponCode}");
+            coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponCode}");
             return TypedResults.Ok(request);
         }
 
-        _coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponCode}");
+        coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponCode}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
@@ -81,11 +78,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (command.IsSuccess)
         {
-            _coupon.LogDebug($"LogDebug ====================== Купон успешно создан");
+            coupon.LogDebug($"LogDebug ====================== Купон успешно создан");
             return TypedResults.Ok(command);
         }
 
-        _coupon.LogDebug($"LogDebug ====================== Ошибка создания купона");
+        coupon.LogDebug($"LogDebug ====================== Ошибка создания купона");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
@@ -96,11 +93,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (command.IsSuccess && couponId == updateCouponDto.CouponId)
         {
-            _coupon.LogDebug($"LogDebug ====================== Купон успешно обновлен");
+            coupon.LogDebug($"LogDebug ====================== Купон успешно обновлен");
             return TypedResults.Ok(command);
         }
 
-        _coupon.LogDebug($"LogDebug ====================== Ошибка обновления купона");
+        coupon.LogDebug($"LogDebug ====================== Ошибка обновления купона");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
@@ -111,11 +108,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
         {
             if (command.IsSuccess && couponId == deleteCouponDto.CouponId)
             {
-                _coupon.LogDebug($"LogDebug ====================== Купон успешно удален:{couponId}");
+                coupon.LogDebug($"LogDebug ====================== Купон успешно удален:{couponId}");
                 return TypedResults.Ok(command);
             }
 
-            _coupon.LogDebug($"LogDebug ====================== Ошибка удаления купона:{couponId}");
+            coupon.LogDebug($"LogDebug ====================== Ошибка удаления купона:{couponId}");
             return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
         }
     }
@@ -127,11 +124,11 @@ public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDt
 
         if (command.IsSuccess)
         {
-            _coupon.LogDebug($"LogDebug ====================== Купоны успешно удалены");
+            coupon.LogDebug($"LogDebug ====================== Купоны успешно удалены");
             return TypedResults.Ok(command);
         }
 
-        _coupon.LogDebug($"LogDebug ====================== Ошибка удаления купонов");
+        coupon.LogDebug($"LogDebug ====================== Ошибка удаления купонов");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }
