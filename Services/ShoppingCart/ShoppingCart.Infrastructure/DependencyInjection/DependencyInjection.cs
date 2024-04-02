@@ -29,8 +29,8 @@ namespace ShoppingCart.Infrastructure.DependencyInjection
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ICouponService, CouponService>();
 
-            services.AddScoped(scope => new DbConnectionFactory(connectionString));
-            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
+            services.AddScoped(scope => new DbConnectionFactory(connectionString!));
+            services.AddHealthChecks().AddNpgSql(connectionString!).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void RegisterDataBase(this IServiceCollection services, IConfiguration configuration)

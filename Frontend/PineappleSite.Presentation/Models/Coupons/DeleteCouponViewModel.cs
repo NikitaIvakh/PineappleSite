@@ -2,6 +2,6 @@
 {
     public class DeleteCouponViewModel
     {
-        public int Id { get; set; }
+        public int CouponId { get; set; }
     }
 }

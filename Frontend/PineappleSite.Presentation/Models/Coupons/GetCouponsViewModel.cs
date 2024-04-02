@@ -1,6 +1,3 @@
 ﻿namespace PineappleSite.Presentation.Models.Coupons;
 
-public class GetCouponsViewModel
-{
-    
-}
+public record GetCouponsViewModel(int CouponId, string CouponCode, double DiscountAmount, double MinAmount);

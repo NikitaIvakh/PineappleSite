@@ -5,46 +5,59 @@ using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Services
 {
-    public class CouponService(ILocalStorageService localStorageService, ICouponClient couponClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) : BaseCouponService(localStorageService, couponClient, httpContextAccessor), ICouponService
+    public class CouponService(ILocalStorageService localStorageService, ICouponClient couponClient, IMapper mapper, IHttpContextAccessor httpContextAccessor) 
+        : BaseCouponService(localStorageService, couponClient, httpContextAccessor), ICouponService
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
         private readonly ICouponClient _couponClient = couponClient;
-        private readonly IMapper _mapper = mapper;
 
-        public async Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync()
+        public async Task<CollectionResultViewModel<GetCouponsViewModel>> GetAllCouponsAsync()
         {
             AddBearerToken();
             try
             {
-                CouponDtoCollectionResult coupons = await _couponClient.CouponsAsync();
+                var coupons = await _couponClient.GetCouponsAsync();
+                var getCoupons = coupons.Data
+                    .Select(coupon => new GetCouponsViewModel
+                    (
+                        coupon.CouponId, 
+                        coupon.CouponCode,
+                        coupon.DiscountAmount, 
+                        coupon.MinAmount
+                    ))
+                    .ToList();
 
                 if (coupons.IsSuccess)
                 {
-                    return _mapper.Map<CollectionResultViewModel<CouponViewModel>>(coupons);
+                    return new CollectionResultViewModel<GetCouponsViewModel>
+                    {
+                        Count = coupons.Count,
+                        SuccessCode = coupons.StatusCode,
+                        SuccessMessage = coupons.SuccessMessage,
+                        Data = getCoupons,
+                    };
                 }
 
                 else
                 {
                     foreach (var error in coupons.ValidationErrors)
                     {
-                        return new CollectionResultViewModel<CouponViewModel>
+                        return new CollectionResultViewModel<GetCouponsViewModel>
                         {
                             ValidationErrors = [error],
-                            ErrorCode = coupons.ErrorCode,
+                            ErrorCode = coupons.StatusCode,
                             ErrorMessage = coupons.ErrorMessage,
                         };
                     }
                 }
 
-                return new CollectionResultViewModel<CouponViewModel>();
+                return new CollectionResultViewModel<GetCouponsViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<GetCouponsViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -54,7 +67,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<GetCouponsViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -64,7 +77,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<GetCouponsViewModel>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -74,20 +87,22 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<ResultViewModel<CouponViewModel>> GetCouponAsync(int couponId)
+        public async Task<ResultViewModel<GetCouponViewModel>> GetCouponAsync(int couponId)
         {
             AddBearerToken();
             try
             {
-                CouponDtoResult coupon = await _couponClient.CouponGETAsync(couponId);
+                var coupon = await _couponClient.GetCouponByIdAsync(couponId);
+                var getCoupon = new GetCouponViewModel(coupon.Data.CouponId, coupon.Data.CouponCode,
+                    coupon.Data.DiscountAmount, coupon.Data.MinAmount);
 
                 if (coupon.IsSuccess)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
-                        SuccessCode = coupon.SuccessCode,
+                        Data = getCoupon,
+                        SuccessCode = coupon.StatusCode,
                         SuccessMessage = coupon.SuccessMessage,
-                        Data = _mapper.Map<CouponViewModel>(coupon.Data),
                     };
                 }
 
@@ -95,23 +110,23 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (var error in coupon.ValidationErrors)
                     {
-                        return new ResultViewModel<CouponViewModel>
+                        return new ResultViewModel<GetCouponViewModel>
                         {
                             ValidationErrors = [error],
-                            ErrorCode = coupon.ErrorCode,
+                            ErrorCode = coupon.StatusCode,
                             ErrorMessage = coupon.ErrorMessage,
                         };
                     }
                 }
 
-                return new ResultViewModel<CouponViewModel>();
+                return new ResultViewModel<GetCouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -121,7 +136,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -131,7 +146,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -141,40 +156,47 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<ResultViewModel<CouponViewModel>> GetCouponAsync(string couponCode)
+        public async Task<ResultViewModel<GetCouponViewModel>> GetCouponAsync(string couponCode)
         {
             AddBearerToken();
             try
             {
-                CouponDtoResult coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
+                var coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
+                var getCoupon = new GetCouponViewModel(coupon.Data.CouponId, coupon.Data.CouponCode,
+                    coupon.Data.DiscountAmount, coupon.Data.MinAmount);
 
                 if (coupon.IsSuccess)
                 {
-                    return _mapper.Map<ResultViewModel<CouponViewModel>>(coupon.Data);
+                    return new ResultViewModel<GetCouponViewModel>
+                    {
+                        Data = getCoupon,
+                        SuccessCode = coupon.StatusCode,
+                        SuccessMessage = coupon.SuccessMessage,
+                    };
                 }
 
                 else
                 {
                     foreach (var error in coupon.ValidationErrors)
                     {
-                        return new ResultViewModel<CouponViewModel>
+                        return new ResultViewModel<GetCouponViewModel>
                         {
                             ValidationErrors = [error],
-                            ErrorCode = coupon.ErrorCode,
+                            ErrorCode = coupon.StatusCode,
                             ErrorMessage = coupon.ErrorMessage,
                         };
                     }
                 }
 
 
-                return new ResultViewModel<CouponViewModel>();
+                return new ResultViewModel<GetCouponViewModel>();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -184,7 +206,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -194,7 +216,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<GetCouponViewModel>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -203,22 +225,22 @@ namespace PineappleSite.Presentation.Services
                 }
             }
         }
-
-        public async Task<ResultViewModel<CouponViewModel>> CreateCouponAsync(CreateCouponViewModel createCoupon)
+        
+        public async Task<ResultViewModel<int>> CreateCouponAsync(CreateCouponViewModel createCoupon)
         {
             AddBearerToken();
             try
             {
-                CreateCouponDto createCouponDto = _mapper.Map<CreateCouponDto>(createCoupon);
-                CouponDtoResult apiResponse = await _couponClient.CouponPOSTAsync(createCouponDto);
+                CreateCouponDto createCouponDto = mapper.Map<CreateCouponDto>(createCoupon);
+                var apiResponse = await _couponClient.CreateCouponAsync(createCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<int>
                     {
-                        SuccessCode = apiResponse.SuccessCode,
+                        Data = apiResponse.Data,
+                        SuccessCode = apiResponse.StatusCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -226,23 +248,23 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new ResultViewModel<CouponViewModel>
+                        return new ResultViewModel<int>
                         {
                             ValidationErrors = [error],
                             ErrorMessage = apiResponse.ErrorMessage,
-                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorCode = apiResponse.StatusCode,
                         };
                     }
                 }
 
-                return new ResultViewModel<CouponViewModel>();
+                return new ResultViewModel<int>();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<int>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -252,7 +274,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<int>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -262,7 +284,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel<int>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -271,22 +293,21 @@ namespace PineappleSite.Presentation.Services
                 }
             }
         }
-
-        public async Task<ResultViewModel<CouponViewModel>> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon)
+        
+        public async Task<ResultViewModel> UpdateCouponAsync(int id, UpdateCouponViewModel updateCoupon)
         {
             AddBearerToken();
             try
             {
-                UpdateCouponDto updateCouponDto = _mapper.Map<UpdateCouponDto>(updateCoupon);
-                CouponDtoResult apiResponse = await _couponClient.CouponPUTAsync(updateCouponDto.CouponId, updateCouponDto);
+                UpdateCouponDto updateCouponDto = mapper.Map<UpdateCouponDto>(updateCoupon);
+                var apiResponse = await _couponClient.UpdateCouponAsync(updateCouponDto.CouponId, updateCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
-                        SuccessCode = apiResponse.SuccessCode,
+                        SuccessCode = apiResponse.StatusCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -294,23 +315,23 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new ResultViewModel<CouponViewModel>
+                        return new ResultViewModel
                         {
                             ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorCode = apiResponse.StatusCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
 
-                return new ResultViewModel<CouponViewModel>();
+                return new ResultViewModel();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -320,7 +341,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -330,7 +351,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -340,21 +361,20 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<ResultViewModel<CouponViewModel>> DeleteCouponAsync(int id, DeleteCouponViewModel deleteCoupon)
+        public async Task<ResultViewModel> DeleteCouponAsync(int couponId, DeleteCouponViewModel deleteCoupon)
         {
             AddBearerToken();
             try
             {
-                DeleteCouponDto deleteCouponDto = _mapper.Map<DeleteCouponDto>(deleteCoupon);
-                CouponDtoResult apiResponse = await _couponClient.CouponDELETEAsync(deleteCouponDto.Id, deleteCouponDto);
+                DeleteCouponDto deleteCouponDto = mapper.Map<DeleteCouponDto>(deleteCoupon);
+                var apiResponse = await _couponClient.DeleteCouponAsync(deleteCouponDto.CouponId, deleteCouponDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
-                        SuccessCode = apiResponse.SuccessCode,
+                        SuccessCode = apiResponse.StatusCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<CouponViewModel>(apiResponse.Data),
                     };
                 }
 
@@ -362,10 +382,10 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new ResultViewModel<CouponViewModel>
+                        return new ResultViewModel
                         {
                             ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorCode = apiResponse.StatusCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
@@ -378,7 +398,7 @@ namespace PineappleSite.Presentation.Services
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -388,7 +408,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -398,7 +418,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new ResultViewModel<CouponViewModel>
+                    return new ResultViewModel
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,
@@ -408,21 +428,20 @@ namespace PineappleSite.Presentation.Services
             }
         }
 
-        public async Task<CollectionResultViewModel<CouponViewModel>> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
+        public async Task<CollectionResultViewModel<bool>> DeleteCouponsAsync(DeleteCouponListViewModel deleteCouponList)
         {
             AddBearerToken();
             try
             {
-                DeleteCouponListDto deleteCouponListDto = _mapper.Map<DeleteCouponListDto>(deleteCouponList);
-                CouponDtoCollectionResult apiResponse = await _couponClient.DeleteCouponListAsync(deleteCouponListDto);
+                var deleteCouponListDto = mapper.Map<DeleteCouponsDto>(deleteCouponList);
+                var apiResponse = await _couponClient.DeleteCouponListAsync(deleteCouponListDto);
 
                 if (apiResponse.IsSuccess)
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<bool>
                     {
-                        SuccessCode = apiResponse.SuccessCode,
+                        SuccessCode = apiResponse.StatusCode,
                         SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<IReadOnlyCollection<CouponViewModel>>(apiResponse.Data),
                     };
                 }
 
@@ -430,23 +449,23 @@ namespace PineappleSite.Presentation.Services
                 {
                     foreach (string error in apiResponse.ValidationErrors)
                     {
-                        return new CollectionResultViewModel<CouponViewModel>
+                        return new CollectionResultViewModel<bool>
                         {
                             ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
+                            ErrorCode = apiResponse.StatusCode,
                             ErrorMessage = apiResponse.ErrorMessage,
                         };
                     }
                 }
 
-                return new CollectionResultViewModel<CouponViewModel>();
+                return new CollectionResultViewModel<bool>();
             }
 
             catch (CouponExceptions exceptions)
             {
                 if (exceptions.StatusCode == 403)
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<bool>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -456,7 +475,7 @@ namespace PineappleSite.Presentation.Services
 
                 else if (exceptions.StatusCode == 401)
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<bool>
                     {
                         ErrorCode = exceptions.StatusCode,
                         ErrorMessage = exceptions.Response,
@@ -466,7 +485,7 @@ namespace PineappleSite.Presentation.Services
 
                 else
                 {
-                    return new CollectionResultViewModel<CouponViewModel>
+                    return new CollectionResultViewModel<bool>
                     {
                         ErrorMessage = exceptions.Response,
                         ErrorCode = exceptions.StatusCode,

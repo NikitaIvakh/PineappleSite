@@ -9,7 +9,7 @@ namespace ShoppingCart.Infrastructure.Repository.Services
     {
         private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
 
-        public async Task<Result<CouponDto>> GetCouponAsync(string couponCode)
+        public async Task<Result<GetCouponDto>> GetCouponAsync(string couponCode)
         {
             HttpClient httpClient = _httpClientFactory.CreateClient("Coupon");
             var response = await httpClient.GetAsync($"/api/Coupon/GetCouponByCode/{couponCode}");
@@ -23,10 +23,10 @@ namespace ShoppingCart.Infrastructure.Repository.Services
                 };
 
                 var options = jsonSerializerOptions;
-                return await JsonSerializer.DeserializeAsync<Result<CouponDto>>(stream, options);
+                return await JsonSerializer.DeserializeAsync<Result<GetCouponDto>>(stream, options);
             }
 
-            return new Result<CouponDto>();
+            return new Result<GetCouponDto>();
         }
     }
 }

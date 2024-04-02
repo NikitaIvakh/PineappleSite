@@ -5,6 +5,6 @@ namespace ShoppingCart.Domain.Interfaces.Service
 {
     public interface ICouponService
     {
-        Task<Result<CouponDto>> GetCouponAsync(string couponCode);
+        Task<Result<GetCouponDto>> GetCouponAsync(string couponCode);
     }
 }

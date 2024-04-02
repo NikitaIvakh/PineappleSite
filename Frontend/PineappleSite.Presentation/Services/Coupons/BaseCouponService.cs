@@ -9,11 +9,11 @@ namespace PineappleSite.Presentation.Services.Coupons
         private readonly ICouponClient _couponClient = couponClient;
         private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
 
-        protected ResultViewModel<CouponDto> ConvertCouponExceptions(CouponExceptions couponExceptions)
+        protected ResultViewModel ConvertCouponExceptions(CouponExceptions couponExceptions)
         {
             if (couponExceptions.StatusCode == 403)
             {
-                return new ResultViewModel<CouponDto>
+                return new ResultViewModel
                 {
                     ErrorCode = 403,
                     ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
@@ -23,7 +23,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
             else if (couponExceptions.StatusCode == 401)
             {
-                return new ResultViewModel<CouponDto>
+                return new ResultViewModel
                 {
                     ErrorCode = 401,
                     ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
@@ -33,7 +33,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
             else
             {
-                return new ResultViewModel<CouponDto>()
+                return new ResultViewModel
                 {
                     ErrorCode = 500,
                     ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",

@@ -234,7 +234,7 @@ namespace PineappleSite.Presentation.Controllers
 
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -347,7 +347,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -410,7 +410,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
     }

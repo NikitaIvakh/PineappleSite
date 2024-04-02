@@ -10,12 +10,12 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class DeleteCouponsRequestHandler(ICouponRepository repository, DeleteCouponsValidator validationRules, IMemoryCache memoryCache) 
-        : IRequestHandler<DeleteCouponsRequest, CollectionResult<Unit>>
+    public class DeleteCouponsRequestHandler(ICouponRepository repository, DeleteCouponsValidator validationRules, IMemoryCache memoryCache)
+        : IRequestHandler<DeleteCouponsRequest, CollectionResult<bool>>
     {
         private const string CacheKey = "couponsCacheKey";
 
-        public async Task<CollectionResult<Unit>> Handle(DeleteCouponsRequest request, CancellationToken cancellationToken)
+        public async Task<CollectionResult<bool>> Handle(DeleteCouponsRequest request, CancellationToken cancellationToken)
         {
             try
             {
@@ -32,7 +32,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         if (existMessage.TryGetValue(error.Key, out var errorMessage))
                         {
-                            return new CollectionResult<Unit>
+                            return new CollectionResult<bool>
                             {
                                 ValidationErrors = errorMessage,
                                 StatusCode = (int)StatusCode.NoContent,
@@ -41,7 +41,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         }
                     }
 
-                    return new CollectionResult<Unit>
+                    return new CollectionResult<bool>
                     {
                         StatusCode = (int)StatusCode.NoContent,
                         ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
@@ -55,7 +55,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
                 if (coupons.Count == 0)
                 {
-                    return new CollectionResult<Unit>
+                    return new CollectionResult<bool>
                     {
                         StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage = ErrorMessage.CouponsNotFound,
@@ -73,10 +73,10 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 memoryCache.Remove(CacheKey);
                 memoryCache.Set(CacheKey, coupons);
 
-                return new CollectionResult<Unit>
+                return new CollectionResult<bool>
                 {
                     Count = coupons.Count,
-                    Data = new[] {Unit.Value},
+                    Data = new[] { true },
                     StatusCode = (int)StatusCode.Deleted,
                     SuccessMessage = SuccessMessage.CouponsDeletedSuccessfully,
                 };
@@ -84,10 +84,10 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
 
             catch (Exception exception)
             {
-                return new CollectionResult<Unit>
+                return new CollectionResult<bool>
                 {
                     ErrorMessage = exception.Message,
-                    StatusCode= (int)StatusCode.InternalServerError,
+                    StatusCode = (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }

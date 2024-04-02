@@ -20,16 +20,12 @@ namespace PineappleSite.Presentation
         public MappingProfile()
         {
             #region Coupon Mapping
-            CreateMap<CouponDto, CouponViewModel>().ReverseMap();
-            CreateMap<CouponDtoResult, CouponViewModel>().ReverseMap();
+            CreateMap<GetCouponDto, CouponViewModel>();
+            CreateMap<GetCouponsDto, CouponViewModel>();
             CreateMap<CreateCouponDto, CreateCouponViewModel>().ReverseMap();
             CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
             CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
-            CreateMap<DeleteCouponListDto, DeleteCouponListViewModel>().ReverseMap();
-            CreateMap<CouponDto, ResultViewModel>().ReverseMap();
-
-            CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
-            CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
+            CreateMap<DeleteCouponsDto, DeleteCouponListViewModel>().ReverseMap();
             #endregion
 
             #region Identity && User Mapping

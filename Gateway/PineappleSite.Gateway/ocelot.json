@@ -1,16 +1,16 @@
 {
   "Routes": [
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon/Coupons",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/GetCoupons",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/Coupons",
+      "UpstreamPathTemplate": "/api/Coupon/GetCoupons",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -18,27 +18,27 @@
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/GetCouponById/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamPathTemplate": "/api/Coupon/GetCouponById/{id}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
+      //"Coupon.API": "https://localhost:7202"
       "DownstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
       "UpstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
@@ -46,16 +46,16 @@
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/CreateCoupon",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon",
+      "UpstreamPathTemplate": "/api/Coupon/CreateCoupon",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -63,16 +63,16 @@
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/UpdateCoupon/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamPathTemplate": "/api/Coupon/UpdateCoupon/{id}",
       "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -80,16 +80,16 @@
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon/{id}",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/DeleteCoupon/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/{id}",
+      "UpstreamPathTemplate": "/api/Coupon/DeleteCoupon/{id}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -97,16 +97,16 @@
     },
 
     {
-      //"Coupon.API": "https://localhost:7149"
-      "DownstreamPathTemplate": "/api/Coupon",
+      //"Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/Coupon/DeleteCouponList",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
           "Host": "localhost",
-          "Port": 7149
+          "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon",
+      "UpstreamPathTemplate": "/api/Coupon/DeleteCouponList",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

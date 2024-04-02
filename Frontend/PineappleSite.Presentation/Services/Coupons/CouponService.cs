@@ -24,66 +24,66 @@ namespace PineappleSite.Presentation.Services.Coupons
     {
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponsAsync();
+        System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync();
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponsAsync(System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponGETAsync(int id);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponGETAsync(int id, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPOSTAsync(CreateCouponDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoResult> CouponPOSTAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body);
+        System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken);
 
     }
 
@@ -115,15 +115,15 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponsAsync()
+        public virtual System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync()
         {
-            return CouponsAsync(System.Threading.CancellationToken.None);
+            return GetCouponsAsync(System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoCollectionResult> CouponsAsync(System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -140,7 +140,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Coupon");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupons");
+                    urlBuilder_.Append("GetCoupons");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -165,7 +165,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetCouponsDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -194,18 +194,18 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponGETAsync(int id)
+        public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId)
         {
-            return CouponGETAsync(id, System.Threading.CancellationToken.None);
+            return GetCouponByIdAsync(couponId, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponGETAsync(int id, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId, System.Threading.CancellationToken cancellationToken)
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
+            if (couponId == null)
+                throw new System.ArgumentNullException("couponId");
 
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -222,7 +222,9 @@ namespace PineappleSite.Presentation.Services.Coupons
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Coupon");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append("GetCouponById");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(couponId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -247,7 +249,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetCouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -276,179 +278,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body)
-        {
-            return CouponPUTAsync(id, body, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponPUTAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-                    var content_ = new System.Net.Http.StringContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-
-                    var urlBuilder_ = new System.Text.StringBuilder();
-                
-                    urlBuilder_.Append("api");
-                    urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
-                    urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body)
-        {
-            return CouponDELETEAsync(id, body, System.Threading.CancellationToken.None);
-        }
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponDELETEAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
-        {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
-
-            var client_ = _httpClient;
-            var disposeClient_ = false;
-            try
-            {
-                using (var request_ = new System.Net.Http.HttpRequestMessage())
-                {
-                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
-                    var content_ = new System.Net.Http.StringContent(json_);
-                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
-                    request_.Content = content_;
-                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
-
-                    var urlBuilder_ = new System.Text.StringBuilder();
-                
-                    urlBuilder_.Append("api");
-                    urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
-                    urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
-
-                    PrepareRequest(client_, request_, urlBuilder_);
-
-                    var url_ = urlBuilder_.ToString();
-                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
-
-                    PrepareRequest(client_, request_, url_);
-
-                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
-                    var disposeResponse_ = true;
-                    try
-                    {
-                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
-                        if (response_.Content != null && response_.Content.Headers != null)
-                        {
-                            foreach (var item_ in response_.Content.Headers)
-                                headers_[item_.Key] = item_.Value;
-                        }
-
-                        ProcessResponse(client_, response_);
-
-                        var status_ = (int)response_.StatusCode;
-                        if (status_ == 200)
-                        {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
-                            if (objectResponse_.Object == null)
-                            {
-                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
-                            }
-                            return objectResponse_.Object;
-                        }
-                        else
-                        {
-                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
-                            throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
-                        }
-                    }
-                    finally
-                    {
-                        if (disposeResponse_)
-                            response_.Dispose();
-                    }
-                }
-            }
-            finally
-            {
-                if (disposeClient_)
-                    client_.Dispose();
-            }
-        }
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode)
+        public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode)
         {
             return GetCouponByCodeAsync(couponCode, System.Threading.CancellationToken.None);
         }
@@ -456,7 +286,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken)
         {
             if (couponCode == null)
                 throw new System.ArgumentNullException("couponCode");
@@ -503,7 +333,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<GetCouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -532,15 +362,15 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoResult> CouponPOSTAsync(CreateCouponDto body)
+        public virtual System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body)
         {
-            return CouponPOSTAsync(body, System.Threading.CancellationToken.None);
+            return CreateCouponAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoResult> CouponPOSTAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -560,6 +390,8 @@ namespace PineappleSite.Presentation.Services.Coupons
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("CreateCoupon");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -584,7 +416,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<Int32Result>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -613,7 +445,183 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body)
+        {
+            return UpdateCouponAsync(id, body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("PUT");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    urlBuilder_.Append("api");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("UpdateCoupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UnitResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body)
+        {
+            return DeleteCouponAsync(id, body, System.Threading.CancellationToken.None);
+        }
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        public virtual async System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
+        {
+            if (id == null)
+                throw new System.ArgumentNullException("id");
+
+            var client_ = _httpClient;
+            var disposeClient_ = false;
+            try
+            {
+                using (var request_ = new System.Net.Http.HttpRequestMessage())
+                {
+                    var json_ = Newtonsoft.Json.JsonConvert.SerializeObject(body, _settings.Value);
+                    var content_ = new System.Net.Http.StringContent(json_);
+                    content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
+                    request_.Content = content_;
+                    request_.Method = new System.Net.Http.HttpMethod("DELETE");
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+
+                    var urlBuilder_ = new System.Text.StringBuilder();
+                
+                    urlBuilder_.Append("api");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append("DeleteCoupon");
+                    urlBuilder_.Append('/');
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+
+                    PrepareRequest(client_, request_, urlBuilder_);
+
+                    var url_ = urlBuilder_.ToString();
+                    request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                    PrepareRequest(client_, request_, url_);
+
+                    var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                    var disposeResponse_ = true;
+                    try
+                    {
+                        var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                        if (response_.Content != null && response_.Content.Headers != null)
+                        {
+                            foreach (var item_ in response_.Content.Headers)
+                                headers_[item_.Key] = item_.Value;
+                        }
+
+                        ProcessResponse(client_, response_);
+
+                        var status_ = (int)response_.StatusCode;
+                        if (status_ == 200)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<UnitResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            return objectResponse_.Object;
+                        }
+                        else
+                        {
+                            var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                            throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                        }
+                    }
+                    finally
+                    {
+                        if (disposeResponse_)
+                            response_.Dispose();
+                    }
+                }
+            }
+            finally
+            {
+                if (disposeClient_)
+                    client_.Dispose();
+            }
+        }
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        public virtual System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body)
         {
             return DeleteCouponListAsync(body, System.Threading.CancellationToken.None);
         }
@@ -621,7 +629,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<CouponDtoCollectionResult> DeleteCouponListAsync(DeleteCouponListDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken)
         {
             var client_ = _httpClient;
             var disposeClient_ = false;
@@ -667,7 +675,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<CouponDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<BooleanCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -798,24 +806,7 @@ namespace PineappleSite.Presentation.Services.Coupons
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CouponDto
-    {
-        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CouponId { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string CouponCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double DiscountAmount { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public double MinAmount { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CouponDtoCollectionResult
+    public partial class BooleanCollectionResult
     {
         [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsSuccess { get; set; }
@@ -826,46 +817,17 @@ namespace PineappleSite.Presentation.Services.Coupons
         [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string ErrorMessage { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? ErrorCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SuccessCode { get; set; }
+        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
 
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
 
         [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<CouponDto> Data { get; set; }
+        public System.Collections.Generic.ICollection<bool> Data { get; set; }
 
         [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public int Count { get; set; }
-
-    }
-
-    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class CouponDtoResult
-    {
-        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public bool IsSuccess { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string SuccessMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public string ErrorMessage { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("errorCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? ErrorCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("successCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int? SuccessCode { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public CouponDto Data { get; set; }
 
     }
 
@@ -886,16 +848,151 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class DeleteCouponDto
     {
-        [Newtonsoft.Json.JsonProperty("id", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Id { get; set; }
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CouponId { get; set; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class DeleteCouponListDto
+    public partial class DeleteCouponsDto
     {
         [Newtonsoft.Json.JsonProperty("couponIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<int> CouponIds { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetCouponDto
+    {
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CouponId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double DiscountAmount { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double MinAmount { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetCouponDtoResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public GetCouponDto Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetCouponsDto
+    {
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int CouponId { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double DiscountAmount { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public double MinAmount { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class GetCouponsDtoCollectionResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<GetCouponsDto> Data { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Count { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Int32Result
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int Data { get; set; }
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class Unit
+    {
+
+    }
+
+    [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+    public partial class UnitResult
+    {
+        [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public bool IsSuccess { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string SuccessMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string ErrorMessage { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public int? StatusCode { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public Unit Data { get; set; }
 
     }
 

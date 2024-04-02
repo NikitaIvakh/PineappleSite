@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponsRequestHandler(ICouponRepository couponRepository, IMemoryCache memoryCache) 
+    public class GetCouponsRequestHandler(ICouponRepository couponRepository, IMemoryCache memoryCache)
         : IRequestHandler<GetCouponsRequest, CollectionResult<GetCouponsDto>>
     {
         private const string CacheKey = "couponsCacheKey";
@@ -22,14 +22,17 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
 
                 if (memoryCache.TryGetValue(CacheKey, out IReadOnlyCollection<GetCouponsDto>? coupons))
                 {
-                    return new CollectionResult<GetCouponsDto>
+                    if (coupons is not null)
                     {
-                        Data = coupons,
-                        Count = coupons!.Count,
-                        StatusCode = (int)StatusCode.NoContent,
-                    };
+                        return new CollectionResult<GetCouponsDto>
+                        {
+                            Data = coupons,
+                            Count = coupons!.Count,
+                            StatusCode = (int)StatusCode.NoContent,
+                        };
+                    }
                 }
-                
+
                 var couponsFromDb = await couponRepository.GetAllAsync().ToListAsync(cancellationToken);
 
                 if (couponsFromDb.Count == 0)
@@ -53,7 +56,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                 )).OrderBy(key => key.CouponId).ToList();
 
                 memoryCache.Set(CacheKey, getCoupons);
-                    
+
                 return new CollectionResult<GetCouponsDto>
                 {
                     Data = getCoupons,

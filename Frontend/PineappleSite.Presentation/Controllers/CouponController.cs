@@ -15,7 +15,7 @@ namespace PineappleSite.Presentation.Controllers
         {
             try
             {
-                CollectionResultViewModel<CouponViewModel> coupons = await _couponService.GetAllCouponsAsync();
+                var coupons = await _couponService.GetAllCouponsAsync();
 
                 if (coupons.IsSuccess)
                 {
@@ -26,7 +26,7 @@ namespace PineappleSite.Presentation.Controllers
                             key.DiscountAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase) ||
                             key.MinAmount.ToString().Contains(searchCode, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
-                        coupons = new CollectionResultViewModel<CouponViewModel>
+                        coupons = new CollectionResultViewModel<GetCouponsViewModel>
                         {
                             Data = filteredCouponsList
                         };
@@ -37,7 +37,7 @@ namespace PineappleSite.Presentation.Controllers
 
                     int pageSize = 10;
                     var filteredCoupons = coupons.Data.AsQueryable();
-                    var paginatedCoupons = PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
+                    var paginatedCoupons = PaginatedList<GetCouponsViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
 
                     if (paginatedCoupons.Count == 0)
                     {
@@ -193,20 +193,14 @@ namespace PineappleSite.Presentation.Controllers
             }
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Delete()
-        {
-            return View();
-        }
-
         // POST: CouponController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Delete(int id, DeleteCouponViewModel deleteCoupon)
+        public async Task<ActionResult> Delete(int couponId, DeleteCouponViewModel deleteCoupon)
         {
             try
             {
-                ResultViewModel response = await _couponService.DeleteCouponAsync(id, deleteCoupon);
+                ResultViewModel response = await _couponService.DeleteCouponAsync(couponId, deleteCoupon);
 
                 if (response.IsSuccess)
                 {
@@ -227,20 +221,20 @@ namespace PineappleSite.Presentation.Controllers
 
             catch
             {
-                return View();
+                return RedirectToAction(nameof(Index));
             }
         }
 
         public async Task<ActionResult> DeleteMultiple(List<int> selectedCoupons)
         {
-            if (selectedCoupons is null || selectedCoupons.Count <= 1)
+            if (selectedCoupons.Count <= 1)
             {
                 TempData["error"] = "Выберите хотя бы один купон для удаления.";
                 return RedirectToAction(nameof(Index));
             }
 
             DeleteCouponListViewModel deleteCouponList = new() { CouponIds = selectedCoupons };
-            CollectionResultViewModel<CouponViewModel> response = await _couponService.DeleteCouponsAsync(deleteCouponList);
+            var response = await _couponService.DeleteCouponsAsync(deleteCouponList);
 
             if (response.IsSuccess)
             {

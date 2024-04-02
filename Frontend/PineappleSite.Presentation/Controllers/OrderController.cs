@@ -97,7 +97,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(orderId);
+                return RedirectToAction(nameof(OrderIndex));
             }
         }
 
@@ -106,13 +106,11 @@ namespace PineappleSite.Presentation.Controllers
         {
             var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_ReadyForPickup);
 
-            if (response is not null && response.IsSuccess)
-            {
-                TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
-            }
-
-            return View();
+            if (!response.IsSuccess) 
+                return RedirectToAction(nameof(OrderIndex));
+            
+            TempData["success"] = response.SuccessMessage;
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
         }
 
         [HttpPost("CompleteOrder")]
@@ -120,13 +118,11 @@ namespace PineappleSite.Presentation.Controllers
         {
             var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Completed);
 
-            if (response is not null && response.IsSuccess)
-            {
-                TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
-            }
-
-            return View();
+            if (!response.IsSuccess) 
+                return RedirectToAction(nameof(OrderIndex));
+            TempData["success"] = response.SuccessMessage;
+            
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
         }
 
         [HttpPost("CancelOrder")]
@@ -134,13 +130,12 @@ namespace PineappleSite.Presentation.Controllers
         {
             var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Cancelled);
 
-            if (response is not null && response.IsSuccess)
-            {
-                TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
-            }
+            if (!response.IsSuccess) 
+                return RedirectToAction(nameof(OrderIndex));
+            
+            TempData["success"] = response.SuccessMessage;
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
 
-            return View();
         }
     }
 }

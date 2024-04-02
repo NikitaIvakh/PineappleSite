@@ -40,7 +40,7 @@ namespace ShoppingCart.Test.Common
             var couponMock = new Mock<ICouponService>();
 
             couponMock.Setup(mock => mock.GetCouponAsync("5OFF"))
-                .ReturnsAsync(new Result<CouponDto>
+                .ReturnsAsync(new Result<GetCouponDto>
                 {
                     Data = new CouponDto { CouponId = 1, CouponCode = "5OFF", DiscountAmount = 20, MinAmount = 40 }
                 });

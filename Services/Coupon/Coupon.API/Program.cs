@@ -1,15 +1,16 @@
-using Carter;
 using Coupon.API;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Serilog;
 using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCarter();
 
 builder.Services.AddMemoryCache();
 builder.Services.ConfigureApplicationServices();
@@ -35,7 +36,16 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapCarter();
-app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
+app.MapHealthChecks("health", new HealthCheckOptions
+{ 
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
+
+app.UseSerilogRequestLogging();
+app.UseAuthorization();
+
+app.UseCors();
+app.MapControllers();
+
 app.Run();

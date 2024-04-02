@@ -76,7 +76,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(cartViewModel);
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -136,7 +136,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(cartViewModel);
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -167,7 +167,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(productId);
+                return RedirectToAction(nameof(Index));
             }
         }
 
@@ -371,7 +371,7 @@ namespace PineappleSite.Presentation.Controllers
             catch (Exception exception)
             {
                 ModelState.AddModelError(string.Empty, exception.Message);
-                return View(cartViewModel);
+                return RedirectToAction(nameof(Index));
             }
         }
 

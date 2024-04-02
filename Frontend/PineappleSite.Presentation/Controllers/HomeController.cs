@@ -192,7 +192,7 @@ namespace PineappleSite.Presentation.Controllers
                 TempData["error"] = response.ErrorMessage;
             }
 
-            return View(cartViewModel);
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpPost]
@@ -231,7 +231,7 @@ namespace PineappleSite.Presentation.Controllers
                 }
             }
 
-            return View(favouritesViewModel);
+            return RedirectToAction(nameof(Index));
         }
 
         public IActionResult Privacy()

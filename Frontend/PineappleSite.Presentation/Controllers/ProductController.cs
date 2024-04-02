@@ -13,9 +13,9 @@ namespace PineappleSite.Presentation.Controllers
         private readonly IFavoriteService _favoriteService = favoriteService;
 
         // GET: ProductController
-        public async Task<ActionResult> Index()
+        public Task<ActionResult> Index()
         {
-            return View();
+            return Task.FromResult<ActionResult>(RedirectToAction("Index", "Home"));
         }
 
         public async Task<ActionResult> GetProducts(string searchProduct, string currentFilter, int? pageNumber)
@@ -256,13 +256,13 @@ namespace PineappleSite.Presentation.Controllers
 
             catch
             {
-                return View(deleteProductViewModel);
+                return RedirectToAction(nameof(Index));
             }
         }
 
         public async Task<ActionResult> DeleteProductList(List<int> selectedProducts)
         {
-            if (selectedProducts is null || selectedProducts.Count <= 1)
+            if (selectedProducts.Count <= 1)
             {
                 TempData["error"] = "Выберите хотя бы один продукт для удаления.";
                 return RedirectToAction(nameof(GetProducts));
