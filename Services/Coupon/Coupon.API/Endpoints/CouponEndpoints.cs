@@ -6,11 +6,16 @@ using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using ILogger = Serilog.ILogger;
 
 namespace Coupon.API.Endpoints;
 
-public class CouponEndpoints : ICarterModule
+public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDto> coupon)
+    : ICarterModule
 {
+    private ILogger<GetCouponsDto> _coupons = coupons;
+    private ILogger<GetCouponDto> _coupon = coupon;
+
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         var group = app.MapGroup("api/coupons");
@@ -24,95 +29,109 @@ public class CouponEndpoints : ICarterModule
         group.MapDelete("", DeleteCoupons).WithName(nameof(DeleteCoupons));
     }
 
-    private static async Task<Results<Ok<CollectionResult<GetCouponsDto>>, BadRequest<string>>> GetCoupons(
+    private async Task<Results<Ok<CollectionResult<GetCouponsDto>>, BadRequest<string>>> GetCoupons(
         ISender sender)
     {
         var request = await sender.Send(new GetCouponsRequest());
 
         if (request.IsSuccess)
         {
+            _coupons.LogDebug("LogDebug ====================== Купоны успешно получены");
             return TypedResults.Ok(request);
         }
-
+        
+        _coupons.LogDebug("LogDebug ====================== Ошибка получения купонов");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponById(ISender sender,
+    private async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponById(ISender sender,
         int couponId)
     {
         var request = await sender.Send(new GetCouponRequest(couponId));
 
         if (request.IsSuccess)
         {
+            _coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponId}");
             return TypedResults.Ok(request);
         }
 
+        _coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponByCode(ISender sender,
+    private async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponByCode(ISender sender,
         string couponCode)
     {
         var request = await sender.Send(new GetCouponByCodeRequest(couponCode));
 
         if (request.IsSuccess)
         {
+            _coupon.LogDebug($"LogDebug ====================== Купон успешно получен:{couponCode}");
             return TypedResults.Ok(request);
         }
 
+        _coupon.LogDebug($"LogDebug ====================== Ошибка получения купона:{couponCode}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<int>>, BadRequest<string>>> CreateCoupon(ISender sender,
+    private async Task<Results<Ok<Result<int>>, BadRequest<string>>> CreateCoupon(ISender sender,
         [FromBody] CreateCouponDto createCouponDto)
     {
         var command = await sender.Send(new CreateCouponRequest(createCouponDto));
 
         if (command.IsSuccess)
         {
+            _coupon.LogDebug($"LogDebug ====================== Купон успешно создан");
             return TypedResults.Ok(command);
         }
 
+        _coupon.LogDebug($"LogDebug ====================== Ошибка создания купона");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(ISender sender, int couponId,
+    private async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(ISender sender, int couponId,
         [FromBody] UpdateCouponDto updateCouponDto)
     {
         var command = await sender.Send(new UpdateCouponRequest(updateCouponDto));
 
         if (command.IsSuccess && couponId == updateCouponDto.CouponId)
         {
+            _coupon.LogDebug($"LogDebug ====================== Купон успешно обновлен");
             return TypedResults.Ok(command);
         }
 
+        _coupon.LogDebug($"LogDebug ====================== Ошибка обновления купона");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(ISender sender, int couponId,
+    private async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(ISender sender, int couponId,
         [FromBody] DeleteCouponDto deleteCouponDto)
     {
         var command = await sender.Send(new DeleteCouponRequest(deleteCouponDto));
         {
             if (command.IsSuccess && couponId == deleteCouponDto.CouponId)
             {
+                _coupon.LogDebug($"LogDebug ====================== Купон успешно удален:{couponId}");
                 return TypedResults.Ok(command);
             }
 
+            _coupon.LogDebug($"LogDebug ====================== Ошибка удаления купона:{couponId}");
             return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
         }
     }
 
-    private static async Task<Results<Ok<CollectionResult<Unit>>, BadRequest<string>>> DeleteCoupons(ISender sender,
+    private async Task<Results<Ok<CollectionResult<Unit>>, BadRequest<string>>> DeleteCoupons(ISender sender,
         [FromBody] DeleteCouponsDto deleteCouponsDto)
     {
         var command = await sender.Send(new DeleteCouponsRequest(deleteCouponsDto));
 
         if (command.IsSuccess)
         {
+            _coupon.LogDebug($"LogDebug ====================== Купоны успешно удалены");
             return TypedResults.Ok(command);
         }
 
+        _coupon.LogDebug($"LogDebug ====================== Ошибка удаления купонов");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }
