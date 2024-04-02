@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands
 {
-    public class CreateCouponRequest : IRequest<Result<CouponDto>>
+    public class CreateCouponRequest(CreateCouponDto createCoupon) : IRequest<Result<int>>
     {
-        public CreateCouponDto CreateCoupon { get; set; }
+        public CreateCouponDto CreateCoupon { get; init; } = createCoupon;
     }
 }

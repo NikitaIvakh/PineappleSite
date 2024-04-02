@@ -81,10 +81,10 @@ namespace Coupon.API.Controllers
 
         // POST api/<CouponController>
         [HttpPost]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
+        // [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Post([FromBody] CreateCouponDto createCouponDto)
         {
-            var command = await _mediator.Send(new CreateCouponRequest { CreateCoupon = createCouponDto });
+            var command = await _mediator.Send(new CreateCouponRequest(createCouponDto));
 
             if (command.IsSuccess)
             {

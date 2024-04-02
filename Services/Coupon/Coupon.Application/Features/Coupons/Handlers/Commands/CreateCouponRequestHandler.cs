@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using Coupon.Application.Features.Coupons.Requests.Commands;
+﻿using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Resources;
 using Coupon.Application.Validations;
-using Coupon.Domain.DTOs;
 using Coupon.Domain.Entities;
 using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
@@ -10,26 +8,20 @@ using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Serilog;
 using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, ILogger logger, IMapper mapper, CreateValidator createValidator, IMemoryCache memoryCache) : IRequestHandler<CreateCouponRequest, Result<CouponDto>>
+    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, CreateValidator createValidator, IMemoryCache memoryCache) 
+        : IRequestHandler<CreateCouponRequest, Result<int>>
     {
-        private readonly IBaseRepository<CouponEntity> _repository = repository;
-        private readonly ILogger _logger = logger.ForContext<CreateCouponRequestHandler>();
-        private readonly IMapper _mapper = mapper;
-        private readonly CreateValidator _createValidator = createValidator;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "couponsCacheKey";
-
-        public async Task<Result<CouponDto>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
+        private const string CacheKey = "couponsCacheKey";
+        
+        public async Task<Result<int>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
         {
             try
             {
-                var result = await _createValidator.ValidateAsync(request.CreateCoupon, cancellationToken);
+                var result = await createValidator.ValidateAsync(request.CreateCoupon, cancellationToken);
 
                 if (!result.IsValid)
                 {
@@ -44,7 +36,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     {
                         if (errorMessages.TryGetValue(error.Key, out var errorMessage))
                         {
-                            return new Result<CouponDto>
+                            return new Result<int>
                             {
                                 ValidationErrors = errorMessage,
                                 ErrorMessage = ErrorMessage.CouponNotCreated,
@@ -53,7 +45,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                         }
                     }
 
-                    return new Result<CouponDto>
+                    return new Result<int>
                     {
                         ErrorMessage = ErrorMessage.CouponNotCreated,
                         ErrorCode = (int)ErrorCodes.CouponNotCreated,
@@ -61,84 +53,77 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                     };
                 }
 
-                else
-                {
-                    var coupon = await _repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponCode == request.CreateCoupon.CouponCode, cancellationToken);
+                var couponAlreadyExists = await repository.GetAllAsync()
+                    .FirstOrDefaultAsync(key => key.CouponCode == request.CreateCoupon.CouponCode, cancellationToken);
 
-                    if (coupon is not null)
+                if (couponAlreadyExists is not null)
+                {
+                    return new Result<int>
                     {
-                        return new Result<CouponDto>
+                        ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
+                        ErrorMessage = ErrorMessage.CouponAlreadyExists,
+                        ValidationErrors = [ErrorMessage.CouponAlreadyExists]
+                    };
+                }
+
+                var coupon = new CouponEntity
+                {
+                    CouponCode = request.CreateCoupon.CouponCode.Replace(" ", ""),
+                    DiscountAmount = request.CreateCoupon.DiscountAmount,
+                    MinAmount = request.CreateCoupon.MinAmount,
+                };
+
+                await repository.CreateAsync(coupon);
+
+                var options = new CouponCreateOptions
+                {
+                    Currency = "byn",
+                    Id = coupon.CouponCode,
+                    Name = coupon.CouponCode,
+                    AmountOff = (long)(coupon.DiscountAmount * 100),
+                };
+
+                CouponService? service = new();
+
+                if (options.Id is not null)
+                {
+                    try
+                    {
+                        var existingCoupon = await service?.GetAsync(coupon.CouponCode, cancellationToken: cancellationToken)!;
+
+                        if (existingCoupon is not null)
                         {
-                            Data = null,
-                            ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
-                            ErrorMessage = ErrorMessage.CouponAlreadyExists,
-                            ValidationErrors = [ErrorMessage.CouponAlreadyExists]
-                        };
+                            await service?.DeleteAsync(coupon.CouponCode, cancellationToken: cancellationToken)!;
+                            await service?.CreateAsync(options, cancellationToken: cancellationToken)!;
+                        }
                     }
 
-                    else
+                    catch (StripeException ex)
                     {
-                        coupon = new CouponEntity
-                        {
-                            CouponCode = request.CreateCoupon.CouponCode.Replace(" ", ""),
-                            DiscountAmount = request.CreateCoupon.DiscountAmount,
-                            MinAmount = request.CreateCoupon.MinAmount,
-                        };
-
-                        await _repository.CreateAsync(coupon);
-
-                        var options = new CouponCreateOptions
-                        {
-                            Currency = "byn",
-                            Id = coupon.CouponCode,
-                            Name = coupon.CouponCode,
-                            AmountOff = (long)(coupon.DiscountAmount * 100),
-                        };
-
-                        CouponService? service = new();
-
-                        if (options.Id is not null)
-                        {
-                            try
-                            {
-                                var existingCoupon = service?.Get(coupon.CouponCode);
-
-                                if (existingCoupon is not null)
-                                {
-                                    service?.Delete(coupon.CouponCode);
-                                    service?.Create(options);
-                                }
-                            }
-
-                            catch (StripeException ex)
-                            {
-                                service?.Create(options);
-                            }
-                        }
-
-                        _memoryCache.Remove(cacheKey);
-                        var coupons = await _repository.GetAllAsync().ToListAsync(cancellationToken);
-
-                        _memoryCache.Set(cacheKey, coupon);
-                        _memoryCache.Set(cacheKey, coupons);
-
-                        return new Result<CouponDto>
-                        {
-                            Data = _mapper.Map<CouponDto>(coupon),
-                            SuccessCode = (int)SuccessCode.Created,
-                            SuccessMessage = SuccessMessage.CouponSuccessfullyCreated,
-                        };
+                        await service?.CreateAsync(options, cancellationToken: cancellationToken)!;
                     }
                 }
+
+                memoryCache.Remove(CacheKey);
+                var coupons = await repository.GetAllAsync().ToListAsync(cancellationToken);
+
+                memoryCache.Set(CacheKey, coupon);
+                memoryCache.Set(CacheKey, coupons);
+
+                return new Result<int>
+                {
+                    Data = coupon.CouponId,
+                    SuccessCode = (int)SuccessCode.Created,
+                    SuccessMessage = SuccessMessage.CouponSuccessfullyCreated,
+                };
             }
 
             catch (Exception exception)
             {
-                _logger.Error(exception, exception.Message);
-                _memoryCache.Remove(cacheKey);
-                return new Result<CouponDto>
+                memoryCache.Remove(CacheKey);
+                return new Result<int>
                 {
-                    ErrorMessage = ErrorMessage.InternalServerError,
+                    ErrorMessage = exception.Message,
                     ErrorCode = (int)ErrorCodes.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
