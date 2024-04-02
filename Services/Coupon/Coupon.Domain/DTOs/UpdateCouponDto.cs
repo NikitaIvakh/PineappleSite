@@ -1,13 +1,4 @@
 ﻿namespace Coupon.Domain.DTOs
 {
-    public class UpdateCouponDto : ICouponDto
-    {
-        public int CouponId { get; set; }
-
-        public string CouponCode { get; set; }
-
-        public double DiscountAmount { get; set; }
-
-        public double MinAmount { get; set; }
-    }
+    public record UpdateCouponDto(int CouponId, string CouponCode, double DiscountAmount, double MinAmount);
 }

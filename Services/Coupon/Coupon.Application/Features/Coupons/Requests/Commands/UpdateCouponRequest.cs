@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands
 {
-    public class UpdateCouponRequest : IRequest<Result<CouponDto>>
+    public class UpdateCouponRequest(UpdateCouponDto updateCouponDto) : IRequest<Result<Unit>>
     {
-        public UpdateCouponDto UpdateCoupon { get; set; }
+        public UpdateCouponDto UpdateCouponDto { get; set; } = updateCouponDto;
     }
 }

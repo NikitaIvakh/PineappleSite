@@ -82,7 +82,7 @@ namespace Coupon.API.Controllers
         // POST api/<CouponController>
         [HttpPost]
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<CouponDto>>> Post([FromBody] CreateCouponDto createCouponDto)
+        public async Task<ActionResult<Result<int>>> Post([FromBody] CreateCouponDto createCouponDto)
         {
             var command = await _mediator.Send(new CreateCouponRequest(createCouponDto));
 
@@ -104,11 +104,11 @@ namespace Coupon.API.Controllers
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
        // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<CouponDto>>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
+        public async Task<ActionResult<Result<Unit>>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
         {
             if (id == updateCouponDto.CouponId)
             {
-                var command = await _mediator.Send(new UpdateCouponRequest { UpdateCoupon = updateCouponDto });
+                var command = await _mediator.Send(new UpdateCouponRequest(updateCouponDto));
 
                 if (command.IsSuccess)
                 {
@@ -135,7 +135,7 @@ namespace Coupon.API.Controllers
         // DELETE api/<CouponController>/5
         [HttpDelete("{couponId}")]
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<CouponDto>>> Delete(int couponId, [FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<Result<Unit>>> Delete(int couponId, [FromBody] DeleteCouponDto deleteCouponDto)
         {
             if (couponId == deleteCouponDto.CouponId)
             {
@@ -165,7 +165,7 @@ namespace Coupon.API.Controllers
         // DELETE api/<CouponController>/5
         [HttpDelete("DeleteCouponList")]
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<CollectionResult<CouponDto>>> DeleteCouponList([FromBody] DeleteCouponsDto deleteCouponsDto)
+        public async Task<ActionResult<CollectionResult<Unit>>> DeleteCouponList([FromBody] DeleteCouponsDto deleteCouponsDto)
         {
             var command = await _mediator.Send(new DeleteCouponsRequest(deleteCouponsDto));
 
