@@ -29,16 +29,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>ErrorMessage.resx</DependentUpon>
     </Compile>
-    <Compile Update="Resources\ErrorMessage_en_US1.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ErrorMessage_en_US1.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\ErrorMessage.ru-RU1.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>ErrorMessage.ru-RU1.resx</DependentUpon>
-    </Compile>
     <Compile Update="Resources\SuccessMessage.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -47,17 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Update="Resources\ErrorMessage_en_US1.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessage_en_US1.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\ErrorMessage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ErrorMessage.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ErrorMessage.ru-RU1.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>ErrorMessage.ru-RU1.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\SuccessMessage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
