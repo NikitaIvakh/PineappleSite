@@ -38,7 +38,7 @@ namespace Coupon.Test.Common
 
             CreateValidator = new CreateValidator(Context);
             UpdateValidator = new UpdateValidator(Context);
-            DeleteValidator = new DeleteValidator(Context);
+            DeleteValidator = new DeleteValidator();
             DeleteCouponsValidator = new DeleteCouponsValidator();
 
             MemoryCache = new MemoryCache(new MemoryCacheOptions());

@@ -4,8 +4,8 @@ using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Commands
 {
-    public class DeleteCouponRequest : IRequest<Result<CouponDto>>
+    public class DeleteCouponRequest(DeleteCouponDto deleteCouponDto) : IRequest<Result<Unit>>
     {
-        public DeleteCouponDto DeleteCoupon { get; set; }
+        public DeleteCouponDto DeleteCouponDto { get; set; } = deleteCouponDto;
     }
 }

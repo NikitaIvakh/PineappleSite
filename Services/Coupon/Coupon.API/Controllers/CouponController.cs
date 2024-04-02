@@ -133,21 +133,21 @@ namespace Coupon.API.Controllers
         }
 
         // DELETE api/<CouponController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{couponId}")]
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<CouponDto>>> Delete(int id, [FromBody] DeleteCouponDto deleteCouponDto)
+        public async Task<ActionResult<Result<CouponDto>>> Delete(int couponId, [FromBody] DeleteCouponDto deleteCouponDto)
         {
-            if (id == deleteCouponDto.Id)
+            if (couponId == deleteCouponDto.CouponId)
             {
-                var command = await _mediator.Send(new DeleteCouponRequest { DeleteCoupon = deleteCouponDto });
+                var command = await _mediator.Send(new DeleteCouponRequest(deleteCouponDto));
 
                 if (command.IsSuccess)
                 {
-                    _logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.Id}");
+                    _logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.CouponId}");
                     return Ok(command);
                 }
 
-                _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.Id}");
+                _logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.CouponId}");
                 foreach (var error in command.ValidationErrors!)
                 {
                     return BadRequest(error);
