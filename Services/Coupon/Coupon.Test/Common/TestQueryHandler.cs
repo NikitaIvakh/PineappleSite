@@ -24,7 +24,7 @@ namespace Coupon.Test.Common
         public TestQueryHandler()
         {
             Context = CouponRepositoryContextFactory.Create();
-            GetByCodeLogger = Log.ForContext<GetCouponDetailsByCouponNameRequestHandler>();
+            GetByCodeLogger = Log.ForContext<GetCouponByCodeRequestHandler>();
             GetLogger = Log.ForContext<GetCouponRequestHandler>();
             GetListLogger = Log.ForContext<GetCouponsRequestHandler>();
             Repository = new BaseRepository<CouponEntity>(Context);

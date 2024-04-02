@@ -62,7 +62,7 @@ namespace Coupon.API.Controllers
         [HttpGet("GetCouponByCode/{couponCode}")]
         public async Task<ActionResult<Result<CouponDto>>> GetCouponByCode(string couponCode)
         {
-            var query = await _mediator.Send(new GetCouponDetailsByCouponNameRequest { CouponCode = couponCode });
+            var query = await _mediator.Send(new GetCouponByCodeRequest(couponCode));
 
             if (query.IsSuccess)
             {
