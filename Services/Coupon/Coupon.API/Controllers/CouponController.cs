@@ -11,15 +11,15 @@ namespace Coupon.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CouponController(IMediator mediator, ILogger<CouponDto> logger) : ControllerBase
+    public class CouponController(IMediator mediator, ILogger<GetCouponDto> logger) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
-        private readonly ILogger<CouponDto> _logger = logger;
+        private readonly ILogger<GetCouponDto> _logger = logger;
 
         // GET: api/<CouponController>
         [HttpGet("Coupons")]
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
+        public async Task<ActionResult<CollectionResult<GetCouponsDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponsRequest());
 
@@ -60,7 +60,7 @@ namespace Coupon.API.Controllers
         }
 
         [HttpGet("GetCouponByCode/{couponCode}")]
-        public async Task<ActionResult<Result<CouponDto>>> GetCouponByCode(string couponCode)
+        public async Task<ActionResult<Result<GetCouponDto>>> GetCouponByCode(string couponCode)
         {
             var query = await _mediator.Send(new GetCouponByCodeRequest(couponCode));
 

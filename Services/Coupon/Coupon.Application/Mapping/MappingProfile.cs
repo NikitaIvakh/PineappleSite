@@ -8,7 +8,6 @@ namespace Coupon.Application.Mapping
     {
         public MappingProfile()
         {
-            CreateMap<CouponEntity, CouponDto>().ReverseMap();
             CreateMap<CouponEntity, GetCouponDto>().ReverseMap();
             CreateMap<CouponEntity, GetCouponsDto>().ReverseMap();
             
