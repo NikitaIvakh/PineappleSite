@@ -18,7 +18,7 @@ namespace Coupon.API.Controllers
 
         // GET: api/<CouponController>
         [HttpGet("Coupons")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
+        // [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
             var query = await _mediator.Send(new GetCouponListRequest());
@@ -103,7 +103,7 @@ namespace Coupon.API.Controllers
 
         // PUT api/<CouponController>/5
         [HttpPut("{id}")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
+       // [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Put(int id, [FromBody] UpdateCouponDto updateCouponDto)
         {
             if (id == updateCouponDto.CouponId)
@@ -134,7 +134,7 @@ namespace Coupon.API.Controllers
 
         // DELETE api/<CouponController>/5
         [HttpDelete("{id}")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
+        // [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<Result<CouponDto>>> Delete(int id, [FromBody] DeleteCouponDto deleteCouponDto)
         {
             if (id == deleteCouponDto.Id)
@@ -164,18 +164,18 @@ namespace Coupon.API.Controllers
 
         // DELETE api/<CouponController>/5
         [HttpDelete("DeleteCouponList")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<CollectionResult<CouponDto>>> DeleteCouponList([FromBody] DeleteCouponListDto deleteCouponListDto)
+        // [Authorize(Roles = StaticDetails.RoleAdministrator)]
+        public async Task<ActionResult<CollectionResult<CouponDto>>> DeleteCouponList([FromBody] DeleteCouponsDto deleteCouponsDto)
         {
-            var command = await _mediator.Send(new DeleteCouponListRequest { DeleteCoupon = deleteCouponListDto });
+            var command = await _mediator.Send(new DeleteCouponsRequest(deleteCouponsDto));
 
             if (command.IsSuccess)
             {
-                _logger.LogDebug($"LogDebug ================ Купоны успешно удалены: {deleteCouponListDto.CouponIds}");
+                _logger.LogDebug($"LogDebug ================ Купоны успешно удалены: {deleteCouponsDto.CouponIds}");
                 return Ok(command);
             }
 
-            _logger.LogError($"LogDebugError ================ Ошибка удаления купонов: {deleteCouponListDto.CouponIds}");
+            _logger.LogError($"LogDebugError ================ Ошибка удаления купонов: {deleteCouponsDto.CouponIds}");
             foreach (var error in command.ValidationErrors!)
             {
                 return BadRequest(error);

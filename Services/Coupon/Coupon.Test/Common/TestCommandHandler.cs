@@ -18,7 +18,7 @@ namespace Coupon.Test.Common
         protected CreateValidator CreateValidator;
         protected UpdateValidator UpdateValidator;
         protected DeleteValidator DeleteValidator;
-        protected DeleteListValidator DeleteListValidator;
+        protected DeleteCouponsValidator DeleteCouponsValidator;
         protected IBaseRepository<CouponEntity> Repository;
         protected ILogger CreateLogger;
         protected ILogger UpdateLogger;
@@ -34,12 +34,12 @@ namespace Coupon.Test.Common
             CreateLogger = Log.ForContext<CreateCouponRequestHandler>();
             UpdateLogger = Log.ForContext<UpdateCouponRequestHandler>();
             DeleteLogger = Log.ForContext<DeleteCouponRequestHandler>();
-            DeleteListLogger = Log.ForContext<DeleteCouponListRequestHandler>();
+            DeleteListLogger = Log.ForContext<DeleteCouponsRequestHandler>();
 
             CreateValidator = new CreateValidator(Context);
             UpdateValidator = new UpdateValidator(Context);
             DeleteValidator = new DeleteValidator(Context);
-            DeleteListValidator = new DeleteListValidator();
+            DeleteCouponsValidator = new DeleteCouponsValidator();
 
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
