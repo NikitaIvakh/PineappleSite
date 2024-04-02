@@ -2,12 +2,12 @@
 {
     public class CouponEntity
     {
-        public int CouponId { get; set; }
+        public int CouponId { get; init; }
 
-        public string CouponCode { get; set; }
+        public required string CouponCode { get; set; }
 
-        public double DiscountAmount { get; set; }
+        public required double DiscountAmount { get; set; }
 
-        public double MinAmount { get; set; }
+        public required double MinAmount { get; set; }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Resources;
 using Coupon.Application.Validations;
-using Coupon.Domain.Entities;
 using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
@@ -36,16 +35,16 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             return new Result<Unit>
                             {
                                 ValidationErrors = errorMessage,
+                                StatusCode = (int)StatusCode.NoContent,
                                 ErrorMessage = ErrorMessage.CouponNotDeleted,
-                                ErrorCode = (int)ErrorCodes.CouponNotDeleted,
                             };
                         }
                     }
 
                     return new Result<Unit>
                     {
+                        StatusCode= (int)StatusCode.NoContent,
                         ErrorMessage = ErrorMessage.CouponNotDeleted,
-                        ErrorCode = (int)ErrorCodes.CouponNotDeleted,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
                 }
@@ -58,8 +57,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     return new Result<Unit>
                     {
+                        StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage = ErrorMessage.CouponNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponNotFound,
                         ValidationErrors = [ErrorMessage.CouponNotFound]
                     };
                 }
@@ -75,7 +74,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new Result<Unit>
                 {
                     Data = Unit.Value,
-                    SuccessCode = (int)SuccessCode.Deleted,
+                    StatusCode = (int)StatusCode.Deleted,
                     SuccessMessage = SuccessMessage.CouponDeletedSuccessfully,
                 };
             }
@@ -86,7 +85,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new Result<Unit>
                 {
                     ErrorMessage = exception.Message,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    StatusCode = (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }

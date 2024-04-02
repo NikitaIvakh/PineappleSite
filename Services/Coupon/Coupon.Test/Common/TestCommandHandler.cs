@@ -8,18 +8,18 @@ namespace Coupon.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
-        private readonly ApplicationDbContext _context;
+        protected readonly ApplicationDbContext Context;
         protected readonly CreateValidator CreateValidator;
         protected readonly UpdateValidator UpdateValidator;
         protected readonly DeleteValidator DeleteValidator;
         protected readonly DeleteCouponsValidator DeleteCouponsValidator;
         protected readonly ICouponRepository Repository;
-        protected IMemoryCache MemoryCache;
+        protected readonly IMemoryCache MemoryCache;
 
-        public TestCommandHandler()
+        protected TestCommandHandler()
         {
-            _context = CouponRepositoryContextFactory.Create();
-            Repository = new CouponRepository(_context);
+            Context = CouponRepositoryContextFactory.Create();
+            Repository = new CouponRepository(Context);
             CreateValidator = new CreateValidator();
             UpdateValidator = new UpdateValidator();
             DeleteValidator = new DeleteValidator();
@@ -28,6 +28,6 @@ namespace Coupon.Test.Common
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
         }
 
-        public void Dispose() => CouponRepositoryContextFactory.DestroyDatabase(_context);
+        public void Dispose() => CouponRepositoryContextFactory.DestroyDatabase(Context);
     }
 }

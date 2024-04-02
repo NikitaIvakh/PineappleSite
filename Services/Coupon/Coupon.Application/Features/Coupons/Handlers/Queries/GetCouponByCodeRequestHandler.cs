@@ -1,7 +1,6 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Resources;
 using Coupon.Domain.DTOs;
-using Coupon.Domain.Entities;
 using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
@@ -27,7 +26,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         return new Result<GetCouponDto>
                         {
                             Data = coupon,
-                            SuccessCode = (int)SuccessCode.Ok,
+                            StatusCode = (int)StatusCode.NoContent,
                         };
                     }
                 }
@@ -40,8 +39,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     memoryCache.Remove(CacheKey);
                     return new Result<GetCouponDto>
                     {
+                        StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage = ErrorMessage.CouponNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponNotFound,
                         ValidationErrors = [ErrorMessage.CouponNotFound]
                     };
                 }
@@ -58,7 +57,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                         MinAmount: couponFromDb.MinAmount
                     ),
                     
-                    SuccessCode = (int)SuccessCode.Ok,
+                    StatusCode = (int)StatusCode.NoContent,
                 };
             }
 
@@ -68,7 +67,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                 return new Result<GetCouponDto>
                 {
                     ErrorMessage = exception.Message,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    StatusCode = (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }

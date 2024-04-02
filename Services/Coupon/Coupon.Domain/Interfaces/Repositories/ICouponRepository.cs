@@ -11,7 +11,5 @@ namespace Coupon.Domain.Interfaces.Repositories
         Task<CouponEntity> UpdateAsync(CouponEntity entity);
 
         Task<CouponEntity> DeleteAsync(CouponEntity entity);
-
-        Task DeleteListAsync(IList<CouponEntity> entities);
     }
 }

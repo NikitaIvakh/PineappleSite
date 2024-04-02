@@ -26,7 +26,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     {
                         Data = coupons,
                         Count = coupons!.Count,
-                        SuccessCode = (int)SuccessCode.Ok,
+                        StatusCode = (int)StatusCode.NoContent,
                     };
                 }
                 
@@ -38,8 +38,8 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                     return new CollectionResult<GetCouponsDto>()
                     {
                         Data = [],
+                        StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage = ErrorMessage.CouponsNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponsNotFound,
                         ValidationErrors = [ErrorMessage.CouponsNotFound],
                     };
                 }
@@ -58,7 +58,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                 {
                     Data = getCoupons,
                     Count = getCoupons.Count,
-                    SuccessCode = (int)SuccessCode.Ok,
+                    StatusCode = (int)StatusCode.NoContent,
                 };
             }
 
@@ -68,7 +68,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Queries
                 return new CollectionResult<GetCouponsDto>()
                 {
                     ErrorMessage = exception.Message,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    StatusCode = (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }

@@ -27,8 +27,6 @@ builder.Services.AddAddAuthenticated(builder.Configuration);
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
-// TO serilog, swagger
-
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())

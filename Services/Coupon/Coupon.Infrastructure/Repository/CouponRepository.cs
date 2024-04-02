@@ -51,18 +51,5 @@ namespace Coupon.Infrastructure.Repository
 
             return Task.FromResult(entity);
         }
-
-        public Task DeleteListAsync(IList<CouponEntity> entities)
-        {
-            if (entities is null)
-            {
-                throw new ArgumentNullException(nameof(entities), "Список сущностей пуст");
-            }
-
-            _context.RemoveRange(entities);
-            _context.SaveChanges();
-
-            return Task.FromResult(entities);
-        }
     }
 }

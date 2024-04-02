@@ -10,8 +10,7 @@ using static Coupon.API.Utility.StaticDetails;
 
 namespace Coupon.API.Endpoints;
 
-public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDto> coupon)
-    : ICarterModule
+public class CouponEndpoints(ILogger<GetCouponsDto> coupons, ILogger<GetCouponDto> coupon) : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

@@ -4,38 +4,35 @@
     {
         public bool IsSuccess => ErrorMessage == null;
 
-        public string? SuccessMessage { get; set; }
+        public string? SuccessMessage { get; init; }
 
-        public string? ErrorMessage { get; set; }
+        public string? ErrorMessage { get; init; }
 
-        public int? ErrorCode { get; set; }
+        public int? StatusCode { get; set; }
 
-        public int? SuccessCode { get; set; }
-
-        public List<string>? ValidationErrors { get; set; }
+        public List<string>? ValidationErrors { get; init; }
     }
 
     public class Result<T> : Result
     {
-        public Result(string? successMessage, int? successCode, T? data)
+        public Result(string? successMessage, T? data)
         {
             SuccessMessage = successMessage;
-            SuccessCode = successCode;
             Data = data;
         }
 
-        public Result(string? errorMessage, int? errorCode, T? data, List<string> validationErrors)
+        public Result(string? errorMessage, int? statusCode, T? data, List<string> validationErrors)
         {
             ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
+            StatusCode = statusCode;
             Data = data;
             ValidationErrors = validationErrors;
         }
 
-        public Result(string? errorMessage, int? errorCode, List<string>? validationErrors)
+        public Result(string? errorMessage, int? statusCode, List<string>? validationErrors)
         {
             ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
+            StatusCode = statusCode;
             ValidationErrors = validationErrors;
         }
 

@@ -1,7 +1,6 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Commands;
 using Coupon.Application.Resources;
 using Coupon.Application.Validations;
-using Coupon.Domain.Entities;
 using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
@@ -36,16 +35,16 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             return new CollectionResult<Unit>
                             {
                                 ValidationErrors = errorMessage,
+                                StatusCode = (int)StatusCode.NoContent,
                                 ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                                ErrorCode = (int)ErrorCodes.CouponNotDeletedListCatch,
                             };
                         }
                     }
 
                     return new CollectionResult<Unit>
                     {
+                        StatusCode = (int)StatusCode.NoContent,
                         ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                        ErrorCode = (int)ErrorCodes.CouponNotDeletedListCatch,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
                 }
@@ -58,17 +57,16 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     return new CollectionResult<Unit>
                     {
+                        StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage = ErrorMessage.CouponsNotFound,
-                        ErrorCode = (int)ErrorCodes.CouponsNotFound,
                         ValidationErrors = [ErrorMessage.CouponsNotFound]
                     };
                 }
 
-                await repository.DeleteListAsync(coupons);
-
                 foreach (var coupon in coupons)
                 {
                     memoryCache.Remove(coupon);
+                    await repository.DeleteAsync(coupon);
                 }
 
                 var couponsCache = await repository.GetAllAsync().ToListAsync(cancellationToken);
@@ -79,7 +77,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     Count = coupons.Count,
                     Data = new[] {Unit.Value},
-                    SuccessCode = (int)SuccessCode.Deleted,
+                    StatusCode = (int)StatusCode.Deleted,
                     SuccessMessage = SuccessMessage.CouponsDeletedSuccessfully,
                 };
             }
@@ -89,7 +87,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new CollectionResult<Unit>
                 {
                     ErrorMessage = exception.Message,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    StatusCode= (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }

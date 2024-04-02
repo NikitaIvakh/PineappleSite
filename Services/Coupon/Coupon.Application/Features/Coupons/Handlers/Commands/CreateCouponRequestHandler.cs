@@ -39,16 +39,16 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                             return new Result<int>
                             {
                                 ValidationErrors = errorMessage,
+                                StatusCode = (int)StatusCode.NoContent,
                                 ErrorMessage = ErrorMessage.CouponNotCreated,
-                                ErrorCode = (int)ErrorCodes.CouponNotCreated,
                             };
                         }
                     }
 
                     return new Result<int>
                     {
+                        StatusCode = (int)StatusCode.NoContent,
                         ErrorMessage = ErrorMessage.CouponNotCreated,
-                        ErrorCode = (int)ErrorCodes.CouponNotCreated,
                         ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
                     };
                 }
@@ -60,7 +60,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 {
                     return new Result<int>
                     {
-                        ErrorCode = (int)ErrorCodes.CouponAlreadyExists,
+                        StatusCode = (int)StatusCode.NoContent,
                         ErrorMessage = ErrorMessage.CouponAlreadyExists,
                         ValidationErrors = [ErrorMessage.CouponAlreadyExists]
                     };
@@ -113,7 +113,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new Result<int>
                 {
                     Data = coupon.CouponId,
-                    SuccessCode = (int)SuccessCode.Created,
+                    StatusCode = (int)StatusCode.Created,
                     SuccessMessage = SuccessMessage.CouponSuccessfullyCreated,
                 };
             }
@@ -124,7 +124,7 @@ namespace Coupon.Application.Features.Coupons.Handlers.Commands
                 return new Result<int>
                 {
                     ErrorMessage = exception.Message,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
+                    StatusCode = (int)StatusCode.InternalServerError,
                     ValidationErrors = [ErrorMessage.InternalServerError]
                 };
             }
