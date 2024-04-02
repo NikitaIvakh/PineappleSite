@@ -15,16 +15,16 @@
         public List<string>? ValidationErrors { get; set; }
     }
 
-    public class Result<Type> : Result
+    public class Result<T> : Result
     {
-        public Result(string? successMessage, int? successCode, Type? data)
+        public Result(string? successMessage, int? successCode, T? data)
         {
             SuccessMessage = successMessage;
             SuccessCode = successCode;
             Data = data;
         }
 
-        public Result(string? errorMessage, int? errorCode, Type? data, List<string> validationErrors)
+        public Result(string? errorMessage, int? errorCode, T? data, List<string> validationErrors)
         {
             ErrorMessage = errorMessage;
             ErrorCode = errorCode;
@@ -44,7 +44,7 @@
             SuccessMessage = successMessage;
         }
 
-        public Result(Type? data)
+        public Result(T? data)
         {
             Data = data;
         }
@@ -54,6 +54,6 @@
 
         }
 
-        public Type? Data { get; set; }
+        public T? Data { get; set; }
     }
 }

@@ -12,7 +12,7 @@ using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class CreateCouponRequestHandler(IBaseRepository<CouponEntity> repository, CreateValidator createValidator, IMemoryCache memoryCache) 
+    public class CreateCouponRequestHandler(ICouponRepository repository, CreateValidator createValidator, IMemoryCache memoryCache) 
         : IRequestHandler<CreateCouponRequest, Result<int>>
     {
         private const string CacheKey = "couponsCacheKey";

@@ -1,17 +1,19 @@
-﻿using Coupon.Domain.Interfaces.Repositories;
+﻿using Coupon.Domain.Entities;
+using Coupon.Domain.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure.Repository
 {
-    public class BaseRepository<TEntity>(ApplicationDbContext context) : IBaseRepository<TEntity> where TEntity : class
+    public class CouponRepository(ApplicationDbContext context) : ICouponRepository
     {
         private readonly ApplicationDbContext _context = context;
 
-        public IQueryable<TEntity> GetAllAsync()
+        public IQueryable<CouponEntity> GetAllAsync()
         {
-            return _context.Set<TEntity>();
+            return _context.Coupons.AsNoTracking().AsQueryable();
         }
 
-        public Task<TEntity> CreateAsync(TEntity entity)
+        public Task<CouponEntity> CreateAsync(CouponEntity entity)
         {
             if (entity is null)
             {
@@ -24,7 +26,7 @@ namespace Coupon.Infrastructure.Repository
             return Task.FromResult(entity);
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        public Task<CouponEntity> UpdateAsync(CouponEntity entity)
         {
             if (entity is null)
             {
@@ -37,7 +39,7 @@ namespace Coupon.Infrastructure.Repository
             return Task.FromResult(entity);
         }
 
-        public Task<TEntity> DeleteAsync(TEntity entity)
+        public Task<CouponEntity> DeleteAsync(CouponEntity entity)
         {
             if (entity is null)
             {
@@ -50,11 +52,11 @@ namespace Coupon.Infrastructure.Repository
             return Task.FromResult(entity);
         }
 
-        public Task DeleteListAsync(IList<TEntity> entities)
+        public Task DeleteListAsync(IList<CouponEntity> entities)
         {
             if (entities is null)
             {
-                throw new ArgumentNullException(nameof(entities), "Список сущностей пуст.");
+                throw new ArgumentNullException(nameof(entities), "Список сущностей пуст");
             }
 
             _context.RemoveRange(entities);

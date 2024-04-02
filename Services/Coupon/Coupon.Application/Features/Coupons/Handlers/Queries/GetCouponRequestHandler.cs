@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponRequestHandler(IBaseRepository<CouponEntity> repository, IMemoryCache memoryCache) 
+    public class GetCouponRequestHandler(ICouponRepository repository, IMemoryCache memoryCache) 
         : IRequestHandler<GetCouponRequest, Result<GetCouponDto>>
     {
         private const string CacheKey = "couponsCacheKey";

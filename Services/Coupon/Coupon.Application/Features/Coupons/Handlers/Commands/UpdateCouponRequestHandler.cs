@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class UpdateCouponRequestHandler(IBaseRepository<CouponEntity> repository, UpdateValidator updateValidator, IMemoryCache memoryCache) 
+    public class UpdateCouponRequestHandler(ICouponRepository repository, UpdateValidator updateValidator, IMemoryCache memoryCache) 
         : IRequestHandler<UpdateCouponRequest, Result<Unit>>
     {
         private const string CacheKey = "couponsCacheKey";

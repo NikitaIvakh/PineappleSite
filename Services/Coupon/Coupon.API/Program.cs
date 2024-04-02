@@ -1,65 +1,27 @@
-using Coupon.API;
+using Carter;
 using Coupon.Application.DependencyInjection;
 using Coupon.Infrastructure.DependencyInjection;
-using HealthChecks.UI.Client;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Serilog;
-using Stripe;
 
-WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+builder.Services.AddCarter();
 
-applicationBuilder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-applicationBuilder.Services.AddEndpointsApiExplorer();
-applicationBuilder.Services.AddHttpContextAccessor();
-applicationBuilder.Services.AddSwaggerGen();
+builder.Services.AddMemoryCache();
+builder.Services.ConfigureApplicationServices();
+builder.Services.ConfigureInfrastructureService(builder.Configuration);
 
-applicationBuilder.Services.ConfigureApplicationService();
-applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
+// TO serilog, swagger
 
-applicationBuilder.Host.UseSerilog((context, logConfig) =>
+var app = builder.Build();
+
+if (app.Environment.IsDevelopment())
 {
-    logConfig.ReadFrom.Configuration(context.Configuration);
-    logConfig.WriteTo.Console();
-});
-
-StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
-
-applicationBuilder.Services.AddCors(key =>
-{
-    key.AddPolicy("CorsPolicy",
-        applicationBuilder => applicationBuilder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
-});
-
-applicationBuilder.Services.AddSwagger();
-applicationBuilder.Services.AddMemoryCache();
-applicationBuilder.Services.AddSwaggerAuthentication();
-applicationBuilder.Services.AddAddAuthenticated(applicationBuilder.Configuration);
-
-WebApplication webApplication = applicationBuilder.Build();
-
-// Configure the HTTP request pipeline.
-if (webApplication.Environment.IsDevelopment())
-{
-    webApplication.UseSwagger();
-    webApplication.UseSwaggerUI();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
 
-webApplication.UseHttpsRedirection();
-webApplication.MapHealthChecks("health", new HealthCheckOptions
-{
-    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-});
-
-webApplication.UseSerilogRequestLogging();
-webApplication.UseAuthorization();
-
-webApplication.UseCors();
-webApplication.MapControllers();
-
-webApplication.Run();
+app.MapCarter();
+app.UseHttpsRedirection();
+app.Run();

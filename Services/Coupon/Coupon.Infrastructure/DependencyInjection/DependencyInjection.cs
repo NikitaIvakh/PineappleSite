@@ -21,9 +21,9 @@ namespace Coupon.Infrastructure.DependencyInjection
         {
             var connectionString = configuration.GetConnectionString("CouponConnectionString");
 
-            services.AddScoped<IBaseRepository<CouponEntity>, BaseRepository<CouponEntity>>();
-            services.AddScoped(sp => new DbConnectionFactory(connectionString));
-            services.AddHealthChecks().AddNpgSql(connectionString).AddDbContextCheck<ApplicationDbContext>();
+            services.AddScoped<ICouponRepository, CouponRepository>();
+            services.AddScoped(sp => new DbConnectionFactory(connectionString!));
+            services.AddHealthChecks().AddNpgSql(connectionString!).AddDbContextCheck<ApplicationDbContext>();
         }
 
         private static void RegisterConnectionString(this IServiceCollection services, IConfiguration configuration)

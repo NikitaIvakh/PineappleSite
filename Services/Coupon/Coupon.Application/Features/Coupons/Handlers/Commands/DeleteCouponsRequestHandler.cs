@@ -11,7 +11,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands
 {
-    public class DeleteCouponsRequestHandler(IBaseRepository<CouponEntity> repository, DeleteCouponsValidator validationRules, IMemoryCache memoryCache) 
+    public class DeleteCouponsRequestHandler(ICouponRepository repository, DeleteCouponsValidator validationRules, IMemoryCache memoryCache) 
         : IRequestHandler<DeleteCouponsRequest, CollectionResult<Unit>>
     {
         private const string CacheKey = "couponsCacheKey";

@@ -1,22 +1,15 @@
 ﻿using Coupon.Domain.DTOs;
-using Coupon.Infrastructure;
 using FluentValidation;
-using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Application.Validations
 {
     public class CreateValidator : AbstractValidator<CreateCouponDto>
     {
-        private readonly ApplicationDbContext _context;
-
-        public CreateValidator(ApplicationDbContext context)
+        public CreateValidator()
         {
-            _context = context;
-            
             RuleFor(key => key.CouponCode).NotEmpty().NotNull()
                 .MaximumLength(20).WithMessage("Строка не должна превышать 20 символов")
-                .MinimumLength(3).WithMessage("Строка должна превышать 3 символа")
-                .MustAsync(BeUniqueCouponCode).WithMessage("Такой купон уже существует");
+                .MinimumLength(3).WithMessage("Строка должна превышать 3 символа");
 
             RuleFor(key => key.DiscountAmount).NotEmpty().NotNull()
                 .LessThanOrEqualTo(101).WithMessage("Сумма скидки не должна превышать 101 единицу")
@@ -32,17 +25,6 @@ namespace Coupon.Application.Validations
             double discountAmount, ValidationContext<CreateCouponDto> arg3, CancellationToken arg4)
         {
             return Task.FromResult(!(discountAmount > coupon.MinAmount));
-        }
-
-        private async Task<bool> BeUniqueCouponCode(string couponCode, CancellationToken token)
-        {
-            if (string.IsNullOrEmpty(couponCode) || !string.IsNullOrEmpty(couponCode))
-            {
-                return true;
-            }
-
-            var existsCouponCode = await _context.Coupons.FirstOrDefaultAsync(key => key.CouponCode == couponCode, token);
-            return existsCouponCode is null;
         }
     }
 }

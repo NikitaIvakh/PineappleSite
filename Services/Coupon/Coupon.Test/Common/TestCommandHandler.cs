@@ -1,59 +1,33 @@
-﻿using AutoMapper;
-using Coupon.Application.Features.Coupons.Handlers.Commands;
-using Coupon.Application.Mapping;
-using Coupon.Application.Validations;
-using Coupon.Domain.Entities;
+﻿using Coupon.Application.Validations;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure;
 using Coupon.Infrastructure.Repository;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
-using Serilog;
 
 namespace Coupon.Test.Common
 {
     public class TestCommandHandler : IDisposable
     {
-        protected ApplicationDbContext Context;
-        protected CreateValidator CreateValidator;
-        protected UpdateValidator UpdateValidator;
-        protected DeleteValidator DeleteValidator;
-        protected DeleteCouponsValidator DeleteCouponsValidator;
-        protected IBaseRepository<CouponEntity> Repository;
-        protected ILogger CreateLogger;
-        protected ILogger UpdateLogger;
-        protected ILogger DeleteLogger;
-        protected ILogger DeleteListLogger;
-        protected IMapper Mapper;
+        private readonly ApplicationDbContext _context;
+        protected readonly CreateValidator CreateValidator;
+        protected readonly UpdateValidator UpdateValidator;
+        protected readonly DeleteValidator DeleteValidator;
+        protected readonly DeleteCouponsValidator DeleteCouponsValidator;
+        protected readonly ICouponRepository Repository;
         protected IMemoryCache MemoryCache;
 
         public TestCommandHandler()
         {
-            Context = CouponRepositoryContextFactory.Create();
-            Repository = new BaseRepository<CouponEntity>(Context);
-            CreateLogger = Log.ForContext<CreateCouponRequestHandler>();
-            UpdateLogger = Log.ForContext<UpdateCouponRequestHandler>();
-            DeleteLogger = Log.ForContext<DeleteCouponRequestHandler>();
-            DeleteListLogger = Log.ForContext<DeleteCouponsRequestHandler>();
-
-            CreateValidator = new CreateValidator(Context);
-            UpdateValidator = new UpdateValidator(Context);
+            _context = CouponRepositoryContextFactory.Create();
+            Repository = new CouponRepository(_context);
+            CreateValidator = new CreateValidator();
+            UpdateValidator = new UpdateValidator();
             DeleteValidator = new DeleteValidator();
             DeleteCouponsValidator = new DeleteCouponsValidator();
 
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
-
-            var configurationProvider = new MapperConfiguration(cfg =>
-            {
-                cfg.AddProfile<MappingProfile>();
-            });
-
-            Mapper = configurationProvider.CreateMapper();
         }
 
-        public void Dispose()
-        {
-            CouponRepositoryContextFactory.DestroyDatabase(Context);
-        }
+        public void Dispose() => CouponRepositoryContextFactory.DestroyDatabase(_context);
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Resources;
 using Coupon.Domain.DTOs;
-using Coupon.Domain.Entities;
 using Coupon.Domain.Enum;
 using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Domain.ResultCoupon;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries
 {
-    public class GetCouponsRequestHandler(IBaseRepository<CouponEntity> couponRepository, IMemoryCache memoryCache) 
+    public class GetCouponsRequestHandler(ICouponRepository couponRepository, IMemoryCache memoryCache) 
         : IRequestHandler<GetCouponsRequest, CollectionResult<GetCouponsDto>>
     {
         private const string CacheKey = "couponsCacheKey";

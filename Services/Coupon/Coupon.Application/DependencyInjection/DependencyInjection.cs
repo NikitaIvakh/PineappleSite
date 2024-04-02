@@ -9,7 +9,7 @@ namespace Coupon.Application.DependencyInjection
 {
     public static class DependencyInjection
     {
-        public static void ConfigureApplicationService(this IServiceCollection services)
+        public static void ConfigureApplicationServices(this IServiceCollection services)
         {
             services.RegistersInit();
             services.ServicesInit();
@@ -27,6 +27,7 @@ namespace Coupon.Application.DependencyInjection
             services.AddScoped<IValidator<CreateCouponDto>, CreateValidator>();
             services.AddScoped<IValidator<UpdateCouponDto>, UpdateValidator>();
             services.AddScoped<IValidator<DeleteCouponDto>, DeleteValidator>();
+            services.AddScoped<IValidator<DeleteCouponsDto>, DeleteCouponsValidator>();
         }
     }
 }
