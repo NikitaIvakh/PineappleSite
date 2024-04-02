@@ -39,18 +39,18 @@ namespace Coupon.API.Controllers
         }
 
         // GET api/<CouponController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Result<CouponDto>>> GetCoupon(int id)
+        [HttpGet("{couponId}")]
+        public async Task<ActionResult<Result<GetCouponDto>>> GetCoupon(int couponId)
         {
-            var query = await _mediator.Send(new GetCouponDetailsRequest() { Id = id });
+            var query = await _mediator.Send(new GetCouponRequest(couponId));
 
             if (query.IsSuccess)
             {
-                _logger.LogDebug($"LogDebug ================ Купон успешно получен: {id}");
+                _logger.LogDebug($"LogDebug ================ Купон успешно получен: {couponId}");
                 return Ok(query);
             }
 
-            _logger.LogError($"LogDebugError ================ Ошибка получения купона: {id}");
+            _logger.LogError($"LogDebugError ================ Ошибка получения купона: {couponId}");
             foreach (var error in query.ValidationErrors!)
             {
                 return BadRequest(error);
