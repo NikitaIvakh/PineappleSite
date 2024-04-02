@@ -10,6 +10,7 @@ namespace Coupon.Application.Mapping
         {
             CreateMap<CouponEntity, CouponDto>().ReverseMap();
             CreateMap<CouponEntity, GetCouponDto>().ReverseMap();
+            CreateMap<CouponEntity, GetCouponsDto>().ReverseMap();
             
             CreateMap<CouponEntity, CreateCouponDto>().ReverseMap();
             CreateMap<CouponEntity, UpdateCouponDto>().ReverseMap();

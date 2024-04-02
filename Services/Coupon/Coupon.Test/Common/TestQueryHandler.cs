@@ -26,7 +26,7 @@ namespace Coupon.Test.Common
             Context = CouponRepositoryContextFactory.Create();
             GetByCodeLogger = Log.ForContext<GetCouponDetailsByCouponNameRequestHandler>();
             GetLogger = Log.ForContext<GetCouponRequestHandler>();
-            GetListLogger = Log.ForContext<GetCouponListRequestHandler>();
+            GetListLogger = Log.ForContext<GetCouponsRequestHandler>();
             Repository = new BaseRepository<CouponEntity>(Context);
 
             MemoryCache = new MemoryCache(new MemoryCacheOptions());

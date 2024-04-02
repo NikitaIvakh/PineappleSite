@@ -21,7 +21,7 @@ namespace Coupon.API.Controllers
         // [Authorize(Roles = StaticDetails.RoleAdministrator)]
         public async Task<ActionResult<CollectionResult<CouponDto>>> GetCoupons()
         {
-            var query = await _mediator.Send(new GetCouponListRequest());
+            var query = await _mediator.Send(new GetCouponsRequest());
 
             if (query.IsSuccess)
             {
