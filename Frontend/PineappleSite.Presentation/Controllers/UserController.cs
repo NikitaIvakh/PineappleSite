@@ -29,6 +29,7 @@ namespace PineappleSite.Presentation.Controllers
                             key => key.FirstName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
                             key.LastName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
                             key.EmailAddress.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                            key.Role.Any(key => key.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)) ||
                             key.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)).ToList();
 
                         users = new IdentityCollectionResult<GetAllUsersViewModel>

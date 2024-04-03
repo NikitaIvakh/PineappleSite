@@ -148,7 +148,7 @@
     <value>Quantity</value>
   </data>
   <data name="Sending a request" xml:space="preserve">
-    <value>Sending a request</value>
+    <value>Send a message to the queue</value>
   </data>
   <data name="Shopping cart" xml:space="preserve">
     <value>Shopping cart</value>

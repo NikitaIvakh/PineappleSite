@@ -148,7 +148,7 @@
     <value>Количество</value>
   </data>
   <data name="Sending a request" xml:space="preserve">
-    <value>Отправка запроса</value>
+    <value>Отправить сообщение в очередь</value>
   </data>
   <data name="Shopping cart" xml:space="preserve">
     <value>Корзина</value>
