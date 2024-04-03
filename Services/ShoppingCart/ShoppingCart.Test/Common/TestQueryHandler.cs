@@ -45,7 +45,7 @@ namespace ShoppingCart.Test.Common
             couponMock.Setup(mock => mock.GetCouponAsync("5OFF"))
                 .ReturnsAsync(new Result<GetCouponDto>
                 {
-                    Data = new CouponDto { CouponId = 1, CouponCode = "5OFF", DiscountAmount = 20, MinAmount = 40 }
+                    Data = new GetCouponDto(CouponId: 1, CouponCode: "5OFF", DiscountAmount: 20, MinAmount: 40 )
                 });
 
             Context = ShoppingCartDbContextFactory.Create();
