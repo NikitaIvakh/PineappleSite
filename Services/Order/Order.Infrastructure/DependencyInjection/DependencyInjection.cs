@@ -45,7 +45,11 @@ namespace Order.Infrastructure.DependencyInjection
             var scope = services.BuildServiceProvider();
             using var serviceProvider = scope.CreateScope();
             var db = serviceProvider.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            db.Database.Migrate();
+
+            if (db.Database.GetPendingMigrations().Any())
+            {
+                db.Database.Migrate();
+            }
         }
     }
 }
