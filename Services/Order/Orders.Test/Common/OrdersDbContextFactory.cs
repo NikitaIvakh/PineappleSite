@@ -29,8 +29,8 @@ namespace Orders.Test.Common
 
                 OrderTime = DateTime.Now,
                 Status = StaticDetails.Status_Pending,
-                StripeSessionId = "sk_test_51O90F4D1JYWWRL6F1K5vbfmQJeQuN8YRrNQYhq1I3l6OHyRqe6kzhS6wYYelu1YXtjftts7Ela0WDdmIafeGRS6n00AL3kb8tV",
-                PaymentIntentId = "pk_test_51O90F4D1JYWWRL6FfzRmE3NEQrVS2SzFgXASN2N3TNgQb4P7UMXXvN7YlVoFKakglHw8UMi7HifHFLN7KnUOznOZ00k3Sexivf",
+                StripeSessionId = "test",
+                PaymentIntentId = "test",
             };
 
             var orderDetails = new OrderDetails
