@@ -135,6 +135,9 @@
   <data name="Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
+  <data name="Role" xml:space="preserve">
+    <value>Роль</value>
+  </data>
   <data name="Show" xml:space="preserve">
     <value>Показать</value>
   </data>
