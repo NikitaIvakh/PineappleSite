@@ -56,6 +56,7 @@
                                 <th>@Localizer["Description"]</th>
                                 <th>@Localizer["ProductCategory"]</th>
                                 <th>@Localizer["Price"]</th>
+                                <th>@Localizer["Image"]</th>
                                 <th>@Localizer["Details"]</th>
                                 <th>@Localizer["Update"]</th>
                                 <th>@Localizer["Delete"]</th>
@@ -69,23 +70,26 @@
                                 foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>
+                                        <td class="text-center">
                                             <input type="checkbox" name="selectedProducts" value="@item.Id" />
                                         </td>
-                                        <td>@item.Id</td>
-                                        <td>@item.Name</td>
-                                        <td>@item.Description</td>
-                                        <td>@item.ProductCategory</td>
-                                        <td>@item.Price</td>
-                                        <td>
+                                        <td class="text-center">@item.Id</td>
+                                        <td class="text-center">@item.Name</td>
+                                        <td class="text-center">@item.Description</td>
+                                        <td class="text-center">@item.ProductCategory</td>
+                                        <td class="text-center">@item.Price</td>
+                                        <td class="text-center" style="padding: 0;">
+                                            <img src="@item.ImageUrl" alt="" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: 0;">
+                                        </td>
+                                        <td class="text-center">
                                             <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">@Localizer["Details"]</a>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
                                         </td>
-                                        <td>
+                                        <td class="text-center">
                                             <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                                 <i class="bi bi-trash">Удалить</i>
                                             </button>
