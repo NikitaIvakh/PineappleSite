@@ -11,5 +11,5 @@ public class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
     }
 
-    public DbSet<CouponEntity> Coupons { get; set; }
+    public DbSet<CouponEntity> Coupons { get; init; }
 }
