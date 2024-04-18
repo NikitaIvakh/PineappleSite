@@ -2,10 +2,9 @@
 using Coupon.Domain.ResultCoupon;
 using MediatR;
 
-namespace Coupon.Application.Features.Coupons.Requests.Queries
-{
-    public class GetCouponsRequest : IRequest<CollectionResult<GetCouponsDto>>
-    {
+namespace Coupon.Application.Features.Coupons.Requests.Queries;
 
-    }
+public class GetCouponsRequest : IRequest<CollectionResult<GetCouponsDto>>
+{
+
 }

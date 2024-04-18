@@ -1,4 +1,3 @@
-﻿namespace Coupon.Domain.DTOs
-{
-    public record DeleteCouponDto(int CouponId);
-}
+﻿namespace Coupon.Domain.DTOs;
+
+public record DeleteCouponDto(int CouponId);

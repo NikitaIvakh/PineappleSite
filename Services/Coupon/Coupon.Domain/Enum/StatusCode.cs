@@ -1,12 +1,12 @@
-﻿namespace Coupon.Domain.Enum
+﻿namespace Coupon.Domain.Enum;
+
+public enum StatusCode
 {
-    public enum StatusCode
-    {
-        NotFound = 404,
-        Created = 201,
-        Modify = 203,
-        Deleted = 200,
-        NoContent = 204,
-        InternalServerError = 500,
-    }
+    NotFound = 404,
+    Ok = 200,
+    Created = 201,
+    Modify = 203,
+    Deleted = 205,
+    NoContent = 204,
+    InternalServerError = 500,
 }

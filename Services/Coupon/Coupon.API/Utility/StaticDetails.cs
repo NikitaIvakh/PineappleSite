@@ -1,7 +1,7 @@
 ﻿namespace Coupon.API.Utility;
 
-public abstract class StaticDetails
+public static class StaticDetails
 {
-    public const string RoleAdministrator = "Administrator";
     public const string RoleUser = "User";
+    public const string RoleAdministrator = "Administrator";
 }

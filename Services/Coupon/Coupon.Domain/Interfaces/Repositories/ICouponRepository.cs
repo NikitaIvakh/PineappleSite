@@ -1,15 +1,14 @@
 ﻿using Coupon.Domain.Entities;
 
-namespace Coupon.Domain.Interfaces.Repositories
+namespace Coupon.Domain.Interfaces.Repositories;
+
+public interface ICouponRepository
 {
-    public interface ICouponRepository
-    {
-        IQueryable<CouponEntity> GetAllAsync();
+    IQueryable<CouponEntity> GetAllAsync();
 
-        Task<CouponEntity> CreateAsync(CouponEntity entity);
+    Task<CouponEntity> CreateAsync(CouponEntity entity);
 
-        Task<CouponEntity> UpdateAsync(CouponEntity entity);
+    Task<CouponEntity> UpdateAsync(CouponEntity entity);
 
-        Task<CouponEntity> DeleteAsync(CouponEntity entity);
-    }
+    Task<CouponEntity> DeleteAsync(CouponEntity entity);
 }

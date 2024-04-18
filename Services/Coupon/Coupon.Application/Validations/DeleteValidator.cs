@@ -1,14 +1,13 @@
 ﻿using Coupon.Domain.DTOs;
 using FluentValidation;
 
-namespace Coupon.Application.Validations
+namespace Coupon.Application.Validations;
+
+public class DeleteValidator : AbstractValidator<DeleteCouponDto>
 {
-    public class DeleteValidator : AbstractValidator<DeleteCouponDto>
+    public DeleteValidator()
     {
-        public DeleteValidator()
-        {
-            RuleFor(key => key.CouponId)
-                .NotEmpty().NotNull().WithMessage("Такого идентификатора не существует");
-        }
+        RuleFor(key => key.CouponId)
+            .NotEmpty().NotNull().WithMessage("Идентификатор купона не должен быть пустым");
     }
 }

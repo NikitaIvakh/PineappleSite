@@ -1,7 +1,6 @@
-﻿namespace Coupon.Domain.ResultCoupon
+﻿namespace Coupon.Domain.ResultCoupon;
+
+public class CollectionResult<T> : Result<IReadOnlyCollection<T>>
 {
-    public class CollectionResult<T> : Result<IReadOnlyCollection<T>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; set; }
 }

@@ -8,93 +8,99 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Coupon.Application.Features.Coupons.Handlers.Commands
+namespace Coupon.Application.Features.Coupons.Handlers.Commands;
+
+public class UpdateCouponRequestHandler(
+    ICouponRepository repository,
+    UpdateValidator updateValidator,
+    IMemoryCache memoryCache)
+    : IRequestHandler<UpdateCouponRequest, Result<Unit>>
 {
-    public class UpdateCouponRequestHandler(ICouponRepository repository, UpdateValidator updateValidator, IMemoryCache memoryCache) 
-        : IRequestHandler<UpdateCouponRequest, Result<Unit>>
+    private const string CacheKey = "couponsCacheKey";
+
+    public async Task<Result<Unit>> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
     {
-        private const string CacheKey = "couponsCacheKey";
-
-        public async Task<Result<Unit>> Handle(UpdateCouponRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var result = await updateValidator.ValidateAsync(request.UpdateCouponDto, cancellationToken);
+
+            if (!result.IsValid)
             {
-                var result = await updateValidator.ValidateAsync(request.UpdateCouponDto, cancellationToken);
-
-                if (!result.IsValid)
+                var errorMessages = new Dictionary<string, List<string>>
                 {
-                    var errorMessages = new Dictionary<string, List<string>>
-                    {
-                        { "CouponId", result.Errors.Select(key => key.ErrorMessage).ToList() },
-                        { "CouponCode", result.Errors.Select(key => key.ErrorMessage).ToList() },
-                        { "DiscountAmount", result.Errors.Select(key => key.ErrorMessage).ToList() },
-                        { "MinAmount", result.Errors.Select(key => key.ErrorMessage).ToList() },
-                    };
+                    { "CouponId", result.Errors.Select(key => key.ErrorMessage).ToList() },
+                    { "CouponCode", result.Errors.Select(key => key.ErrorMessage).ToList() },
+                    { "DiscountAmount", result.Errors.Select(key => key.ErrorMessage).ToList() },
+                    { "MinAmount", result.Errors.Select(key => key.ErrorMessage).ToList() },
+                };
 
-                    foreach (var error in errorMessages)
+                foreach (var error in errorMessages)
+                {
+                    if (errorMessages.TryGetValue(error.Key, out var errorMessage))
                     {
-                        if (errorMessages.TryGetValue(error.Key, out var errorMessage))
+                        return new Result<Unit>
                         {
-                            return new Result<Unit>
-                            {
-                                ValidationErrors = errorMessage,
-                                StatusCode = (int)StatusCode.NoContent,
-                                ErrorMessage = ErrorMessage.CouponNotUpdated,
-                            };
-                        }
+                            ValidationErrors = errorMessage,
+                            StatusCode = (int)StatusCode.NoContent,
+                            ErrorMessage =
+                                ErrorMessage.ResourceManager.GetString("CouponNotUpdated", ErrorMessage.Culture),
+                        };
                     }
-
-                    return new Result<Unit>
-                    {
-                        StatusCode= (int)StatusCode.NoContent,
-                        ErrorMessage = ErrorMessage.CouponNotUpdated,
-                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
-                    };
                 }
-
-                var coupon = await repository.GetAllAsync()
-                    .FirstOrDefaultAsync(key => key.CouponId == request.UpdateCouponDto.CouponId, cancellationToken);
-
-                if (coupon is null)
-                {
-                    return new Result<Unit>
-                    {
-                        StatusCode = (int)StatusCode.NotFound,
-                        ErrorMessage = ErrorMessage.CouponNotFound,
-                        ValidationErrors = [ErrorMessage.CouponNotFound]
-                    };
-                }
-
-                coupon.CouponCode = request.UpdateCouponDto.CouponCode.Replace(" ", "");
-                coupon.DiscountAmount = request.UpdateCouponDto.DiscountAmount;
-                coupon.MinAmount = request.UpdateCouponDto.MinAmount;
-
-                await repository.UpdateAsync(coupon);
-
-                var coupons = await repository.GetAllAsync().ToListAsync(cancellationToken);
-
-                memoryCache.Remove(coupon);
-                memoryCache.Remove(coupons);
-
-                memoryCache.Set(CacheKey, coupons);
 
                 return new Result<Unit>
                 {
-                    Data = Unit.Value,
-                    StatusCode= (int)StatusCode.Modify,
-                    SuccessMessage = SuccessMessage.CouponUpdatedSuccessfully,
+                    StatusCode = (int)StatusCode.NoContent,
+                    ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponNotUpdated", ErrorMessage.Culture),
                 };
             }
 
-            catch (Exception exception)
+            var coupon = await repository.GetAllAsync()
+                .FirstOrDefaultAsync(key => key.CouponId == request.UpdateCouponDto.CouponId, cancellationToken);
+
+            if (coupon is null)
             {
                 return new Result<Unit>
                 {
-                    ErrorMessage = exception.Message,
-                    StatusCode = (int)StatusCode.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("CouponNotFound", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
                 };
             }
+
+            coupon.CouponCode = request.UpdateCouponDto.CouponCode.Replace(" ", "");
+            coupon.DiscountAmount = request.UpdateCouponDto.DiscountAmount;
+            coupon.MinAmount = request.UpdateCouponDto.MinAmount;
+
+            await repository.UpdateAsync(coupon);
+
+            var coupons = await repository.GetAllAsync().ToListAsync(cancellationToken);
+            memoryCache.Remove(coupon);
+            memoryCache.Remove(coupons);
+            memoryCache.Set(CacheKey, coupons);
+
+            return new Result<Unit>
+            {
+                Data = Unit.Value,
+                StatusCode = (int)StatusCode.Modify,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("CouponUpdatedSuccessfully", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<Unit>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

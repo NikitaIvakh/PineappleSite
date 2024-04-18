@@ -8,89 +8,99 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Coupon.Application.Features.Coupons.Handlers.Commands
+namespace Coupon.Application.Features.Coupons.Handlers.Commands;
+
+public class DeleteCouponsRequestHandler(
+    ICouponRepository repository,
+    DeleteCouponsValidator validationRules,
+    IMemoryCache memoryCache)
+    : IRequestHandler<DeleteCouponsRequest, CollectionResult<bool>>
 {
-    public class DeleteCouponsRequestHandler(ICouponRepository repository, DeleteCouponsValidator validationRules, IMemoryCache memoryCache)
-        : IRequestHandler<DeleteCouponsRequest, CollectionResult<bool>>
+    private const string CacheKey = "couponsCacheKey";
+
+    public async Task<CollectionResult<bool>> Handle(DeleteCouponsRequest request,
+        CancellationToken cancellationToken)
     {
-        private const string CacheKey = "couponsCacheKey";
-
-        public async Task<CollectionResult<bool>> Handle(DeleteCouponsRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var result = await validationRules.ValidateAsync(request.DeleteCouponsDto, cancellationToken);
+
+            if (!result.IsValid)
             {
-                var result = await validationRules.ValidateAsync(request.DeleteCouponsDto, cancellationToken);
-
-                if (!result.IsValid)
+                var existMessage = new Dictionary<string, List<string>>
                 {
-                    var existMessage = new Dictionary<string, List<string>>
-                    {
-                        { "CouponIds", result.Errors.Select(key => key.ErrorMessage).ToList() }
-                    };
+                    { "CouponIds", result.Errors.Select(key => key.ErrorMessage).ToList() }
+                };
 
-                    foreach (var error in existMessage)
+                foreach (var error in existMessage)
+                {
+                    if (existMessage.TryGetValue(error.Key, out var errorMessage))
                     {
-                        if (existMessage.TryGetValue(error.Key, out var errorMessage))
+                        return new CollectionResult<bool>
                         {
-                            return new CollectionResult<bool>
-                            {
-                                ValidationErrors = errorMessage,
-                                StatusCode = (int)StatusCode.NoContent,
-                                ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                            };
-                        }
+                            ValidationErrors = errorMessage,
+                            StatusCode = (int)StatusCode.NoContent,
+                            ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponNotDeletedListCatch",
+                                ErrorMessage.Culture),
+                        };
                     }
-
-                    return new CollectionResult<bool>
-                    {
-                        StatusCode = (int)StatusCode.NoContent,
-                        ErrorMessage = ErrorMessage.CouponNotDeletedListCatch,
-                        ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
-                    };
                 }
-
-                var coupons = await repository.GetAllAsync()
-                    .Where(key => request.DeleteCouponsDto.CouponIds.Contains(key.CouponId))
-                    .ToListAsync(cancellationToken);
-
-                if (coupons.Count == 0)
-                {
-                    return new CollectionResult<bool>
-                    {
-                        StatusCode = (int)StatusCode.NotFound,
-                        ErrorMessage = ErrorMessage.CouponsNotFound,
-                        ValidationErrors = [ErrorMessage.CouponsNotFound]
-                    };
-                }
-
-                foreach (var coupon in coupons)
-                {
-                    memoryCache.Remove(coupon);
-                    await repository.DeleteAsync(coupon);
-                }
-
-                var couponsCache = await repository.GetAllAsync().ToListAsync(cancellationToken);
-                memoryCache.Remove(CacheKey);
-                memoryCache.Set(CacheKey, coupons);
 
                 return new CollectionResult<bool>
                 {
-                    Count = coupons.Count,
-                    Data = new[] { true },
-                    StatusCode = (int)StatusCode.Deleted,
-                    SuccessMessage = SuccessMessage.CouponsDeletedSuccessfully,
+                    StatusCode = (int)StatusCode.NoContent,
+                    ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("CouponNotDeletedListCatch", ErrorMessage.Culture),
                 };
             }
 
-            catch (Exception exception)
+            var coupons = await repository.GetAllAsync()
+                .Where(key => request.DeleteCouponsDto.CouponIds.Contains(key.CouponId))
+                .ToListAsync(cancellationToken);
+
+            if (coupons.Count == 0)
             {
                 return new CollectionResult<bool>
                 {
-                    ErrorMessage = exception.Message,
-                    StatusCode = (int)StatusCode.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
                 };
             }
+
+            foreach (var coupon in coupons)
+            {
+                memoryCache.Remove(coupon);
+                await repository.DeleteAsync(coupon);
+            }
+
+            var couponsCache = await repository.GetAllAsync().ToListAsync(cancellationToken);
+            memoryCache.Remove(CacheKey);
+            memoryCache.Set(CacheKey, couponsCache);
+
+            return new CollectionResult<bool>
+            {
+                Count = coupons.Count,
+                Data = new[] { true },
+                StatusCode = (int)StatusCode.Deleted,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("CouponsDeletedSuccessfully", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new CollectionResult<bool>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

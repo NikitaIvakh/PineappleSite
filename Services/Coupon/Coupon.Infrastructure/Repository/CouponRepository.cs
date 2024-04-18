@@ -2,54 +2,51 @@
 using Coupon.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-namespace Coupon.Infrastructure.Repository
+namespace Coupon.Infrastructure.Repository;
+
+public class CouponRepository(ApplicationDbContext context) : ICouponRepository
 {
-    public class CouponRepository(ApplicationDbContext context) : ICouponRepository
+    public IQueryable<CouponEntity> GetAllAsync()
     {
-        private readonly ApplicationDbContext _context = context;
+        return context.Coupons.AsNoTracking().AsQueryable();
+    }
 
-        public IQueryable<CouponEntity> GetAllAsync()
+    public Task<CouponEntity> CreateAsync(CouponEntity entity)
+    {
+        if (entity is null)
         {
-            return _context.Coupons.AsNoTracking().AsQueryable();
+            throw new ArgumentNullException(nameof(entity), "Сущность пустая");
         }
 
-        public Task<CouponEntity> CreateAsync(CouponEntity entity)
+        context.Add(entity);
+        context.SaveChanges();
+
+        return Task.FromResult(entity);
+    }
+
+    public Task<CouponEntity> UpdateAsync(CouponEntity entity)
+    {
+        if (entity is null)
         {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
-            }
-
-            _context.Add(entity);
-            _context.SaveChanges();
-
-            return Task.FromResult(entity);
+            throw new ArgumentNullException(nameof(entity), "Сущность пустая");
         }
 
-        public Task<CouponEntity> UpdateAsync(CouponEntity entity)
+        context.Update(entity);
+        context.SaveChanges();
+
+        return Task.FromResult(entity);
+    }
+
+    public Task<CouponEntity> DeleteAsync(CouponEntity entity)
+    {
+        if (entity is null)
         {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
-            }
-
-            _context.Update(entity);
-            _context.SaveChanges();
-
-            return Task.FromResult(entity);
+            throw new ArgumentNullException(nameof(entity), "Сущность пустая");
         }
 
-        public Task<CouponEntity> DeleteAsync(CouponEntity entity)
-        {
-            if (entity is null)
-            {
-                throw new ArgumentNullException(nameof(entity), "Сущность пустая");
-            }
+        context.Remove(entity);
+        context.SaveChanges();
 
-            _context.Remove(entity);
-            _context.SaveChanges();
-
-            return Task.FromResult(entity);
-        }
+        return Task.FromResult(entity);
     }
 }

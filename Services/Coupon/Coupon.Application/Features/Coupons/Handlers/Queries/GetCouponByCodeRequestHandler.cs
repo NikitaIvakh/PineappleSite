@@ -8,69 +8,76 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Coupon.Application.Features.Coupons.Handlers.Queries
+namespace Coupon.Application.Features.Coupons.Handlers.Queries;
+
+public class GetCouponByCodeRequestHandler(ICouponRepository repository, IMemoryCache memoryCache)
+    : IRequestHandler<GetCouponByCodeRequest, Result<GetCouponDto>>
 {
-    public class GetCouponByCodeRequestHandler(ICouponRepository repository, IMemoryCache memoryCache) 
-        : IRequestHandler<GetCouponByCodeRequest, Result<GetCouponDto>>
+    private const string CacheKey = "couponsCacheKey";
+
+    public async Task<Result<GetCouponDto>> Handle(GetCouponByCodeRequest request,
+        CancellationToken cancellationToken)
     {
-        private const string CacheKey = "couponsCacheKey";
-
-        public async Task<Result<GetCouponDto>> Handle(GetCouponByCodeRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            if (memoryCache.TryGetValue(CacheKey, out GetCouponDto? coupon))
             {
-                if (memoryCache.TryGetValue(CacheKey, out GetCouponDto? coupon))
+                if (coupon is null)
                 {
-                    if (coupon is null)
-                    {
-                        return new Result<GetCouponDto>
-                        {
-                            Data = coupon,
-                            StatusCode = (int)StatusCode.NoContent,
-                        };
-                    }
-                }
-
-                var couponFromDb = await repository.GetAllAsync()
-                    .FirstOrDefaultAsync(key => key.CouponCode == request.CouponCode, cancellationToken);
-
-                if (couponFromDb is null)
-                {
-                    memoryCache.Remove(CacheKey);
                     return new Result<GetCouponDto>
                     {
-                        StatusCode = (int)StatusCode.NotFound,
-                        ErrorMessage = ErrorMessage.CouponNotFound,
-                        ValidationErrors = [ErrorMessage.CouponNotFound]
+                        Data = coupon,
+                        StatusCode = (int)StatusCode.Ok,
                     };
                 }
-
-                memoryCache.Set(CacheKey, couponFromDb);
-
-                return new Result<GetCouponDto>
-                {
-                    Data = new GetCouponDto
-                    (
-                        CouponId: couponFromDb.CouponId,
-                        CouponCode: couponFromDb.CouponCode,
-                        DiscountAmount: couponFromDb.DiscountAmount,
-                        MinAmount: couponFromDb.MinAmount
-                    ),
-                    
-                    StatusCode = (int)StatusCode.NoContent,
-                };
             }
 
-            catch (Exception exception)
+            var couponFromDb = await repository.GetAllAsync()
+                .FirstOrDefaultAsync(key => key.CouponCode == request.CouponCode, cancellationToken);
+
+            if (couponFromDb is null)
             {
                 memoryCache.Remove(CacheKey);
                 return new Result<GetCouponDto>
                 {
-                    ErrorMessage = exception.Message,
-                    StatusCode = (int)StatusCode.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
                 };
             }
+
+            var getCoupon = new GetCouponDto
+            (
+                CouponId: couponFromDb.CouponId,
+                CouponCode: couponFromDb.CouponCode,
+                DiscountAmount: couponFromDb.DiscountAmount,
+                MinAmount: couponFromDb.MinAmount
+            );
+
+            memoryCache.Set(CacheKey, getCoupon);
+
+            return new Result<GetCouponDto>
+            {
+                Data = getCoupon,
+                StatusCode = (int)StatusCode.Ok,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("CouponSuccessfullyGet", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            memoryCache.Remove(CacheKey);
+            return new Result<GetCouponDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }
