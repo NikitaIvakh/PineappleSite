@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Coupon.Test.Queries;
 
-public class GetCouponRequestHandlerTest : TestQueryHandler
+public sealed class GetCouponRequestHandlerTest : TestQueryHandler
 {
     [Fact]
     public async Task GetCouponRequestHandlerTest_Success()

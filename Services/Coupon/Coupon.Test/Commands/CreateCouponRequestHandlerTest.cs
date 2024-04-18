@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Coupon.Test.Commands;
 
-public class CreateCouponRequestHandlerTest : TestCommandHandler
+public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
 {
     [Fact]
     public async Task CreateCouponRequestHandler_Success()
@@ -53,7 +53,7 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         // Assert
         result.StatusCode.Should().Be(204);
         result.ErrorMessage.Should().Be("Купон не может быть создан");
-        result.ValidationErrors.Should().Equal("Строка не должна превышать 20 символов");
+        result.ValidationErrors.Should().Equal("Код купона не должен превышать 20 символов");
     }
     
     [Fact]
@@ -74,7 +74,7 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         // Assert
         result.StatusCode.Should().Be(204);
         result.ErrorMessage.Should().Be("Купон не может быть создан");
-        result.ValidationErrors.Should().Equal("Строка должна превышать 3 символа");
+        result.ValidationErrors.Should().Equal("Код купона должен превышать 3 символа");
     }
     
     [Fact]
@@ -97,8 +97,8 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal
         (
-            "Сумма скидки не должна превышать 101 единицу", 
-            "Скидка не должна превышать стоимость продукта"
+           "Сумма скидки купона не должна превышать 101 единицу", 
+           "Сумма скидки не должна превышать стоимость продукта"
         );
     }
     
@@ -120,7 +120,7 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         // Assert
         result.StatusCode.Should().Be(204);
         result.ErrorMessage.Should().Be("Купон не может быть создан");
-        result.ValidationErrors.Should().Equal("Сумма скидки должна превышать 2 единицы");
+        result.ValidationErrors.Should().Equal("Сумма скидки купона должна превышать 2 единицы");
     }
     
     [Fact]
@@ -143,7 +143,7 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal
         (
-            "Цена товара должна быть ниже 101 единицы"
+            "Стоимость товара должна быть ниже 101 единицы"
         );
     }
     
@@ -167,8 +167,8 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal
         (
-            "Скидка не должна превышать стоимость продукта", 
-            "Сумма товара должна превышать 2 единицы"
+           "Сумма скидки не должна превышать стоимость продукта", 
+           "Стоимость товара должна превышать 2 единицы"
         );
     }
     
@@ -192,9 +192,9 @@ public class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal
         (
-            "Строка должна превышать 3 символа", 
-            "Сумма скидки не должна превышать 101 единицу", 
-            "Цена товара должна быть ниже 101 единицы"
+            "Код купона должен превышать 3 символа", 
+            "Сумма скидки купона не должна превышать 101 единицу", 
+            "Стоимость товара должна быть ниже 101 единицы"
         );
     }
 }

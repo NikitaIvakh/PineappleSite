@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Coupon.Test.Commands;
 
-public class DeleteCouponsRequestHandlerTest : TestCommandHandler
+public sealed class DeleteCouponsRequestHandlerTest : TestCommandHandler
 {
     [Fact]
     public async Task DeleteCouponsRequestHandlerTest_Success()
@@ -29,7 +29,7 @@ public class DeleteCouponsRequestHandlerTest : TestCommandHandler
         var result = await handler.Handle(new DeleteCouponsRequest(deleteCouponsDto), CancellationToken.None);
 
         // Assert
-        result.StatusCode.Should().Be(200);
+        result.StatusCode.Should().Be(205);
         result.SuccessMessage.Should().Be("Купоны успешно удалены");
         result.ErrorMessage.Should().BeNullOrEmpty();
         result.ValidationErrors.Should().BeNullOrEmpty();

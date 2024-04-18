@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Coupon.Test.Queries
 {
-    public class GetCouponsRequestHandlerTest : TestQueryHandler
+    public sealed class GetCouponsRequestHandlerTest : TestQueryHandler
     {
         [Fact]
         public async Task GetCouponListRequestHandlerTest_Success()
@@ -18,8 +18,9 @@ namespace Coupon.Test.Queries
             var result = await handler.Handle(new GetCouponsRequest(), CancellationToken.None);
 
             // Assert
+            result.StatusCode.Should().Be(200);
+            result.SuccessMessage.Should().Be("Купоны успешно получены");
             result.ErrorMessage.Should().BeNullOrEmpty();
-            result.SuccessMessage.Should().BeNullOrEmpty();
             result.ValidationErrors.Should().BeNullOrEmpty();
         }
     }

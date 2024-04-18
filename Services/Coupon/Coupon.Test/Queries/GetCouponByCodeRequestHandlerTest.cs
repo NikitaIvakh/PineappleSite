@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Coupon.Test.Queries;
 
-public class GetCouponByCodeRequestHandlerTest : TestQueryHandler
+public sealed class GetCouponByCodeRequestHandlerTest : TestQueryHandler
 {
     [Fact]
     public async Task GtCouponByCodeRequestHandler_Success()
@@ -36,8 +36,8 @@ public class GetCouponByCodeRequestHandlerTest : TestQueryHandler
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Купон не найден");
+        result.ErrorMessage.Should().Be("Купоны не найдены");
         result.SuccessMessage.Should().BeNullOrEmpty();
-        result.ValidationErrors.Should().Equal("Купон не найден");
+        result.ValidationErrors.Should().Equal("Купоны не найдены");
     }
 }
