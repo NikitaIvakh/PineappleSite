@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using static Coupon.API.Utility.StaticDetails;
 using static Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults;
 
 namespace Coupon.API;
@@ -124,5 +125,15 @@ public static class Startup
                 Console.WriteLine($"XML-файл документации не найден: {xmlPath}");
             }
         });
+    }
+
+    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: UserAndAdministratorPolicy,
+                policy => { policy.RequireRole(RoleUser, RoleAdministrator); });
     }
 }

@@ -6,6 +6,7 @@ using Coupon.Domain.ResultCoupon;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using static Coupon.API.Utility.StaticDetails;
 
 namespace Coupon.API.Endpoints;
 
@@ -15,13 +16,13 @@ public sealed class CouponEndpoints : ICarterModule
     {
         var group = app.MapGroup("api/coupons");
 
-        group.MapGet("/GetCoupons", GetCoupons).WithName(nameof(GetCoupons));
-        group.MapGet("/GetCouponById/{couponId:int}", GetCouponById).WithName(nameof(GetCouponById));
-        group.MapGet("/GetCouponByCode/{couponCode}", GetCouponByCode).WithName(nameof(GetCouponByCode));
-        group.MapPost("/CreateCoupon", CreateCoupon).WithName(nameof(CreateCoupon));
-        group.MapPut("/UpdateCoupon/{couponId:int}", UpdateCoupon).WithName(nameof(UpdateCoupon));
-        group.MapDelete("/DeleteCoupon/{couponId:int}", DeleteCoupon).WithName(nameof(DeleteCoupon));
-        group.MapDelete("/DeleteCoupons", DeleteCoupons).WithName(nameof(DeleteCoupons));
+        group.MapGet("/GetCoupons", GetCoupons).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetCouponById/{couponId:int}", GetCouponById).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetCouponByCode/{couponCode}", GetCouponByCode).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/CreateCoupon", CreateCoupon).RequireAuthorization(AdministratorPolicy);
+        group.MapPut("/UpdateCoupon/{couponId:int}", UpdateCoupon).RequireAuthorization(AdministratorPolicy);
+        group.MapDelete("/DeleteCoupon/{couponId:int}", DeleteCoupon).RequireAuthorization(AdministratorPolicy);
+        group.MapDelete("/DeleteCoupons", DeleteCoupons).RequireAuthorization(AdministratorPolicy);
     }
 
     private static async Task<Results<Ok<CollectionResult<GetCouponsDto>>, BadRequest<string>>> GetCoupons(

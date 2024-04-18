@@ -26,6 +26,7 @@ builder.Host.UseSerilog((context, logConfig) =>
 builder.Services.AddSwagger();
 builder.Services.AddSwaggerAuthentication();
 builder.Services.AddAddAuthenticated(builder.Configuration);
+builder.Services.AddAuthenticatePolicy();
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
