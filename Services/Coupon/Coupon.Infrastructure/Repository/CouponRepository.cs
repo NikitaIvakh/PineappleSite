@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Coupon.Infrastructure.Repository;
 
-public class CouponRepository(ApplicationDbContext context) : ICouponRepository
+public sealed class CouponRepository(ApplicationDbContext context) : ICouponRepository
 {
     public IQueryable<CouponEntity> GetAllAsync()
     {

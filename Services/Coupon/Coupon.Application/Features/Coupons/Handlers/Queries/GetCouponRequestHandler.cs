@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries;
 
-public class GetCouponRequestHandler(ICouponRepository repository, IMemoryCache memoryCache)
+public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemoryCache memoryCache)
     : IRequestHandler<GetCouponRequest, Result<GetCouponDto>>
 {
     private const string CacheKey = "couponsCacheKey";

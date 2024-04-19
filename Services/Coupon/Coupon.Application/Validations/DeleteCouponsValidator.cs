@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Coupon.Application.Validations;
 
-public class DeleteCouponsValidator : AbstractValidator<DeleteCouponsDto>
+public sealed class DeleteCouponsValidator : AbstractValidator<DeleteCouponsDto>
 {
     public DeleteCouponsValidator()
     {

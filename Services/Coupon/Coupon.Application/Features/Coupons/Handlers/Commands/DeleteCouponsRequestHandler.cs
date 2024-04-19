@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands;
 
-public class DeleteCouponsRequestHandler(
+public sealed class DeleteCouponsRequestHandler(
     ICouponRepository repository,
     DeleteCouponsValidator validationRules,
     IMemoryCache memoryCache)

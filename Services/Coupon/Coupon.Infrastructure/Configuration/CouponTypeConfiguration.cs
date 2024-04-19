@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Coupon.Infrastructure.Configuration;
 
-public class CouponTypeConfiguration : IEntityTypeConfiguration<CouponEntity>
+public sealed class CouponTypeConfiguration : IEntityTypeConfiguration<CouponEntity>
 {
     public void Configure(EntityTypeBuilder<CouponEntity> builder)
     {

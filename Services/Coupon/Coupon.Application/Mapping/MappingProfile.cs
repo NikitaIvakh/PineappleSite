@@ -4,7 +4,7 @@ using Coupon.Domain.Entities;
 
 namespace Coupon.Application.Mapping;
 
-public class MappingProfile : Profile
+public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands;
 
-public class UpdateCouponRequestHandler(
+public sealed class UpdateCouponRequestHandler(
     ICouponRepository repository,
     UpdateValidator updateValidator,
     IMemoryCache memoryCache)

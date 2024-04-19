@@ -1,3 +1,3 @@
 ﻿namespace Coupon.Domain.DTOs;
 
-public record DeleteCouponsDto(List<string> CouponIds);
+public sealed record DeleteCouponsDto(List<string> CouponIds);

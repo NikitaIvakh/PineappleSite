@@ -1,6 +1,6 @@
 ﻿namespace Coupon.Domain.Entities;
 
-public class CouponEntity
+public sealed class CouponEntity
 {
     public string CouponId { get; init; } = Guid.NewGuid().ToString();
 

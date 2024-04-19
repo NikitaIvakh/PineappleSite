@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Queries;
 
-public class GetCouponsRequest : IRequest<CollectionResult<GetCouponsDto>>
+public sealed class GetCouponsRequest : IRequest<CollectionResult<GetCouponsDto>>
 {
 
 }

@@ -12,7 +12,7 @@ using Stripe;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Commands;
 
-public class CreateCouponRequestHandler(
+public sealed class CreateCouponRequestHandler(
     ICouponRepository repository,
     CreateValidator createValidator,
     IMemoryCache memoryCache)

@@ -3,7 +3,7 @@ using FluentValidation;
 
 namespace Coupon.Application.Validations;
 
-public class CreateValidator : AbstractValidator<CreateCouponDto>
+public sealed class CreateValidator : AbstractValidator<CreateCouponDto>
 {
     public CreateValidator()
     {

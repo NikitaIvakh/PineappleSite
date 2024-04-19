@@ -3,7 +3,7 @@ using System.Data;
 
 namespace Coupon.Infrastructure.Health;
 
-public class DbConnectionFactory(string connectionString)
+public sealed class DbConnectionFactory(string connectionString)
 {
     public IDbConnection OpenConnection()
     {
