@@ -55,7 +55,7 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction("Index", "Home");
         }
     }
-    
+
     // GET: CouponController/Details/5
     public async Task<ActionResult> Details(string couponId)
     {
@@ -101,7 +101,7 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction(nameof(Index));
         }
     }
-    
+
     // GET: CouponController/Edit/5
     public async Task<ActionResult> Edit(string couponId)
     {
@@ -123,7 +123,7 @@ public class CouponController(ICouponService couponService) : Controller
         TempData["error"] = coupon.ValidationErrors;
         return RedirectToAction(nameof(Index));
     }
-    
+
     // POST: CouponController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
@@ -175,7 +175,7 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction(nameof(Index));
         }
     }
-    
+
     public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons)
     {
         if (selectedCoupons.Count <= 1)
