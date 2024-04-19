@@ -1,17 +1,16 @@
 ﻿using Favourite.Domain.DTOs;
 
-namespace Favourite.Domain.Entities
+namespace Favourite.Domain.Entities;
+
+public sealed class FavouriteDetails
 {
-    public class FavouriteDetails
-    {
-        public int FavouriteDetailsId { get; set; }
+    public int FavouriteDetailsId { get; init; }
 
-        public FavouriteHeader? FavouriteHeader { get; set; }
+    public FavouriteHeader? FavouriteHeader { get; init; }
 
-        public int FavouriteHeaderId { get; set; }
+    public int FavouriteHeaderId { get; init; }
 
-        public ProductDto? Product { get; set; }
+    public ProductDto? Product { get; init; }
 
-        public int ProductId { get; set; }
-    }
+    public int ProductId { get; init; }
 }

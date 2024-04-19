@@ -1,9 +1,8 @@
-﻿namespace Favourite.Domain.Enum
+﻿namespace Favourite.Domain.Enum;
+
+public enum ProductCategory
 {
-    public enum ProductCategory
-    {
-        Soups = 1,
-        Snacks = 2,
-        Drinks = 3,
-    }
+    Soups = 1,
+    Snacks = 2,
+    Drinks = 3,
 }

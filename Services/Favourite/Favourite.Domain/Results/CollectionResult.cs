@@ -1,7 +1,7 @@
 ﻿namespace Favourite.Domain.Results
 {
-    public class CollectionResult<TEntity> : Result<IReadOnlyCollection<TEntity>>
+    public class CollectionResult<T> : Result<IReadOnlyCollection<T>>
     {
-        public int Count { get; set; }
+        public int Count { get; init; }
     }
 }

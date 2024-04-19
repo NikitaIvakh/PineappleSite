@@ -1,9 +1,8 @@
-﻿namespace Favourite.Domain.Entities
-{
-    public class FavouriteHeader
-    {
-        public int FavouriteHeaderId { get; set; }
+﻿namespace Favourite.Domain.Entities;
 
-        public string? UserId { get; set; }
-    }
+public sealed class FavouriteHeader
+{
+    public int FavouriteHeaderId { get; init; }
+
+    public string? UserId { get; init; }
 }

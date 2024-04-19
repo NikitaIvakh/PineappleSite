@@ -1,25 +1,19 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
+using Favourite.Application.Mapping;
 
-namespace Favourite.Application.DependencyInjection
+namespace Favourite.Application.DependencyInjection;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static void ConfigureApplicationServices(this IServiceCollection services)
     {
-        public static void ConfigureApplicationServices(this IServiceCollection services)
-        {
-            services.RegisterInits();
-            services.RegisterServices();
-        }
+        RegisterInits(services);
+    }
 
-        private static void RegisterInits(this IServiceCollection services)
-        {
-            services.AddAutoMapper(Assembly.GetExecutingAssembly());
-            services.AddMediatR(config => config.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]));
-        }
-
-        private static void RegisterServices(this IServiceCollection services)
-        {
-
-        }
+    private static void RegisterInits(IServiceCollection services)
+    {
+        services.AddAutoMapper(typeof(MappingProfile));
+        services.AddMediatR(config => config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly()));
     }
 }

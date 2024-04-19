@@ -1,9 +1,8 @@
-﻿namespace Favourite.Domain.DTOs
-{
-    public class FavouriteHeaderDto
-    {
-        public int FavouriteHeaderId { get; set; }
+﻿namespace Favourite.Domain.DTOs;
 
-        public string? UserId { get; set; }
-    }
+public class FavouriteHeaderDto
+{
+    public int FavouriteHeaderId { get; init; }
+
+    public string? UserId { get; init; }
 }

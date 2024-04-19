@@ -1,15 +1,14 @@
-﻿namespace Favourite.Domain.DTOs
+﻿namespace Favourite.Domain.DTOs;
+
+public sealed class FavouriteDetailsDto
 {
-    public class FavouriteDetailsDto
-    {
-        public int FavouriteDetailsId { get; set; }
+    public int FavouriteDetailsId { get; set; }
 
-        public FavouriteHeaderDto? FavouriteHeader { get; set; }
+    public FavouriteHeaderDto? FavouriteHeader { get; init; }
 
-        public int FavouriteHeaderId { get; set; }
+    public int FavouriteHeaderId { get; set; }
 
-        public ProductDto? Product { get; set; }
+    public ProductDto? Product { get; set; }
 
-        public int ProductId { get; set; }
-    }
+    public int ProductId { get; init; }
 }

@@ -9,93 +9,101 @@ using Favourite.Domain.Results;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Favourite.Application.Features.Handlers.Commands
+namespace Favourite.Application.Features.Handlers.Commands;
+
+public sealed class FavouriteProductUpsertRequestHandler(
+    IBaseRepository<FavouriteHeader> headerRepository,
+    IBaseRepository<FavouriteDetails> detailsRepository,
+    IMapper mapper,
+    IMemoryCache memoryCache) : IRequestHandler<FavouriteProductUpsertRequest, Result<FavouriteHeaderDto>>
 {
-    public class FavouriteProductUpsertRequestHandler(IBaseRepositiry<FavouriteHeader> headerRepository, IBaseRepositiry<FavouriteDetails> detailsRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<FavouriteProductUpsertRequest, Result<FavouriteHeaderDto>>
+    private const string CacheKey = "FavouritesCacheKey";
+
+    public async Task<Result<FavouriteHeaderDto>> Handle(FavouriteProductUpsertRequest request,
+        CancellationToken cancellationToken)
     {
-        private readonly IBaseRepositiry<FavouriteHeader> _favouriteHeaderRepository = headerRepository;
-        private readonly IBaseRepositiry<FavouriteDetails> _favouriteDetailsRepository = detailsRepository;
-        private readonly IMapper _mapper = mapper;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "FavouritesCacheKey";
-
-        public async Task<Result<FavouriteHeaderDto>> Handle(FavouriteProductUpsertRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var favouriteHeaderFromDb = headerRepository.GetAll()
+                .FirstOrDefault(key => key.UserId == request.FavouriteDto.FavouriteHeader.UserId);
+
+            if (favouriteHeaderFromDb is null)
             {
-                FavouriteHeader? favouriteHeaderFromDb = _favouriteHeaderRepository.GetAll().FirstOrDefault(key => key.UserId == request.FavouriteDto.FavouriteHeader.UserId);
+                var favouriteHeader =
+                    mapper.Map<FavouriteHeader>(request.FavouriteDto.FavouriteHeader);
+                await headerRepository.CreateAsync(favouriteHeader!);
 
-                if (favouriteHeaderFromDb is null)
-                {
-                    FavouriteHeader? favouriteHeader = _mapper.Map<FavouriteHeader>(request.FavouriteDto.FavouriteHeader);
-                    await _favouriteHeaderRepository.CreateAsync(favouriteHeader);
+                request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteHeader!.FavouriteHeaderId;
+                await detailsRepository.CreateAsync(
+                    mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First())!);
 
-                    request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteHeader.FavouriteHeaderId;
-                    await _favouriteDetailsRepository.CreateAsync(_mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First()));
+                var getAllHeaders = headerRepository.GetAll().ToList();
+                var getAllDetails = detailsRepository.GetAll().ToList();
 
-                    var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
-                    var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
+                memoryCache.Remove(getAllHeaders);
+                memoryCache.Remove(getAllDetails);
+                memoryCache.Set(CacheKey, getAllHeaders);
+                memoryCache.Set(CacheKey, getAllDetails);
 
-                    _memoryCache.Remove(getAllheaders);
-                    _memoryCache.Remove(getAlldetails);
-
-                    _memoryCache.Set(cacheKey, getAllheaders);
-                    _memoryCache.Set(cacheKey, getAlldetails);
-
-                    return new Result<FavouriteHeaderDto>
-                    {
-                        SuccessCode = (int)SuccessCode.Created,
-                        Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeader),
-                        SuccessMessage = SuccessMessage.FroductSuccessfullyAddedToFavourite,
-                    };
-                }
-
-                else
-                {
-                    FavouriteDetails? favouriteDetails = _favouriteDetailsRepository
-                        .GetAll()
-                        .FirstOrDefault(key => key.ProductId == request.FavouriteDto.FavouriteDetails.First().ProductId && key.FavouriteHeaderId == favouriteHeaderFromDb.FavouriteHeaderId);
-
-                    if (favouriteDetails is null)
-                    {
-                        request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteHeaderFromDb.FavouriteHeaderId;
-                        await _favouriteDetailsRepository.CreateAsync(_mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First()));
-                    }
-
-                    else
-                    {
-                        request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId = favouriteDetails.FavouriteHeaderId;
-                        request.FavouriteDto.FavouriteDetails.First().FavouriteDetailsId = favouriteDetails.FavouriteDetailsId;
-                    }
-
-                    var getAllheaders = _favouriteHeaderRepository.GetAll().ToList();
-                    var getAlldetails = _favouriteDetailsRepository.GetAll().ToList();
-
-                    _memoryCache.Remove(getAllheaders);
-                    _memoryCache.Remove(getAlldetails);
-
-                    _memoryCache.Set(cacheKey, getAllheaders);
-                    _memoryCache.Set(cacheKey, getAlldetails);
-
-                    return new Result<FavouriteHeaderDto>
-                    {
-                        SuccessCode = (int)SuccessCode.Created,
-                        Data = _mapper.Map<FavouriteHeaderDto>(favouriteHeaderFromDb),
-                        SuccessMessage = SuccessMessage.FroductSuccessfullyAddedToFavourite,
-                    };
-                }
-            }
-
-            catch
-            {
                 return new Result<FavouriteHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [ErrorMessages.InternalServerError]
+                    StatusCode = (int)StatusCode.Created,
+                    Data = mapper.Map<FavouriteHeaderDto>(favouriteHeader),
+                    SuccessMessage = SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedToFavourite",
+                        SuccessMessage.Culture),
                 };
             }
+
+            var favouriteDetails = detailsRepository
+                .GetAll()
+                .FirstOrDefault(key =>
+                    key.ProductId == request.FavouriteDto.FavouriteDetails.First().ProductId &&
+                    key.FavouriteHeaderId == favouriteHeaderFromDb.FavouriteHeaderId);
+
+            if (favouriteDetails is null)
+            {
+                request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId =
+                    favouriteHeaderFromDb.FavouriteHeaderId;
+
+                await detailsRepository.CreateAsync(
+                    mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First())!);
+            }
+
+            else
+            {
+                request.FavouriteDto.FavouriteDetails.First().FavouriteHeaderId =
+                    favouriteDetails.FavouriteHeaderId;
+
+                request.FavouriteDto.FavouriteDetails.First().FavouriteDetailsId =
+                    favouriteDetails.FavouriteDetailsId;
+            }
+
+            var getAllHeaders1 = headerRepository.GetAll().ToList();
+            var getAllDetails1 = detailsRepository.GetAll().ToList();
+
+            memoryCache.Remove(getAllHeaders1);
+            memoryCache.Remove(getAllDetails1);
+            memoryCache.Set(CacheKey, getAllHeaders1);
+            memoryCache.Set(CacheKey, getAllDetails1);
+
+            return new Result<FavouriteHeaderDto>
+            {
+                StatusCode = (int)StatusCode.Created,
+                Data = mapper.Map<FavouriteHeaderDto>(favouriteHeaderFromDb),
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedToFavourite",
+                        SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<FavouriteHeaderDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

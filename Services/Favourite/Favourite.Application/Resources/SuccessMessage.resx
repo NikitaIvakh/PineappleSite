@@ -120,7 +120,7 @@
   <data name="FavouriteProducts" xml:space="preserve">
     <value>Ваши избранные товары</value>
   </data>
-  <data name="FroductSuccessfullyAddedToFavourite" xml:space="preserve">
+  <data name="ProductSuccessfullyAddedToFavourite" xml:space="preserve">
     <value>Продукт успешно добавлен в избранное</value>
   </data>
   <data name="ProductsSuccessfullyDeleted" xml:space="preserve">

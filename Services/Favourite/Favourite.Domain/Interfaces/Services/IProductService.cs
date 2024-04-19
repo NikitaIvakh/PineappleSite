@@ -1,10 +1,9 @@
 ﻿using Favourite.Domain.DTOs;
 using Favourite.Domain.Results;
 
-namespace Favourite.Domain.Interfaces.Services
+namespace Favourite.Domain.Interfaces.Services;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<CollectionResult<ProductDto>> GetProductListAsync();
-    }
+    Task<CollectionResult<ProductDto>> GetProductListAsync();
 }

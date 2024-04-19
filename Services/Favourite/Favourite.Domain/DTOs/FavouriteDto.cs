@@ -1,9 +1,8 @@
-﻿namespace Favourite.Domain.DTOs
-{
-    public class FavouriteDto
-    {
-        public FavouriteHeaderDto FavouriteHeader { get; set; }
+﻿namespace Favourite.Domain.DTOs;
 
-        public List<FavouriteDetailsDto> FavouriteDetails { get; set; }
-    }
+public sealed class FavouriteDto(FavouriteHeaderDto favouriteHeader, List<FavouriteDetailsDto> favouriteDetails)
+{
+    public FavouriteHeaderDto FavouriteHeader { get; init; } = favouriteHeader;
+
+    public List<FavouriteDetailsDto> FavouriteDetails { get; init; } = favouriteDetails;
 }
