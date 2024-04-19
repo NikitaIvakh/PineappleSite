@@ -58,8 +58,8 @@ public class CouponService(
             };
         }
     }
-
-    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponAsync(int couponId)
+    
+    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponByIdAsync(string couponId)
     {
         AddBearerToken();
         try
@@ -96,8 +96,8 @@ public class CouponService(
             };
         }
     }
-
-    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponAsync(string couponCode)
+    
+    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponByCodeAsync(string couponCode)
     {
         AddBearerToken();
         try
@@ -135,7 +135,7 @@ public class CouponService(
         }
     }
 
-    public async Task<ResultViewModel<int>> CreateCouponAsync(CreateCouponViewModel createCoupon)
+    public async Task<ResultViewModel<string>> CreateCouponAsync(CreateCouponViewModel createCoupon)
     {
         AddBearerToken();
         try
@@ -145,7 +145,7 @@ public class CouponService(
 
             if (apiResponse.IsSuccess)
             {
-                return new ResultViewModel<int>
+                return new ResultViewModel<string>
                 {
                     Data = apiResponse.Data,
                     StatusCode = apiResponse.StatusCode,
@@ -153,17 +153,17 @@ public class CouponService(
                 };
             }
 
-            return new ResultViewModel<int>
+            return new ResultViewModel<string>
             {
                 StatusCode = apiResponse.StatusCode,
                 ErrorMessage = apiResponse.ErrorMessage,
                 ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
             };
         }
-
+        
         catch (CouponExceptions<string> ex)
         {
-            return new ResultViewModel<int>
+            return new ResultViewModel<string>
             {
                 StatusCode = ConvertCouponExceptions(ex).StatusCode,
                 ErrorMessage = ConvertCouponExceptions(ex).ErrorMessage,
@@ -171,8 +171,8 @@ public class CouponService(
             };
         }
     }
-
-    public async Task<ResultViewModel> UpdateCouponAsync(int couponId, UpdateCouponViewModel updateCoupon)
+    
+    public async Task<ResultViewModel> UpdateCouponAsync(string couponId, UpdateCouponViewModel updateCoupon)
     {
         AddBearerToken();
         try
@@ -207,8 +207,8 @@ public class CouponService(
             };
         }
     }
-
-    public async Task<ResultViewModel> DeleteCouponAsync(int couponId, DeleteCouponViewModel deleteCoupon)
+    
+    public async Task<ResultViewModel> DeleteCouponAsync(string couponId, DeleteCouponViewModel deleteCoupon)
     {
         AddBearerToken();
         try

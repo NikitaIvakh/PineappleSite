@@ -4,7 +4,7 @@ namespace PineappleSite.Presentation.Models.Coupons;
 
 public class UpdateCouponViewModel
 {
-    public int CouponId { get; init; }
+    public string? CouponId { get; init; }
 
     [Required(ErrorMessage = "Поле обязательно для заполнения")]
     [MaxLength(20, ErrorMessage = "Строка не должна превышать 20 символов")]

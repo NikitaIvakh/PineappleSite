@@ -33,12 +33,12 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
@@ -51,30 +51,30 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body);
+        System.Threading.Tasks.Task<StringResult> CreateCouponAsync(CreateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<StringResult> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body);
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(string couponId, UpdateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(string couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(string couponId, DeleteCouponDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(string couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
@@ -203,7 +203,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId)
+        public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId)
         {
             return GetCouponByIdAsync(couponId, System.Threading.CancellationToken.None);
         }
@@ -211,7 +211,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(int couponId, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken)
         {
             if (couponId == null)
                 throw new System.ArgumentNullException("couponId");
@@ -391,7 +391,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body)
+        public virtual System.Threading.Tasks.Task<StringResult> CreateCouponAsync(CreateCouponDto body)
         {
             return CreateCouponAsync(body, System.Threading.CancellationToken.None);
         }
@@ -399,7 +399,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<StringResult> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (body == null)
                 throw new System.ArgumentNullException("body");
@@ -448,7 +448,7 @@ namespace PineappleSite.Presentation.Services.Coupons
                         var status_ = (int)response_.StatusCode;
                         if (status_ == 200)
                         {
-                            var objectResponse_ = await ReadObjectResponseAsync<Int32Result>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            var objectResponse_ = await ReadObjectResponseAsync<StringResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                             if (objectResponse_.Object == null)
                             {
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -487,7 +487,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(string couponId, UpdateCouponDto body)
         {
             return UpdateCouponAsync(couponId, body, System.Threading.CancellationToken.None);
         }
@@ -495,7 +495,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(string couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (couponId == null)
                 throw new System.ArgumentNullException("couponId");
@@ -588,7 +588,7 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(string couponId, DeleteCouponDto body)
         {
             return DeleteCouponAsync(couponId, body, System.Threading.CancellationToken.None);
         }
@@ -596,7 +596,7 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(string couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
             if (couponId == null)
                 throw new System.ArgumentNullException("couponId");
@@ -929,8 +929,8 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class DeleteCouponDto
     {
-        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CouponId { get; set; }
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponId { get; set; }
 
     }
 
@@ -938,15 +938,15 @@ namespace PineappleSite.Presentation.Services.Coupons
     public partial class DeleteCouponsDto
     {
         [Newtonsoft.Json.JsonProperty("couponIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public System.Collections.Generic.ICollection<int> CouponIds { get; set; }
+        public System.Collections.Generic.ICollection<string> CouponIds { get; set; }
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class GetCouponDto
     {
-        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CouponId { get; set; }
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CouponCode { get; set; }
@@ -985,8 +985,8 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class GetCouponsDto
     {
-        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CouponId { get; set; }
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CouponCode { get; set; }
@@ -1026,7 +1026,7 @@ namespace PineappleSite.Presentation.Services.Coupons
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-    public partial class Int32Result
+    public partial class StringResult
     {
         [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public bool IsSuccess { get; set; }
@@ -1043,8 +1043,8 @@ namespace PineappleSite.Presentation.Services.Coupons
         [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
 
-        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int Data { get; set; }
+        [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string Data { get; set; }
 
     }
 
@@ -1080,8 +1080,8 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class UpdateCouponDto
     {
-        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-        public int CouponId { get; set; }
+        [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+        public string CouponId { get; set; }
 
         [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
         public string CouponCode { get; set; }
@@ -1122,9 +1122,9 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CouponExceptions<TResult> : CouponExceptions
     {
-        public string Result { get; private set; }
+        public TResult Result { get; private set; }
 
-        public CouponExceptions(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, string result, System.Exception innerException)
+        public CouponExceptions(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

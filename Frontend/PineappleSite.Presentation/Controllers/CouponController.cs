@@ -55,11 +55,11 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction("Index", "Home");
         }
     }
-
+    
     // GET: CouponController/Details/5
-    public async Task<ActionResult> Details(int couponId)
+    public async Task<ActionResult> Details(string couponId)
     {
-        var coupon = await couponService.GetCouponAsync(couponId);
+        var coupon = await couponService.GetCouponByIdAsync(couponId);
 
         if (coupon.IsSuccess)
         {
@@ -101,11 +101,11 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction(nameof(Index));
         }
     }
-
+    
     // GET: CouponController/Edit/5
-    public async Task<ActionResult> Edit(int couponId)
+    public async Task<ActionResult> Edit(string couponId)
     {
-        var coupon = await couponService.GetCouponAsync(couponId);
+        var coupon = await couponService.GetCouponByIdAsync(couponId);
 
         if (coupon.IsSuccess)
         {
@@ -123,11 +123,11 @@ public class CouponController(ICouponService couponService) : Controller
         TempData["error"] = coupon.ValidationErrors;
         return RedirectToAction(nameof(Index));
     }
-
+    
     // POST: CouponController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(int couponId, UpdateCouponViewModel updateCoupon)
+    public async Task<ActionResult> Edit(string couponId, UpdateCouponViewModel updateCoupon)
     {
         try
         {
@@ -153,7 +153,7 @@ public class CouponController(ICouponService couponService) : Controller
     // POST: CouponController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(int couponId, DeleteCouponViewModel deleteCoupon)
+    public async Task<ActionResult> Delete(string couponId, DeleteCouponViewModel deleteCoupon)
     {
         try
         {
@@ -175,8 +175,8 @@ public class CouponController(ICouponService couponService) : Controller
             return RedirectToAction(nameof(Index));
         }
     }
-
-    public async Task<ActionResult> DeleteMultiple(List<int> selectedCoupons)
+    
+    public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons)
     {
         if (selectedCoupons.Count <= 1)
         {
