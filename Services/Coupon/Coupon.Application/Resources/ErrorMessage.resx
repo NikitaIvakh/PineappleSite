@@ -156,4 +156,7 @@
   <data name="MinAmountNotValid" xml:space="preserve">
     <value>Сумма для применения купона не валидна</value>
   </data>
+  <data name="ChooseOneOrMoreCoupons" xml:space="preserve">
+    <value>Выберите хотя бы один купон для удаления</value>
+  </data>
 </root>

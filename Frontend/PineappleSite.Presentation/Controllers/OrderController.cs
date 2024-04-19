@@ -30,15 +30,15 @@ namespace PineappleSite.Presentation.Controllers
                 switch (status)
                 {
                     case "approved":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Approved);
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusApproved);
                         break;
 
                     case "readyforpickup":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_ReadyForPickup);
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusReadyForPickup);
                         break;
 
                     case "cancelled":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.Status_Cancelled || key.Status == StaticDetails.Status_Refunded);
+                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusCancelled || key.Status == StaticDetails.StatusRefunded);
                         break;
 
                     default:
@@ -104,7 +104,7 @@ namespace PineappleSite.Presentation.Controllers
         [HttpPost("OrderReadyForPickup")]
         public async Task<ActionResult> OrderReadyForPickup(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_ReadyForPickup);
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusReadyForPickup);
 
             if (!response.IsSuccess) 
                 return RedirectToAction(nameof(OrderIndex));
@@ -116,7 +116,7 @@ namespace PineappleSite.Presentation.Controllers
         [HttpPost("CompleteOrder")]
         public async Task<ActionResult> CompleteOrder(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Completed);
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusCompleted);
 
             if (!response.IsSuccess) 
                 return RedirectToAction(nameof(OrderIndex));
@@ -128,7 +128,7 @@ namespace PineappleSite.Presentation.Controllers
         [HttpPost("CancelOrder")]
         public async Task<ActionResult> CancelOrder(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.Status_Cancelled);
+            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusCancelled);
 
             if (!response.IsSuccess) 
                 return RedirectToAction(nameof(OrderIndex));

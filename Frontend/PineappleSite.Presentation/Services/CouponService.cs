@@ -5,7 +5,7 @@ using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Services;
 
-public class CouponService(
+public sealed class CouponService(
     ILocalStorageService localStorageService,
     ICouponClient couponClient,
     IMapper mapper,

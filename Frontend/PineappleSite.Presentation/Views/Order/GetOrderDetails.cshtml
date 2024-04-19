@@ -101,7 +101,7 @@
                             </ul>
 
                             @{
-                                if (Model.Status == StaticDetails.Status_Approved)
+                                if (Model.Status == StaticDetails.StatusApproved)
                                 {
                                     if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                     {
@@ -109,7 +109,7 @@
                                     }
                                 }
 
-                                if (Model.Status == StaticDetails.Status_ReadyForPickup)
+                                if (Model.Status == StaticDetails.StatusReadyForPickup)
                                 {
                                     if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                     {
@@ -117,7 +117,7 @@
                                     }
                                 }
 
-                                if (Model.Status == StaticDetails.Status_Approved || Model.Status == StaticDetails.Status_ReadyForPickup)
+                                if (Model.Status == StaticDetails.StatusApproved || Model.Status == StaticDetails.StatusReadyForPickup)
                                 {
                                     <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">@Localizer["Cancel the order"]</button>
                                 }

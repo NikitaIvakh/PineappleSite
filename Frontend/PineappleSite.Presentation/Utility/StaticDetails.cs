@@ -1,28 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PineappleSite.Presentation.Utility
+namespace PineappleSite.Presentation.Utility;
+
+public static class StaticDetails
 {
-    public static class StaticDetails
+    public enum UserRoles
     {
-        public enum UserRoles
-        {
-            [Display(Name = "Пользователь")]
-            User = 1,
+        [Display(Name = "Пользователь")]
+        User = 1,
 
-            [Display(Name = "Администратор")]
-            Administrator = 2
-        }
-
-
-        public const string RoleAdmin = "Administrator";
-        public const string RoleUser = "User";
-        public const string UserAdmin = "admin@localhost.com";
-
-        public const string Status_Pending = "Ожидается";
-        public const string Status_Approved = "Подтвержден";
-        public const string Status_ReadyForPickup = "Готов к выдаче";
-        public const string Status_Completed = "Завершен";
-        public const string Status_Refunded = "Возвращен";
-        public const string Status_Cancelled = "Отменен";
+        [Display(Name = "Администратор")]
+        Administrator = 2
     }
+
+    public const string RoleAdmin = "Administrator";
+    public const string RoleUser = "User";
+    public const string UserAdmin = "admin@localhost.com";
+
+    public const string StatusPending = "Ожидается";
+    public const string StatusApproved = "Подтвержден";
+    public const string StatusReadyForPickup = "Готов к выдаче";
+    public const string StatusCompleted = "Завершен";
+    public const string StatusRefunded = "Возвращен";
+    public const string StatusCancelled = "Отменен";
 }

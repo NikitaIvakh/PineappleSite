@@ -1,3 +1,3 @@
 ﻿namespace PineappleSite.Presentation.Models.Coupons;
 
-public record DeleteCouponsViewModel(List<string> CouponIds);
+public sealed record DeleteCouponsViewModel(List<string> CouponIds);

@@ -2,7 +2,7 @@
 
 namespace PineappleSite.Presentation.Models.Coupons;
 
-public class CreateCouponViewModel
+public sealed class CreateCouponViewModel
 {
     [Required(ErrorMessage = "Поле обязательно для заполнения")]
     [MaxLength(20, ErrorMessage = "Строка не должна превышать 20 символов")]

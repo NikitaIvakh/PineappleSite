@@ -285,7 +285,7 @@ namespace PineappleSite.Presentation.Controllers
                 {
                     OrderHeaderViewModel orderHeaderDto = response.Data;
 
-                    if (orderHeaderDto.Status == StaticDetails.Status_Approved)
+                    if (orderHeaderDto.Status == StaticDetails.StatusApproved)
                     {
                         TempData["success"] = response.SuccessMessage;
                         return View(orderId);

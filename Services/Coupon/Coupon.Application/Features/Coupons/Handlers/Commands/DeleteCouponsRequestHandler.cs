@@ -59,18 +59,32 @@ public sealed class DeleteCouponsRequestHandler(
                 .Where(key => request.DeleteCouponsDto.CouponIds.Contains(key.CouponId))
                 .ToListAsync(cancellationToken);
 
-            if (coupons.Count == 0)
+            switch (coupons.Count)
             {
-                return new CollectionResult<bool>
-                {
-                    StatusCode = (int)StatusCode.NotFound,
-                    ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture),
-                    ValidationErrors =
-                    [
-                        ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture) ??
-                        string.Empty
-                    ]
-                };
+                case 0:
+                    return new CollectionResult<bool>
+                    {
+                        StatusCode = (int)StatusCode.NotFound,
+                        ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture),
+                        ValidationErrors =
+                        [
+                            ErrorMessage.ResourceManager.GetString("CouponsNotFound", ErrorMessage.Culture) ??
+                            string.Empty
+                        ]
+                    };
+                
+                case <= 1:
+                    return new CollectionResult<bool>()
+                    {
+                        StatusCode = (int)StatusCode.NoContent,
+                        ErrorMessage =
+                            ErrorMessage.ResourceManager.GetString("ChooseOneOrMoreCoupons", ErrorMessage.Culture),
+                        ValidationErrors =
+                        [
+                            ErrorMessage.ResourceManager.GetString("ChooseOneOrMoreCoupons", ErrorMessage.Culture) ??
+                            string.Empty
+                        ]
+                    };
             }
 
             foreach (var coupon in coupons)

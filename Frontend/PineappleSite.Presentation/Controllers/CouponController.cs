@@ -7,7 +7,7 @@ using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers;
 
-public class CouponController(ICouponService couponService) : Controller
+public sealed class CouponController(ICouponService couponService) : Controller
 {
     // GET: CouponController
     public async Task<ActionResult> Index(string searchCode, string currentFilter, int? pageNumber)
@@ -178,12 +178,6 @@ public class CouponController(ICouponService couponService) : Controller
 
     public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons)
     {
-        if (selectedCoupons.Count <= 1)
-        {
-            TempData["error"] = "Выберите хотя бы один купон для удаления.";
-            return RedirectToAction(nameof(Index));
-        }
-
         DeleteCouponsViewModel deleteCoupons = new(selectedCoupons);
         var response = await couponService.DeleteCouponsAsync(deleteCoupons);
 

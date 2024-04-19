@@ -2,7 +2,7 @@
 
 namespace PineappleSite.Presentation.Models.Coupons;
 
-public class UpdateCouponViewModel
+public sealed class UpdateCouponViewModel
 {
     public string? CouponId { get; init; }
 

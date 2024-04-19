@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using PineappleSite.Presentation;
 
-WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
+var applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 applicationBuilder.Services.AddControllersWithViews().AddViewLocalization().AddDataAnnotationsLocalization();
@@ -30,7 +30,7 @@ applicationBuilder.Services.Configure<RequestLocalizationOptions>(options =>
     options.SupportedUICultures = supportedCultures;
 });
 
-WebApplication webApplication = applicationBuilder.Build();
+var webApplication = applicationBuilder.Build();
 
 var supportedCultures = new[]
 {
