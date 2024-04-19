@@ -1,3 +1,3 @@
 ﻿namespace Coupon.Domain.DTOs;
 
-public record GetCouponsDto(int CouponId, string CouponCode, double DiscountAmount, double MinAmount);
+public record GetCouponsDto(string CouponId, string CouponCode, double DiscountAmount, double MinAmount);

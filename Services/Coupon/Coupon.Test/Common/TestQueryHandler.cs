@@ -3,21 +3,20 @@ using Coupon.Domain.Interfaces.Repositories;
 using Coupon.Infrastructure.Repository;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Coupon.Test.Common
+namespace Coupon.Test.Common;
+
+public class TestQueryHandler : IDisposable
 {
-    public class TestQueryHandler : IDisposable
+    private readonly ApplicationDbContext _context;
+    protected readonly ICouponRepository Repository;
+    protected readonly IMemoryCache MemoryCache;
+
+    protected TestQueryHandler()
     {
-        private readonly ApplicationDbContext _context;
-        protected readonly ICouponRepository Repository;
-        protected readonly IMemoryCache MemoryCache;
-
-        protected TestQueryHandler()
-        {
-            _context = CouponRepositoryContextFactory.Create();
-            Repository = new CouponRepository(_context);
-            MemoryCache = new MemoryCache(new MemoryCacheOptions());
-        }
-
-        public void Dispose() => CouponRepositoryContextFactory.DestroyDatabase(_context);
+        _context = CouponRepositoryContextFactory.Create();
+        Repository = new CouponRepository(_context);
+        MemoryCache = new MemoryCache(new MemoryCacheOptions());
     }
+
+    public void Dispose() => CouponRepositoryContextFactory.DestroyDatabase(_context);
 }

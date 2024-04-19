@@ -15,7 +15,7 @@ public sealed class DeleteCouponRequestHandlerTest : TestCommandHandler
     {
         // Arrange
         var handler = new DeleteCouponRequestHandler(Repository, DeleteValidator, MemoryCache);
-        const int couponId = 3;
+        var couponId = Guid.Parse("a70b2384-54bf-4c01-91be-689ba8dd1a31").ToString();
         var deleteCouponDto = new DeleteCouponDto(CouponId: couponId);
 
         foreach (var entity in Context.ChangeTracker.Entries())
@@ -36,7 +36,7 @@ public sealed class DeleteCouponRequestHandlerTest : TestCommandHandler
     {
         // Arrange
         var handler = new DeleteCouponRequestHandler(Repository, DeleteValidator, MemoryCache);
-        const int couponId = 34;
+        var couponId = Guid.Parse("a70b2384-54bf-4c01-91be-689ba8dd1a99").ToString();
         var deleteCouponDto = new DeleteCouponDto(CouponId: couponId);
 
         // Act

@@ -19,7 +19,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 3,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test 1234",
             DiscountAmount: 40,
             MinAmount: 90
@@ -43,13 +43,35 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
     }
     
     [Fact]
+    public async Task UpdateCouponRequestHandler_FailOrWrong_CouponId()
+    {
+        // Arrange
+        var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
+        var updateCouponDto = new UpdateCouponDto
+        (
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2411").ToString(),
+            CouponCode: "Test 123",
+            DiscountAmount: 40,
+            MinAmount: 90
+        );
+
+        // Act
+        var result = await handler.Handle(new UpdateCouponRequest(updateCouponDto), CancellationToken.None);
+
+        // Assert
+        result.StatusCode.Should().Be(404);
+        result.ErrorMessage.Should().Be("Купон не найден");
+        result.ValidationErrors.Should().Equal("Купон не найден");
+    }
+    
+    [Fact]
     public async Task UpdateCouponRequestHandler_FailOrWrong_CouponCode_Max()
     {
         // Arrange
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 3,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test 12341111111111111111111111111111111111111111111111111",
             DiscountAmount: 40,
             MinAmount: 90
@@ -71,7 +93,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 3,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "T",
             DiscountAmount: 40,
             MinAmount: 90
@@ -93,7 +115,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 3,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test 1234",
             DiscountAmount: 401,
             MinAmount: 90
@@ -119,7 +141,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 3,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test coupon 12",
             DiscountAmount: 1,
             MinAmount: 90
@@ -141,7 +163,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 4,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test 1234 2",
             DiscountAmount: 40,
             MinAmount: 1020
@@ -166,7 +188,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 4,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "Test coupon 12",
             DiscountAmount: 19,
             MinAmount: 1
@@ -192,7 +214,7 @@ public sealed class UpdateCouponRequestHandlerTest : TestCommandHandler
         var handler = new UpdateCouponRequestHandler(Repository, UpdateValidator, MemoryCache);
         var updateCouponDto = new UpdateCouponDto
         (
-            CouponId: 4,
+            CouponId: Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString(),
             CouponCode: "T",
             DiscountAmount: 190,
             MinAmount: 1009

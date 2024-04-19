@@ -17,14 +17,18 @@ public sealed class DeleteCouponsRequestHandlerTest : TestCommandHandler
         var handler = new DeleteCouponsRequestHandler(Repository, DeleteCouponsValidator, MemoryCache);
         var deleteCouponsDto = new DeleteCouponsDto
         (
-            CouponIds: [3, 4, 5]
+            CouponIds: 
+            [
+                Guid.Parse("a70b2384-54bf-4c01-91be-689ba8dd1a31").ToString(), 
+                Guid.Parse("284e4b19-fccf-4ac4-8b13-a26dcd9e2475").ToString()
+            ]
         );
 
         foreach (var entity in Context.ChangeTracker.Entries())
         {
             entity.State = EntityState.Detached;
         }
-        
+
         // Act
         var result = await handler.Handle(new DeleteCouponsRequest(deleteCouponsDto), CancellationToken.None);
 
@@ -34,7 +38,7 @@ public sealed class DeleteCouponsRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().BeNullOrEmpty();
         result.ValidationErrors.Should().BeNullOrEmpty();
     }
-    
+
     [Fact]
     public async Task DeleteCouponsRequestHandlerTest_FailOrWrong_CouponIds()
     {
@@ -42,14 +46,14 @@ public sealed class DeleteCouponsRequestHandlerTest : TestCommandHandler
         var handler = new DeleteCouponsRequestHandler(Repository, DeleteCouponsValidator, MemoryCache);
         var deleteCouponsDto = new DeleteCouponsDto
         (
-            CouponIds: [7, 8, 7]
+            CouponIds: ["B4C4A067-1C55-42C8-993E-580DACC7A123", "AEDBA600-1D3D-4C77-BE31-186BC4E7A678"]
         );
 
         foreach (var entity in Context.ChangeTracker.Entries())
         {
             entity.State = EntityState.Detached;
         }
-        
+
         // Act
         var result = await handler.Handle(new DeleteCouponsRequest(deleteCouponsDto), CancellationToken.None);
 

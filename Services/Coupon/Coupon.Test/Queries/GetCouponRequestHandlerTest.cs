@@ -14,8 +14,8 @@ public sealed class GetCouponRequestHandlerTest : TestQueryHandler
     public async Task GetCouponRequestHandlerTest_Success()
     {
         var handler = new GetCouponRequestHandler(Repository, MemoryCache);
-        const int couponId = 5;
-
+        var couponId = Guid.Parse("a70b2384-54bf-4c01-91be-689ba8dd1a31").ToString();
+        
         // Act
         var result = await handler.Handle(new GetCouponRequest(couponId), CancellationToken.None);
 
@@ -25,7 +25,7 @@ public sealed class GetCouponRequestHandlerTest : TestQueryHandler
         result.ValidationErrors.ShouldBeNull();
 
         var getCoupon = await Repository.GetAllAsync().FirstOrDefaultAsync(key => key.CouponId == result.Data!.CouponId);
-        getCoupon!.CouponId.Should().Be(5);
+        getCoupon!.CouponId.Should().Be("a70b2384-54bf-4c01-91be-689ba8dd1a31");
         getCoupon.CouponCode.Should().Be("30OFF");
         getCoupon.DiscountAmount.Should().Be(30);
         getCoupon.MinAmount.Should().Be(40);
@@ -35,7 +35,7 @@ public sealed class GetCouponRequestHandlerTest : TestQueryHandler
     public async Task GetCouponRequestHandlerTest_FailOrWrong_CouponId()
     {
         var handler = new GetCouponRequestHandler(Repository, MemoryCache);
-        const int couponId = 999;
+        const string couponId = "a70b2384-54bf-4c01-91be-689ba8dd1a99";
 
         // Act
         var result = await handler.Handle(new GetCouponRequest(couponId), CancellationToken.None);

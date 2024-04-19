@@ -10,7 +10,7 @@ public class CouponTypeConfiguration : IEntityTypeConfiguration<CouponEntity>
     {
         builder.ToTable("Coupons");
         builder.HasKey(key => key.CouponId);
-        builder.Property(key => key.CouponId).ValueGeneratedOnAdd();
-        builder.Property(key => key.CouponCode).HasColumnType("varchar(255)").IsRequired();
+        builder.Property(key => key.DiscountAmount).HasColumnType("numeric(10, 2)");
+        builder.Property(key => key.MinAmount).HasColumnType("numeric(10, 2)");
     }
 }

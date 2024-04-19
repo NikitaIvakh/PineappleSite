@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Coupon.Application.Features.Coupons.Requests.Queries;
 
-public class GetCouponRequest(int couponId) : IRequest<Result<GetCouponDto>>
+public class GetCouponRequest(string couponId) : IRequest<Result<GetCouponDto>>
 {
-    public int CouponId { get; } = couponId;
+    public string CouponId { get; } = couponId;
 }

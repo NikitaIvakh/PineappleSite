@@ -2,7 +2,7 @@
 
 public class CouponEntity
 {
-    public int CouponId { get; init; }
+    public string CouponId { get; init; } = Guid.NewGuid().ToString();
 
     public required string CouponCode { get; set; }
 

@@ -16,11 +16,11 @@ public class CreateCouponRequestHandler(
     ICouponRepository repository,
     CreateValidator createValidator,
     IMemoryCache memoryCache)
-    : IRequestHandler<CreateCouponRequest, Result<int>>
+    : IRequestHandler<CreateCouponRequest, Result<string>>
 {
     private const string CacheKey = "couponsCacheKey";
 
-    public async Task<Result<int>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
+    public async Task<Result<string>> Handle(CreateCouponRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -39,7 +39,7 @@ public class CreateCouponRequestHandler(
                 {
                     if (errorMessages.TryGetValue(error.Key, out var errorMessage))
                     {
-                        return new Result<int>
+                        return new Result<string>
                         {
                             ValidationErrors = errorMessage,
                             StatusCode = (int)StatusCode.NoContent,
@@ -49,7 +49,7 @@ public class CreateCouponRequestHandler(
                     }
                 }
 
-                return new Result<int>
+                return new Result<string>
                 {
                     StatusCode = (int)StatusCode.NoContent,
                     ValidationErrors = result.Errors.Select(key => key.ErrorMessage).ToList(),
@@ -62,7 +62,7 @@ public class CreateCouponRequestHandler(
 
             if (couponAlreadyExists is not null)
             {
-                return new Result<int>
+                return new Result<string>
                 {
                     StatusCode = (int)StatusCode.NoContent,
                     ErrorMessage =
@@ -120,7 +120,7 @@ public class CreateCouponRequestHandler(
             memoryCache.Set(CacheKey, coupon);
             memoryCache.Set(CacheKey, coupons);
 
-            return new Result<int>
+            return new Result<string>
             {
                 Data = coupon.CouponId,
                 StatusCode = (int)StatusCode.Created,
@@ -132,7 +132,7 @@ public class CreateCouponRequestHandler(
         catch (Exception ex)
         {
             memoryCache.Remove(CacheKey);
-            return new Result<int>
+            return new Result<string>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],
