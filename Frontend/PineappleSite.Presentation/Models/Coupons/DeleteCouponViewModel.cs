@@ -1,7 +1,3 @@
-﻿namespace PineappleSite.Presentation.Models.Coupons
-{
-    public class DeleteCouponViewModel
-    {
-        public int CouponId { get; set; }
-    }
-}
+﻿namespace PineappleSite.Presentation.Models.Coupons;
+
+public record DeleteCouponViewModel(int CouponId);

@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Coupons
+﻿namespace PineappleSite.Presentation.Services.Coupons;
+
+public class CollectionResultViewModel<T> : ResultViewModel<IReadOnlyCollection<T>>
 {
-    public class CollectionResultViewModel<Type> : ResultViewModel<IReadOnlyCollection<Type>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; set; }
 }

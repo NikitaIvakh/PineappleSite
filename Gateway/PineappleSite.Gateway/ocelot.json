@@ -1,8 +1,8 @@
 {
   "Routes": [
     {
-      //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/GetCoupons",
+      // "Coupon.API": "https://localhost:7202"
+      "DownstreamPathTemplate": "/api/coupons/GetCoupons",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -10,7 +10,7 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/GetCoupons",
+      "UpstreamPathTemplate": "/api/coupons/GetCoupons",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -19,7 +19,7 @@
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/GetCouponById/{id}",
+      "DownstreamPathTemplate": "/api/coupons/GetCouponById/{couponId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -27,13 +27,13 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/GetCouponById/{id}",
+      "UpstreamPathTemplate": "/api/coupons/GetCouponById/{couponId}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
+      "DownstreamPathTemplate": "/api/coupons/GetCouponByCode/{couponCode}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -41,13 +41,13 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/GetCouponByCode/{couponCode}",
+      "UpstreamPathTemplate": "/api/coupons/GetCouponByCode/{couponCode}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/CreateCoupon",
+      "DownstreamPathTemplate": "/api/coupons/CreateCoupon",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -55,7 +55,7 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/CreateCoupon",
+      "UpstreamPathTemplate": "/api/coupons/CreateCoupon",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -64,7 +64,7 @@
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/UpdateCoupon/{id}",
+      "DownstreamPathTemplate": "/api/coupons/UpdateCoupon/{couponId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -72,7 +72,7 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/UpdateCoupon/{id}",
+      "UpstreamPathTemplate": "/api/coupons/UpdateCoupon/{couponId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -81,7 +81,7 @@
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/DeleteCoupon/{id}",
+      "DownstreamPathTemplate": "/api/coupons/DeleteCoupon/{couponId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -89,7 +89,7 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/DeleteCoupon/{id}",
+      "UpstreamPathTemplate": "/api/coupons/DeleteCoupon/{couponId}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -98,7 +98,7 @@
 
     {
       //"Coupon.API": "https://localhost:7202"
-      "DownstreamPathTemplate": "/api/Coupon/DeleteCouponList",
+      "DownstreamPathTemplate": "/api/coupons/DeleteCoupons",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -106,7 +106,7 @@
           "Port": 7202
         }
       ],
-      "UpstreamPathTemplate": "/api/Coupon/DeleteCouponList",
+      "UpstreamPathTemplate": "/api/coupons/DeleteCoupons",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

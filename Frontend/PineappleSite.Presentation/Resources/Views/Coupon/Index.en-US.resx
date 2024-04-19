@@ -157,7 +157,7 @@
     <value>Previous</value>
   </data>
   <data name="Remove entities" xml:space="preserve">
-    <value>Do you really want to delete this entry?</value>
+    <value>Delete?</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Search</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="Update" xml:space="preserve">
     <value>Update</value>
+  </data>
+  <data name="Remove entity" xml:space="preserve">
+    <value>Delete?</value>
   </data>
 </root>

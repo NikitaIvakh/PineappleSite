@@ -60,42 +60,41 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body);
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken);
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body);
-
-        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
-
-        /// <returns>Success</returns>
-        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body);
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body);
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken);
+        System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken);
+
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponsAsync(DeleteCouponsDto body);
+
+        /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+        /// <returns>Success</returns>
+        /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+        System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponsAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken);
 
     }
 
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CouponClient : ICouponClient
     {
-        private System.Net.Http.HttpClient _httpClient;
         private static System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings, true);
 
         public CouponClient(System.Net.Http.HttpClient httpClient)
         {
-            _httpClient = httpClient;
+            HttpClient = httpClient;
         }
 
         private static Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
@@ -125,20 +124,20 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken)
         {
-            var client_ = _httpClient;
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetCoupons");
 
@@ -171,6 +170,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
@@ -207,20 +216,20 @@ namespace PineappleSite.Presentation.Services.Coupons
             if (couponId == null)
                 throw new System.ArgumentNullException("couponId");
 
-            var client_ = _httpClient;
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetCouponById");
                     urlBuilder_.Append('/');
@@ -257,6 +266,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -291,20 +310,20 @@ namespace PineappleSite.Presentation.Services.Coupons
             if (couponCode == null)
                 throw new System.ArgumentNullException("couponCode");
 
-            var client_ = _httpClient;
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
                 using (var request_ = new System.Net.Http.HttpRequestMessage())
                 {
                     request_.Method = new System.Net.Http.HttpMethod("GET");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("GetCouponByCode");
                     urlBuilder_.Append('/');
@@ -341,6 +360,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -372,7 +401,10 @@ namespace PineappleSite.Presentation.Services.Coupons
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
         public virtual async System.Threading.Tasks.Task<Int32Result> CreateCouponAsync(CreateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
-            var client_ = _httpClient;
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
@@ -383,13 +415,13 @@ namespace PineappleSite.Presentation.Services.Coupons
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("CreateCoupon");
 
@@ -424,6 +456,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -445,20 +487,23 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body)
         {
-            return UpdateCouponAsync(id, body, System.Threading.CancellationToken.None);
+            return UpdateCouponAsync(couponId, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int id, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> UpdateCouponAsync(int couponId, UpdateCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
+            if (couponId == null)
+                throw new System.ArgumentNullException("couponId");
 
-            var client_ = _httpClient;
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
@@ -469,17 +514,17 @@ namespace PineappleSite.Presentation.Services.Coupons
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("UpdateCoupon");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(couponId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -512,6 +557,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -533,20 +588,23 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body)
+        public virtual System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body)
         {
-            return DeleteCouponAsync(id, body, System.Threading.CancellationToken.None);
+            return DeleteCouponAsync(couponId, body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int id, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<UnitResult> DeleteCouponAsync(int couponId, DeleteCouponDto body, System.Threading.CancellationToken cancellationToken)
         {
-            if (id == null)
-                throw new System.ArgumentNullException("id");
+            if (couponId == null)
+                throw new System.ArgumentNullException("couponId");
 
-            var client_ = _httpClient;
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
@@ -557,17 +615,17 @@ namespace PineappleSite.Presentation.Services.Coupons
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
                     urlBuilder_.Append("DeleteCoupon");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(id, System.Globalization.CultureInfo.InvariantCulture)));
+                    urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(couponId, System.Globalization.CultureInfo.InvariantCulture)));
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -600,6 +658,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                             return objectResponse_.Object;
                         }
                         else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                        }
+                        else
                         {
                             var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                             throw new CouponExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -621,17 +689,20 @@ namespace PineappleSite.Presentation.Services.Coupons
 
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body)
+        public virtual System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponsAsync(DeleteCouponsDto body)
         {
-            return DeleteCouponListAsync(body, System.Threading.CancellationToken.None);
+            return DeleteCouponsAsync(body, System.Threading.CancellationToken.None);
         }
 
         /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
         /// <returns>Success</returns>
         /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-        public virtual async System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponListAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken)
+        public virtual async System.Threading.Tasks.Task<BooleanCollectionResult> DeleteCouponsAsync(DeleteCouponsDto body, System.Threading.CancellationToken cancellationToken)
         {
-            var client_ = _httpClient;
+            if (body == null)
+                throw new System.ArgumentNullException("body");
+
+            var client_ = HttpClient;
             var disposeClient_ = false;
             try
             {
@@ -642,15 +713,15 @@ namespace PineappleSite.Presentation.Services.Coupons
                     content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("DELETE");
-                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                    request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                     var urlBuilder_ = new System.Text.StringBuilder();
                 
                     urlBuilder_.Append("api");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("Coupon");
+                    urlBuilder_.Append("coupons");
                     urlBuilder_.Append('/');
-                    urlBuilder_.Append("DeleteCouponList");
+                    urlBuilder_.Append("DeleteCoupons");
 
                     PrepareRequest(client_, request_, urlBuilder_);
 
@@ -681,6 +752,16 @@ namespace PineappleSite.Presentation.Services.Coupons
                                 throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                             }
                             return objectResponse_.Object;
+                        }
+                        else
+                        if (status_ == 400)
+                        {
+                            var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                            if (objectResponse_.Object == null)
+                            {
+                                throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                            }
+                            throw new CouponExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                         }
                         else
                         {
@@ -1041,9 +1122,9 @@ namespace PineappleSite.Presentation.Services.Coupons
     [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
     public partial class CouponExceptions<TResult> : CouponExceptions
     {
-        public TResult Result { get; private set; }
+        public string Result { get; private set; }
 
-        public CouponExceptions(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, TResult result, System.Exception innerException)
+        public CouponExceptions(string message, int statusCode, string response, System.Collections.Generic.IReadOnlyDictionary<string, System.Collections.Generic.IEnumerable<string>> headers, string result, System.Exception innerException)
             : base(message, statusCode, response, headers, innerException)
         {
             Result = result;

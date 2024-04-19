@@ -1,53 +1,48 @@
 ﻿using PineappleSite.Presentation.Contracts;
 using System.Net.Http.Headers;
 
-namespace PineappleSite.Presentation.Services.Coupons
+namespace PineappleSite.Presentation.Services.Coupons;
+
+public class BaseCouponService(
+    ILocalStorageService localStorageService,
+    ICouponClient couponClient,
+    IHttpContextAccessor contextAccessor)
 {
-    public class BaseCouponService(ILocalStorageService localStorageService, ICouponClient couponClient, IHttpContextAccessor contextAccessor)
+    protected static ResultViewModel ConvertCouponExceptions(CouponExceptions<string> couponExceptions)
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly ICouponClient _couponClient = couponClient;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        protected ResultViewModel ConvertCouponExceptions(CouponExceptions couponExceptions)
+        return couponExceptions.StatusCode switch
         {
-            if (couponExceptions.StatusCode == 403)
+            403 => new ResultViewModel
             {
-                return new ResultViewModel
-                {
-                    ErrorCode = 403,
-                    ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                    ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                };
-            }
+                StatusCode = 403,
+                ErrorMessage =
+                    "Пользователям не доступна эта страница. Эта страница доступна только администраторам.",
+                ValidationErrors =
+                    "Пользователям не доступна эта страница. Эта страница доступна только администраторам."
+            },
 
-            else if (couponExceptions.StatusCode == 401)
+            401 => new ResultViewModel
             {
-                return new ResultViewModel
-                {
-                    ErrorCode = 401,
-                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                };
-            }
+                StatusCode = 401,
+                ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                ValidationErrors = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."
+            },
 
-            else
+            _ => new ResultViewModel
             {
-                return new ResultViewModel
-                {
-                    ErrorCode = 500,
-                    ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
-                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
-                };
+                StatusCode = 500,
+                ErrorMessage = couponExceptions.Result,
+                ValidationErrors = couponExceptions.Result,
             }
-        }
+        };
+    }
 
-        protected void AddBearerToken()
+    protected void AddBearerToken()
+    {
+        if (contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
         {
-            if (_contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
-            {
-                _couponClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
-            }
+            couponClient.HttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
         }
     }
 }

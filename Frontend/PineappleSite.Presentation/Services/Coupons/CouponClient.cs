@@ -1,10 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Coupons
+﻿namespace PineappleSite.Presentation.Services.Coupons;
+
+public partial class CouponClient : ICouponClient
 {
-    public partial class CouponClient : ICouponClient
-    {
-        public HttpClient HttpClient
-        {
-            get { return _httpClient; }
-        }
-    }
+    public HttpClient HttpClient { get; }
 }

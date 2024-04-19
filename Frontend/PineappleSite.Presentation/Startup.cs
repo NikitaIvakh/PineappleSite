@@ -21,12 +21,18 @@ namespace PineappleSite.Presentation
 
         private static void ConfigureHttpClients(IServiceCollection services)
         {
-            services.AddHttpClient<ICouponClient, CouponClient>(couponClient => couponClient.BaseAddress = new Uri("https://localhost:7777"));
-            services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient => identityClient.BaseAddress = new Uri("https://localhost:7777"));
-            services.AddHttpClient<IProductClient, ProductClient>(productClient => productClient.BaseAddress = new Uri("https://localhost:7777"));
-            services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient => favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
-            services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart => cart.BaseAddress = new Uri("https://localhost:7777"));
-            services.AddHttpClient<IOrderClient, OrderClient>(order => order.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<ICouponClient, CouponClient>(couponClient =>
+                couponClient.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient =>
+                identityClient.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<IProductClient, ProductClient>(productClient =>
+                productClient.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient =>
+                favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart =>
+                cart.BaseAddress = new Uri("https://localhost:7777"));
+            services.AddHttpClient<IOrderClient, OrderClient>(order =>
+                order.BaseAddress = new Uri("https://localhost:7777"));
         }
 
         private static void ConfigureServices(IServiceCollection services)

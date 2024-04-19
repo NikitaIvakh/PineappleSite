@@ -6,7 +6,7 @@
 }
 
 <form class="container col-7" asp-action="Create">
-    <br />
+    <br/>
     <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
@@ -15,14 +15,14 @@
                 </div>
             </div>
         </div>
-        <hr />
+        <hr/>
         <div class="row">
             <div class="row">
                 <div class="col-6">
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Coupon Code"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="CouponCode" />
+                    <input class="form-control" asp-for="CouponCode"/>
                     <span class="text-danger" asp-validation-for="CouponCode"></span>
                 </div>
             </div>
@@ -31,7 +31,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Discount Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="DiscountAmount" />
+                    <input class="form-control" asp-for="DiscountAmount"/>
                     <span class="text-danger" asp-validation-for="DiscountAmount"></span>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Min Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="MinAmount" />
+                    <input class="form-control" asp-for="MinAmount"/>
                     <span class="text-danger" asp-validation-for="MinAmount"></span>
                 </div>
             </div>
@@ -48,12 +48,12 @@
                 <a class="btn-primary btn form-control" asp-action="Index" asp-route-culture="@CultureInfo.CurrentCulture.Name">@Localizer["Go Back"]</a>
             </div>
             <div class="col-5">
-                <input type="submit" value="@Localizer["Add Coupon"]" class="btn btn-success form-control" />
+                <input type="submit" value="@Localizer["Add Coupon"]" class="btn btn-success form-control"/>
             </div>
         </div>
     </div>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

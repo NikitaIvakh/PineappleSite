@@ -157,7 +157,7 @@
     <value>Назад</value>
   </data>
   <data name="Remove entities" xml:space="preserve">
-    <value>Вы действительно хотите удалить данную запись?</value>
+    <value>Удалить?</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
@@ -167,5 +167,8 @@
   </data>
   <data name="Update" xml:space="preserve">
     <value>Обновление</value>
+  </data>
+  <data name="Remove entity" xml:space="preserve">
+    <value>Удалить?</value>
   </data>
 </root>
