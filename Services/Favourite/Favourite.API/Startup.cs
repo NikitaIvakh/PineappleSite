@@ -30,7 +30,7 @@ public static class Startup
             options.SwaggerDoc("v2", new OpenApiInfo
             {
                 Version = "v2",
-                Title = "Микросервис для работы с избранными товарамий",
+                Title = "Микросервис для работы с избранными товарами",
                 Description = "Микросервис для работы с избранными товарами",
                 TermsOfService = new Uri("https://github.com/NikitaIvakh"),
                 Contact = new OpenApiContact
@@ -51,7 +51,7 @@ public static class Startup
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,

@@ -1,3 +1,4 @@
+using Carter;
 using Favourite.API;
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
@@ -7,10 +8,9 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCarter();
 
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
@@ -36,14 +36,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.MapCarter();
 app.UseHttpsRedirection();
 app.MapHealthChecks("health", new HealthCheckOptions
 {
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 
+app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
-
 app.Run();

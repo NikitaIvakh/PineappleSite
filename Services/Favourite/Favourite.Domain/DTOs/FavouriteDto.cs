@@ -2,7 +2,7 @@
 
 public sealed class FavouriteDto(FavouriteHeaderDto favouriteHeader, List<FavouriteDetailsDto> favouriteDetails)
 {
-    public FavouriteHeaderDto FavouriteHeader { get; init; } = favouriteHeader;
+    public FavouriteHeaderDto FavouriteHeader { get; } = favouriteHeader;
 
-    public List<FavouriteDetailsDto> FavouriteDetails { get; init; } = favouriteDetails;
+    public List<FavouriteDetailsDto> FavouriteDetails { get; } = favouriteDetails;
 }

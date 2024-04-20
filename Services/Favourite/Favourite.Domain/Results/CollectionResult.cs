@@ -1,7 +1,6 @@
-﻿namespace Favourite.Domain.Results
+﻿namespace Favourite.Domain.Results;
+
+public sealed class CollectionResult<T> : Result<IReadOnlyCollection<T>>
 {
-    public class CollectionResult<T> : Result<IReadOnlyCollection<T>>
-    {
-        public int Count { get; init; }
-    }
+    public int Count { get; init; }
 }
