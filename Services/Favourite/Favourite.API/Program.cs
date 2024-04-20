@@ -15,7 +15,8 @@ builder.Services.AddCarter();
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 
-builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]!));
+builder.Services.AddHttpClient("Product",
+    key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]!));
 
 builder.Host.UseSerilog((context, logConfig) =>
 {
@@ -27,6 +28,7 @@ builder.Services.AddSwagger();
 builder.Services.AddMemoryCache();
 builder.Services.AddSwaggerAuthentication();
 builder.Services.AddAppAuthentication(builder.Configuration);
+builder.Services.AddAuthenticatePolicy();
 
 var app = builder.Build();
 

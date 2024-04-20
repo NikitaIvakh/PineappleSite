@@ -6,6 +6,7 @@ using Favourite.Domain.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using static Favourite.API.Utility.StaticDetails;
 
 namespace Favourite.API.Endpoints;
 
@@ -13,7 +14,7 @@ public sealed class FavouriteEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/favourites");
+        var group = app.MapGroup("api/favourites").RequireAuthorization(UserAndAdministratorPolicy);
 
         group.MapGet("/GetFavouriteProducts/{userId}", GetFavouriteProducts);
         group.MapPost("/FavouriteUpsertAsync", FavouriteUpsertAsync);

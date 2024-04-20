@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using static Favourite.API.Utility.StaticDetails;
 
 namespace Favourite.API;
 
@@ -115,5 +116,15 @@ public static class Startup
                 Console.WriteLine($"XML-файл документации не найден: {xmlPath}");
             }
         });
+    }
+
+    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: UserAndAdministratorPolicy,
+                policy => { policy.RequireRole(RoleUser, RoleAdministrator); });
     }
 }
