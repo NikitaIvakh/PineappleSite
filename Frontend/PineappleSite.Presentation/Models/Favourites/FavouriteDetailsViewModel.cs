@@ -1,17 +1,16 @@
 ﻿using PineappleSite.Presentation.Models.Products;
 
-namespace PineappleSite.Presentation.Models.Favourites
+namespace PineappleSite.Presentation.Models.Favourites;
+
+public sealed class FavouriteDetailsViewModel
 {
-    public class FavouriteDetailsViewModel
-    {
-        public int FavouriteDetailsId { get; set; }
+    public int FavouriteDetailsId { get; init; }
 
-        public FavouriteHeaderViewModel? FavouriteHeader { get; set; }
+    public FavouriteHeaderViewModel? FavouriteHeader { get; init; }
 
-        public int FavouriteHeaderId { get; set; }
+    public int FavouriteHeaderId { get; init; }
 
-        public ProductViewModel? Product { get; set; }
+    public ProductViewModel? Product { get; init; }
 
-        public int ProductId { get; set; }
-    }
+    public int ProductId { get; init; }
 }

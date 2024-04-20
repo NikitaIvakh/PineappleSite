@@ -18,10 +18,10 @@ public sealed class FavouriteEndpoints : ICarterModule
 
         group.MapGet("/GetFavouriteProducts/{userId}", GetFavouriteProducts);
         group.MapPost("/FavouriteUpsertAsync", FavouriteUpsertAsync);
-        group.MapDelete("/DeleteFavouriteProduct", DeleteFavouriteProduct);
+        group.MapDelete("/DeleteFavouriteProduct/{productId:int}", DeleteFavouriteProduct);
         group.MapDelete("/DeleteFavouriteProducts", DeleteFavouriteProducts);
     }
-
+    
     private static async Task<Results<Ok<Result<FavouriteDto>>, BadRequest<string>>> GetFavouriteProducts(string userId,
         ISender sender, ILogger<FavouriteDto> logger)
     {
@@ -36,7 +36,7 @@ public sealed class FavouriteEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка получения избранных товаров: {userId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-
+    
     private static async Task<Results<Ok<Result<FavouriteHeaderDto>>, BadRequest<string>>> FavouriteUpsertAsync(
         ISender sender, ILogger<FavouriteHeaderDto> logger, [FromBody] FavouriteDto favouriteDto)
     {

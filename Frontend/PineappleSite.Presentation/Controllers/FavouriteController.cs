@@ -1,85 +1,57 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
-using PineappleSite.Presentation.Models.Favourites;
-using PineappleSite.Presentation.Services.Favorites;
 using System.Security.Claims;
 
-namespace PineappleSite.Presentation.Controllers
+namespace PineappleSite.Presentation.Controllers;
+
+public sealed class FavouriteController(IFavouriteService favouriteService) : Controller
 {
-    public class FavouriteController(IFavoriteService favoriteService) : Controller
+    // GET: FavouriteController
+    public async Task<ActionResult> Index()
     {
-        private readonly IFavoriteService _favoriteService = favoriteService;
-
-        // GET: FavouriteController
-        public async Task<ActionResult> Index()
+        try
         {
-            try
+            var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+            var result = await favouriteService.GetFavouriteProductsAsync(userId!);
+
+            if (result.IsSuccess)
             {
-                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
-                FavouriteResult<FavouriteViewModel> result = await _favoriteService.GetFavouruteProductsAsync(userId);
-
-                if (result.IsSuccess)
-                {
-                    FavouriteResult<FavouriteViewModel> favouriteViewModel = new()
-                    {
-                        Data = result.Data,
-                        ErrorCode = result.ErrorCode,
-                        ErrorMessage = result.ErrorMessage,
-                        SuccessMessage = result.SuccessMessage,
-                        ValidationErrors = result.ValidationErrors,
-                    };
-
-                    return View(favouriteViewModel);
-                }
-
-                else
-                {
-                    foreach (var error in result.ValidationErrors!)
-                    {
-                        TempData["error"] = error;
-                    }
-
-                    return RedirectToAction("Index", "Home");
-                }
+                TempData["success"] = result.SuccessMessage;
+                return View(result);
             }
 
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return View();
-            }
+            TempData["error"] = result.ValidationErrors;
+            return RedirectToAction("Index", "Home");
         }
 
-        // GET: FavouriteController/Delete/5
-        public async Task<ActionResult> DeleteProduct(int productId)
+        catch (Exception ex)
         {
-            try
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Index", "Home");
+        }
+    }
+
+    // GET: FavouriteController/Delete/5
+    public async Task<ActionResult> DeleteProduct(int productId)
+    {
+        try
+        {
+            var response = await favouriteService.DeleteFavouriteProductAsync(productId);
+
+            if (response.IsSuccess)
             {
-                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
-                FavouriteResult<FavouriteViewModel> response = await _favoriteService.FavouruteRemoveProductsAsync(productId);
-
-                if (response.IsSuccess)
-                {
-                    TempData["success"] = response.SuccessMessage;
-                    return RedirectToAction(nameof(Index));
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors!)
-                    {
-                        TempData["error"] = error;
-                    }
-
-                    return RedirectToAction(nameof(Index));
-                }
-            }
-
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
+                TempData["success"] = response.SuccessMessage;
                 return RedirectToAction(nameof(Index));
             }
+
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Index));
+        }
+
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

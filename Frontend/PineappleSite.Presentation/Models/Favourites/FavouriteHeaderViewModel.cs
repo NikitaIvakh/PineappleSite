@@ -1,9 +1,8 @@
-﻿namespace PineappleSite.Presentation.Models.Favourites
-{
-    public class FavouriteHeaderViewModel
-    {
-        public int FavouriteHeaderId { get; set; }
+﻿namespace PineappleSite.Presentation.Models.Favourites;
 
-        public string? UserId { get; set; }
-    }
+public sealed class FavouriteHeaderViewModel
+{
+    public int FavouriteHeaderId { get; init; }
+
+    public string? UserId { get; init; }
 }

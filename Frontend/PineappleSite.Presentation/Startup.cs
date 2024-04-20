@@ -2,7 +2,7 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Services;
 using PineappleSite.Presentation.Services.Coupons;
-using PineappleSite.Presentation.Services.Favorites;
+using PineappleSite.Presentation.Services.Favourite;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Orders;
 using PineappleSite.Presentation.Services.Products;
@@ -23,14 +23,19 @@ public static class Startup
     {
         services.AddHttpClient<ICouponClient, CouponClient>(couponClient =>
             couponClient.BaseAddress = new Uri("https://localhost:7777"));
+
         services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient =>
             identityClient.BaseAddress = new Uri("https://localhost:7777"));
+
         services.AddHttpClient<IProductClient, ProductClient>(productClient =>
             productClient.BaseAddress = new Uri("https://localhost:7777"));
-        services.AddHttpClient<IFavoritesClient, FavoritesClient>(favoritesClient =>
+
+        services.AddHttpClient<IFavouriteClient, FavouriteClient>(favoritesClient =>
             favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
+
         services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart =>
             cart.BaseAddress = new Uri("https://localhost:7777"));
+
         services.AddHttpClient<IOrderClient, OrderClient>(order =>
             order.BaseAddress = new Uri("https://localhost:7777"));
     }
@@ -41,7 +46,7 @@ public static class Startup
         services.AddScoped<ICouponService, CouponService>();
         services.AddScoped<IUserService, UserService>();
         services.AddScoped<IProductService, ProductService>();
-        services.AddScoped<IFavoriteService, FavoriteService>();
+        services.AddScoped<IFavouriteService, FavouriteService>();
         services.AddScoped<IShoppingCartService, ShoppingCartService>();
         services.AddScoped<IOrderService, OrderService>();
         services.AddTransient<IIdentityService, IdentityService>();

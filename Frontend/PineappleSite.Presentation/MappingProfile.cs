@@ -7,7 +7,7 @@ using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Coupons;
-using PineappleSite.Presentation.Services.Favorites;
+using PineappleSite.Presentation.Services.Favourite;
 using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Orders;
 using PineappleSite.Presentation.Services.Products;
@@ -23,7 +23,7 @@ public sealed class MappingProfile : Profile
 
         CreateMap<GetCouponDto, GetCouponViewModel>().ReverseMap();
         CreateMap<GetCouponsDto, GetCouponsViewModel>().ReverseMap();
-        
+
         CreateMap<CreateCouponDto, CreateCouponViewModel>().ReverseMap();
         CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
         CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
@@ -85,11 +85,11 @@ public sealed class MappingProfile : Profile
         CreateMap<FavouriteDto, FavouriteViewModel>().ReverseMap();
         CreateMap<FavouriteHeaderDto, FavouriteHeaderViewModel>().ReverseMap();
         CreateMap<FavouriteDetailsDto, FavouriteDetailsViewModel>().ReverseMap();
-        CreateMap<Services.Favorites.DeleteFavouriteProducts, DeleteFavouriteProductsViewModel>().ReverseMap();
-        CreateMap<DeleteProductsViewModel, DeleteFavouriteProducts>().ReverseMap();
+        CreateMap<DeleteFavouriteProductsDto, DeleteFavouriteProductsViewModel>().ReverseMap();
+        CreateMap<DeleteProductsViewModel, DeleteFavouriteProductsViewModel>().ReverseMap();
 
         CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
-        CreateMap<Services.Favorites.ProductDto, ProductViewModel>().ReverseMap();
+        CreateMap<Services.Favourite.ProductDto, ProductViewModel>().ReverseMap();
 
         #endregion
 

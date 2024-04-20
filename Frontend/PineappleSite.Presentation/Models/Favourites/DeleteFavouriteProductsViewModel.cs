@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Models.Favourites
+﻿namespace PineappleSite.Presentation.Models.Favourites;
+
+public sealed class DeleteFavouriteProductsViewModel(List<int> productIds)
 {
-    public class DeleteFavouriteProductsViewModel
-    {
-        public List<int> ProductIds { get; set; }
-    }
+    public List<int> ProductIds { get; init; } = productIds;
 }

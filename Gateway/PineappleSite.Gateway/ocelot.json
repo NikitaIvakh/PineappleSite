@@ -115,7 +115,7 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
-      "DownstreamPathTemplate": "/api/Favourite/GetFavouriteProducts/{userid}",
+      "DownstreamPathTemplate": "/api/favourites/GetFavouriteProducts/{userid}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -123,7 +123,7 @@
           "Port": 7247
         }
       ],
-      "UpstreamPathTemplate": "/api/Favourite/GetFavouriteProducts/{userid}",
+      "UpstreamPathTemplate": "/api/favourites/GetFavouriteProducts/{userid}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -132,7 +132,7 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
-      "DownstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
+      "DownstreamPathTemplate": "/api/favourites/FavouriteUpsertAsync",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -140,7 +140,7 @@
           "Port": 7247
         }
       ],
-      "UpstreamPathTemplate": "/api/Favourite/FavouriteUpsertAsync",
+      "UpstreamPathTemplate": "/api/favourites/FavouriteUpsertAsync",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -149,7 +149,7 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
-      "DownstreamPathTemplate": "/api/Favourite/{productId}",
+      "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct/{productId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -157,7 +157,7 @@
           "Port": 7247
         }
       ],
-      "UpstreamPathTemplate": "/api/Favourite/{productId}",
+      "UpstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct/{productId}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -166,7 +166,7 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
-      "DownstreamPathTemplate": "/api/Favourite/DeleteProductList",
+      "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProducts",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -174,7 +174,7 @@
           "Port": 7247
         }
       ],
-      "UpstreamPathTemplate": "/api/Favourite/DeleteProductList",
+      "UpstreamPathTemplate": "/api/favourites/DeleteFavouriteProducts",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
