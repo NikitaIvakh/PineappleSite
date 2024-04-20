@@ -57,15 +57,19 @@ public sealed class GetFavouriteProductsRequestHandler(
                 };
             }
 
-            var favouriteDetails = detailsRepository.GetAll().Select(key =>
-                new FavouriteDetailsDto
-                {
-                    FavouriteDetailsId = key.FavouriteDetailsId,
-                    FavouriteHeader = mapper.Map<FavouriteHeaderDto>(key.FavouriteHeader),
-                    FavouriteHeaderId = key.FavouriteHeaderId,
-                    Product = key.Product,
-                    ProductId = key.ProductId,
-                }).OrderByDescending(key => key.FavouriteDetailsId).ToList();
+            var favouriteDetails = detailsRepository.GetAll()
+                .Where(key =>
+                    key.FavouriteHeader!.UserId == favouriteHeader.UserId &&
+                    key.FavouriteHeaderId == favouriteHeader.FavouriteHeaderId)
+                .Select(key =>
+                    new FavouriteDetailsDto
+                    {
+                        FavouriteDetailsId = key.FavouriteDetailsId,
+                        FavouriteHeader = mapper.Map<FavouriteHeaderDto>(key.FavouriteHeader),
+                        FavouriteHeaderId = key.FavouriteHeaderId,
+                        Product = key.Product,
+                        ProductId = key.ProductId,
+                    }).OrderByDescending(key => key.FavouriteDetailsId).ToList();
 
             if (favouriteDetails.Count == 0)
             {
