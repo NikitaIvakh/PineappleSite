@@ -87,7 +87,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успшено удален.
+        ///   Looks up a localized string similar to Продукт успешно удален.
         /// </summary>
         internal static string ProductSuccessfullyDeleted {
             get {

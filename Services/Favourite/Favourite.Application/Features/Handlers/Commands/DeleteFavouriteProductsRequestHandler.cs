@@ -27,9 +27,6 @@ public sealed class DeleteFavouriteProductsRequestHandler(
             var favouriteDetails = favouriteDetailsRepository.GetAll()
                 .Where(key => request.DeleteFavourite.ProductIds.Contains(key.ProductId)).ToList();
 
-            var favouriteHeader = favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
-                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
-
             if (favouriteDetails.Count == 0)
             {
                 return new Result<FavouriteHeaderDto>
@@ -44,6 +41,9 @@ public sealed class DeleteFavouriteProductsRequestHandler(
                     ]
                 };
             }
+            
+            var favouriteHeader = favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
+                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
 
             var totalRemoveProducts = favouriteDetailsRepository.GetAll().Count(key =>
                 key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);

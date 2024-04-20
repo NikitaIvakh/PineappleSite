@@ -2,36 +2,36 @@
 using Favourite.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
-namespace Favourite.Test.Common
+namespace Favourite.Test.Common;
+
+public static class FavouriteProductsDbContextFactory
 {
-    public static class FavouriteProductsDbContextFactory
+    public static ApplicationDbContext Create()
     {
-        public static ApplicationDbContext Create()
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString())
+            .Options;
+        var context = new ApplicationDbContext(options);
+        context.Database.EnsureCreated();
+        context.FavouriteHeaders.AddRange(new FavouriteHeader
         {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new ApplicationDbContext(options);
-            context.Database.EnsureCreated();
-            context.FavouriteHeaders.AddRange(new FavouriteHeader
-            {
-                FavouriteHeaderId = 1,
-                UserId = "bestuserid1"
-            });
+            FavouriteHeaderId = 1,
+            UserId = "best-userid1"
+        });
 
-            context.FavouriteDetails.AddRange(new FavouriteDetails
-            {
-                FavouriteDetailsId = 1,
-                FavouriteHeaderId = 1,
-                ProductId = 2,
-            });
-
-            context.SaveChanges();
-            return context;
-        }
-
-        public static void Destroy(ApplicationDbContext context)
+        context.FavouriteDetails.AddRange(new FavouriteDetails
         {
-            context.Database.EnsureDeleted();
-            context.Dispose();
-        }
+            FavouriteDetailsId = 1,
+            FavouriteHeaderId = 1,
+            ProductId = 2,
+        });
+
+        context.SaveChanges();
+        return context;
+    }
+
+    public static void Destroy(ApplicationDbContext context)
+    {
+        context.Database.EnsureDeleted();
+        context.Dispose();
     }
 }

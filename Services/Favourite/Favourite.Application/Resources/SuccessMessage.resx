@@ -127,7 +127,7 @@
     <value>Продукты успшено удалены</value>
   </data>
   <data name="ProductSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукт успшено удален</value>
+    <value>Продукт успешно удален</value>
   </data>
   <data name="ThereAreNoFavouriteProducts" xml:space="preserve">
     <value>В избранном никаких товаров нет</value>
