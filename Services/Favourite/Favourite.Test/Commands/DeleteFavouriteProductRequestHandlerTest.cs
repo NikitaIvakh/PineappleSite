@@ -13,7 +13,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
     public async Task RemoveFavoriteRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, Mapper, MemoryCache);
+        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
         const int productId = 2;
 
         foreach (var entity in Context.ChangeTracker.Entries())
@@ -35,7 +35,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
     public async Task RemoveFavoriteRequestHandlerTest_FailOrWrongId()
     {
         // Arrange
-        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, Mapper, MemoryCache);
+        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
         const int productId = 13;
 
         // Act

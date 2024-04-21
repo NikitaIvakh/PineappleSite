@@ -1,10 +1,9 @@
-﻿using Favourite.Domain.DTOs;
+﻿using MediatR;
 using Favourite.Domain.Results;
-using MediatR;
 
 namespace Favourite.Application.Features.Requests.Commands;
 
-public sealed class DeleteFavouriteProductRequest(int productId) : IRequest<Result<FavouriteHeaderDto>>
+public sealed class DeleteFavouriteProductRequest(int productId) : IRequest<Result<Unit>>
 {
-    public int ProductId { get; init; } = productId;
+    public int ProductId { get; } = productId;
 }

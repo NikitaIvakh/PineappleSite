@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Favourite.Application.Features.Requests.Commands;
+﻿using Favourite.Application.Features.Requests.Commands;
 using Favourite.Application.Resources;
-using Favourite.Domain.DTOs;
 using Favourite.Domain.Entities;
 using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
@@ -14,12 +12,11 @@ namespace Favourite.Application.Features.Handlers.Commands;
 public sealed class DeleteFavouriteProductRequestHandler(
     IBaseRepository<FavouriteHeader> headerRepository,
     IBaseRepository<FavouriteDetails> detailsRepository,
-    IMapper mapper,
-    IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductRequest, Result<FavouriteHeaderDto>>
+    IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductRequest, Result<Unit>>
 {
     private const string CacheKey = "FavouritesCacheKey";
 
-    public async Task<Result<FavouriteHeaderDto>> Handle(DeleteFavouriteProductRequest request,
+    public async Task<Result<Unit>> Handle(DeleteFavouriteProductRequest request,
         CancellationToken cancellationToken)
     {
         try
@@ -29,7 +26,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
 
             if (favouriteProduct is null)
             {
-                return new Result<FavouriteHeaderDto>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("ProductNotFound", ErrorMessages.Culture),
@@ -40,9 +37,6 @@ public sealed class DeleteFavouriteProductRequestHandler(
                     ]
                 };
             }
-            
-            var favouriteHeader = headerRepository.GetAll()
-                .FirstOrDefault(key => key.FavouriteHeaderId == favouriteProduct!.FavouriteHeaderId);
 
             var totalRemoveFavouriteItems = detailsRepository
                 .GetAll().Count(key => key.FavouriteHeaderId == favouriteProduct.FavouriteHeaderId);
@@ -56,7 +50,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
 
                 if (favouriteHeaderDelete is null)
                 {
-                    return new Result<FavouriteHeaderDto>
+                    return new Result<Unit>
                     {
                         StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage =
@@ -80,10 +74,10 @@ public sealed class DeleteFavouriteProductRequestHandler(
             memoryCache.Set(CacheKey, getAllHeaders);
             memoryCache.Set(CacheKey, getAllDetails);
 
-            return new Result<FavouriteHeaderDto>
+            return new Result<Unit>
             {
+                Data = Unit.Value,
                 StatusCode = (int)StatusCode.Deleted,
-                Data = mapper.Map<FavouriteHeaderDto>(favouriteHeader),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("ProductSuccessfullyDeleted", SuccessMessage.Culture),
             };
@@ -91,7 +85,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<FavouriteHeaderDto>
+            return new Result<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],
