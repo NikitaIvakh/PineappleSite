@@ -59,12 +59,12 @@ public partial interface IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<FavouriteHeaderDtoResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body);
+    Task<UnitCollectionResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<FavouriteHeaderDtoResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body, CancellationToken cancellationToken);
+    Task<UnitCollectionResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body, CancellationToken cancellationToken);
 
 }
 
@@ -379,7 +379,7 @@ public partial class FavouriteClient : IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public Task<FavouriteHeaderDtoResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body)
+    public Task<UnitCollectionResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body)
     {
         return DeleteFavouriteProductsAsync(body, CancellationToken.None);
     }
@@ -387,7 +387,7 @@ public partial class FavouriteClient : IFavouriteClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public async Task<FavouriteHeaderDtoResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body, CancellationToken cancellationToken)
+    public async Task<UnitCollectionResult> DeleteFavouriteProductsAsync(DeleteFavouriteProductsDto body, CancellationToken cancellationToken)
     {
         if (body == null)
             throw new ArgumentNullException("body");
@@ -436,7 +436,7 @@ public partial class FavouriteClient : IFavouriteClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<FavouriteHeaderDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<UnitCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new FavouriteExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -590,13 +590,13 @@ public partial class FavouriteDetailsDto
     [JsonProperty("favouriteDetailsId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public int FavouriteDetailsId { get; set; }
 
-    [JsonProperty("favouriteHeader", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteHeader", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public FavouriteHeaderDto FavouriteHeader { get; set; }
 
     [JsonProperty("favouriteHeaderId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public int FavouriteHeaderId { get; set; }
 
-    [JsonProperty("product", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("product", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public ProductDto Product { get; set; }
 
     [JsonProperty("productId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
@@ -607,7 +607,7 @@ public partial class FavouriteDetailsDto
 [GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class FavouriteDto
 {
-    [JsonProperty("favouriteHeader", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteHeader", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public FavouriteHeaderDto FavouriteHeader { get; set; }
 
     [JsonProperty("favouriteDetails", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -713,6 +713,32 @@ public partial class ProductDto
 [GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class Unit
 {
+
+}
+
+[GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class UnitCollectionResult
+{
+    [JsonProperty("isSuccess", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [JsonProperty("successMessage", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [JsonProperty("errorMessage", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [JsonProperty("statusCode", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [JsonProperty("validationErrors", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public ICollection<string> ValidationErrors { get; set; }
+
+    [JsonProperty("data", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public ICollection<Unit> Data { get; set; }
+
+    [JsonProperty("count", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public int Count { get; set; }
 
 }
 

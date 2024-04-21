@@ -1,7 +1,5 @@
-﻿using AutoMapper;
-using Favourite.Application.Features.Requests.Commands;
+﻿using Favourite.Application.Features.Requests.Commands;
 using Favourite.Application.Resources;
-using Favourite.Domain.DTOs;
 using Favourite.Domain.Entities;
 using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
@@ -14,12 +12,11 @@ namespace Favourite.Application.Features.Handlers.Commands;
 public sealed class DeleteFavouriteProductsRequestHandler(
     IBaseRepository<FavouriteHeader> favouriteHeaderRepository,
     IBaseRepository<FavouriteDetails> favouriteDetailsRepository,
-    IMapper mapper,
-    IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductsRequest, Result<FavouriteHeaderDto>>
+    IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductsRequest, CollectionResult<Unit>>
 {
     private const string CacheKey = "FavouritesCacheKey";
 
-    public async Task<Result<FavouriteHeaderDto>> Handle(DeleteFavouriteProductsRequest request,
+    public async Task<CollectionResult<Unit>> Handle(DeleteFavouriteProductsRequest request,
         CancellationToken cancellationToken)
     {
         try
@@ -29,9 +26,8 @@ public sealed class DeleteFavouriteProductsRequestHandler(
 
             if (favouriteDetails.Count == 0)
             {
-                return new Result<FavouriteHeaderDto>
+                return new CollectionResult<Unit>
                 {
-                    Data = new FavouriteHeaderDto(),
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("ProductsNotFound", ErrorMessages.Culture),
                     ValidationErrors =
@@ -41,48 +37,53 @@ public sealed class DeleteFavouriteProductsRequestHandler(
                     ]
                 };
             }
-            
-            var favouriteHeader = favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
-                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
-
-            var totalRemoveProducts = favouriteDetailsRepository.GetAll().Count(key =>
-                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
 
             foreach (var favouriteDetail in favouriteDetails)
             {
                 await favouriteDetailsRepository.DeleteAsync(favouriteDetail);
             }
 
+            var totalRemoveProducts = favouriteDetailsRepository.GetAll().Count(key =>
+                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
+
             if (totalRemoveProducts == 1)
             {
                 var favouriteHeaderFromDb = favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
                     key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
 
-                if (favouriteHeaderFromDb is not null)
+                if (favouriteHeaderFromDb is null)
                 {
-                    await favouriteHeaderRepository.DeleteAsync(favouriteHeaderFromDb);
+                    return new CollectionResult<Unit>()
+                    {
+                        StatusCode = (int)StatusCode.NotFound,
+                        ErrorMessage =
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture),
+                        ValidationErrors =
+                        [
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture) ??
+                            string.Empty
+                        ]
+                    };
                 }
+
+                await favouriteHeaderRepository.DeleteAsync(favouriteHeaderFromDb);
             }
 
-            var getAllHeaders = favouriteHeaderRepository.GetAll().ToList();
-            var getAllDetails = favouriteDetailsRepository.GetAll().ToList();
+            memoryCache.Remove(CacheKey);
 
-            memoryCache.Remove(getAllHeaders);
-            memoryCache.Remove(getAllDetails);
-            memoryCache.Set(CacheKey, getAllHeaders);
-            memoryCache.Set(CacheKey, getAllDetails);
-
-            return new Result<FavouriteHeaderDto>
+            return new CollectionResult<Unit>
             {
+                Data = [Unit.Value],
+                Count = favouriteDetails.Count,
                 StatusCode = (int)StatusCode.Deleted,
-                Data = mapper.Map<FavouriteHeaderDto>(favouriteHeader),
-                SuccessMessage = SuccessMessage.ResourceManager.GetString("ProductsSuccessfullyDeleted", SuccessMessage.Culture),
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("ProductsSuccessfullyDeleted", SuccessMessage.Culture),
             };
         }
 
         catch (Exception ex)
         {
-            return new Result<FavouriteHeaderDto>
+            return new CollectionResult<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

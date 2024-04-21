@@ -69,7 +69,7 @@ public sealed class FavouriteEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<FavouriteHeaderDto>>, BadRequest<string>>> DeleteFavouriteProducts(
+    private static async Task<Results<Ok<CollectionResult<Unit>>, BadRequest<string>>> DeleteFavouriteProducts(
         ISender sender, ILogger<FavouriteHeaderDto> logger,
         [FromBody] DeleteFavouriteProductsDto deleteFavouriteProductsDto)
     {

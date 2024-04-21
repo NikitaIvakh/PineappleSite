@@ -127,7 +127,7 @@ public sealed class FavouriteService(
         }
     }
 
-    public async Task<FavouriteResult<FavouriteHeaderViewModel>> DeleteFavouriteProductsAsync(
+    public async Task<FavouriteCollectionResult> DeleteFavouriteProductsAsync(
         DeleteProductsViewModel deleteProductsViewModel)
     {
         AddBearerToken();
@@ -138,15 +138,14 @@ public sealed class FavouriteService(
 
             if (apiResponse.IsSuccess)
             {
-                return new FavouriteResult<FavouriteHeaderViewModel>
+                return new FavouriteCollectionResult
                 {
                     StatusCode = apiResponse.StatusCode,
                     SuccessMessage = apiResponse.SuccessMessage,
-                    Data = mapper.Map<FavouriteHeaderViewModel>(apiResponse.Data),
                 };
             }
 
-            return new FavouriteResult<FavouriteHeaderViewModel>
+            return new FavouriteCollectionResult
             {
                 StatusCode = apiResponse.StatusCode,
                 ErrorMessage = apiResponse.ErrorMessage,
@@ -156,7 +155,7 @@ public sealed class FavouriteService(
 
         catch (FavouriteExceptions<string> exceptions)
         {
-            return new FavouriteResult<FavouriteHeaderViewModel>
+            return new FavouriteCollectionResult
             {
                 StatusCode = exceptions.StatusCode,
                 ErrorMessage = exceptions.Response,
