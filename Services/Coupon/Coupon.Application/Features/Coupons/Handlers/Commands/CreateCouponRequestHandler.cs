@@ -115,10 +115,6 @@ public sealed class CreateCouponRequestHandler(
             }
 
             memoryCache.Remove(CacheKey);
-            var coupons = await repository.GetAllAsync().ToListAsync(cancellationToken);
-
-            memoryCache.Set(CacheKey, coupon);
-            memoryCache.Set(CacheKey, coupons);
 
             return new Result<string>
             {

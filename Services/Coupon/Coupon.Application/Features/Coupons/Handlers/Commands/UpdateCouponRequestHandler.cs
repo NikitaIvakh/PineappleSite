@@ -78,11 +78,7 @@ public sealed class UpdateCouponRequestHandler(
             coupon.MinAmount = request.UpdateCouponDto.MinAmount;
 
             await repository.UpdateAsync(coupon);
-
-            var coupons = await repository.GetAllAsync().ToListAsync(cancellationToken);
-            memoryCache.Remove(coupon);
-            memoryCache.Remove(coupons);
-            memoryCache.Set(CacheKey, coupons);
+            memoryCache.Remove(CacheKey);
 
             return new Result<Unit>
             {

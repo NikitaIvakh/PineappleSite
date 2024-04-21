@@ -93,9 +93,7 @@ public sealed class DeleteCouponsRequestHandler(
                 await repository.DeleteAsync(coupon);
             }
 
-            var couponsCache = await repository.GetAllAsync().ToListAsync(cancellationToken);
             memoryCache.Remove(CacheKey);
-            memoryCache.Set(CacheKey, couponsCache);
 
             return new CollectionResult<bool>
             {
