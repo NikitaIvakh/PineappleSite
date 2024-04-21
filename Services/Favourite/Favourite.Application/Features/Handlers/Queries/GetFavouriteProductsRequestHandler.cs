@@ -16,7 +16,6 @@ public sealed class GetFavouriteProductsRequestHandler(
     IBaseRepository<FavouriteHeader> headerRepository,
     IBaseRepository<FavouriteDetails> detailsRepository,
     IProductService productService,
-    IMapper mapper,
     IMemoryCache memoryCache) : IRequestHandler<GetFavouriteProductsRequest, Result<FavouriteDto>>
 {
     private const string CacheKey = "FavouritesCacheKey";
@@ -65,7 +64,7 @@ public sealed class GetFavouriteProductsRequestHandler(
                     new FavouriteDetailsDto
                     {
                         FavouriteDetailsId = key.FavouriteDetailsId,
-                        FavouriteHeader = mapper.Map<FavouriteHeaderDto>(key.FavouriteHeader),
+                        FavouriteHeader = favouriteHeader,
                         FavouriteHeaderId = key.FavouriteHeaderId,
                         Product = key.Product,
                         ProductId = key.ProductId,

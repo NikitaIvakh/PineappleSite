@@ -12,8 +12,8 @@ public sealed class GetFavouriteProductsRequestHandlerTest : TestQueryHandler
     public async Task GetFavouriteProductsRequestHandlerTest_Success()
     {
         //Arrange
-        var handler = new GetFavouriteProductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService,
-            Mapper, MemoryCache);
+        var handler =
+            new GetFavouriteProductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, MemoryCache);
         const string userid = "best-userid1";
 
         // Act
@@ -29,8 +29,8 @@ public sealed class GetFavouriteProductsRequestHandlerTest : TestQueryHandler
     public async Task GetFavouriteProductsRequestHandlerTest_NewUserId()
     {
         //Arrange
-        var handler = new GetFavouriteProductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService,
-            Mapper, MemoryCache);
+        var handler =
+            new GetFavouriteProductsRequestHandler(FavouriteHeader, FavouriteDetails, ProductService, MemoryCache);
         const string userid = "best-userid1";
 
         // Act
