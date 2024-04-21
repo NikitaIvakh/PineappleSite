@@ -37,13 +37,7 @@ public sealed class FavouriteProductUpsertRequestHandler(
                 await detailsRepository.CreateAsync(
                     mapper.Map<FavouriteDetails>(request.FavouriteDto.FavouriteDetails.First())!);
 
-                var getAllHeaders = headerRepository.GetAll().ToList();
-                var getAllDetails = detailsRepository.GetAll().ToList();
-
-                memoryCache.Remove(getAllHeaders);
-                memoryCache.Remove(getAllDetails);
-                memoryCache.Set(CacheKey, getAllHeaders);
-                memoryCache.Set(CacheKey, getAllDetails);
+                memoryCache.Remove(CacheKey);
 
                 return new Result<FavouriteHeaderDto>
                 {
@@ -58,7 +52,8 @@ public sealed class FavouriteProductUpsertRequestHandler(
                 .GetAll()
                 .FirstOrDefault(key =>
                     key.ProductId == request.FavouriteDto.FavouriteDetails.First().ProductId &&
-                    key.FavouriteHeaderId == favouriteHeaderFromDb.FavouriteHeaderId);
+                    key.FavouriteHeaderId == favouriteHeaderFromDb.FavouriteHeaderId &&
+                    key.FavouriteHeader!.UserId == favouriteHeaderFromDb.UserId);
 
             if (favouriteDetails is null)
             {
@@ -78,13 +73,7 @@ public sealed class FavouriteProductUpsertRequestHandler(
                     favouriteDetails.FavouriteDetailsId;
             }
 
-            var getAllHeaders1 = headerRepository.GetAll().ToList();
-            var getAllDetails1 = detailsRepository.GetAll().ToList();
-
-            memoryCache.Remove(getAllHeaders1);
-            memoryCache.Remove(getAllDetails1);
-            memoryCache.Set(CacheKey, getAllHeaders1);
-            memoryCache.Set(CacheKey, getAllDetails1);
+            memoryCache.Remove(CacheKey);
 
             return new Result<FavouriteHeaderDto>
             {
