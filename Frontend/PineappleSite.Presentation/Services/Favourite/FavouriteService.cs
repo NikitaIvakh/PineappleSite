@@ -50,12 +50,12 @@ public partial interface IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<FavouriteHeaderDtoResult> DeleteFavouriteProductAsync(int productId);
+    Task<UnitResult> DeleteFavouriteProductAsync(int productId);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<FavouriteHeaderDtoResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken);
+    Task<UnitResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken);
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
@@ -285,7 +285,7 @@ public partial class FavouriteClient : IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public Task<FavouriteHeaderDtoResult> DeleteFavouriteProductAsync(int productId)
+    public Task<UnitResult> DeleteFavouriteProductAsync(int productId)
     {
         return DeleteFavouriteProductAsync(productId, CancellationToken.None);
     }
@@ -293,7 +293,7 @@ public partial class FavouriteClient : IFavouriteClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public async Task<FavouriteHeaderDtoResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken)
+    public async Task<UnitResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken)
     {
         if (productId == null)
             throw new ArgumentNullException("productId");
@@ -340,7 +340,7 @@ public partial class FavouriteClient : IFavouriteClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<FavouriteHeaderDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<UnitResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new FavouriteExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -707,6 +707,35 @@ public partial class ProductDto
 
     [JsonProperty("imageLocalPath", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public string ImageLocalPath { get; set; }
+
+}
+
+[GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class Unit
+{
+
+}
+
+[GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class UnitResult
+{
+    [JsonProperty("isSuccess", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [JsonProperty("successMessage", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [JsonProperty("errorMessage", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [JsonProperty("statusCode", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [JsonProperty("validationErrors", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    public ICollection<string> ValidationErrors { get; set; }
+
+    [JsonProperty("data", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public Unit Data { get; set; }
 
 }
 

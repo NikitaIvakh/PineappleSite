@@ -66,13 +66,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
                 await headerRepository.DeleteAsync(favouriteHeaderDelete);
             }
 
-            var getAllHeaders = headerRepository.GetAll().ToList();
-            var getAllDetails = detailsRepository.GetAll().ToList();
-
-            memoryCache.Remove(getAllHeaders);
-            memoryCache.Remove(getAllDetails);
-            memoryCache.Set(CacheKey, getAllHeaders);
-            memoryCache.Set(CacheKey, getAllDetails);
+            memoryCache.Remove(CacheKey);
 
             return new Result<Unit>
             {

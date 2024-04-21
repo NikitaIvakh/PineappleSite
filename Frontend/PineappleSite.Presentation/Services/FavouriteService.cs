@@ -72,17 +72,12 @@ public sealed class FavouriteService(
                 };
             }
 
-            if (apiResponse.ValidationErrors.Count != 0)
+            return new FavouriteResult<FavouriteHeaderViewModel>
             {
-                return new FavouriteResult<FavouriteHeaderViewModel>
-                {
-                    StatusCode = apiResponse.StatusCode,
-                    ErrorMessage = apiResponse.ErrorMessage,
-                    ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
-                };
-            }
-
-            return new FavouriteResult<FavouriteHeaderViewModel>();
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
         catch (FavouriteExceptions<string> exceptions)
@@ -96,7 +91,7 @@ public sealed class FavouriteService(
         }
     }
 
-    public async Task<FavouriteResult<FavouriteHeaderViewModel>> DeleteFavouriteProductAsync(int productId)
+    public async Task<FavouriteResult> DeleteFavouriteProductAsync(int productId)
     {
         AddBearerToken();
         try
@@ -113,17 +108,12 @@ public sealed class FavouriteService(
                 };
             }
 
-            if (apiResponse.ValidationErrors.Count != 0)
+            return new FavouriteResult<FavouriteHeaderViewModel>
             {
-                return new FavouriteResult<FavouriteHeaderViewModel>
-                {
-                    StatusCode = apiResponse.StatusCode,
-                    ErrorMessage = apiResponse.ErrorMessage,
-                    ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
-                };
-            }
-
-            return new FavouriteResult<FavouriteHeaderViewModel>();
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
         catch (FavouriteExceptions<string> exceptions)
@@ -156,17 +146,12 @@ public sealed class FavouriteService(
                 };
             }
 
-            if (apiResponse.ValidationErrors.Count != 0)
+            return new FavouriteResult<FavouriteHeaderViewModel>
             {
-                return new FavouriteResult<FavouriteHeaderViewModel>
-                {
-                    StatusCode = apiResponse.StatusCode,
-                    ErrorMessage = apiResponse.ErrorMessage,
-                    ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
-                };
-            }
-
-            return new FavouriteResult<FavouriteHeaderViewModel>();
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
         catch (FavouriteExceptions<string> exceptions)
