@@ -16,7 +16,7 @@ public sealed class CouponEndpoints : ICarterModule
     {
         var group = app.MapGroup("api/coupons");
 
-        group.MapGet("/GetCoupons", GetCoupons).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetCoupons", GetCoupons).RequireAuthorization(AdministratorPolicy);
         group.MapGet("/GetCouponById/{couponId}", GetCouponById).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapGet("/GetCouponByCode/{couponCode}", GetCouponByCode).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapPost("/CreateCoupon", CreateCoupon).RequireAuthorization(AdministratorPolicy);
@@ -39,7 +39,7 @@ public sealed class CouponEndpoints : ICarterModule
         logger.LogError("LogDebugError ================ Ошибка получения купонов");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-    
+
     private static async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponById(string couponId,
         ISender sender, ILogger<GetCouponDto> logger)
     {
@@ -69,7 +69,7 @@ public sealed class CouponEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка получения купона: {couponCode}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-    
+
     private static async Task<Results<Ok<Result<string>>, BadRequest<string>>> CreateCoupon(ISender sender,
         ILogger<CreateCouponDto> logger, [FromBody] CreateCouponDto createCouponDto)
     {
@@ -84,8 +84,9 @@ public sealed class CouponEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка создания купона: {createCouponDto.CouponCode}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
-    
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(string couponId, ISender sender,
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(string couponId,
+        ISender sender,
         ILogger<UpdateCouponDto> logger, [FromBody] UpdateCouponDto updateCouponDto)
     {
         var command = await sender.Send(new UpdateCouponRequest(updateCouponDto));
@@ -99,8 +100,9 @@ public sealed class CouponEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка обновления купона: {updateCouponDto.CouponId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
-    
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(string couponId, ISender sender,
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(string couponId,
+        ISender sender,
         ILogger<DeleteCouponDto> logger, [FromBody] DeleteCouponDto deleteCouponDto)
     {
         var command = await sender.Send(new DeleteCouponRequest(deleteCouponDto));
