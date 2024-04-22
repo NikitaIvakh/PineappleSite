@@ -1,22 +1,19 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class UpdateUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     UpdateUserValidator updateUserValidator,
-    IMemoryCache memoryCache,
-    ApplicationDbContext context)
-    : IRequestHandler<UpdateUserRequest, Result<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<UpdateUserRequest, Result<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -58,7 +55,8 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            var user = await userManager.FindByIdAsync(request.UpdateUser.Id);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Id == request.UpdateUser.Id, cancellationToken);
 
             if (user is null)
             {
@@ -79,7 +77,7 @@ public sealed class UpdateUserRequestHandler(
             user.Email = request.UpdateUser.EmailAddress.Trim();
             user.UserName = request.UpdateUser.UserName.Trim();
 
-            var result = await userManager.UpdateAsync(user);
+            var result = await userRepository.UpdateUserAsync(user, cancellationToken);
 
             if (!result.Succeeded)
             {
@@ -94,12 +92,6 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            var existsRoles = await userManager.GetRolesAsync(user);
-            await userManager.RemoveFromRolesAsync(user, existsRoles);
-
-            await userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
-            await userManager.UpdateAsync(user);
-            await context.SaveChangesAsync(cancellationToken);
             memoryCache.Remove(CacheKey);
 
             return new Result<Unit>
