@@ -56,6 +56,17 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return await Task.FromResult(user);
     }
 
+    public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password, CancellationToken token = default)
+    {
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user), "Объект пустой");
+        }
+
+        var result = await userManager.CheckPasswordAsync(user, password);
+        return result;
+    }
+
     public async Task<ApplicationUser> UpdateUserAsync(ApplicationUser user, CancellationToken token = default)
     {
         if (user is null)
@@ -80,16 +91,5 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         await context.SaveChangesAsync(token);
 
         return await Task.FromResult(user);
-    }
-
-    public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password, CancellationToken token = default)
-    {
-        if (user is null)
-        {
-            throw new ArgumentNullException(nameof(user), "Объект пустой");
-        }
-
-        var result = await userManager.CheckPasswordAsync(user, password);
-        return result;
     }
 }
