@@ -163,7 +163,7 @@ public sealed class RegisterUserRequestHandler(
             return new Result<string>
             {
                 Data = userFromDb.Id,
-                StatusCode = (int)StatusCode.Ok,
+                StatusCode = (int)StatusCode.Created,
                 SuccessMessage = SuccessMessage.ResourceManager.GetString("SuccessfullyRegister", ErrorMessage.Culture),
             };
         }

@@ -74,7 +74,7 @@ public sealed class RefreshTokenRequestHandler(
                     refreshToken = newRefreshToken,
                 }),
 
-                StatusCode = (int)StatusCode.Ok,
+                StatusCode = (int)StatusCode.Refreshed,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("TokensUpdatedSuccessfully", SuccessMessage.Culture),
             };
