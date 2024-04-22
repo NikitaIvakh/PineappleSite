@@ -8,8 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
-public sealed class RevokeTokenRequestHandler(
-    IUserRepository userRepository)
+public sealed class RevokeTokenRequestHandler(IUserRepository userRepository)
     : IRequestHandler<RevokeTokenRequest, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(RevokeTokenRequest request, CancellationToken cancellationToken)
