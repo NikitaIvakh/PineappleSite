@@ -14,7 +14,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return userManager.Users.AsNoTracking().AsQueryable();
     }
 
-    public async Task<IEnumerable<IdentityRole<string>>> GetUserRolesAsync(ApplicationUser user,
+    public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user,
         CancellationToken token = default)
     {
         if (user is null)
@@ -23,8 +23,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         }
 
         var userRolesNames = await userManager.GetRolesAsync(user);
-        var userRoles = userRolesNames.Select(roleName => new IdentityRole<string> { Name = roleName });
-        return userRoles;
+        return userRolesNames;
     }
 
     public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password,

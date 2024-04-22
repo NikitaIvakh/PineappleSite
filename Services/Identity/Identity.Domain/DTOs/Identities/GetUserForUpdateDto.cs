@@ -8,7 +8,7 @@ public sealed record GetUserForUpdateDto(
     string LastName,
     string UserName,
     string EmailAddress,
-    IEnumerable<IdentityRole<string>> Role,
+    IEnumerable<string> Role,
     string Description,
     int? Age,
     string Password,

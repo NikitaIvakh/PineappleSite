@@ -45,26 +45,30 @@ public sealed class GetUsersRequestHandler(
                 };
             }
 
-            var roles = users.Select(user => userRepository.GetUserRolesAsync(user, cancellationToken)).ToList();
+            var getUsersDtoList = new List<GetUsersDto>();
 
-            var getUsersDto = users.Select(key => new GetUsersDto
-            (
-                UserId: key.Id,
-                FirstName: key.FirstName,
-                LastName: key.LastName,
-                UserName: key.UserName!,
-                EmailAddress: key.Email!,
-                Role: roles,
-                CreatedTime: key.CreatedTime,
-                ModifiedTime: key.ModifiedTime
-            )).OrderByDescending(key => key.CreatedTime).ToList();
+            foreach (var user in users)
+            {
+                var role = await userRepository.GetUserRolesAsync(user, cancellationToken);
+                getUsersDtoList.Add(new GetUsersDto
+                (
+                    UserId: user.Id,
+                    FirstName: user.FirstName,
+                    LastName: user.LastName,
+                    UserName: user.UserName!,
+                    EmailAddress: user.Email!,
+                    Role: role,
+                    CreatedTime: user.CreatedTime,
+                    ModifiedTime: user.ModifiedTime
+                ));
+            }
 
             memoryCache.Remove(CacheKey);
 
             return new CollectionResult<GetUsersDto>
             {
-                Data = getUsersDto,
-                Count = getUsersDto.Count,
+                Data = getUsersDtoList,
+                Count = getUsersDtoList.Count,
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("UsersSuccessfullyGeted", SuccessMessage.Culture),

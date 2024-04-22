@@ -4,7 +4,6 @@ using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Identity.Domain.Entities.Users;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
@@ -13,7 +12,7 @@ namespace Identity.Application.Extensions;
 
 public static class JwtBearerExtensions
 {
-    public static IEnumerable<Claim> CreateClaims(this ApplicationUser user, IEnumerable<IdentityRole<string>> roles)
+    public static IEnumerable<Claim> CreateClaims(this ApplicationUser user, IEnumerable<string> roles)
     {
         var claims = new List<Claim>()
         {
@@ -23,9 +22,9 @@ public static class JwtBearerExtensions
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Name, user.UserName!),
             new(ClaimTypes.Email, user.Email!),
-            new(ClaimTypes.Role, string.Join(",", roles.Select(key => key.Name))),
+            new(ClaimTypes.Role, string.Join(",", roles.ToString())),
         };
-
+        
         return claims;
     }
 

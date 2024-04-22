@@ -85,9 +85,9 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var roles = userRepository.GetUserRolesAsync(user, cancellationToken);
+            var roles = await userRepository.GetUserRolesAsync(user, cancellationToken);
 
-            var accessToken = tokenService.CreateToken(user, await roles);
+            var accessToken = tokenService.CreateToken(user, roles);
             user.RefreshToken = configuration.GenerateRefreshToken();
             user.RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(
                 int.Parse(configuration.GetSection("Jwt:RefreshTokenValidityInDays").Value!));

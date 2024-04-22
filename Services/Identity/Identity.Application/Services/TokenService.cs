@@ -8,7 +8,7 @@ namespace Identity.Application.Services;
 
 public sealed class TokenService(IConfiguration configuration) : ITokenService
 {
-    public string CreateToken(ApplicationUser user, IEnumerable<IdentityRole<string>> roles)
+    public string CreateToken(ApplicationUser user, IEnumerable<string> roles)
     {
         var token = user.CreateClaims(roles).CreateJwtToken(configuration);
         var tokenHandler = new JwtSecurityTokenHandler();
