@@ -1,23 +1,20 @@
-﻿using Identity.Application.Extecsions;
+﻿using Identity.Application.Extensions;
 using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
 using Identity.Application.Services;
 using Identity.Application.Validators;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class LoginUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     AuthRequestValidator authValidator,
-    ApplicationDbContext context,
     ITokenService tokenService,
     IConfiguration configuration) : IRequestHandler<LoginUserRequest, Result<string>>
 {
@@ -57,7 +54,8 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var user = await userManager.FindByEmailAsync(request.AuthRequest.EmailAddress);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Email == request.AuthRequest.EmailAddress, cancellationToken);
 
             if (user is null)
             {
@@ -71,7 +69,7 @@ public sealed class LoginUserRequestHandler(
             }
 
             var isValidPassword =
-                await userManager.CheckPasswordAsync(user, request.AuthRequest.Password.Trim());
+                await userRepository.CheckPasswordAsync(user, request.AuthRequest.Password.Trim(), cancellationToken);
 
             if (!isValidPassword)
             {
@@ -87,18 +85,12 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var roleIds = await context.UserRoles.Where(key => key.UserId == user.Id)
-                .Select(key => key.RoleId).ToListAsync(cancellationToken);
+            var roles = userRepository.GetUserRolesAsync(user, cancellationToken);
 
-            var roles = await context.Roles.Where(key => roleIds.Contains(key.Id))
-                .ToListAsync(cancellationToken);
-
-            var accessToken = tokenService.CreateToken(user, roles);
+            var accessToken = tokenService.CreateToken(user, await roles);
             user.RefreshToken = configuration.GenerateRefreshToken();
             user.RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(
                 int.Parse(configuration.GetSection("Jwt:RefreshTokenValidityInDays").Value!));
-
-            await context.SaveChangesAsync(cancellationToken);
 
             return new Result<string>
             {

@@ -1,5 +1,4 @@
-﻿using Identity.Application.Extecsions;
-using Identity.Application.Features.Identities.Requests.Commands;
+﻿using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
@@ -10,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using Identity.Application.Extensions;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 

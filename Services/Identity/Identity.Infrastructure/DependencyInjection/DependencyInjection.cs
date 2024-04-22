@@ -1,5 +1,7 @@
 ﻿using Identity.Domain.Entities.Users;
+using Identity.Domain.Interfaces;
 using Identity.Infrastructure.Health;
+using Identity.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,6 +26,7 @@ public static class DependencyInjection
             .AddSignInManager<SignInManager<ApplicationUser>>();
 
         services.AddScoped<RoleManager<IdentityRole<string>>>();
+        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     private static void RegisterDbConnectionString(IServiceCollection services, IConfiguration configuration)

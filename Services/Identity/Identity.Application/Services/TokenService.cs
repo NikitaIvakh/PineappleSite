@@ -1,8 +1,8 @@
-﻿using Identity.Application.Extecsions;
-using Identity.Domain.Entities.Users;
+﻿using Identity.Domain.Entities.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
+using Identity.Application.Extensions;
 
 namespace Identity.Application.Services;
 
