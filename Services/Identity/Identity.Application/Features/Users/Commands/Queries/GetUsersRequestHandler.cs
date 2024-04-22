@@ -1,18 +1,17 @@
 ﻿using MediatR;
 using Identity.Domain.DTOs.Identities;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Identity.Application.Resources;
 using Identity.Domain.Enum;
 using Microsoft.Extensions.Caching.Memory;
 using Identity.Application.Features.Users.Requests.Queries;
+using Identity.Domain.Interfaces;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
 public sealed class GetUsersRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     IMemoryCache memoryCache) : IRequestHandler<GetUsersRequest, CollectionResult<GetUsersDto>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -33,7 +32,7 @@ public sealed class GetUsersRequestHandler(
                 };
             }
 
-            var users = await userManager.Users.ToListAsync(cancellationToken);
+            var users = await userRepository.GetAll(cancellationToken).ToListAsync(cancellationToken);
 
             if (users.Count == 0)
             {
@@ -46,6 +45,8 @@ public sealed class GetUsersRequestHandler(
                 };
             }
 
+            var roles = users.Select(user => userRepository.GetUserRolesAsync(user, cancellationToken)).ToList();
+
             var getUsersDto = users.Select(key => new GetUsersDto
             (
                 UserId: key.Id,
@@ -53,7 +54,7 @@ public sealed class GetUsersRequestHandler(
                 LastName: key.LastName,
                 UserName: key.UserName!,
                 EmailAddress: key.Email!,
-                Role: users.Select(userManager.GetRolesAsync),
+                Role: roles,
                 CreatedTime: key.CreatedTime,
                 ModifiedTime: key.ModifiedTime
             )).OrderByDescending(key => key.CreatedTime).ToList();
