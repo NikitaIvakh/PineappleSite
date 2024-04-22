@@ -4,18 +4,18 @@ using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class RegisterUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     RegisterValidator validationRules,
-    ApplicationDbContext context,
     IMemoryCache memoryCache) : IRequestHandler<RegisterUserRequest, Result<string>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -60,7 +60,8 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
+            var existsEmail = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
 
             if (existsEmail is not null)
             {
@@ -77,7 +78,8 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsUserName = await userManager.FindByNameAsync(request.RegisterRequest.UserName);
+            var existsUserName = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.UserName == request.RegisterRequest.UserName, cancellationToken);
 
             if (existsUserName is not null)
             {
@@ -123,7 +125,8 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var result = await userManager.CreateAsync(user, request.RegisterRequest.Password);
+            var result =
+                await userRepository.CreateUserAsync(user, request.RegisterRequest.Password, cancellationToken);
 
             if (!result.Succeeded)
             {
@@ -140,7 +143,8 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var userFromDb = await userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
+            var userFromDb = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
 
             if (userFromDb is null)
             {
@@ -153,9 +157,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            await userManager.AddToRoleAsync(user, RoleConst.User);
-            await context.SaveChangesAsync(cancellationToken);
-
+            await userRepository.AddUserToRoleAsync(user, RoleConst.User, cancellationToken);
             memoryCache.Remove(CacheKey);
 
             return new Result<string>

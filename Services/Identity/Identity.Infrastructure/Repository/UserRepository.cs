@@ -27,14 +27,30 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return userRoles;
     }
 
-    public async Task<ApplicationUser> CreateUserAsync(ApplicationUser user, CancellationToken token = default)
+    public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password,
+        CancellationToken token = default)
     {
         if (user is null)
         {
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
-        await userManager.CreateAsync(user);
+        await userManager.CreateAsync(user, password);
+        await context.SaveChangesAsync(token);
+
+        return IdentityResult.Success;
+    }
+
+    public async Task<ApplicationUser> AddUserToRoleAsync(ApplicationUser user, string role,
+        CancellationToken token = default)
+    {
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user), "Объект пустой");
+        }
+
+        await userManager.AddToRoleAsync(user, role);
+        await userManager.UpdateAsync(user);
         await context.SaveChangesAsync(token);
 
         return await Task.FromResult(user);

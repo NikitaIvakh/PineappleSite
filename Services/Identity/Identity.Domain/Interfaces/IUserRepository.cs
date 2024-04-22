@@ -8,8 +8,10 @@ public interface IUserRepository
     IQueryable<ApplicationUser> GetAll(CancellationToken cancellationToken = default);
 
     Task<IEnumerable<IdentityRole<string>>> GetUserRolesAsync(ApplicationUser user, CancellationToken token = default);
-    
-    Task<ApplicationUser> CreateUserAsync(ApplicationUser user, CancellationToken token = default);
+
+    Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password, CancellationToken token = default);
+
+    Task<ApplicationUser> AddUserToRoleAsync(ApplicationUser user, string role, CancellationToken token = default);
 
     Task<ApplicationUser> UpdateUserAsync(ApplicationUser user, CancellationToken token = default);
 
