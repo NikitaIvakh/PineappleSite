@@ -3,15 +3,17 @@ using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
 public sealed class GetUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     IMemoryCache memoryCache) : IRequestHandler<GetUserRequest, Result<GetUserDto>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -26,11 +28,13 @@ public sealed class GetUserRequestHandler(
                 {
                     Data = userWithRoles,
                     StatusCode = (int)StatusCode.Ok,
-                    SuccessMessage = SuccessMessage.UserSuccessfullyGeted,
+                    SuccessMessage =
+                        SuccessMessage.ResourceManager.GetString("UserSuccessfullyGot", SuccessMessage.Culture),
                 };
             }
 
-            var user = await userManager.FindByIdAsync(request.UserId);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Id == request.UserId, cancellationToken);
 
             if (user is null)
             {
@@ -43,10 +47,18 @@ public sealed class GetUserRequestHandler(
                 };
             }
 
-            var roles = await userManager.GetRolesAsync(user);
-
-            var getUserWithRoles = new GetUserDto(user.Id, user.FirstName, user.LastName, user.UserName!, user.Email!,
-                roles, user.CreatedTime, user.ModifiedTime);
+            var roles = await userRepository.GetUserRolesAsync(user, cancellationToken);
+            var getUserWithRoles = new GetUserDto
+            (
+                UserId: user.Id,
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                UserName: user.UserName!,
+                EmailAddress: user.Email!,
+                Role: roles,
+                CreatedTime: user.CreatedTime,
+                ModifiedTime: user.ModifiedTime
+            );
 
             memoryCache.Remove(CacheKey);
 
@@ -55,7 +67,7 @@ public sealed class GetUserRequestHandler(
                 Data = getUserWithRoles,
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage =
-                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyGeted", SuccessMessage.Culture),
+                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyGot", SuccessMessage.Culture),
             };
         }
 

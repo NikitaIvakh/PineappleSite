@@ -1,19 +1,18 @@
 ﻿using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
 public sealed class GetUserForUpdateRequestHandler(
-    UserManager<ApplicationUser> userManager,
-    IMemoryCache memoryCache)
-    : IRequestHandler<GetUserForUpdateRequest, Result<GetUserForUpdateDto>>
+    IUserRepository userRepository,
+    IMemoryCache memoryCache) : IRequestHandler<GetUserForUpdateRequest, Result<GetUserForUpdateDto>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -28,11 +27,13 @@ public sealed class GetUserForUpdateRequestHandler(
                 {
                     Data = resultUser,
                     StatusCode = (int)StatusCode.Ok,
-                    SuccessMessage = SuccessMessage.UserSuccessfullyGeted,
+                    SuccessMessage =
+                        SuccessMessage.ResourceManager.GetString("UserSuccessfullyGot", SuccessMessage.Culture),
                 };
             }
 
-            var user = await userManager.FindByIdAsync(request.UserId);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Id == request.UserId, cancellationToken);
 
             if (user is null)
             {
@@ -47,8 +48,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 };
             }
 
-            var roles = await userManager.GetRolesAsync(user);
-
+            var roles = await userRepository.GetUserRolesAsync(user, cancellationToken);
             var getUserFotUpdate = new GetUserForUpdateDto
             (
                 UserId: user.Id,
@@ -70,7 +70,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 Data = getUserFotUpdate,
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage =
-                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyGeted", SuccessMessage.Culture),
+                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyGot", SuccessMessage.Culture),
             };
         }
 

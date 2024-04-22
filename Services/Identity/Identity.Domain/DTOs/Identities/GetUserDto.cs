@@ -1,4 +1,6 @@
-﻿namespace Identity.Domain.DTOs.Identities;
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace Identity.Domain.DTOs.Identities;
 
 public sealed record GetUserDto(
     string UserId,
@@ -6,7 +8,7 @@ public sealed record GetUserDto(
     string LastName,
     string UserName,
     string EmailAddress,
-    IList<string> Role,
+    IEnumerable<IdentityRole<string>> Role,
     DateTime? CreatedTime,
     DateTime? ModifiedTime
 );
