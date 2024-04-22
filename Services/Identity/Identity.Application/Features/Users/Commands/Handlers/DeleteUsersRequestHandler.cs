@@ -1,21 +1,19 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class DeleteUsersRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     DeleteUsersValidator deleteValidator,
-    IMemoryCache memoryCache)
-    : IRequestHandler<DeleteUsersRequest, CollectionResult<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<DeleteUsersRequest, CollectionResult<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -55,7 +53,8 @@ public sealed class DeleteUsersRequestHandler(
                 };
             }
 
-            var users = await userManager.Users.Where(key => request.DeleteUsers.UserIds.Contains(key.Id))
+            var users = await userRepository.GetAll(cancellationToken)
+                .Where(key => request.DeleteUsers.UserIds.Contains(key.Id))
                 .ToListAsync(cancellationToken);
 
             if (users.Count == 0)
@@ -77,12 +76,10 @@ public sealed class DeleteUsersRequestHandler(
                 if (!string.IsNullOrEmpty(user.ImageLocalPath))
                 {
                     var fileName = $"Id_{user.Id}*";
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot",
-                        "UserImages");
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
+                    var getAllFiles = Directory.GetFiles(filePath, fileName + ".*");
 
-                    var getAllFields = Directory.GetFiles(filePath, fileName + ".*");
-
-                    foreach (var file in getAllFields)
+                    foreach (var file in getAllFiles)
                     {
                         File.Delete(file);
                     }
@@ -90,10 +87,10 @@ public sealed class DeleteUsersRequestHandler(
                     user.ImageUrl = null;
                     user.ImageLocalPath = null;
 
-                    await userManager.UpdateAsync(user);
+                    await userRepository.UpdateUserAsync(user, cancellationToken);
                 }
 
-                var result = await userManager.DeleteAsync(user);
+                var result = await userRepository.DeleteUserAsync(user, cancellationToken);
 
                 if (!result.Succeeded)
                 {

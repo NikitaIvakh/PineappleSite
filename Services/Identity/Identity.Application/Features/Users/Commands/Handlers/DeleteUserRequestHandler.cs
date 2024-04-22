@@ -70,7 +70,6 @@ public sealed class DeleteUserRequestHandler(
             {
                 var fileName = $"Id_{user.Id}*";
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
-
                 var getAllFiles = Directory.GetFiles(filePath, fileName + ".*");
 
                 foreach (var file in getAllFiles)
