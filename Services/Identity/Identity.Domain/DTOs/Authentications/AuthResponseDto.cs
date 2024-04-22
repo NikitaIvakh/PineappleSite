@@ -1,17 +1,10 @@
-﻿namespace Identity.Domain.DTOs.Authentications
-{
-    public class AuthResponseDto
-    {
-        public string FirstName { get; set; } = null!;
+﻿namespace Identity.Domain.DTOs.Authentications;
 
-        public string LastName { get; set; } = null!;
-
-        public string UsertName { get; set; } = null!;
-
-        public string Email { get; set; } = null!;
-
-        public string JwtToken { get; set; } = null!;
-
-        public string RefreshToken { get; set; } = null!;
-    }
-}
+public sealed record AuthResponseDto(
+    string FirstName,
+    string LastName,
+    string UserName,
+    string EmailAddress,
+    string JwtToken,
+    string RefreshToken
+);

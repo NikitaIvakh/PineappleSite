@@ -2,10 +2,9 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Users.Requests.Handlers
+namespace Identity.Application.Features.Users.Requests.Handlers;
+
+public sealed class UpdateUserProfileRequest : IRequest<Result<Unit>>
 {
-    public class UpdateUserProfileRequest : IRequest<Result<GetUserForUpdateDto>>
-    {
-        public UpdateUserProfileDto UpdateUserProfile { get; set; } = null!;
-    }
+    public UpdateUserProfileDto UpdateUserProfile { get; set; } = null!;
 }

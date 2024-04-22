@@ -4,18 +4,15 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace Identity.Application.Services
+namespace Identity.Application.Services;
+
+public sealed class TokenService(IConfiguration configuration) : ITokenService
 {
-    public class TokenService(IConfiguration configuration) : ITokenService
+    public string CreateToken(ApplicationUser user, IEnumerable<IdentityRole<string>> roles)
     {
-        private readonly IConfiguration _configuration = configuration;
+        var token = user.CreateClaims(roles).CreateJwtToken(configuration);
+        var tokenHandler = new JwtSecurityTokenHandler();
 
-        public string CreateToken(ApplicationUser user, List<IdentityRole<string>> roles)
-        {
-            var token = user.CreateClaims(roles).CreateJwtToken(_configuration);
-            var tokenHandler = new JwtSecurityTokenHandler();
-
-            return tokenHandler.WriteToken(token);
-        }
+        return tokenHandler.WriteToken(token);
     }
 }

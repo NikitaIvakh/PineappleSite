@@ -2,10 +2,9 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Identities.Requests.Commands
+namespace Identity.Application.Features.Identities.Requests.Commands;
+
+public sealed class RegisterUserRequest(RegisterRequestDto registerRequest) : IRequest<Result<string>>
 {
-    public class RegisterUserRequest : IRequest<Result<RegisterResponseDto>>
-    {
-        public RegisterRequestDto RegisterRequest { get; set; }
-    }
+    public RegisterRequestDto RegisterRequest { get; init; } = registerRequest;
 }

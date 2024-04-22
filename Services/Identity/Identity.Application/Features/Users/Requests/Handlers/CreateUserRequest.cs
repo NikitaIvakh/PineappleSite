@@ -2,10 +2,9 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Users.Requests.Handlers
+namespace Identity.Application.Features.Users.Requests.Handlers;
+
+public sealed class CreateUserRequest(CreateUserDto createUser) : IRequest<Result<string>>
 {
-    public class CreateUserRequest : IRequest<Result<string>>
-    {
-        public CreateUserDto CreateUser { get; set; } = null!;
-    }
+    public CreateUserDto CreateUser { get; init; } = createUser;
 }

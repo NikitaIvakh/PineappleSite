@@ -1,9 +1,3 @@
-﻿namespace Identity.Domain.DTOs.Authentications
-{
-    public class AuthRequestDto
-    {
-        public string Email { get; set; } = null!;
+﻿namespace Identity.Domain.DTOs.Authentications;
 
-        public string Password { get; set; } = null!;
-    }
-}
+public sealed record AuthRequestDto(string EmailAddress, string Password);

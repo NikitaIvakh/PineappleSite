@@ -43,7 +43,7 @@
 //            var token = new Mock<ITokenProvider>();
 //            var httpContextAccessor = new Mock<IHttpContextAccessor>();
 //            Context = IdentityDbContextFactory.Create();
-//            DeleteUserListLogger = Log.ForContext<DeleteUserListRequestHandler>();
+//            DeleteUserListLogger = Log.ForContext<DeleteUsersRequestHandler>();
 //            DeleteUserLogger = Log.ForContext<DeleteUserRequestHandler>();
 //            AuthUserLogger = Log.ForContext<LoginUserRequestHandler>();
 //            UserManager = new UserManager<ApplicationUser>(

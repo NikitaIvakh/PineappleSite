@@ -8,70 +8,80 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace Identity.Application.Features.Users.Commands.Queries
+namespace Identity.Application.Features.Users.Commands.Queries;
+
+public sealed class GetUserForUpdateRequestHandler(
+    UserManager<ApplicationUser> userManager,
+    IMemoryCache memoryCache)
+    : IRequestHandler<GetUserForUpdateRequest, Result<GetUserForUpdateDto>>
 {
-    public class GetUserForUpdateRequestHandler(UserManager<ApplicationUser> userManager, IMemoryCache memoryCache) : IRequestHandler<GetUserForUpdateRequest, Result<GetUserForUpdateDto>>
+    private const string CacheKey = "СacheUserKey";
+
+    public async Task<Result<GetUserForUpdateDto>> Handle(GetUserForUpdateRequest request,
+        CancellationToken cancellationToken)
     {
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "СacheUserKey";
-
-        public async Task<Result<GetUserForUpdateDto>> Handle(GetUserForUpdateRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
-            {
-                if (_memoryCache.TryGetValue(cacheKey, out GetUserForUpdateDto? resultUser))
-                {
-                    return new Result<GetUserForUpdateDto>
-                    {
-                        Data = resultUser,
-                        SuccessCode = (int)SuccessCode.Ok,
-                        SuccessMessage = SuccessMessage.UserSuccessfullyGeted,
-                    };
-                }
-
-                else
-                {
-                    var user = await _userManager.FindByIdAsync(request.UserId);
-
-                    if (user is null)
-                    {
-                        return new Result<GetUserForUpdateDto>
-                        {
-                            ErrorCode = (int)ErrorCodes.UserNotFound,
-                            ErrorMessage = ErrorMessage.UserNotFound,
-                            ValidationErrors = [ErrorMessage.UserNotFound]
-                        };
-                    }
-
-                    else
-                    {
-                        var roles = await _userManager.GetRolesAsync(user);
-                        resultUser = new GetUserForUpdateDto(user.Id, user.FirstName, user.LastName, user.UserName!, user.Email!, roles, user.Description!, user.Age, request.Password!, user.ImageUrl!, user.ImageLocalPath!);
-
-                        _memoryCache.Remove(resultUser);
-                        _memoryCache.Set(cacheKey, resultUser);
-
-                        return new Result<GetUserForUpdateDto>
-                        {
-                            Data = resultUser,
-                            SuccessCode = (int)SuccessCode.Ok,
-                            SuccessMessage = SuccessMessage.UserSuccessfullyGeted,
-                        };
-                    }
-                }
-            }
-
-            catch (Exception exception)
+            if (memoryCache.TryGetValue(CacheKey, out GetUserForUpdateDto? resultUser))
             {
                 return new Result<GetUserForUpdateDto>
                 {
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ErrorMessage = ErrorMessage.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    Data = resultUser,
+                    StatusCode = (int)StatusCode.Ok,
+                    SuccessMessage = SuccessMessage.UserSuccessfullyGeted,
                 };
             }
+
+            var user = await userManager.FindByIdAsync(request.UserId);
+
+            if (user is null)
+            {
+                return new Result<GetUserForUpdateDto>
+                {
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture) ?? string.Empty
+                    ]
+                };
+            }
+
+            var roles = await userManager.GetRolesAsync(user);
+
+            var getUserFotUpdate = new GetUserForUpdateDto
+            (
+                UserId: user.Id,
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                UserName: user.UserName!,
+                EmailAddress: user.Email!,
+                Role: roles,
+                Description: user.Description!,
+                Age: user.Age,
+                Password: request.Password!,
+                ImageUrl: user.ImageUrl!,
+                ImageLocalPath: user.ImageLocalPath!);
+
+            memoryCache.Remove(CacheKey);
+
+            return new Result<GetUserForUpdateDto>
+            {
+                Data = getUserFotUpdate,
+                StatusCode = (int)StatusCode.Ok,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyGeted", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<GetUserForUpdateDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

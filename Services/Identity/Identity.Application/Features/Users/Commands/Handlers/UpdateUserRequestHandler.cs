@@ -7,128 +7,118 @@ using Identity.Domain.ResultIdentity;
 using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Serilog;
 
-namespace Identity.Application.Features.Users.Commands.Handlers
+namespace Identity.Application.Features.Users.Commands.Handlers;
+
+public sealed class UpdateUserRequestHandler(
+    UserManager<ApplicationUser> userManager,
+    UpdateUserValidator updateUserValidator,
+    IMemoryCache memoryCache,
+    ApplicationDbContext context)
+    : IRequestHandler<UpdateUserRequest, Result<Unit>>
 {
-    public class UpdateUserRequestHandler(UserManager<ApplicationUser> userManager, IUpdateUserRequestDtoValidator validationRules, ILogger logger, IMemoryCache memoryCache, ApplicationDbContext context)
-        : IRequestHandler<UpdateUserRequest, Result<Unit>>
+    private const string CacheKey = "СacheUserKey";
+
+    public async Task<Result<Unit>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
     {
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly IUpdateUserRequestDtoValidator _updateValidator = validationRules;
-        private readonly ILogger _logger = logger.ForContext<UpdateUserRequest>();
-        private readonly IMemoryCache _memoryCache = memoryCache;
-        private readonly ApplicationDbContext _context = context;
-
-        private readonly string cacheKey = "СacheUserKey";
-
-        public async Task<Result<Unit>> Handle(UpdateUserRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var validator = await updateUserValidator.ValidateAsync(request.UpdateUser, cancellationToken);
+
+            if (!validator.IsValid)
             {
-                var validator = await _updateValidator.ValidateAsync(request.UpdateUser, cancellationToken);
-
-                if (!validator.IsValid)
+                var errorMessages = new Dictionary<string, List<string>>
                 {
-                    var errorMessages = new Dictionary<string, List<string>>
-                    {
-                        {"FirstName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
-                        {"LastName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
-                        {"UserName",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
-                        {"EmailAddress",  validator.Errors.Select(x => x.ErrorMessage).ToList()},
-                    };
+                    { "FirstName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "LastName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "UserName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "EmailAddress", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                };
 
-                    foreach (var error in errorMessages)
-                    {
-                        if (errorMessages.TryGetValue(error.Key, out var message))
-                        {
-                            return new Result<Unit>
-                            {
-                                ValidationErrors = message,
-                                ErrorMessage = ErrorMessage.UserUpdateError,
-                                ErrorCode = (int)ErrorCodes.UserUpdateError,
-                            };
-                        }
-                    }
-
-                    return new Result<Unit>
-                    {
-                        ErrorMessage = ErrorMessage.UserUpdateError,
-                        ErrorCode = (int)ErrorCodes.UserUpdateError,
-                        ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
-                    };
-                }
-
-                else
+                foreach (var error in errorMessages)
                 {
-                    var user = await _userManager.FindByIdAsync(request.UpdateUser.Id);
-
-                    if (user is null)
+                    if (errorMessages.TryGetValue(error.Key, out var message))
                     {
                         return new Result<Unit>
                         {
-                            ErrorMessage = ErrorMessage.UserNotFound,
-                            ErrorCode = (int)ErrorCodes.UserNotFound,
+                            ValidationErrors = message,
+                            StatusCode = (int)StatusCode.NoAction,
+                            ErrorMessage =
+                                ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture),
                         };
                     }
-
-                    else
-                    {
-                        user.FirstName = request.UpdateUser.FirstName.Trim();
-                        user.LastName = request.UpdateUser.LastName.Trim();
-                        user.Email = request.UpdateUser.EmailAddress.Trim();
-                        user.UserName = request.UpdateUser.UserName.Trim();
-
-                        var result = await _userManager.UpdateAsync(user);
-
-                        if (result.Succeeded)
-                        {
-                            var existsRoles = await _userManager.GetRolesAsync(user);
-                            await _userManager.RemoveFromRolesAsync(user, existsRoles);
-
-                            await _userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
-                            await _userManager.UpdateAsync(user);
-                            await _context.SaveChangesAsync(cancellationToken);
-
-                            _memoryCache.Remove(user);
-
-                            var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
-                            _memoryCache.Set(cacheKey, usersCache1);
-                            _memoryCache.Set(cacheKey, user);
-
-                            return new Result<Unit>
-                            {
-                                Data = Unit.Value,
-                                SuccessCode = (int)SuccessCode.Updated,
-                                SuccessMessage = SuccessMessage.UserSuccessfullyUpdated,
-                            };
-                        }
-
-                        else
-                        {
-                            return new Result<Unit>
-                            {
-                                ErrorMessage = ErrorMessage.UserUpdateError,
-                                ErrorCode = (int)ErrorCodes.UserUpdateError,
-                                ValidationErrors = [ErrorMessage.UserUpdateError]
-                            };
-                        }
-                    }
                 }
-            }
 
-            catch (Exception exception)
-            {
-                _logger.Warning(exception, exception.Message);
                 return new Result<Unit>
                 {
-                    ErrorMessage = ErrorMessage.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    StatusCode = (int)StatusCode.NoAction,
+                    ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture),
                 };
             }
+
+            var user = await userManager.FindByIdAsync(request.UpdateUser.Id);
+
+            if (user is null)
+            {
+                return new Result<Unit>
+                {
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            user.FirstName = request.UpdateUser.FirstName.Trim();
+            user.LastName = request.UpdateUser.LastName.Trim();
+            user.Email = request.UpdateUser.EmailAddress.Trim();
+            user.UserName = request.UpdateUser.UserName.Trim();
+
+            var result = await userManager.UpdateAsync(user);
+
+            if (!result.Succeeded)
+            {
+                return new Result<Unit>
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture) ?? string.Empty
+                    ]
+                };
+            }
+
+            var existsRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, existsRoles);
+
+            await userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
+            await userManager.UpdateAsync(user);
+            await context.SaveChangesAsync(cancellationToken);
+            memoryCache.Remove(CacheKey);
+
+            return new Result<Unit>
+            {
+                Data = Unit.Value,
+                StatusCode = (int)StatusCode.Modify,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyUpdated", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<Unit>
+            {
+                ErrorMessage = ex.Message,
+                StatusCode = (int)StatusCode.InternalServerError,
+                ValidationErrors = [ex.Message]
+            };
         }
     }
 }

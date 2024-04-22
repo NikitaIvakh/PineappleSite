@@ -162,7 +162,7 @@
   <data name="ThisUserNameAlreadyExists" xml:space="preserve">
     <value>Такое имя пользователя уже используется</value>
   </data>
-  <data name="UpdateProdileError" xml:space="preserve">
+  <data name="UpdateProfileError" xml:space="preserve">
     <value>Ошибка обновления профиля</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">

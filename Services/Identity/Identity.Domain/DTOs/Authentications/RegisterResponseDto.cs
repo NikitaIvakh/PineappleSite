@@ -1,7 +1,3 @@
-﻿namespace Identity.Domain.DTOs.Authentications
-{
-    public class RegisterResponseDto
-    {
-        public string UserId { get; set; } = null!;
-    }
-}
+﻿namespace Identity.Domain.DTOs.Authentications;
+
+public sealed record RegisterResponseDto(string UserId);

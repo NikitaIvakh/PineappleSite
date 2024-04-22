@@ -1,7 +1,6 @@
-﻿namespace Identity.Domain.ResultIdentity
+﻿namespace Identity.Domain.ResultIdentity;
+
+public class CollectionResult<T> : Result<IReadOnlyCollection<T>>
 {
-    public class CollectionResult<Type> : Result<IReadOnlyCollection<Type>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; init; }
 }

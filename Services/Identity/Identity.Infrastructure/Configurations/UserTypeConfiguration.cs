@@ -3,22 +3,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Identity.Infrastructure.Configurations
+namespace Identity.Infrastructure.Configurations;
+
+public sealed class UserTypeConfiguration : IEntityTypeConfiguration<ApplicationUser>
 {
-    public class UserTypeConfiguration : IEntityTypeConfiguration<ApplicationUser>
+    public void Configure(EntityTypeBuilder<ApplicationUser> builder)
     {
-        public void Configure(EntityTypeBuilder<ApplicationUser> builder)
-        {
-            builder.Property(key => key.Age).IsRequired(false);
-            builder.Property(key => key.Description).IsRequired(false);
+        builder.Property(key => key.Age).IsRequired(false);
+        builder.Property(key => key.Description).IsRequired(false);
 
-            SeedData(builder);
-        }
+        SeedData(builder);
+    }
 
-        private static void SeedData(EntityTypeBuilder<ApplicationUser> builder)
-        {
-            var hasher = new PasswordHasher<ApplicationUser>();
-            builder.HasData(new ApplicationUser
+    private static void SeedData(EntityTypeBuilder<ApplicationUser> builder)
+    {
+        var hasher = new PasswordHasher<ApplicationUser>();
+        builder.HasData(new ApplicationUser
             {
                 Id = "9e224968-33e4-4652-b7b7-8574d048cdb9",
                 Email = "user@localhost.com",
@@ -35,7 +35,6 @@ namespace Identity.Infrastructure.Configurations
                 CreatedTime = DateTime.UtcNow,
                 ModifiedTime = null,
             },
-
             new ApplicationUser
             {
                 Id = "8e445865-a24d-4543-a6c6-9443d048cdb9",
@@ -53,6 +52,5 @@ namespace Identity.Infrastructure.Configurations
                 CreatedTime = DateTime.UtcNow,
                 ModifiedTime = null,
             });
-        }
     }
 }

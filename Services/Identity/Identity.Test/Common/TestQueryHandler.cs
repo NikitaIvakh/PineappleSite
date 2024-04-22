@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Identity.Application.Features.Users.Commands.Queries;
-using Identity.Application.Profiles;
+using Identity.Application.Mapping;
 using Identity.Domain.Entities.Users;
 using Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -26,8 +26,8 @@ namespace Identity.Test.Common
         public TestQueryHandler()
         {
             Context = IdentityDbContextFactory.Create();
-            GetUsersLogger = Log.ForContext<GetUserListRequestHandler>();
-            GetUserLogger = Log.ForContext<GetUserDetailsRequestHandler>();
+            GetUsersLogger = Log.ForContext<GetUsersRequestHandler>();
+            GetUserLogger = Log.ForContext<GetUserRequestHandler>();
             UserManager = new UserManager<ApplicationUser>(
                 new UserStore<ApplicationUser>(Context),
                 null,

@@ -8,182 +8,172 @@ using Identity.Domain.ResultIdentity;
 using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Serilog;
 
-namespace Identity.Application.Features.Identities.Commands.Commands
+namespace Identity.Application.Features.Identities.Commands.Commands;
+
+public sealed class RegisterUserRequestHandler(
+    UserManager<ApplicationUser> userManager,
+    RegisterValidator validationRules,
+    ApplicationDbContext context,
+    IMemoryCache memoryCache) : IRequestHandler<RegisterUserRequest, Result<string>>
 {
-    public class RegisterUserRequestHandler(UserManager<ApplicationUser> userManager, IRegisterRequestDtoValidator validationRules, ILogger logger, ApplicationDbContext context, IMemoryCache memoryCache) : IRequestHandler<RegisterUserRequest, Result<RegisterResponseDto>>
+    private const string CacheKey = "СacheUserKey";
+
+    public async Task<Result<string>> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
     {
-        private readonly UserManager<ApplicationUser> _userManager = userManager;
-        private readonly IRegisterRequestDtoValidator _registerValidator = validationRules;
-        private readonly ApplicationDbContext _context = context;
-        private readonly ILogger _logger = logger.ForContext<RegisterUserRequestHandler>();
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "СacheUserKey";
-
-        public async Task<Result<RegisterResponseDto>> Handle(RegisterUserRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var validator = await validationRules.ValidateAsync(request.RegisterRequest, cancellationToken);
+
+            if (!validator.IsValid)
             {
-                var validator = await _registerValidator.ValidateAsync(request.RegisterRequest, cancellationToken);
-
-                if (!validator.IsValid)
+                var errorMessages = new Dictionary<string, List<string>>()
                 {
-                    var errorMessages = new Dictionary<string, List<string>>()
-                    {
-                        {"FirstName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
-                        {"LastName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
-                        {"UserName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
-                        {"EmailAddress", validator.Errors.Select(x => x.ErrorMessage).ToList() },
-                        {"Password", validator.Errors.Select(x => x.ErrorMessage).ToList() },
-                    };
+                    { "FirstName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "LastName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "UserName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "EmailAddress", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                    { "Password", validator.Errors.Select(x => x.ErrorMessage).ToList() },
+                };
 
-                    foreach (var error in errorMessages)
-                    {
-                        if (errorMessages.TryGetValue(error.Key, out var message))
-                        {
-                            return new Result<RegisterResponseDto>
-                            {
-                                ValidationErrors = message,
-                                ErrorMessage = ErrorMessage.RegistrationLoginError,
-                                ErrorCode = (int)ErrorCodes.RegistrationLoginError,
-                            };
-                        }
-                    }
-
-                    return new Result<RegisterResponseDto>
-                    {
-                        ErrorMessage = ErrorMessage.RegistrationLoginError,
-                        ErrorCode = (int)ErrorCodes.RegistrationLoginError,
-                        ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
-                    };
-                }
-
-                else
+                foreach (var error in errorMessages)
                 {
-                    var existsEmail = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
-
-                    if (existsEmail is not null)
+                    if (errorMessages.TryGetValue(error.Key, out var message))
                     {
-                        return new Result<RegisterResponseDto>
+                        return new Result<string>
                         {
-                            Data = null,
-                            ErrorMessage = ErrorMessage.EmailAddressAlreadyExists,
-                            ErrorCode = (int)ErrorCodes.EmailAddressAlreadyExists,
-                            ValidationErrors = [ErrorMessage.EmailAddressAlreadyExists]
+                            ValidationErrors = message,
+                            StatusCode = (int)StatusCode.NoAction,
+                            ErrorMessage = ErrorMessage.ResourceManager.GetString("RegistrationLoginError",
+                                ErrorMessage.Culture),
                         };
                     }
-
-                    else
-                    {
-                        var existsUserName = await _userManager.FindByNameAsync(request.RegisterRequest.UserName);
-
-                        if (existsUserName is not null)
-                        {
-                            return new Result<RegisterResponseDto>
-                            {
-                                Data = null,
-                                ErrorMessage = ErrorMessage.ThisUserNameAlreadyExists,
-                                ErrorCode = (int)ErrorCodes.ThisUserNameAlreadyExists,
-                                ValidationErrors = [ErrorMessage.ThisUserNameAlreadyExists]
-                            };
-                        }
-
-                        else
-                        {
-                            var user = new ApplicationUser
-                            { 
-                                Id = Guid.NewGuid().ToString(),
-                                FirstName = request.RegisterRequest.FirstName.Trim(),
-                                LastName = request.RegisterRequest.LastName.Trim(),
-                                UserName = request.RegisterRequest.UserName.Trim(),
-                                Email = request.RegisterRequest.Email.Trim(),
-                                EmailConfirmed = true,
-                            };
-
-                            var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.RegisterRequest.Password);
-                            user.PasswordHash = passwordHasher;
-
-                            if (request.RegisterRequest.Password.Trim() == request.RegisterRequest.PasswordConfirm.Trim())
-                            {
-                                var result = await _userManager.CreateAsync(user, request.RegisterRequest.Password);
-
-                                if (!result.Succeeded)
-                                {
-                                    return new Result<RegisterResponseDto>
-                                    {
-                                        ErrorCode = (int)ErrorCodes.RegistrationLoginError,
-                                        ErrorMessage = ErrorMessage.RegistrationLoginError,
-                                        ValidationErrors = [ErrorMessage.RegistrationLoginError]
-                                    };
-                                }
-
-                                else
-                                {
-                                    var userFromDb = await _userManager.FindByEmailAsync(request.RegisterRequest.Email);
-
-                                    if (userFromDb is null)
-                                    {
-                                        return new Result<RegisterResponseDto>
-                                        {
-                                            ErrorCode = (int)ErrorCodes.UserNotFound,
-                                            ErrorMessage = ErrorMessage.UserNotFound,
-                                            ValidationErrors = [ErrorMessage.UserNotFound]
-                                        };
-                                    }
-
-                                    else
-                                    {
-                                        await _userManager.AddToRoleAsync(user, RoleConsts.User);
-                                        await _context.SaveChangesAsync(cancellationToken);
-
-                                        _memoryCache.Remove(user);
-
-                                        var usersCache1 = await _userManager.Users.ToListAsync(cancellationToken);
-                                        _memoryCache.Set(cacheKey, usersCache1);
-                                        _memoryCache.Set(cacheKey, user);
-
-                                        return new Result<RegisterResponseDto>
-                                        {
-                                            Data = new RegisterResponseDto
-                                            {
-                                                UserId = userFromDb.Id,
-                                            },
-
-                                            SuccessCode = (int)SuccessCode.Ok,
-                                            SuccessMessage = SuccessMessage.SuccessfullyRegister,
-                                        };
-                                    }
-                                }
-                            }
-
-                            else
-                            {
-                                return new Result<RegisterResponseDto>
-                                {
-                                    ErrorCode = (int)ErrorCodes.PasswordsDoNotMatch,
-                                    ErrorMessage = ErrorMessage.PasswordsDoNotMatch,
-                                    ValidationErrors = [ErrorMessage.PasswordsDoNotMatch]
-                                };
-                            }
-                        }
-                    }
                 }
-            }
 
-            catch (Exception exception)
-            {
-                _logger.Warning(exception, exception.Message);
-                return new Result<RegisterResponseDto>
+                return new Result<string>
                 {
-                    ErrorMessage = ErrorMessage.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [ErrorMessage.InternalServerError]
+                    StatusCode = (int)StatusCode.NoAction,
+                    ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("RegistrationLoginError", ErrorMessage.Culture),
                 };
             }
+
+            var existsEmail = await userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
+
+            if (existsEmail is not null)
+            {
+                return new Result<string>
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("EmailAddressAlreadyExists", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("EmailAddressAlreadyExists", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var existsUserName = await userManager.FindByNameAsync(request.RegisterRequest.UserName);
+
+            if (existsUserName is not null)
+            {
+                return new Result<string>
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("ThisUserNameAlreadyExists", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("ThisUserNameAlreadyExists", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var user = new ApplicationUser
+            {
+                Id = Guid.NewGuid().ToString(),
+                FirstName = request.RegisterRequest.FirstName.Trim(),
+                LastName = request.RegisterRequest.LastName.Trim(),
+                UserName = request.RegisterRequest.UserName.Trim(),
+                Email = request.RegisterRequest.EmailAddress.Trim(),
+                EmailConfirmed = true,
+            };
+
+            var passwordHasher =
+                new PasswordHasher<ApplicationUser>().HashPassword(user, request.RegisterRequest.Password);
+
+            user.PasswordHash = passwordHasher;
+
+            if (request.RegisterRequest.Password.Trim() != request.RegisterRequest.PasswordConfirm.Trim())
+            {
+                return new Result<string>
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("PasswordsDoNotMatch", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("PasswordsDoNotMatch", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var result = await userManager.CreateAsync(user, request.RegisterRequest.Password);
+
+            if (!result.Succeeded)
+            {
+                return new Result<string>
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("RegistrationLoginError", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("RegistrationLoginError", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var userFromDb = await userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
+
+            if (userFromDb is null)
+            {
+                return new Result<string>
+                {
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture),
+                    ValidationErrors =
+                        [ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture) ?? string.Empty]
+                };
+            }
+
+            await userManager.AddToRoleAsync(user, RoleConst.User);
+            await context.SaveChangesAsync(cancellationToken);
+
+            memoryCache.Remove(CacheKey);
+
+            return new Result<string>
+            {
+                Data = userFromDb.Id,
+                StatusCode = (int)StatusCode.Ok,
+                SuccessMessage = SuccessMessage.ResourceManager.GetString("SuccessfullyRegister", ErrorMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<string>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

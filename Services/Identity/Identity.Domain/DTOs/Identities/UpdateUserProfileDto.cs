@@ -1,29 +1,17 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace Identity.Domain.DTOs.Identities
-{
-    public class UpdateUserProfileDto
-    {
-        public string Id { get; set; }
+namespace Identity.Domain.DTOs.Identities;
 
-        public string? FirstName { get; set; }
-
-        public string? LastName { get; set; }
-
-        public string? EmailAddress { get; set; }
-
-        public string? UserName { get; set; }
-
-        public string? Password { get; set; }
-
-        public string? Description { get; set; }
-
-        public int? Age { get; set; }
-
-        public IFormFile? Avatar { get; set; }
-
-        public string? ImageUrl { get; set; }
-
-        public string? ImageLocalPath { get; set; }
-    }
-}
+public sealed record UpdateUserProfileDto(
+    string Id,
+    string? FirstName,
+    string? LastName,
+    string? EmailAddress,
+    string? UserName,
+    string? Password,
+    string? Description,
+    int? Age,
+    IFormFile? Avatar,
+    string? ImageUrl,
+    string? ImageLocalPath
+);

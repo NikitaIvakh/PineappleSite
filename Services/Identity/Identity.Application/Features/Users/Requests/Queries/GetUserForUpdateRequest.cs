@@ -2,12 +2,11 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Users.Requests.Queries
-{
-    public class GetUserForUpdateRequest : IRequest<Result<GetUserForUpdateDto>>
-    {
-        public string UserId { get; set; } = null!;
+namespace Identity.Application.Features.Users.Requests.Queries;
 
-        public string? Password { get; set; }
-    }
+public sealed class GetUserForUpdateRequest(string userId, string password) : IRequest<Result<GetUserForUpdateDto>>
+{
+    public string UserId { get; init; } = userId;
+
+    public string Password { get; init; } = password;
 }

@@ -2,10 +2,9 @@
 using Identity.Domain.ResultIdentity;
 using MediatR;
 
-namespace Identity.Application.Features.Identities.Requests.Commands
+namespace Identity.Application.Features.Identities.Requests.Commands;
+
+public sealed class LoginUserRequest(AuthRequestDto authRequest) : IRequest<Result<string>>
 {
-    public class LoginUserRequest : IRequest<Result<AuthResponseDto>>
-    {
-        public AuthRequestDto AuthRequest { get; set; }
-    }
+    public AuthRequestDto AuthRequest { get; init; } = authRequest;
 }

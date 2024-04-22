@@ -1,7 +1,3 @@
-﻿namespace Identity.Domain.DTOs.Identities
-{
-    public class DeleteUserDto
-    {
-        public string Id { get; set; }
-    }
-}
+﻿namespace Identity.Domain.DTOs.Identities;
+
+public sealed record DeleteUserDto(string UserId);

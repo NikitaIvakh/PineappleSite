@@ -1,9 +1,3 @@
-﻿namespace Identity.Domain.DTOs.Authentications
-{
-    public class TokenModelDto
-    {
-        public string AccessToken { get; set; } = null!;
+﻿namespace Identity.Domain.DTOs.Authentications;
 
-        public string RefreshToken { get; set; } = null!;
-    }
-}
+public sealed record TokenModelDto(string AccessToken, string RefreshToken);

@@ -2,19 +2,18 @@
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 
-namespace Identity.Application.Profiles
-{
-    public class MappingProfile : Profile
-    {
-        public MappingProfile()
-        {
-            CreateMap<ApplicationUser, GetUserDto>().ReverseMap();
-            CreateMap<ApplicationUser, GetAllUsersDto>().ReverseMap();
-            CreateMap<ApplicationUser, GetUserForUpdateDto>().ReverseMap();
+namespace Identity.Application.Mapping;
 
-            CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
-            CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
-            CreateMap<ApplicationUser, DeleteUserDto>().ReverseMap();
-        }
+public sealed class MappingProfile : Profile
+{
+    public MappingProfile()
+    {
+        CreateMap<ApplicationUser, GetUserDto>().ReverseMap();
+        CreateMap<ApplicationUser, GetUsersDto>().ReverseMap();
+        CreateMap<ApplicationUser, GetUserForUpdateDto>().ReverseMap();
+
+        CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
+        CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
+        CreateMap<ApplicationUser, DeleteUserDto>().ReverseMap();
     }
 }

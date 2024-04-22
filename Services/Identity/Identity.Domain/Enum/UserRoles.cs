@@ -1,8 +1,7 @@
-﻿namespace Identity.Domain.Enum
+﻿namespace Identity.Domain.Enum;
+
+public enum UserRoles
 {
-    public enum UserRoles
-    {
-        User = 1,
-        Administrator = 2
-    }
+    User = 1,
+    Administrator = 2
 }

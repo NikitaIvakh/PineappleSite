@@ -13,14 +13,14 @@
 //        public async Task DeleteUserListRequestHandlerTest_Success()
 //        {
 //            // Arrange
-//            var handler = new DeleteUserListRequestHandler(UserManager, DeleteUsers, DeleteUserListLogger, Mapper);
+//            var handler = new DeleteUsersRequestHandler(UserManager, DeleteUsers, DeleteUserListLogger, Mapper);
 //            var deleteUserList = new DeleteUserListDto()
 //            {
 //                UserIds = ["8e445865-a24d-4543-a6c6-9443d048cdb9", "9e224968-33e4-4652-b7b7-8574d048cdb9"],
 //            };
 
 //            // Act
-//            var result = await handler.Handle(new DeleteUserListRequest
+//            var result = await handler.Handle(new DeleteUsersRequest
 //            {
 //                DeleteUserList = deleteUserList,
 //            }, CancellationToken.None);
@@ -37,14 +37,14 @@
 //        public async Task DeleteUserListRequestHandlerTest_Success_FailOrWrongIds()
 //        {
 //            // Arrange
-//            var handler = new DeleteUserListRequestHandler(UserManager, DeleteUsers, DeleteUserListLogger, Mapper);
+//            var handler = new DeleteUsersRequestHandler(UserManager, DeleteUsers, DeleteUserListLogger, Mapper);
 //            var deleteUserList = new DeleteUserListDto()
 //            {
 //                UserIds = [],
 //            };
 
 //            // Act
-//            var result = await handler.Handle(new DeleteUserListRequest
+//            var result = await handler.Handle(new DeleteUsersRequest
 //            {
 //                DeleteUserList = deleteUserList,
 //            }, CancellationToken.None);
