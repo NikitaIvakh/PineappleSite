@@ -80,7 +80,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return await Task.FromResult(user);
     }
 
-    public async Task<ApplicationUser> DeleteUserAsync(ApplicationUser user, CancellationToken token = default)
+    public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default)
     {
         if (user is null)
         {
@@ -90,6 +90,6 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         await userManager.DeleteAsync(user);
         await context.SaveChangesAsync(token);
 
-        return await Task.FromResult(user);
+        return IdentityResult.Success;
     }
 }

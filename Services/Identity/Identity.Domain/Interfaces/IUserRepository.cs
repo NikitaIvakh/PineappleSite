@@ -15,7 +15,7 @@ public interface IUserRepository
 
     Task<ApplicationUser> UpdateUserAsync(ApplicationUser user, CancellationToken token = default);
 
-    Task<ApplicationUser> DeleteUserAsync(ApplicationUser user, CancellationToken token = default);
+    Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default);
 
     Task<bool> CheckPasswordAsync(ApplicationUser user, string password, CancellationToken token = default);
 }

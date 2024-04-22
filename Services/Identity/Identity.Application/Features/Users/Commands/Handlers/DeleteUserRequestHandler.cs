@@ -2,19 +2,18 @@
 using Identity.Domain.Enum;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.ResultIdentity;
-using Microsoft.AspNetCore.Identity;
 using Identity.Application.Features.Users.Requests.Handlers;
+using Identity.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class DeleteUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     DeleteUserValidator deleteValidator,
-    IMemoryCache memoryCache)
-    : IRequestHandler<DeleteUserRequest, Result<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<DeleteUserRequest, Result<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -53,7 +52,8 @@ public sealed class DeleteUserRequestHandler(
                 };
             }
 
-            var user = await userManager.FindByIdAsync(request.DeleteUser.UserId);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Id == request.DeleteUser.UserId, cancellationToken);
 
             if (user is null)
             {
@@ -71,9 +71,9 @@ public sealed class DeleteUserRequestHandler(
                 var fileName = $"Id_{user.Id}*";
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
 
-                var getAllFields = Directory.GetFiles(filePath, fileName + ".*");
+                var getAllFiles = Directory.GetFiles(filePath, fileName + ".*");
 
-                foreach (var file in getAllFields)
+                foreach (var file in getAllFiles)
                 {
                     File.Delete(file);
                 }
@@ -81,10 +81,10 @@ public sealed class DeleteUserRequestHandler(
                 user.ImageUrl = null;
                 user.ImageLocalPath = null;
 
-                await userManager.UpdateAsync(user);
+                await userRepository.UpdateUserAsync(user, cancellationToken);
             }
 
-            var result = await userManager.DeleteAsync(user);
+            var result = await userRepository.DeleteUserAsync(user, cancellationToken);
 
             if (!result.Succeeded)
             {
