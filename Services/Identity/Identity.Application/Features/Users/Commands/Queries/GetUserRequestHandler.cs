@@ -1,12 +1,10 @@
 ﻿using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 

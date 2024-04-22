@@ -14,6 +14,7 @@ public class UserEndpoints : ICarterModule
         var group = app.MapGroup("api/users");
 
         group.MapGet("/GetUsers", GetUsers).WithName(nameof(GetUsers));
+        group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -28,6 +29,21 @@ public class UserEndpoints : ICarterModule
         }
 
         logger.LogError($"LogDebugError ================ Получить пользователей не удалось");
+        return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<GetUserDto>>, BadRequest<string>>> GetUser(ISender sender,
+        ILogger<string> logger, string userId)
+    {
+        var request = await sender.Send(new GetUserRequest(userId));
+
+        if (request.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователь успешно получен: {userId}");
+            return TypedResults.Ok(request);
+        }
+
+        logger.LogError($"LogDebugError ================ Ошибка получения пользователя: {userId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 }
