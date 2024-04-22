@@ -13,7 +13,7 @@ public interface IUserRepository
 
     Task<ApplicationUser> AddUserToRoleAsync(ApplicationUser user, string role, CancellationToken token = default);
 
-    Task<ApplicationUser> UpdateUserAsync(ApplicationUser user, CancellationToken token = default);
+    Task<IdentityResult> UpdateUserAsync(ApplicationUser user, CancellationToken token = default);
 
     Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default);
 

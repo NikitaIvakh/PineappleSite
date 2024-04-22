@@ -67,7 +67,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return result;
     }
 
-    public async Task<ApplicationUser> UpdateUserAsync(ApplicationUser user, CancellationToken token = default)
+    public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user, CancellationToken token = default)
     {
         if (user is null)
         {
@@ -77,7 +77,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         await userManager.UpdateAsync(user);
         await context.SaveChangesAsync(token);
 
-        return await Task.FromResult(user);
+        return IdentityResult.Success;
     }
 
     public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default)

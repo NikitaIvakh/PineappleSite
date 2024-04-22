@@ -4,22 +4,21 @@ using Identity.Application.Validators;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class UpdateUserProfileRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     UpdateUserProfileValidator userProfileValidator,
     IHttpContextAccessor httpContextAccessor,
-    IMemoryCache memoryCache,
-    ApplicationDbContext context)
-    : IRequestHandler<UpdateUserProfileRequest, Result<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -65,7 +64,8 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            var user = await userManager.FindByIdAsync(request.UpdateUserProfile.Id);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Id == request.UpdateUserProfile.Id, cancellationToken);
 
             if (user is null)
             {
@@ -88,11 +88,12 @@ public sealed class UpdateUserProfileRequestHandler(
             if (!string.IsNullOrEmpty(request.UpdateUserProfile.Password))
             {
                 var newPassword =
-                    userManager.PasswordHasher.HashPassword(user, request.UpdateUserProfile.Password);
+                    new PasswordHasher<ApplicationUser>().HashPassword(user, request.UpdateUserProfile.Password);
+
                 user.PasswordHash = newPassword;
             }
 
-            await userManager.UpdateAsync(user);
+            await userRepository.UpdateUserAsync(user, cancellationToken);
 
             if (request.UpdateUserProfile.Avatar is not null)
             {
@@ -112,11 +113,12 @@ public sealed class UpdateUserProfileRequestHandler(
                     user.ImageUrl = null;
                     user.ImageLocalPath = null;
 
-                    await userManager.UpdateAsync(user);
+                    await userRepository.UpdateUserAsync(user, cancellationToken);
                 }
 
                 var fileName = $"Id_{user.Id}------{Guid.NewGuid()}" +
                                Path.GetExtension(request.UpdateUserProfile.Avatar.FileName);
+
                 var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "UserImages");
                 var directory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
 
@@ -134,6 +136,7 @@ public sealed class UpdateUserProfileRequestHandler(
 
                 var baseUrl =
                     $"{httpContextAccessor.HttpContext!.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host.Value}{httpContextAccessor.HttpContext.Request.PathBase.Value}";
+
                 user.ImageUrl = Path.Combine(baseUrl, "UserImages", fileName);
                 user.ImageLocalPath = filePath;
             }
@@ -144,9 +147,10 @@ public sealed class UpdateUserProfileRequestHandler(
                 request.UpdateUserProfile = request.UpdateUserProfile with { ImageLocalPath = user.ImageLocalPath };
             }
 
-            var result = await userManager.UpdateAsync(user);
+            var result = await userRepository.UpdateUserAsync(user, cancellationToken);
 
             if (!result.Succeeded)
+            {
                 return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NoAction,
@@ -157,14 +161,9 @@ public sealed class UpdateUserProfileRequestHandler(
                         string.Empty
                     ]
                 };
-
-            var existsRoles = await userManager.GetRolesAsync(user);
-            var userWithRoles = new GetUserForUpdateDto(user.Id, user.FirstName, user.LastName,
-                user.UserName, user.Email, existsRoles, user.Description, user.Age,
-                request.UpdateUserProfile.Password!, user.ImageUrl!, user.ImageLocalPath!);
+            }
 
             memoryCache.Remove(CacheKey);
-            await context.SaveChangesAsync(cancellationToken);
 
             return new Result<Unit>
             {
