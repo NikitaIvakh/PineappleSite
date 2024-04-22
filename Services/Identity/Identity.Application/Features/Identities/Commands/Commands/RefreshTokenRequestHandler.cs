@@ -10,13 +10,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Identity.Application.Extensions;
+using Identity.Domain.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class RefreshTokenRequestHandler(
-    UserManager<ApplicationUser> userManager,
-    IConfiguration configuration,
-    ApplicationDbContext context) : IRequestHandler<RefreshTokenRequest, Result<ObjectResult>>
+    IUserRepository userRepository,
+    IConfiguration configuration) : IRequestHandler<RefreshTokenRequest, Result<ObjectResult>>
 {
     public async Task<Result<ObjectResult>> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
     {
@@ -42,7 +43,8 @@ public sealed class RefreshTokenRequestHandler(
             }
 
             var userName = principal.Identity!.Name;
-            var user = await userManager.FindByNameAsync(userName!);
+            var user = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.UserName == userName, cancellationToken);
 
             if (user is null || user.RefreshToken != refreshToken ||
                 user.RefreshTokenExpiresTime <= DateTime.UtcNow)
@@ -62,9 +64,7 @@ public sealed class RefreshTokenRequestHandler(
 
             var newAccessToken = configuration.CreateJwtToken(principal.Claims.ToList());
             var newRefreshToken = configuration.GenerateRefreshToken();
-
             user.RefreshToken = newRefreshToken;
-            await context.SaveChangesAsync(cancellationToken);
 
             return new Result<ObjectResult>
             {
