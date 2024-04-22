@@ -23,7 +23,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         }
 
         var userRolesNames = await userManager.GetRolesAsync(user);
-        return userRolesNames;
+        return await Task.FromResult(userRolesNames);
     }
 
     public async Task<IdentityResult> CreateUserAsync(ApplicationUser user, string password,
@@ -37,7 +37,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         await userManager.CreateAsync(user, password);
         await context.SaveChangesAsync(token);
 
-        return IdentityResult.Success;
+        return await Task.FromResult(IdentityResult.Success);
     }
 
     public async Task<ApplicationUser> AddUserToRoleAsync(ApplicationUser user, string role,
@@ -63,7 +63,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         }
 
         var result = await userManager.CheckPasswordAsync(user, password);
-        return result;
+        return await Task.FromResult(result);
     }
 
     public async Task<IdentityResult> UpdateUserAsync(ApplicationUser user, CancellationToken token = default)
@@ -75,8 +75,8 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
 
         await userManager.UpdateAsync(user);
         await context.SaveChangesAsync(token);
-
-        return IdentityResult.Success;
+        
+        return await Task.FromResult(IdentityResult.Success);
     }
 
     public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default)
@@ -89,6 +89,6 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         await userManager.DeleteAsync(user);
         await context.SaveChangesAsync(token);
 
-        return IdentityResult.Success;
+        return await Task.FromResult(IdentityResult.Success);
     }
 }
