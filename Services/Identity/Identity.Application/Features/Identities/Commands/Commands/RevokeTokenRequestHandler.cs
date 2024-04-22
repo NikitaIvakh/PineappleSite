@@ -32,6 +32,7 @@ public sealed class RevokeTokenRequestHandler(
             }
 
             user.RefreshToken = null;
+            user.RefreshTokenExpiresTime = DateTime.UtcNow;
             await userManager.UpdateAsync(user);
             await context.SaveChangesAsync(cancellationToken);
 

@@ -36,6 +36,7 @@ public sealed class RevokeTokensRequestHandler(
             foreach (var user in users)
             {
                 user.RefreshToken = null;
+                user.RefreshTokenExpiresTime = DateTime.UtcNow;
                 await userManager.UpdateAsync(user);
             }
 
