@@ -22,7 +22,7 @@ public static class JwtBearerExtensions
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Name, user.UserName!),
             new(ClaimTypes.Email, user.Email!),
-            new(ClaimTypes.Role, string.Join(",", roles.ToString())),
+            new(ClaimTypes.Role, string.Join(",", roles)),
         };
         
         return claims;
