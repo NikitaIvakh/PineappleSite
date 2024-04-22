@@ -1,21 +1,22 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
+using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
+using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class CreateUserRequestHandler(
-    UserManager<ApplicationUser> userManager,
+    IUserRepository userRepository,
     CreateUserValidation createValidator,
-    IMemoryCache memoryCache,
-    ApplicationDbContext context) : IRequestHandler<CreateUserRequest, Result<string>>
+    IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<string>>
 {
     private const string CacheKey = "СacheUserKey";
 
@@ -59,7 +60,8 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var userExists = await userManager.FindByNameAsync(request.CreateUser.UserName);
+            var userExists = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.UserName == request.CreateUser.UserName, cancellationToken);
 
             if (userExists is not null)
             {
@@ -75,7 +77,8 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userManager.FindByEmailAsync(request.CreateUser.EmailAddress);
+            var existsEmail = await userRepository.GetAll(cancellationToken)
+                .FirstOrDefaultAsync(key => key.Email == request.CreateUser.EmailAddress, cancellationToken);
 
             if (existsEmail is not null)
             {
@@ -102,43 +105,34 @@ public sealed class CreateUserRequestHandler(
                 EmailConfirmed = true,
             };
 
-            if (!string.IsNullOrEmpty(request.CreateUser.Password))
+            var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.CreateUser.Password);
+            user.PasswordHash = passwordHasher;
+
+            var result = await userRepository.CreateUserAsync(user, request.CreateUser.Password, cancellationToken);
+
+            if (!result.Succeeded)
             {
-                var passwordHasher =
-                    userManager.PasswordHasher.HashPassword(user, request.CreateUser.Password);
-                user.PasswordHash = passwordHasher;
-            }
-
-            var result = await userManager.CreateAsync(user);
-
-            if (result.Succeeded)
-            {
-                await userManager.AddToRoleAsync(user, request.CreateUser.Roles.ToString());
-                await userManager.UpdateAsync(user);
-                await context.SaveChangesAsync(cancellationToken);
-
-                memoryCache.Remove(CacheKey);
-
                 return new Result<string>
                 {
-                    Data = user.Id,
-                    StatusCode = (int)StatusCode.Created,
-                    SuccessMessage =
-                        SuccessMessage.ResourceManager.GetString("UserSuccessfullyCreated", SuccessMessage.Culture),
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("UserCanNotBeCreated", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserCanNotBeCreated", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
                 };
             }
 
+            await userRepository.AddUserToRoleAsync(user, RoleConst.User, cancellationToken);
             memoryCache.Remove(CacheKey);
 
             return new Result<string>
             {
-                StatusCode = (int)StatusCode.NoAction,
-                ErrorMessage = ErrorMessage.ResourceManager.GetString("UserCanNotBeCreated", ErrorMessage.Culture),
-                ValidationErrors =
-                [
-                    ErrorMessage.ResourceManager.GetString("UserCanNotBeCreated", ErrorMessage.Culture) ??
-                    string.Empty
-                ]
+                Data = user.Id,
+                StatusCode = (int)StatusCode.Created,
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("UserSuccessfullyCreated", SuccessMessage.Culture),
             };
         }
 
