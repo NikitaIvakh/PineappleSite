@@ -20,6 +20,7 @@ public sealed class UserEndpoints : ICarterModule
         group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
         group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
         group.Map("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile));
+        group.MapDelete("/DeleteUser/{userId}", DeleteUser).WithName(nameof(DeleteUser));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -82,7 +83,7 @@ public sealed class UserEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    public static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUserProfile(ISender sender,
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUserProfile(ISender sender,
         string userId,
         ILogger<UpdateUserProfileDto> logger, [FromForm] UpdateUserProfileDto updateUserProfileDto)
     {
@@ -97,6 +98,21 @@ public sealed class UserEndpoints : ICarterModule
 
         logger.LogError(
             $"LogDebugError ================ Обновить профиль пользователеля не удалось: {updateUserProfileDto.Id}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteUser(ISender sender, string userId,
+        ILogger<DeleteUserDto> logger, [FromBody] DeleteUserDto deleteUserDto)
+    {
+        var command = await sender.Send(new DeleteUserRequest(deleteUserDto));
+
+        if (command.IsSuccess && userId == deleteUserDto.UserId)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователя успешно удален: {deleteUserDto.UserId}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError($"LogDebugError ================ Удалить пользователеля не удалось: {deleteUserDto.UserId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }
