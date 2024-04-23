@@ -24,8 +24,8 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
+applicationBuilder.Services.AddSwaggerConfigurations(applicationBuilder.Configuration);
 
 var webApplication = applicationBuilder.Build();
 
