@@ -1,9 +1,11 @@
 ﻿using Carter;
+using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Identity.API.Endpoints;
 
@@ -15,6 +17,7 @@ public sealed class UserEndpoints : ICarterModule
 
         group.MapGet("/GetUsers", GetUsers).WithName(nameof(GetUsers));
         group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
+        group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -45,5 +48,20 @@ public sealed class UserEndpoints : ICarterModule
 
         logger.LogError($"LogDebugError ================ Ошибка получения пользователя: {userId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<string>>, BadRequest<string>>> CreateUser(ISender sender,
+        ILogger<CreateUserDto> logger, [FromBody] CreateUserDto createUserDto)
+    {
+        var command = await sender.Send(new CreateUserRequest(createUserDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователь успешно создан: {createUserDto.UserName}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError($"LogDebugError ================ Удалить пользователея не удалось: {createUserDto.UserName}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

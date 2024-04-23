@@ -62,12 +62,14 @@ public sealed class GetUsersRequestHandler(
                     ModifiedTime: user.ModifiedTime
                 ));
             }
+            
+            var getOrderedList = getUsersDtoList.OrderByDescending(key => key.CreatedTime).ToList();
 
             memoryCache.Remove(CacheKey);
 
             return new CollectionResult<GetUsersDto>
             {
-                Data = getUsersDtoList,
+                Data = getOrderedList,
                 Count = getUsersDtoList.Count,
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage =
