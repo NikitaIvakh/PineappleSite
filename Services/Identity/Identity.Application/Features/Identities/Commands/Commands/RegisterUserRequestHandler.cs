@@ -60,7 +60,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userRepository.GetAll(cancellationToken)
+            var existsEmail = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
 
             if (existsEmail is not null)
@@ -78,7 +78,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsUserName = await userRepository.GetAll(cancellationToken)
+            var existsUserName = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.UserName == request.RegisterRequest.UserName, cancellationToken);
 
             if (existsUserName is not null)
@@ -143,7 +143,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var userFromDb = await userRepository.GetAll(cancellationToken)
+            var userFromDb = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
 
             if (userFromDb is null)

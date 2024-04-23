@@ -15,7 +15,7 @@ public sealed class RevokeTokenRequestHandler(IUserRepository userRepository)
     {
         try
         {
-            var user = await userRepository.GetAll(cancellationToken)
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.UserName == request.UserName, cancellationToken: cancellationToken);
 
             if (user is null)

@@ -64,7 +64,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetAll(cancellationToken)
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Id == request.UpdateUserProfile.Id, cancellationToken);
 
             if (user is null)

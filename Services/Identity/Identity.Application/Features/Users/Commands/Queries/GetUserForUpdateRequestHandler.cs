@@ -32,7 +32,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetAll(cancellationToken)
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Id == request.UserId, cancellationToken);
 
             if (user is null)
@@ -48,7 +48,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 };
             }
 
-            var roles = await userRepository.GetUserRolesAsync(user, cancellationToken);
+            var roles = await userRepository.GetUserRolesAsync(user);
             var getUserFotUpdate = new GetUserForUpdateDto
             (
                 UserId: user.Id,

@@ -53,7 +53,7 @@ public sealed class DeleteUsersRequestHandler(
                 };
             }
 
-            var users = await userRepository.GetAll(cancellationToken)
+            var users = await userRepository.GetUsers()
                 .Where(key => request.DeleteUsers.UserIds.Contains(key.Id))
                 .ToListAsync(cancellationToken);
 
@@ -90,7 +90,7 @@ public sealed class DeleteUsersRequestHandler(
                     await userRepository.UpdateUserAsync(user, cancellationToken);
                 }
 
-                var result = await userRepository.DeleteUserAsync(user, cancellationToken);
+                var result = await userRepository.DeleteUserAsync(user);
 
                 if (!result.Succeeded)
                 {

@@ -9,13 +9,12 @@ namespace Identity.Infrastructure.Repository;
 public sealed class UserRepository(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
     : IUserRepository
 {
-    public IQueryable<ApplicationUser> GetAll(CancellationToken cancellationToken = default)
+    public IQueryable<ApplicationUser> GetUsers()
     {
         return userManager.Users.AsNoTracking().AsQueryable();
     }
-
-    public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user,
-        CancellationToken token = default)
+    
+    public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user)
     {
         if (user is null)
         {
@@ -55,7 +54,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return await Task.FromResult(user);
     }
 
-    public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password, CancellationToken token = default)
+    public async Task<bool> CheckPasswordAsync(ApplicationUser user, string password)
     {
         if (user is null)
         {
@@ -80,7 +79,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         return await Task.FromResult(IdentityResult.Success);
     }
 
-    public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user, CancellationToken token = default)
+    public async Task<IdentityResult> DeleteUserAsync(ApplicationUser user)
     {
         if (user is null)
         {
@@ -88,8 +87,6 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         }
 
         await userManager.DeleteAsync(user);
-        await context.SaveChangesAsync(token);
-
         return await Task.FromResult(IdentityResult.Success);
     }
 }

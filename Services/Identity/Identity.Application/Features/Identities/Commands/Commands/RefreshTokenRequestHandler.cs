@@ -1,11 +1,8 @@
 ﻿using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
-using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Domain.ResultIdentity;
-using Identity.Infrastructure;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
@@ -43,7 +40,7 @@ public sealed class RefreshTokenRequestHandler(
             }
 
             var userName = principal.Identity!.Name;
-            var user = await userRepository.GetAll(cancellationToken)
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.UserName == userName, cancellationToken);
 
             if (user is null || user.RefreshToken != refreshToken ||

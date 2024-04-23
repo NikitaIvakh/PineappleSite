@@ -54,8 +54,8 @@ public sealed class UpdateUserRequestHandler(
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture),
                 };
             }
-
-            var user = await userRepository.GetAll(cancellationToken)
+            
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Id == request.UpdateUser.Id, cancellationToken);
 
             if (user is null)

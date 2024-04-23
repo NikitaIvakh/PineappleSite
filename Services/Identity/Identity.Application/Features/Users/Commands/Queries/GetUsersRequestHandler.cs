@@ -32,7 +32,7 @@ public sealed class GetUsersRequestHandler(
                 };
             }
 
-            var users = await userRepository.GetAll(cancellationToken).ToListAsync(cancellationToken);
+            var users = await userRepository.GetUsers().ToListAsync(cancellationToken);
 
             if (users.Count == 0)
             {
@@ -49,7 +49,7 @@ public sealed class GetUsersRequestHandler(
 
             foreach (var user in users)
             {
-                var role = await userRepository.GetUserRolesAsync(user, cancellationToken);
+                var role = await userRepository.GetUserRolesAsync(user);
                 getUsersDtoList.Add(new GetUsersDto
                 (
                     UserId: user.Id,
@@ -62,7 +62,7 @@ public sealed class GetUsersRequestHandler(
                     ModifiedTime: user.ModifiedTime
                 ));
             }
-            
+
             var getOrderedList = getUsersDtoList.OrderByDescending(key => key.CreatedTime).ToList();
 
             memoryCache.Remove(CacheKey);

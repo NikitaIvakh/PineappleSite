@@ -1,60 +1,42 @@
 ﻿using AutoMapper;
-using Identity.Application.Features.Users.Commands.Queries;
+using Identity.Infrastructure;
 using Identity.Application.Mapping;
 using Identity.Domain.Entities.Users;
-using Identity.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using Identity.Domain.Interfaces;
+using Identity.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using Moq;
-using Serilog;
-using Xunit;
 
-namespace Identity.Test.Common
+namespace Identity.Test.Common;
+
+public class TestQueryHandler : IDisposable
 {
-    public class TestQueryHandler : IDisposable
+    private readonly ApplicationDbContext _context;
+    protected IMapper Mapper;
+    protected readonly IMemoryCache MemoryCache;
+    protected readonly IUserRepository UserRepository;
+
+    protected TestQueryHandler()
     {
-        protected ApplicationDbContext Context;
-        protected IMapper Mapper;
-        protected ILogger GetUsersLogger;
-        protected ILogger GetUserLogger;
-        protected IMemoryCache MemoryCache;
-        protected UserManager<ApplicationUser> UserManager;
-
-        public TestQueryHandler()
-        {
-            Context = IdentityDbContextFactory.Create();
-            GetUsersLogger = Log.ForContext<GetUsersRequestHandler>();
-            GetUserLogger = Log.ForContext<GetUserRequestHandler>();
-            UserManager = new UserManager<ApplicationUser>(
-                new UserStore<ApplicationUser>(Context),
-                null,
-                Mock.Of<IPasswordHasher<ApplicationUser>>(),
-                Array.Empty<IUserValidator<ApplicationUser>>(),
-                Array.Empty<IPasswordValidator<ApplicationUser>>(),
-                Mock.Of<ILookupNormalizer>(),
-                Mock.Of<IdentityErrorDescriber>(),
-                Mock.Of<IServiceProvider>(),
-                Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
-
-            MemoryCache = new MemoryCache(new MemoryCacheOptions());
-
-            var mapperConfiguration = new MapperConfiguration(config =>
-            {
-                config.AddProfile<MappingProfile>();
-            });
-
-            Mapper = mapperConfiguration.CreateMapper();
-        }
-
-        public void Dispose()
-        {
-            IdentityDbContextFactory.Destroy(Context);
-        }
+        _context = IdentityDbContextFactory.Create();
+        MemoryCache = new MemoryCache(new MemoryCacheOptions());
+        var mapperConfiguration = new MapperConfiguration(config => { config.AddProfile<MappingProfile>(); });
+        Mapper = mapperConfiguration.CreateMapper();
+        UserManager<ApplicationUser> userManager = new(
+            new UserStore<ApplicationUser>(_context),
+            null,
+            Mock.Of<IPasswordHasher<ApplicationUser>>(),
+            Array.Empty<IUserValidator<ApplicationUser>>(),
+            Array.Empty<IPasswordValidator<ApplicationUser>>(),
+            Mock.Of<ILookupNormalizer>(),
+            Mock.Of<IdentityErrorDescriber>(),
+            Mock.Of<IServiceProvider>(),
+            Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
+        
+        UserRepository = new UserRepository(_context, userManager);
     }
 
-    [CollectionDefinition("QueryCollection")]
-    public class QueryCollection : ICollectionFixture<TestQueryHandler> { }
+    public void Dispose() => IdentityDbContextFactory.Destroy(_context);
 }

@@ -54,7 +54,7 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetAll(cancellationToken)
+            var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Email == request.AuthRequest.EmailAddress, cancellationToken);
 
             if (user is null)
@@ -69,7 +69,7 @@ public sealed class LoginUserRequestHandler(
             }
 
             var isValidPassword =
-                await userRepository.CheckPasswordAsync(user, request.AuthRequest.Password.Trim(), cancellationToken);
+                await userRepository.CheckPasswordAsync(user, request.AuthRequest.Password.Trim());
 
             if (!isValidPassword)
             {
@@ -85,7 +85,7 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var roles = await userRepository.GetUserRolesAsync(user, cancellationToken);
+            var roles = await userRepository.GetUserRolesAsync(user);
 
             var accessToken = tokenService.CreateToken(user, roles);
             user.RefreshToken = configuration.GenerateRefreshToken();

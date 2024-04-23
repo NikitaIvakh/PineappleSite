@@ -60,7 +60,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var userExists = await userRepository.GetAll(cancellationToken)
+            var userExists = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.UserName == request.CreateUser.UserName, cancellationToken);
 
             if (userExists is not null)
@@ -77,7 +77,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userRepository.GetAll(cancellationToken)
+            var existsEmail = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Email == request.CreateUser.EmailAddress, cancellationToken);
 
             if (existsEmail is not null)
