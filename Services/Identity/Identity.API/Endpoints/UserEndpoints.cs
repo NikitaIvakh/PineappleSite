@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Identity.API.Endpoints;
 
-public class UserEndpoints : ICarterModule
+public sealed class UserEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
