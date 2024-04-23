@@ -21,7 +21,8 @@ public sealed partial class UpdateUserProfileValidator : AbstractValidator<Updat
 
         RuleFor(dto => dto.UserName)
             .MinimumLength(5).WithMessage("Длина строки имени пользователя должна быть более 5 символов")
-            .MaximumLength(50).WithMessage("Длина строки имени пользователя не должна превышать 50 символов");
+            .MaximumLength(50).WithMessage("Длина строки имени пользователя не должна превышать 50 символов")
+            .MustAsync(BeUniqieUserName).WithMessage("Такое имя пользователя уже существует");
 
         RuleFor(dto => dto.EmailAddress)
             .MinimumLength(2).WithMessage("Адрес электронной почты должен быть более 2 символов")
@@ -41,9 +42,13 @@ public sealed partial class UpdateUserProfileValidator : AbstractValidator<Updat
             .MaximumLength(30).WithMessage("Длина пароля не может превышать 30 символов");
     }
 
+    private static Task<bool> BeUniqieUserName(string userName, CancellationToken arg2)
+    {
+        return Task.FromResult(string.IsNullOrEmpty(userName) || !string.IsNullOrEmpty(userName));
+    }
+
     private static Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)
     {
-        const string emailPattern = @"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$";
         var isValid = MyRegex().IsMatch(emailAddress);
         return Task.FromResult(isValid);
     }

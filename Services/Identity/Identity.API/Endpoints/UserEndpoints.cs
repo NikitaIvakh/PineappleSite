@@ -18,6 +18,7 @@ public sealed class UserEndpoints : ICarterModule
         group.MapGet("/GetUsers", GetUsers).WithName(nameof(GetUsers));
         group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
         group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
+        group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -62,6 +63,21 @@ public sealed class UserEndpoints : ICarterModule
         }
 
         logger.LogError($"LogDebugError ================ Удалить пользователея не удалось: {createUserDto.UserName}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUser(ISender sender, string userId,
+        ILogger<UpdateUserDto> logger, [FromBody] UpdateUserDto updateUserDto)
+    {
+        var command = await sender.Send(new UpdateUserRequest(updateUserDto));
+
+        if (command.IsSuccess && userId == updateUserDto.Id)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователь успешно обновлен: {updateUserDto.Id}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError($"LogDebugError ================ Обновить пользователеля не удалось: {updateUserDto.Id}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }
