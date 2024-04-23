@@ -1,6 +1,6 @@
 ﻿namespace PineappleSite.Presentation.Models.Users;
 
-public sealed record GetUserViewModel(
+public sealed record GetUsersViewModel(
     string UserId,
     string FirstName,
     string LastName,

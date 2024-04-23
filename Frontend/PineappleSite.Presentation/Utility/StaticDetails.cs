@@ -23,4 +23,11 @@ public static class StaticDetails
     public const string StatusCompleted = "Завершен";
     public const string StatusRefunded = "Возвращен";
     public const string StatusCancelled = "Отменен";
+    
+    public static byte[] ConvertFormFileToByteArray(IFormFile file)
+    {
+        using var memoryStream = new MemoryStream();
+        file.CopyTo(memoryStream);
+        return memoryStream.ToArray();
+    }
 }

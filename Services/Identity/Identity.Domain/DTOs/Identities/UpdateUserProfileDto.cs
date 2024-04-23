@@ -11,6 +11,7 @@ public sealed record UpdateUserProfileDto(
     string? Password,
     string? Description,
     int? Age,
+    IEnumerable<string>? Role,
     IFormFile? Avatar,
     string? ImageUrl,
     string? ImageLocalPath

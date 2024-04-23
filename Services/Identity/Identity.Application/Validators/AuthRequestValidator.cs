@@ -21,11 +21,17 @@ public sealed partial class AuthRequestValidator : AbstractValidator<AuthRequest
             .MaximumLength(50).WithMessage("Пароль не может превышать 50 символов");
     }
 
-    private static Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)
+    private static Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken arg2)
     {
         var isValid = MyRegex().IsMatch(emailAddress);
         return Task.FromResult(isValid);
     }
+
+    // private static Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)
+    // {
+    //     var isValid = MyRegex().IsMatch(emailAddress);
+    //     return Task.FromResult(isValid);
+    // }
 
     [GeneratedRegex(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$")]
     private static partial Regex MyRegex();

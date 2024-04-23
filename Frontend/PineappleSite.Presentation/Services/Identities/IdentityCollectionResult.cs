@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Identities
+﻿namespace PineappleSite.Presentation.Services.Identities;
+
+public sealed class IdentityCollectionResult<T> : IdentityResult<IReadOnlyCollection<T>>
 {
-    public class IdentityCollectionResult<Type> : IdentityResult<IReadOnlyCollection<Type>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; set; }
 }

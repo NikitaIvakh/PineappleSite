@@ -11,7 +11,7 @@ public sealed record GetUserForUpdateDto(
     IEnumerable<string> Role,
     string Description,
     int? Age,
-    string Password,
+    string? Password,
     string ImageUrl,
     string ImageLocalPath
 );

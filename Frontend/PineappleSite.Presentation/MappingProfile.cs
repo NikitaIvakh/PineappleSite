@@ -34,24 +34,19 @@ public sealed class MappingProfile : Profile
         #region Identity && User Mapping
 
         CreateMap<AuthRequestDto, AuthRequestViewModel>().ReverseMap();
-        CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
         CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
-        CreateMap<RegisterResponseDto, RegisterResponseViewModel>().ReverseMap();
         CreateMap<TokenModelDto, TokenModelViewModel>().ReverseMap();
-        CreateMap<AuthResponseDtoResult, IdentityResult>().ReverseMap();
-        CreateMap<RegisterResponseDtoResult, IdentityResult>().ReverseMap();
-        CreateMap<AuthResponseDtoResult, AuthResponseViewModel>().ReverseMap();
-        CreateMap<RegisterResponseDtoResult, RegisterResponseViewModel>().ReverseMap();
-
-        CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
-        CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
-        CreateMap<DeleteUserListDto, DeleteUserListViewModel>().ReverseMap();
-        CreateMap<CreateUserDto, CreateUserViewModel>().ReverseMap();
 
         CreateMap<GetUserDto, GetUserViewModel>().ReverseMap();
-        CreateMap<GetAllUsersDto, GetAllUsersViewModel>().ReverseMap();
-        CreateMap<GetUserForUpdateDto, GetUserForUpdateViewModel>().ReverseMap();
-        CreateMap<GetUserForUpdateDto, UpdateUserProfileViewModel>().ReverseMap();
+        CreateMap<CreateUserDto, CreateUserViewModel>().ReverseMap();
+        CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
+        CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
+
+        CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>()
+            .ForMember(dest =>
+                dest.Avatar, opt =>
+                opt.MapFrom(src => src.Avatar))
+            .ReverseMap();
 
         #endregion
 

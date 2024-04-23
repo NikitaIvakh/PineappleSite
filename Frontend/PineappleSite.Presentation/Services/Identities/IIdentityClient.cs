@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Identities
+﻿namespace PineappleSite.Presentation.Services.Identities;
+
+public partial interface IIdentityClient
 {
-    public partial interface IIdentityClient
-    {
-        public HttpClient HttpClient { get; }
-    }
+    public HttpClient HttpClient { get; }
 }

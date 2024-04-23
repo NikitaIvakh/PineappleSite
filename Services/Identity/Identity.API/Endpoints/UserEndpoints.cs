@@ -18,6 +18,8 @@ public sealed class UserEndpoints : ICarterModule
 
         group.MapGet("/GetUsers", GetUsers).RequireAuthorization(AdministratorPolicy);
         group.MapGet("/GetUser/{userId}", GetUser).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetUserForUpdateProfile/{userId}", GetUserForUpdateProfile)
+            .RequireAuthorization(UserAndAdministratorPolicy);
         group.MapPost("/CreateUser", CreateUser).RequireAuthorization(AdministratorPolicy);
         group.MapPut("/UpdateUser/{userId}", UpdateUser).RequireAuthorization(AdministratorPolicy);
 
@@ -55,6 +57,22 @@ public sealed class UserEndpoints : ICarterModule
         }
 
         logger.LogError($"LogDebugError ================ Ошибка получения пользователя: {userId}");
+        return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+    
+    private static async Task<Results<Ok<Result<GetUserForUpdateDto>>, BadRequest<string>>> GetUserForUpdateProfile(
+        ISender sender,
+        ILogger<GetUserForUpdateDto> logger, [FromRoute] string userId, string? password)
+    {
+        var request = await sender.Send(new GetUserForUpdateRequest(userId, password));
+
+        if (request.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Профиль пользователя успешно получен: {userId}");
+            return TypedResults.Ok(request);
+        }
+
+        logger.LogError($"LogDebugError ================ Получить профиль пользователя не удалось: {userId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 

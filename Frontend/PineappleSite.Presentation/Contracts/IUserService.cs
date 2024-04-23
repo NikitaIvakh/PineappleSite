@@ -1,25 +1,23 @@
-﻿using PineappleSite.Presentation.Models.Identities;
-using PineappleSite.Presentation.Models.Users;
+﻿using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
 
-namespace PineappleSite.Presentation.Contracts
+namespace PineappleSite.Presentation.Contracts;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<IdentityCollectionResult<GetAllUsersViewModel>> GetAllUsersAsync();
+    Task<IdentityCollectionResult<GetUsersViewModel>> GetAllUsersAsync();
 
-        Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id);
+    Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id);
 
-        Task<IdentityResult<GetUserForUpdateViewModel>> GetUserAsync(string userId, string? Password);
+    Task<IdentityResult<GetUserForUpdateViewModel>> GetUserAsync(string userId, string? password);
 
-        Task<IdentityResult<string>> CreateUserAsync(CreateUserViewModel createUserViewModel);
+    Task<IdentityResult<string>> CreateUserAsync(CreateUserViewModel createUserViewModel);
 
-        Task<IdentityResult> UpdateUserAsync(UpdateUserViewModel updateUserView);
+    Task<IdentityResult> UpdateUserAsync(UpdateUserViewModel updateUserView);
 
-        Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
+    Task<IdentityResult> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
 
-        Task<IdentityResult> DeleteUserAsync(DeleteUserViewModel delete);
+    Task<IdentityResult> DeleteUserAsync(DeleteUserViewModel delete);
 
-        Task<IdentityResult<bool>> DeleteUsersAsync(DeleteUserListViewModel deleteUsers);
-    }
+    Task<IdentityResult> DeleteUsersAsync(DeleteUsersViewModel deleteUsers);
 }

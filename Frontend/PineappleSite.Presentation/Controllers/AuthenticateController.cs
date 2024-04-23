@@ -3,100 +3,91 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Identities;
-using PineappleSite.Presentation.Services.Identities;
 
-namespace PineappleSite.Presentation.Controllers
+namespace PineappleSite.Presentation.Controllers;
+
+public sealed class AuthenticateController(IIdentityService identityService, IHttpContextAccessor httpContextAccessor)
+    : Controller
 {
-    public class AuthenticateController(IIdentityService identityService, IHttpContextAccessor httpContextAccessor) : Controller
+    [HttpGet]
+    public ActionResult Login(string? returnUrl = null)
     {
-        private readonly IIdentityService _identityService = identityService;
-        private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
+        return View();
+    }
 
-        [HttpGet]
-        public ActionResult Login(string returnUrl = null)
+    [HttpPost]
+    public async Task<ActionResult> Login(AuthRequestViewModel authRequestViewModel)
+    {
+        try
         {
-            return View();
-        }
+            authRequestViewModel.ReturnUrl ??= Url.Content("/");
+            var response = await identityService.LoginAsync(authRequestViewModel);
 
-        [HttpPost]
-        public async Task<ActionResult> Login(AuthRequestViewModel authRequestViewModel)
-        {
-            if (ModelState.IsValid)
+            if (response.IsSuccess)
             {
-                authRequestViewModel.ReturnUrl ??= Url.Content("/");
-                IdentityResult<AuthResponseViewModel> response = await _identityService.LoginAsync(authRequestViewModel);
-
-                if (response.IsSuccess)
-                {
-                    TempData["success"] = response.SuccessMessage;
-                    return LocalRedirect(authRequestViewModel.ReturnUrl);
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors!)
-                    {
-                        TempData["error"] = error;
-                    }
-
-                    return RedirectToAction(nameof(Login));
-                }
+                TempData["success"] = response.SuccessMessage;
+                return LocalRedirect(authRequestViewModel.ReturnUrl);
             }
 
-            ModelState.AddModelError(string.Empty, "Ошибка входа, попробуйте еще раз!");
-            return View(authRequestViewModel);
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Login));
         }
 
-        [HttpGet]
-        public async Task<ActionResult> Register()
+        catch (Exception ex)
         {
-            return View();
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Index", "Home");
         }
+    }
 
-        [HttpPost]
-        public async Task<ActionResult> Register(RegisterRequestViewModel registerRequestViewModel)
+    [HttpGet]
+    public Task<ActionResult> Register()
+    {
+        return Task.FromResult<ActionResult>(View());
+    }
+
+    [HttpPost]
+    public async Task<ActionResult> Register(RegisterRequestViewModel registerRequestViewModel)
+    {
+        try
         {
-            if (ModelState.IsValid)
+            var returnUrl = Url.Content("/");
+            var response = await identityService.RegisterAsync(registerRequestViewModel);
+
+            if (response.IsSuccess)
             {
-                var returnUrl = Url.Content("/");
-                IdentityResult<RegisterResponseViewModel> response = await _identityService.RegisterAsync(registerRequestViewModel);
-
-                if (response.IsSuccess)
-                {
-                    TempData["success"] = response.SuccessMessage;
-                    return LocalRedirect(returnUrl);
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors!)
-                    {
-                        TempData["error"] = error;
-                    }
-
-                    return RedirectToAction(nameof(Register));
-                }
-            }
-
-            ModelState.AddModelError(string.Empty, "Ошибка регистрации, попробуйте еще раз!");
-            return View(registerRequestViewModel);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult> Logout(string returnUrl)
-        {
-            returnUrl ??= Url.Content("/");
-            var result = _httpContextAccessor.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-            if (result.IsCompletedSuccessfully)
-            {
-                TempData["success"] = "Вы успешно вышли из аккаунта";
-                _httpContextAccessor.HttpContext!.Response.Cookies.Delete("JWTToken");
-                _httpContextAccessor.HttpContext!.Response.Cookies.Delete("AuthenticateCookie");
+                TempData["success"] = response.SuccessMessage;
                 return LocalRedirect(returnUrl);
             }
 
-            return LocalRedirect(returnUrl);
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Register));
         }
+
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Index", "Home");
+        }
+    }
+
+    [HttpPost]
+    public Task<ActionResult> Logout(string? returnUrl)
+    {
+        returnUrl ??= Url.Content("/");
+        var result =
+            httpContextAccessor.HttpContext!.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+        if (!result.IsCompletedSuccessfully)
+        {
+            return Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
+        }
+
+        TempData["success"] = "www успешно вышли из аккаунта";
+
+        httpContextAccessor.HttpContext!.Response.Cookies.Delete("JWTToken");
+        httpContextAccessor.HttpContext!.Response.Cookies.Delete("AuthenticateCookie");
+
+        return Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
     }
 }

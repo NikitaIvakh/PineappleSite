@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Models.Users
+﻿namespace PineappleSite.Presentation.Models.Users;
+
+public sealed class DeleteUserViewModel(string id)
 {
-    public class DeleteUserViewModel
-    {
-        public string Id { get; set; }
-    }
+    public string Id { get; set; } = id;
 }

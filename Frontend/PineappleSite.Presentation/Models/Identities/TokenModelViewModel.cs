@@ -1,9 +1,8 @@
-﻿namespace PineappleSite.Presentation.Models.Identities
-{
-    public class TokenModelViewModel
-    {
-        public string AccessToken { get; set; } = null!;
+﻿namespace PineappleSite.Presentation.Models.Identities;
 
-        public string RefreshToken { get; set; } = null!;
-    }
+public class TokenModelViewModel
+{
+    public string AccessToken { get; init; } = null!;
+
+    public string RefreshToken { get; init; } = null!;
 }
