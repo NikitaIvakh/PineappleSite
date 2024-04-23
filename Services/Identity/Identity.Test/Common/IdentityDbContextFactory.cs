@@ -27,13 +27,15 @@ public static class IdentityDbContextFactory
                 EmailConfirmed = true,
                 Description = "Test_Test",
                 Age = 24,
+                RefreshToken = "refresh",
+                RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(1),
             },
 
             new IdentityRole
             {
                 Id = "C26B100F-216D-4DCD-8FEC-44439AF6C086",
-                Name = "Employee",
-                NormalizedName = "EMPLOYEE",
+                Name = "User",
+                NormalizedName = "USER",
             },
 
             new IdentityUserRole<string>

@@ -47,17 +47,19 @@ public class TestCommandHandler : IDisposable
 
         TokenService = new TokenService(new ConfigurationManager());
 
+        var userStore = new UserStore<ApplicationUser>(Context);
+        var passwordHasher = new PasswordHasher<ApplicationUser>();
         UserManager<ApplicationUser> userManager = new(
-            new UserStore<ApplicationUser>(Context),
+            userStore,
             null,
-            Mock.Of<IPasswordHasher<ApplicationUser>>(),
+            passwordHasher,
             Array.Empty<IUserValidator<ApplicationUser>>(),
             Array.Empty<IPasswordValidator<ApplicationUser>>(),
             Mock.Of<ILookupNormalizer>(),
             Mock.Of<IdentityErrorDescriber>(),
             Mock.Of<IServiceProvider>(),
             Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
-
+        
         UserRepository = new UserRepository(Context, userManager);
     }
 
