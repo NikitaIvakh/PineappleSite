@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Users.Requests.Handlers;
 
-public sealed class UpdateUserProfileRequest : IRequest<Result<Unit>>
+public sealed class UpdateUserProfileRequest(UpdateUserProfileDto updateUserProfile) : IRequest<Result<Unit>>
 {
-    public UpdateUserProfileDto UpdateUserProfile { get; set; } = null!;
+    public UpdateUserProfileDto UpdateUserProfile { get; set; } = updateUserProfile;
 }

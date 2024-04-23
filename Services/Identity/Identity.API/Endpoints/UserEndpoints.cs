@@ -19,7 +19,7 @@ public sealed class UserEndpoints : ICarterModule
         group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
         group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
         group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
-        group.Map("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile));
+        group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile)).DisableAntiforgery();
         group.MapDelete("/DeleteUser/{userId}", DeleteUser).WithName(nameof(DeleteUser));
         group.MapDelete("/DeleteUsers", DeleteUsers).WithName(nameof(DeleteUsers));
     }
@@ -40,7 +40,7 @@ public sealed class UserEndpoints : ICarterModule
     }
 
     private static async Task<Results<Ok<Result<GetUserDto>>, BadRequest<string>>> GetUser(ISender sender,
-        ILogger<string> logger, string userId)
+        ILogger<string> logger, [FromRoute] string userId)
     {
         var request = await sender.Send(new GetUserRequest(userId));
 
@@ -69,8 +69,8 @@ public sealed class UserEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUser(ISender sender, string userId,
-        ILogger<UpdateUserDto> logger, [FromBody] UpdateUserDto updateUserDto)
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUser(ISender sender,
+        ILogger<UpdateUserDto> logger, [FromRoute] string userId, [FromBody] UpdateUserDto updateUserDto)
     {
         var command = await sender.Send(new UpdateUserRequest(updateUserDto));
 
@@ -85,10 +85,10 @@ public sealed class UserEndpoints : ICarterModule
     }
 
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUserProfile(ISender sender,
-        string userId,
-        ILogger<UpdateUserProfileDto> logger, [FromForm] UpdateUserProfileDto updateUserProfileDto)
+        ILogger<UpdateUserProfileDto> logger, [FromForm] UpdateUserProfileDto updateUserProfileDto,
+        [FromRoute] string userId)
     {
-        var command = await sender.Send(new UpdateUserProfileRequest() { UpdateUserProfile = updateUserProfileDto });
+        var command = await sender.Send(new UpdateUserProfileRequest(updateUserProfileDto));
 
         if (command.IsSuccess && userId == updateUserProfileDto.Id)
         {
@@ -102,8 +102,8 @@ public sealed class UserEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteUser(ISender sender, string userId,
-        ILogger<DeleteUserDto> logger, [FromBody] DeleteUserDto deleteUserDto)
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteUser(ISender sender,
+        ILogger<DeleteUserDto> logger, [FromRoute] string userId, [FromBody] DeleteUserDto deleteUserDto)
     {
         var command = await sender.Send(new DeleteUserRequest(deleteUserDto));
 

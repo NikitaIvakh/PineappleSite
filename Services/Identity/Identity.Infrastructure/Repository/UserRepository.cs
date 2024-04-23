@@ -73,9 +73,9 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
-        await userManager.UpdateAsync(user);
+        context.Update(user);
         await context.SaveChangesAsync(token);
-        
+
         return await Task.FromResult(IdentityResult.Success);
     }
 

@@ -10,7 +10,6 @@ var applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
@@ -37,7 +36,6 @@ if (webApplication.Environment.IsDevelopment())
     webApplication.UseSwaggerUI();
 }
 
-
 webApplication.MapCarter();
 webApplication.UseHttpsRedirection();
 webApplication.MapHealthChecks("health", new HealthCheckOptions
@@ -48,6 +46,5 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 webApplication.UseRouting();
 webApplication.UseAntiforgery();
 webApplication.UseAuthentication();
-webApplication.UseAuthorization();
 webApplication.UseStaticFiles();
 webApplication.Run();
