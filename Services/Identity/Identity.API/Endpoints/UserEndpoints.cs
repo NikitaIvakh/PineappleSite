@@ -19,6 +19,7 @@ public sealed class UserEndpoints : ICarterModule
         group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
         group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
         group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
+        group.Map("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -78,6 +79,24 @@ public sealed class UserEndpoints : ICarterModule
         }
 
         logger.LogError($"LogDebugError ================ Обновить пользователеля не удалось: {updateUserDto.Id}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    public static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUserProfile(ISender sender,
+        string userId,
+        ILogger<UpdateUserProfileDto> logger, [FromForm] UpdateUserProfileDto updateUserProfileDto)
+    {
+        var command = await sender.Send(new UpdateUserProfileRequest() { UpdateUserProfile = updateUserProfileDto });
+
+        if (command.IsSuccess && userId == updateUserProfileDto.Id)
+        {
+            logger.LogDebug(
+                $"LogDebug ================ Профиль пользователя успешно обновлен: {updateUserProfileDto.Id}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError(
+            $"LogDebugError ================ Обновить профиль пользователеля не удалось: {updateUserProfileDto.Id}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

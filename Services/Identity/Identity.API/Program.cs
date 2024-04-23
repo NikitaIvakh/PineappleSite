@@ -15,6 +15,7 @@ applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.AddCarter();
+applicationBuilder.Services.AddAntiforgery();
 
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
@@ -45,6 +46,7 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 });
 
 webApplication.UseRouting();
+webApplication.UseAntiforgery();
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
 webApplication.UseStaticFiles();
