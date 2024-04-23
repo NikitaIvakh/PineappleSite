@@ -6,6 +6,7 @@ using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using static Identity.API.Utility.StaticDetails;
 
 namespace Identity.API.Endpoints;
 
@@ -15,13 +16,16 @@ public sealed class UserEndpoints : ICarterModule
     {
         var group = app.MapGroup("api/users");
 
-        group.MapGet("/GetUsers", GetUsers).WithName(nameof(GetUsers));
-        group.MapGet("/GetUser/{userId}", GetUser).WithName(nameof(GetUser));
-        group.MapPost("/CreateUser", CreateUser).WithName(nameof(CreateUser));
-        group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
-        group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile)).DisableAntiforgery();
-        group.MapDelete("/DeleteUser/{userId}", DeleteUser).WithName(nameof(DeleteUser));
-        group.MapDelete("/DeleteUsers", DeleteUsers).WithName(nameof(DeleteUsers));
+        group.MapGet("/GetUsers", GetUsers).RequireAuthorization(AdministratorPolicy);
+        group.MapGet("/GetUser/{userId}", GetUser).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/CreateUser", CreateUser).RequireAuthorization(AdministratorPolicy);
+        group.MapPut("/UpdateUser/{userId}", UpdateUser).RequireAuthorization(AdministratorPolicy);
+
+        group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).RequireAuthorization(UserAndAdministratorPolicy)
+            .DisableAntiforgery();
+
+        group.MapDelete("/DeleteUser/{userId}", DeleteUser).RequireAuthorization(AdministratorPolicy);
+        group.MapDelete("/DeleteUsers", DeleteUsers).RequireAuthorization(AdministratorPolicy);
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,

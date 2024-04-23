@@ -1,9 +1,10 @@
 ﻿using System.Reflection;
 using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using static Identity.API.Utility.StaticDetails;
+using static Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults;
 
 namespace Identity.API;
 
@@ -14,6 +15,7 @@ public static class Startup
         AddSwaggerUi(services);
         AddSwaggerAuthenticate(services, configuration);
         AddSwaggerAuthorize(services);
+        AddAuthPolicy(services);
     }
 
     private static void AddSwaggerUi(IServiceCollection services)
@@ -52,33 +54,32 @@ public static class Startup
     {
         services.AddAuthentication(options =>
             {
-                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = AuthenticationScheme;
+                options.DefaultChallengeScheme = AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
-                options.TokenValidationParameters = new TokenValidationParameters()
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Issuer"],
-                    ValidAudience = configuration["Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Secret"]!)),
+                    ValidIssuer = configuration["Jwt:Issuer"],
+                    ValidAudience = configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!))
                 };
             });
 
         services.AddAuthorizationBuilder()
-            .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser().Build());
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder(AuthenticationScheme).RequireAuthenticatedUser().Build());
     }
-    
+
     private static void AddSwaggerAuthorize(IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
-            options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
+            options.AddSecurityDefinition(name: AuthenticationScheme,
                 securityScheme: new OpenApiSecurityScheme
                 {
                     Name = "Authorization",
@@ -95,7 +96,7 @@ public static class Startup
                     {
                         Reference = new OpenApiReference
                         {
-                            Id = JwtBearerDefaults.AuthenticationScheme,
+                            Id = AuthenticationScheme,
                             Type = ReferenceType.SecurityScheme,
                         },
 
@@ -121,5 +122,15 @@ public static class Startup
                 Console.WriteLine($"XML-файл документации не найден: {xmlPath}");
             }
         });
+    }
+
+    private static void AddAuthPolicy(IServiceCollection services)
+    {
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
+
+        services.AddAuthorizationBuilder()
+            .AddPolicy(name: UserAndAdministratorPolicy,
+                policy => { policy.RequireRole(RoleUser, RoleAdministrator); });
     }
 }
