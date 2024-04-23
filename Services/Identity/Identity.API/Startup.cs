@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.IdentityModel.Tokens;
@@ -12,6 +13,7 @@ public static class Startup
     {
         AddSwaggerUi(services);
         AddSwaggerAuthenticate(services, configuration);
+        AddSwaggerAuthorize(services);
     }
 
     private static void AddSwaggerUi(IServiceCollection services)
@@ -70,5 +72,54 @@ public static class Startup
         services.AddAuthorizationBuilder()
             .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
                 .RequireAuthenticatedUser().Build());
+    }
+    
+    private static void AddSwaggerAuthorize(IServiceCollection services)
+    {
+        services.AddSwaggerGen(options =>
+        {
+            options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
+                securityScheme: new OpenApiSecurityScheme
+                {
+                    Name = "Authorization",
+                    Description = "Enter the Bearer Authoriation stirng as following: `Bearer Generated-JWT-Token`",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                });
+
+            options.AddSecurityRequirement(securityRequirement: new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Id = JwtBearerDefaults.AuthenticationScheme,
+                            Type = ReferenceType.SecurityScheme,
+                        },
+
+                        Scheme = "oauth2",
+                        Name = "Bearer",
+                        In = ParameterLocation.Header,
+                    },
+
+                    new List<string>()
+                }
+            });
+
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+
+            if (File.Exists(xmlPath))
+            {
+                options.IncludeXmlComments(xmlPath);
+            }
+
+            else
+            {
+                Console.WriteLine($"XML-файл документации не найден: {xmlPath}");
+            }
+        });
     }
 }

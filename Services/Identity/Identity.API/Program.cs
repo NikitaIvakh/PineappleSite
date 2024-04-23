@@ -46,5 +46,6 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 webApplication.UseRouting();
 webApplication.UseAntiforgery();
 webApplication.UseAuthentication();
+webApplication.UseAuthorization();
 webApplication.UseStaticFiles();
 webApplication.Run();
