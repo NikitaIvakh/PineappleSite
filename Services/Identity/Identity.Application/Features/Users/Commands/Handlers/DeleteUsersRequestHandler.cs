@@ -113,6 +113,7 @@ public sealed class DeleteUsersRequestHandler(
             return new CollectionResult<Unit>
             {
                 Data = [Unit.Value],
+                Count = users.Count,
                 StatusCode = (int)StatusCode.Deleted,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("UsersSuccessfullyDeleted", SuccessMessage.Culture),

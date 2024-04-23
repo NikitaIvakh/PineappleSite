@@ -21,6 +21,7 @@ public sealed class UserEndpoints : ICarterModule
         group.MapPut("/UpdateUser/{userId}", UpdateUser).WithName(nameof(UpdateUser));
         group.Map("/UpdateUserProfile/{userId}", UpdateUserProfile).WithName(nameof(UpdateUserProfile));
         group.MapDelete("/DeleteUser/{userId}", DeleteUser).WithName(nameof(DeleteUser));
+        group.MapDelete("/DeleteUsers", DeleteUsers).WithName(nameof(DeleteUsers));
     }
 
     private static async Task<Results<Ok<CollectionResult<GetUsersDto>>, BadRequest<string>>> GetUsers(ISender sender,
@@ -108,11 +109,26 @@ public sealed class UserEndpoints : ICarterModule
 
         if (command.IsSuccess && userId == deleteUserDto.UserId)
         {
-            logger.LogDebug($"LogDebug ================ Пользователя успешно удален: {deleteUserDto.UserId}");
+            logger.LogDebug($"LogDebug ================ Пользователь успешно удален: {deleteUserDto.UserId}");
             return TypedResults.Ok(command);
         }
 
         logger.LogError($"LogDebugError ================ Удалить пользователеля не удалось: {deleteUserDto.UserId}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<CollectionResult<Unit>>, BadRequest<string>>> DeleteUsers(ISender sender,
+        ILogger<DeleteUsersDto> logger, [FromBody] DeleteUsersDto deleteUsersDto)
+    {
+        var command = await sender.Send(new DeleteUsersRequest(deleteUsersDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователи успешно удалены: {deleteUsersDto.UserIds}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError($"LogDebugError ================ Удалить пользователелей не удалось: {deleteUsersDto.UserIds}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

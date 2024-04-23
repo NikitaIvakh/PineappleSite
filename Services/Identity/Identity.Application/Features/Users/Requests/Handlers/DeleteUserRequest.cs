@@ -6,5 +6,5 @@ namespace Identity.Application.Features.Users.Requests.Handlers;
 
 public sealed class DeleteUserRequest(DeleteUserDto deleteUser) : IRequest<Result<Unit>>
 {
-    public DeleteUserDto DeleteUser { get; init; } = deleteUser;
+    public DeleteUserDto DeleteUser { get; } = deleteUser;
 }
