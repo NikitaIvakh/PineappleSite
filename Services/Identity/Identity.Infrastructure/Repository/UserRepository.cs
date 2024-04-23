@@ -74,6 +74,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         }
 
         context.Update(user);
+        await userManager.UpdateAsync(user);
         await context.SaveChangesAsync(token);
 
         return await Task.FromResult(IdentityResult.Success);
