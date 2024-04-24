@@ -51,15 +51,8 @@ public sealed class UserController(
                 return View(paginatedUsers);
             }
 
-            else
-            {
-                foreach (var error in users.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction("Index", "Home");
-            }
+            TempData["error"] = users.ValidationErrors;
+            return RedirectToAction("Index", "Home");
         }
 
         catch (Exception exception)
@@ -186,10 +179,11 @@ public sealed class UserController(
     // POST: UserController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(DeleteUserViewModel deleteUser)
+    public async Task<ActionResult> Delete(string userId)
     {
         try
         {
+            var deleteUser = new DeleteUserViewModel(userId);
             var response = await userService.DeleteUserAsync(deleteUser);
 
             if (response.IsSuccess)
@@ -211,24 +205,34 @@ public sealed class UserController(
 
     public async Task<ActionResult> Profile(string? password)
     {
-        var userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
-        var user = await userService.GetUserAsync(userId, password);
-
-        var updateUserProfile = new UpdateUserProfileViewModel
+        try
         {
-            Id = user.Data?.UserId,
-            FirstName = user.Data!.FirstName,
-            LastName = user.Data.LastName,
-            EmailAddress = user.Data.EmailAddress,
-            UserName = user.Data.UserName,
-            Description = user.Data.Description,
-            Age = user.Data.Age,
-            Roles = user.Data.Role,
-            ImageUrl = user.Data.ImageUrl,
-            ImageLocalPath = user.Data.ImageLocalPath,
-        };
+            var userId = User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value;
+            var user = await userService.GetUserAsync(userId, password);
 
-        return View(updateUserProfile);
+            var updateUserProfile = new UpdateUserProfileViewModel
+            {
+                Id = user.Data?.UserId,
+                FirstName = user.Data!.FirstName,
+                LastName = user.Data.LastName,
+                EmailAddress = user.Data.EmailAddress,
+                UserName = user.Data.UserName,
+                Description = user.Data.Description,
+                Age = user.Data.Age,
+                Roles = user.Data.Role,
+                ImageUrl = user.Data.ImageUrl,
+                ImageLocalPath = user.Data.ImageLocalPath,
+                Password = user.Data.Password,
+            };
+
+            return View(updateUserProfile);
+        }
+
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction("Index", "Home");
+        }
     }
 
     [HttpPost]
@@ -256,6 +260,8 @@ public sealed class UserController(
         }
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds)
     {
         try

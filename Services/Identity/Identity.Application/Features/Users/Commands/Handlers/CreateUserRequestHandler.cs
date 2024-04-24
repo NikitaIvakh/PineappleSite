@@ -16,11 +16,11 @@ namespace Identity.Application.Features.Users.Commands.Handlers;
 public sealed class CreateUserRequestHandler(
     IUserRepository userRepository,
     CreateUserValidation createValidator,
-    IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<string>>
+    IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
 
-    public async Task<Result<string>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(CreateUserRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -42,7 +42,7 @@ public sealed class CreateUserRequestHandler(
                 {
                     if (existsErrors.TryGetValue(error.Key, out var errorMessages))
                     {
-                        return new Result<string>
+                        return new Result<Unit>
                         {
                             ValidationErrors = errorMessages,
                             StatusCode = (int)StatusCode.NoAction,
@@ -52,7 +52,7 @@ public sealed class CreateUserRequestHandler(
                     }
                 }
 
-                return new Result<string>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
@@ -65,7 +65,7 @@ public sealed class CreateUserRequestHandler(
 
             if (userExists is not null)
             {
-                return new Result<string>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserAlreadyExists", ErrorMessage.Culture),
@@ -82,7 +82,7 @@ public sealed class CreateUserRequestHandler(
 
             if (existsEmail is not null)
             {
-                return new Result<string>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ErrorMessage =
@@ -112,7 +112,7 @@ public sealed class CreateUserRequestHandler(
 
             if (!result.Succeeded)
             {
-                return new Result<string>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserCanNotBeCreated", ErrorMessage.Culture),
@@ -127,9 +127,8 @@ public sealed class CreateUserRequestHandler(
             await userRepository.AddUserToRoleAsync(user, RoleConst.User, cancellationToken);
             memoryCache.Remove(CacheKey);
 
-            return new Result<string>
+            return new Result<Unit>
             {
-                Data = user.Id,
                 StatusCode = (int)StatusCode.Created,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("UserSuccessfullyCreated", SuccessMessage.Culture),
@@ -138,7 +137,7 @@ public sealed class CreateUserRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<string>
+            return new Result<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

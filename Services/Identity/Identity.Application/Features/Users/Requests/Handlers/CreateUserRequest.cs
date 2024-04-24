@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Identity.Application.Features.Users.Requests.Handlers;
 
-public sealed class CreateUserRequest(CreateUserDto createUser) : IRequest<Result<string>>
+public sealed class CreateUserRequest(CreateUserDto createUser) : IRequest<Result<Unit>>
 {
     public CreateUserDto CreateUser { get; init; } = createUser;
 }

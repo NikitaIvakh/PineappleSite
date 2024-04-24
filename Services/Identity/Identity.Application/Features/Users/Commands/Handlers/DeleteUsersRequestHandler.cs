@@ -16,7 +16,7 @@ public sealed class DeleteUsersRequestHandler(
     IMemoryCache memoryCache) : IRequestHandler<DeleteUsersRequest, CollectionResult<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
-
+    
     public async Task<CollectionResult<Unit>> Handle(DeleteUsersRequest request, CancellationToken cancellationToken)
     {
         try

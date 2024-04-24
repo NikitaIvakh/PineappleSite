@@ -225,7 +225,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/GetUsers",
+      "DownstreamPathTemplate": "/api/User/GetUsers",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -233,7 +233,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/GetUsers",
+      "UpstreamPathTemplate": "/api/User/GetUsers",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -242,7 +242,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/GetUser/{userId}",
+      "DownstreamPathTemplate": "/api/User/GetUser/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -250,13 +250,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/GetUser/{userId}",
+      "UpstreamPathTemplate": "/api/User/GetUser/{userId}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/GetUserForUpdateProfile/{userId}",
+      "DownstreamPathTemplate": "/api/User/GetUserForUpdateProfile/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -264,13 +264,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/GetUserForUpdateProfile/{userId}",
+      "UpstreamPathTemplate": "/api/User/GetUserForUpdateProfile/{userId}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/UpdateUser/{userId}",
+      "DownstreamPathTemplate": "/api/User/UpdateUser/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -278,7 +278,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/UpdateUser/{userId}",
+      "UpstreamPathTemplate": "/api/User/UpdateUser/{userId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -287,7 +287,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/CreateUser",
+      "DownstreamPathTemplate": "/api/User/CreateUser",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -295,7 +295,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/CreateUser",
+      "UpstreamPathTemplate": "/api/User/CreateUser",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -304,7 +304,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/UpdateUserProfile/{userId}",
+      "DownstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -312,7 +312,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/UpdateUserProfile/{userId}",
+      "UpstreamPathTemplate": "/api/User/UpdateUserProfile/{userId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -321,7 +321,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/DeleteUser/{userId}",
+      "DownstreamPathTemplate": "/api/User/DeleteUser/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -329,7 +329,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/DeleteUser/{userId}",
+      "UpstreamPathTemplate": "/api/User/DeleteUser/{userId}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -338,7 +338,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/users/DeleteUsers",
+      "DownstreamPathTemplate": "/api/User/DeleteUsers",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -346,7 +346,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/users/DeleteUsers",
+      "UpstreamPathTemplate": "/api/User/DeleteUsers",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

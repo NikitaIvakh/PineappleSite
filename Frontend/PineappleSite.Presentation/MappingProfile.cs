@@ -41,6 +41,7 @@ public sealed class MappingProfile : Profile
         CreateMap<CreateUserDto, CreateUserViewModel>().ReverseMap();
         CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
         CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
+        CreateMap<DeleteUsersDto, DeleteUsersViewModel>().ReverseMap();
 
         #endregion
 

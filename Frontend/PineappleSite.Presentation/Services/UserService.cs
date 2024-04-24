@@ -173,7 +173,6 @@ public sealed class UserService(
             {
                 return new IdentityResult<string>
                 {
-                    Data = apiResponse.Data,
                     StatusCode = apiResponse.StatusCode,
                     SuccessMessage = apiResponse.SuccessMessage,
                 };
@@ -360,7 +359,7 @@ public sealed class UserService(
                 };
             }
 
-            return new IdentityResult<bool>
+            return new IdentityResult
             {
                 StatusCode = apiResponse.StatusCode,
                 ErrorMessage = apiResponse.ErrorMessage,
@@ -370,7 +369,7 @@ public sealed class UserService(
 
         catch (IdentityExceptions<string> exceptions)
         {
-            return new IdentityResult<bool>
+            return new IdentityResult
             {
                 StatusCode = exceptions.StatusCode,
                 ErrorMessage = exceptions.Result,

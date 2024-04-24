@@ -6,7 +6,7 @@ public sealed record GetUserDto(
     string LastName,
     string UserName,
     string EmailAddress,
-    IEnumerable<string> Role,
     DateTime? CreatedTime,
-    DateTime? ModifiedTime
+    DateTime? ModifiedTime,
+    IEnumerable<string> Role
 );
