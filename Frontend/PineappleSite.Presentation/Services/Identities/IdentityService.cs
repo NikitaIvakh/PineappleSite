@@ -1002,7 +1002,7 @@ public partial class IdentityClient : IIdentityClient
                 client_.Dispose();
         }
     }
-
+    
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath)

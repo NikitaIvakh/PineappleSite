@@ -32,9 +32,20 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         {
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
-        
+
         await userManager.CreateAsync(user, password);
-        await context.SaveChangesAsync(token);
+        return await Task.FromResult(IdentityResult.Success);
+    }
+
+    public async Task<IdentityResult> RemoveFromRolesAsync(ApplicationUser user, CancellationToken token = default)
+    {
+        if (user is null)
+        {
+            throw new ArgumentNullException(nameof(user), "Объект не найден");
+        }
+
+        var role = await userManager.GetRolesAsync(user);
+        await userManager.RemoveFromRolesAsync(user, role);
 
         return await Task.FromResult(IdentityResult.Success);
     }
@@ -46,7 +57,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
         {
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
-        
+
         await userManager.AddToRoleAsync(user, role);
         await context.SaveChangesAsync(token);
 
@@ -71,9 +82,8 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
+        context.Attach(user);
         await userManager.UpdateAsync(user);
-        await context.SaveChangesAsync(token);
-
         return await Task.FromResult(IdentityResult.Success);
     }
 

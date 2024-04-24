@@ -5,7 +5,7 @@ namespace PineappleSite.Presentation.Models.Users;
 
 public sealed class UpdateUserViewModel
 {
-    public string? Id { get; init; }
+    public required string Id { get; init; }
 
     [MinLength(2, ErrorMessage = "Имя должно быть более 2 символов")]
     [MaxLength(20, ErrorMessage = "Имя не может превышать 20 символов")]

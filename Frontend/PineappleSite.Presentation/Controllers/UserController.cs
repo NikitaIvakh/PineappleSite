@@ -129,7 +129,7 @@ public sealed class UserController(
             {
                 var updateUser = new UpdateUserViewModel
                 {
-                    Id = userWithRoles.Data?.UserId,
+                    Id = userWithRoles.Data?.UserId!,
                     FirstName = userWithRoles.Data!.FirstName,
                     LastName = userWithRoles.Data.LastName,
                     EmailAddress = userWithRoles.Data.EmailAddress,

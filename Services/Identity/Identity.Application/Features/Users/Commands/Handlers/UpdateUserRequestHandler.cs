@@ -54,7 +54,7 @@ public sealed class UpdateUserRequestHandler(
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserUpdateError", ErrorMessage.Culture),
                 };
             }
-            
+
             var user = await userRepository.GetUsers()
                 .FirstOrDefaultAsync(key => key.Id == request.UpdateUser.Id, cancellationToken);
 
@@ -72,6 +72,7 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
+            user.Id = request.UpdateUser.Id;
             user.FirstName = request.UpdateUser.FirstName.Trim();
             user.LastName = request.UpdateUser.LastName.Trim();
             user.Email = request.UpdateUser.EmailAddress.Trim();
@@ -92,6 +93,8 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
+            await userRepository.RemoveFromRolesAsync(user, cancellationToken);
+            await userRepository.AddUserToRoleAsync(user, request.UpdateUser.UserRoles.ToString(), cancellationToken);
             memoryCache.Remove(CacheKey);
 
             return new Result<Unit>
