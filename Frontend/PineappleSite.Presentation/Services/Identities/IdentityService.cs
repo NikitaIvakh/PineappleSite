@@ -1056,7 +1056,7 @@ public partial class IdentityClient : IIdentityClient
                 request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
-                
+                    
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("User");

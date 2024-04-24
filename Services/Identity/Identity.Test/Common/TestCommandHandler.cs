@@ -12,6 +12,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Identity.Test.Common;
 
@@ -19,6 +21,8 @@ public class TestCommandHandler : IDisposable
 {
     protected readonly DeleteUserValidator DeleteUser;
     protected readonly DeleteUsersValidator DeleteUsers;
+    protected readonly CreateUserValidation CreateUserValidation;
+    protected readonly UpdateUserValidator UpdateUserValidator;
     protected readonly AuthRequestValidator AuthRequest;
 
     protected readonly IMapper Mapper;
@@ -43,22 +47,25 @@ public class TestCommandHandler : IDisposable
         DeleteUser = new DeleteUserValidator();
         DeleteUsers = new DeleteUsersValidator();
         AuthRequest = new AuthRequestValidator();
+        CreateUserValidation = new CreateUserValidation();
+        UpdateUserValidator = new UpdateUserValidator();
         MemoryCache = new MemoryCache(new MemoryCacheOptions());
 
         TokenService = new TokenService(new ConfigurationManager());
 
         var userStore = new UserStore<ApplicationUser>(Context);
         var passwordHasher = new PasswordHasher<ApplicationUser>();
-        UserManager<ApplicationUser> userManager = new(
+
+        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
             userStore,
             null,
             passwordHasher,
-            Array.Empty<IUserValidator<ApplicationUser>>(),
-            Array.Empty<IPasswordValidator<ApplicationUser>>(),
-            Mock.Of<ILookupNormalizer>(),
-            Mock.Of<IdentityErrorDescriber>(),
-            Mock.Of<IServiceProvider>(),
-            Mock.Of<Microsoft.Extensions.Logging.ILogger<UserManager<ApplicationUser>>>());
+            new List<IUserValidator<ApplicationUser>>(),
+            new List<IPasswordValidator<ApplicationUser>>(),
+            new UpperInvariantLookupNormalizer(),
+            new IdentityErrorDescriber(),
+            new ServiceCollection().BuildServiceProvider(),
+            new LoggerFactory().CreateLogger<UserManager<ApplicationUser>>());
         
         UserRepository = new UserRepository(Context, userManager);
     }

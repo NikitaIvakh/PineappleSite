@@ -124,7 +124,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            await userRepository.AddUserToRoleAsync(user, RoleConst.User, cancellationToken);
+            await userRepository.AddUserToRoleAsync(user, request.CreateUser.Roles.ToString(), cancellationToken);
             memoryCache.Remove(CacheKey);
 
             return new Result<Unit>
