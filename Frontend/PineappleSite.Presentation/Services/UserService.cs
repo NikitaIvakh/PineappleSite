@@ -232,14 +232,15 @@ public sealed class UserService(
             };
         }
     }
-    
-    public async Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
+
+    public async Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(
+        UpdateUserProfileViewModel updateUserProfile)
     {
         AddBearerToken();
         try
         {
             FileParameter avatarFileParameter = null;
-            
+
             if (updateUserProfile.Avatar is not null)
             {
                 avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(),
@@ -261,19 +262,19 @@ public sealed class UserService(
                 updateUserProfile.ImageUrl,
                 updateUserProfile.ImageLocalPath
             );
-                
+
             GetUserForUpdateViewModel getUserForUpdateViewModel = new
             (
-                apiResponse.Data.UserId, 
-                apiResponse.Data.FirstName, 
-                apiResponse.Data.LastName, 
+                apiResponse.Data.UserId,
+                apiResponse.Data.FirstName,
+                apiResponse.Data.LastName,
                 apiResponse.Data.UserName,
                 apiResponse.Data.EmailAddress,
-                apiResponse.Data.Role, 
-                apiResponse.Data.Description, 
-                apiResponse.Data.Age, 
+                apiResponse.Data.Role,
+                apiResponse.Data.Description,
+                apiResponse.Data.Age,
                 apiResponse.Data.Password,
-                apiResponse.Data.ImageUrl, 
+                apiResponse.Data.ImageUrl,
                 apiResponse.Data.ImageLocalPath
             );
 
