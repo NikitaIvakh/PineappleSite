@@ -2,7 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
-using PineappleSite.Presentation.Utility;
 
 namespace PineappleSite.Presentation.Services;
 
@@ -19,6 +18,7 @@ public sealed class UserService(
     public async Task<IdentityCollectionResult<GetUsersViewModel>> GetAllUsersAsync()
     {
         AddBearerToken();
+
         try
         {
             var users = await _identityClient.GetUsersAsync();
@@ -63,6 +63,7 @@ public sealed class UserService(
             };
         }
     }
+
 
     public async Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id)
     {

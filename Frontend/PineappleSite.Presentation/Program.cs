@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Localization;
 using System.Globalization;
 using PineappleSite.Presentation;
+using PineappleSite.Presentation.Middleware;
 
 var applicationBuilder = WebApplication.CreateBuilder(args);
 
@@ -57,10 +58,13 @@ webApplication.UseCookiePolicy();
 webApplication.UseHttpsRedirection();
 
 webApplication.UseStaticFiles();
-webApplication.UseRouting();
 
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
+
+webApplication.UseRouting();
+
+webApplication.UseMiddleware<TokenExpirationMiddleware>();
 
 webApplication.MapControllerRoute(
     name: "default",

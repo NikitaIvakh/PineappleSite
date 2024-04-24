@@ -60,6 +60,7 @@ public static class Startup
                 options.ExpireTimeSpan = TimeSpan.FromHours(1);
                 options.LoginPath = "/Authenticate/Login";
                 options.AccessDeniedPath = "/Authenticate/AccessDenied";
+                options.LogoutPath = "/Authenticate/Logout";
                 options.Cookie.Name = "AuthenticateCookie";
                 options.Cookie.HttpOnly = true;
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
