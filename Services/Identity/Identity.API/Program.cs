@@ -10,6 +10,7 @@ var applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
+applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
@@ -48,4 +49,5 @@ webApplication.UseAntiforgery();
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
 webApplication.UseStaticFiles();
+webApplication.MapControllers();
 webApplication.Run();

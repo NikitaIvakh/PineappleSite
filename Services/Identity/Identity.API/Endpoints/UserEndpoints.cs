@@ -23,8 +23,10 @@ public sealed class UserEndpoints : ICarterModule
         group.MapPost("/CreateUser", CreateUser).RequireAuthorization(AdministratorPolicy);
         group.MapPut("/UpdateUser/{userId}", UpdateUser).RequireAuthorization(AdministratorPolicy);
 
-        group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).RequireAuthorization(UserAndAdministratorPolicy)
-            .DisableAntiforgery();
+        // group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).DisableAntiforgery();
+        //
+        // // group.MapPut("/UpdateUserProfile/{userId}", UpdateUserProfile).RequireAuthorization(UserAndAdministratorPolicy)
+        // //     .DisableAntiforgery();
 
         group.MapDelete("/DeleteUser/{userId}", DeleteUser).RequireAuthorization(AdministratorPolicy);
         group.MapDelete("/DeleteUsers", DeleteUsers).RequireAuthorization(AdministratorPolicy);
@@ -59,7 +61,7 @@ public sealed class UserEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка получения пользователя: {userId}");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-    
+
     private static async Task<Results<Ok<Result<GetUserForUpdateDto>>, BadRequest<string>>> GetUserForUpdateProfile(
         ISender sender,
         ILogger<GetUserForUpdateDto> logger, [FromRoute] string userId, string? password)
@@ -106,7 +108,8 @@ public sealed class UserEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateUserProfile(ISender sender,
+    private static async Task<Results<Ok<Result<GetUserForUpdateDto>>, BadRequest<string>>> UpdateUserProfile(
+        ISender sender,
         ILogger<UpdateUserProfileDto> logger, [FromForm] UpdateUserProfileDto updateUserProfileDto,
         [FromRoute] string userId)
     {

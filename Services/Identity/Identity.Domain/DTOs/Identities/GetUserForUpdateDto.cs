@@ -1,17 +1,15 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace Identity.Domain.DTOs.Identities;
+﻿namespace Identity.Domain.DTOs.Identities;
 
 public sealed record GetUserForUpdateDto(
     string UserId,
-    string FirstName,
-    string LastName,
-    string UserName,
-    string EmailAddress,
-    IEnumerable<string> Role,
-    string Description,
+    string? FirstName,
+    string? LastName,
+    string? UserName,
+    string? EmailAddress,
+    string? Description,
     int? Age,
     string? Password,
-    string ImageUrl,
-    string ImageLocalPath
+    string? ImageUrl,
+    string? ImageLocalPath,
+    IEnumerable<string> Role
 );

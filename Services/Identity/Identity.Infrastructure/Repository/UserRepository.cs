@@ -13,7 +13,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
     {
         return userManager.Users.AsNoTracking().AsQueryable();
     }
-    
+
     public async Task<IEnumerable<string>> GetUserRolesAsync(ApplicationUser user)
     {
         if (user is null)
@@ -33,6 +33,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
+        await context.AddAsync(user, token);
         await userManager.CreateAsync(user, password);
         await context.SaveChangesAsync(token);
 
@@ -47,6 +48,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
+        context.Update(user);
         await userManager.AddToRoleAsync(user, role);
         await userManager.UpdateAsync(user);
         await context.SaveChangesAsync(token);
@@ -86,6 +88,7 @@ public sealed class UserRepository(ApplicationDbContext context, UserManager<App
             throw new ArgumentNullException(nameof(user), "Объект пустой");
         }
 
+        context.Remove(user);
         await userManager.DeleteAsync(user);
         return await Task.FromResult(IdentityResult.Success);
     }

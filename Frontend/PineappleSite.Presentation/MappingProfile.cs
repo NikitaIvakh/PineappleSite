@@ -42,12 +42,6 @@ public sealed class MappingProfile : Profile
         CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
         CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();
 
-        CreateMap<UpdateUserProfileDto, UpdateUserProfileViewModel>()
-            .ForMember(dest =>
-                dest.Avatar, opt =>
-                opt.MapFrom(src => src.Avatar))
-            .ReverseMap();
-
         #endregion
 
         #region Product Mapping

@@ -2,8 +2,6 @@
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Users;
 using PineappleSite.Presentation.Services.Identities;
-using System.Security.Claims;
-using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Utility;
 
 namespace PineappleSite.Presentation.Services;
@@ -235,30 +233,56 @@ public sealed class UserService(
             };
         }
     }
-
-    public async Task<IdentityResult> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
+    
+    public async Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile)
     {
         AddBearerToken();
         try
         {
-            var userId = _httpContextAccessor.HttpContext!.User.Claims.FirstOrDefault(key => key.Type == ClaimTypes.NameIdentifier)!.Value!;
-            //
-            // FileParameter avatarFileParameter = null;
-            //
-            // if (updateUserProfile.Avatar is not null)
-            // {
-            //     avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(), updateUserProfile.Avatar.FileName);
-            // }
-            //
-            // updateUserProfile.Avatar = avatarFileParameter;
+            FileParameter avatarFileParameter = null;
             
-            var updateUserProfileDto = mapper.Map<UpdateUserProfileDto>(updateUserProfile);
-            var apiResponse = await _identityClient.UpdateUserProfileAsync(userId, updateUserProfileDto);
+            if (updateUserProfile.Avatar is not null)
+            {
+                avatarFileParameter = new FileParameter(updateUserProfile.Avatar.OpenReadStream(),
+                    updateUserProfile.Avatar.FileName);
+            }
+
+            var apiResponse = await _identityClient.UpdateUserProfileAsync
+            (
+                updateUserProfile.Id,
+                updateUserProfile.Id,
+                updateUserProfile.FirstName,
+                updateUserProfile.LastName,
+                updateUserProfile.EmailAddress,
+                updateUserProfile.UserName,
+                updateUserProfile.Password,
+                updateUserProfile.Description,
+                updateUserProfile.Age,
+                avatarFileParameter,
+                updateUserProfile.ImageUrl,
+                updateUserProfile.ImageLocalPath
+            );
+                
+            GetUserForUpdateViewModel getUserForUpdateViewModel = new
+            (
+                apiResponse.Data.UserId, 
+                apiResponse.Data.FirstName, 
+                apiResponse.Data.LastName, 
+                apiResponse.Data.UserName,
+                apiResponse.Data.EmailAddress,
+                apiResponse.Data.Role, 
+                apiResponse.Data.Description, 
+                apiResponse.Data.Age, 
+                apiResponse.Data.Password,
+                apiResponse.Data.ImageUrl, 
+                apiResponse.Data.ImageLocalPath
+            );
 
             if (apiResponse.IsSuccess)
             {
-                return new IdentityResult
+                return new IdentityResult<GetUserForUpdateViewModel>
                 {
+                    Data = getUserForUpdateViewModel,
                     StatusCode = apiResponse.StatusCode,
                     SuccessMessage = apiResponse.SuccessMessage,
                 };

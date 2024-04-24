@@ -15,7 +15,7 @@ public interface IUserService
 
     Task<IdentityResult> UpdateUserAsync(UpdateUserViewModel updateUserView);
 
-    Task<IdentityResult> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
+    Task<IdentityResult<GetUserForUpdateViewModel>> UpdateUserProfileAsync(UpdateUserProfileViewModel updateUserProfile);
 
     Task<IdentityResult> DeleteUserAsync(DeleteUserViewModel delete);
 

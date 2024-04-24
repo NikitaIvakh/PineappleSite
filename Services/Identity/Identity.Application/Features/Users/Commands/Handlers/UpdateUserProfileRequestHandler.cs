@@ -18,11 +18,11 @@ public sealed class UpdateUserProfileRequestHandler(
     IUserRepository userRepository,
     UpdateUserProfileValidator userProfileValidator,
     IHttpContextAccessor httpContextAccessor,
-    IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<GetUserForUpdateDto>>
 {
     private const string CacheKey = "СacheUserKey";
 
-    public async Task<Result<Unit>> Handle(UpdateUserProfileRequest request,
+    public async Task<Result<GetUserForUpdateDto>> Handle(UpdateUserProfileRequest request,
         CancellationToken cancellationToken)
     {
         try
@@ -46,7 +46,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 {
                     if (errorMessages.TryGetValue(error.Key, out var message))
                     {
-                        return new Result<Unit>
+                        return new Result<GetUserForUpdateDto>
                         {
                             ValidationErrors = message,
                             StatusCode = (int)StatusCode.NoAction,
@@ -56,7 +56,7 @@ public sealed class UpdateUserProfileRequestHandler(
                     }
                 }
 
-                return new Result<Unit>
+                return new Result<GetUserForUpdateDto>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ValidationErrors = validator.Errors.Select(x => x.ErrorMessage).ToList(),
@@ -69,7 +69,7 @@ public sealed class UpdateUserProfileRequestHandler(
 
             if (user is null)
             {
-                return new Result<Unit>
+                return new Result<GetUserForUpdateDto>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture),
@@ -151,7 +151,7 @@ public sealed class UpdateUserProfileRequestHandler(
 
             if (!result.Succeeded)
             {
-                return new Result<Unit>
+                return new Result<GetUserForUpdateDto>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserCanNotBeUpdated", ErrorMessage.Culture),
@@ -163,11 +163,27 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
+            var roles = await userRepository.GetUserRolesAsync(user);
+            var getUser = new GetUserForUpdateDto
+            (
+                UserId: user.Id,
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                UserName: user.UserName,
+                EmailAddress: user.Email,
+                Role: roles,
+                Description: user.Description,
+                Age: user.Age,
+                Password: request.UpdateUserProfile.Password,
+                ImageUrl: user?.ImageUrl,
+                ImageLocalPath: user?.ImageLocalPath
+            );
+
             memoryCache.Remove(CacheKey);
 
-            return new Result<Unit>
+            return new Result<GetUserForUpdateDto>
             {
-                Data = Unit.Value,
+                Data = getUser,
                 StatusCode = (int)StatusCode.Modify,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("UserProfileSuccessfullyUpdated", SuccessMessage.Culture),
@@ -176,7 +192,7 @@ public sealed class UpdateUserProfileRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<Unit>
+            return new Result<GetUserForUpdateDto>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],
