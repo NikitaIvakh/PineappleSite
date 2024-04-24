@@ -11,13 +11,13 @@ namespace Identity.API.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public sealed class UserController(ISender mediator) : ControllerBase
+public sealed class UserController : ControllerBase
 {
     [HttpGet("GetUsers")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<CollectionResult<GetUsersDto>>> GetUsers(ILogger<GetUsersDto> logger)
+    public async Task<ActionResult<CollectionResult<GetUsersDto>>> GetUsers(ISender sender, ILogger<GetUsersDto> logger)
     {
-        var request = await mediator.Send(new GetUsersRequest());
+        var request = await sender.Send(new GetUsersRequest());
 
         if (request.IsSuccess)
         {
@@ -31,9 +31,10 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpGet("GetUser/{userId}")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<Result<GetUserDto>>> GetUser(ILogger<GetUserDto> logger, [FromRoute] string userId)
+    public async Task<ActionResult<Result<GetUserDto>>> GetUser(ISender sender, ILogger<GetUserDto> logger,
+        [FromRoute] string userId)
     {
-        var request = await mediator.Send(new GetUserRequest(userId));
+        var request = await sender.Send(new GetUserRequest(userId));
 
         if (request.IsSuccess)
         {
@@ -44,13 +45,13 @@ public sealed class UserController(ISender mediator) : ControllerBase
         logger.LogError($"LogDebugError ================ Ошибка получения пользователя: {userId}");
         return BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-    
+
     [HttpGet("GetUserForUpdateProfile/{userId}")]
     [Authorize(Policy = StaticDetails.UserAndAdministratorPolicy)]
-    public async Task<ActionResult<Result<GetUserForUpdateDto>>> GetUserForUpdateProfile(
+    public async Task<ActionResult<Result<GetUserForUpdateDto>>> GetUserForUpdateProfile(ISender sender,
         ILogger<GetUserForUpdateDto> logger, [FromRoute] string userId, string? password)
     {
-        var request = await mediator.Send(new GetUserForUpdateRequest(userId, password));
+        var request = await sender.Send(new GetUserForUpdateRequest(userId, password));
 
         if (request.IsSuccess)
         {
@@ -64,10 +65,10 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpPost("CreateUser")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<Result<Unit>>> CreateUser(ILogger<CreateUserDto> logger,
+    public async Task<ActionResult<Result<Unit>>> CreateUser(ISender sender, ILogger<CreateUserDto> logger,
         [FromBody] CreateUserDto createUserDto)
     {
-        var command = await mediator.Send(new CreateUserRequest(createUserDto));
+        var command = await sender.Send(new CreateUserRequest(createUserDto));
 
         if (command.IsSuccess)
         {
@@ -81,10 +82,10 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpPut("UpdateUser/{useId}")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<Result<Unit>>> UpdateUser(ILogger<UpdateUserDto> logger, [FromRoute] string useId,
-        [FromBody] UpdateUserDto updateUserDto)
+    public async Task<ActionResult<Result<Unit>>> UpdateUser(ISender sender, ILogger<UpdateUserDto> logger,
+        [FromRoute] string useId, [FromBody] UpdateUserDto updateUserDto)
     {
-        var command = await mediator.Send(new UpdateUserRequest(updateUserDto));
+        var command = await sender.Send(new UpdateUserRequest(updateUserDto));
 
         if (command.IsSuccess && useId == updateUserDto.Id)
         {
@@ -98,10 +99,11 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpPut("UpdateUserProfile/{userId}")]
     [Authorize(Policy = StaticDetails.UserAndAdministratorPolicy)]
-    public async Task<ActionResult<Result<GetUserForUpdateDto>>> UpdateUserProfile(ILogger<GetUserForUpdateDto> logger,
-        [FromRoute] string userId, [FromForm] UpdateUserProfileDto updateUserProfileDto)
+    public async Task<ActionResult<Result<GetUserForUpdateDto>>> UpdateUserProfile(ISender sender,
+        ILogger<GetUserForUpdateDto> logger, [FromRoute] string userId,
+        [FromForm] UpdateUserProfileDto updateUserProfileDto)
     {
-        var command = await mediator.Send(new UpdateUserProfileRequest(updateUserProfileDto));
+        var command = await sender.Send(new UpdateUserProfileRequest(updateUserProfileDto));
 
         if (command.IsSuccess && userId == updateUserProfileDto.Id)
         {
@@ -117,10 +119,10 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpDelete("DeleteUser/{userId}")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<Result<Unit>>> DeleteUser(ILogger<DeleteUserDto> logger, [FromRoute] string userId,
-        [FromBody] DeleteUserDto deleteUserDto)
+    public async Task<ActionResult<Result<Unit>>> DeleteUser(ISender sender, ILogger<DeleteUserDto> logger,
+        [FromRoute] string userId, [FromBody] DeleteUserDto deleteUserDto)
     {
-        var command = await mediator.Send(new DeleteUserRequest(deleteUserDto));
+        var command = await sender.Send(new DeleteUserRequest(deleteUserDto));
 
         if (command.IsSuccess && userId == deleteUserDto.UserId)
         {
@@ -134,10 +136,10 @@ public sealed class UserController(ISender mediator) : ControllerBase
 
     [HttpDelete("DeleteUsers")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<CollectionResult<Unit>>> DeleteUsers(ILogger<DeleteUsersDto> logger,
+    public async Task<ActionResult<CollectionResult<Unit>>> DeleteUsers(ISender sender, ILogger<DeleteUsersDto> logger,
         [FromBody] DeleteUsersDto deleteUsersDto)
     {
-        var command = await mediator.Send(new DeleteUsersRequest(deleteUsersDto));
+        var command = await sender.Send(new DeleteUsersRequest(deleteUsersDto));
 
         if (command.IsSuccess)
         {

@@ -1,4 +1,3 @@
-using Carter;
 using HealthChecks.UI.Client;
 using Identity.API;
 using Identity.Application.DependencyInjection;
@@ -14,8 +13,6 @@ applicationBuilder.Services.AddControllers();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddSwaggerGen();
-applicationBuilder.Services.AddCarter();
-applicationBuilder.Services.AddAntiforgery();
 
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService(applicationBuilder.Configuration);
@@ -37,7 +34,6 @@ if (webApplication.Environment.IsDevelopment())
     webApplication.UseSwaggerUI();
 }
 
-webApplication.MapCarter();
 webApplication.UseHttpsRedirection();
 webApplication.MapHealthChecks("health", new HealthCheckOptions
 {
@@ -45,7 +41,6 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 });
 
 webApplication.UseRouting();
-webApplication.UseAntiforgery();
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
 webApplication.UseStaticFiles();
