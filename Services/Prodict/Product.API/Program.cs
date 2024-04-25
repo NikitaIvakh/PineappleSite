@@ -25,6 +25,7 @@ applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
 applicationBuilder.Services.AddSwaggerAuthenticate();
 applicationBuilder.Services.AddAppAuthenticate(applicationBuilder.Configuration);
+applicationBuilder.Services.AddAuthenticatePolicy();
 
 var webApplication = applicationBuilder.Build();
 

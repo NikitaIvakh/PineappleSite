@@ -1,5 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Product.API.Utility;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 using Product.Domain.DTOs;
@@ -11,8 +13,9 @@ namespace Product.API.Controllers;
 [Route("api/[controller]")]
 public sealed class ProductController : ControllerBase
 {
-    [HttpGet("GetProductsDto")]
-    public async Task<ActionResult<CollectionResult<GetProductsDto>>> Get(ISender sender,
+    [HttpGet("GetProducts")]
+    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
+    public async Task<ActionResult<CollectionResult<GetProductsDto>>> GetProducts(ISender sender,
         ILogger<GetProductsDto> logger)
     {
         var request = await sender.Send(new GetProductsRequest());
@@ -28,6 +31,7 @@ public sealed class ProductController : ControllerBase
     }
 
     [HttpGet("GetProduct/{id:int}")]
+    [Authorize(Policy = StaticDetails.UserAndAdministratorPolicy)]
     public async Task<ActionResult<Result<GetProductDto>>> GetProduct(ISender sender, ILogger<GetProductDto> logger,
         [FromRoute] int id)
     {
@@ -44,6 +48,7 @@ public sealed class ProductController : ControllerBase
     }
 
     [HttpPost("CreateProduct")]
+    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<Result<int>>> CreateProduct(ISender sender, ILogger<int> logger,
         [FromForm] CreateProductDto createProductDto)
     {
@@ -60,6 +65,7 @@ public sealed class ProductController : ControllerBase
     }
 
     [HttpPut("UpdateProduct/{id:int}")]
+    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<Result<Unit>>> UpdateProduct(ISender sender, ILogger<Unit> logger,
         [FromRoute] int id, [FromForm] UpdateProductDto updateProductDto)
     {
@@ -76,6 +82,7 @@ public sealed class ProductController : ControllerBase
     }
 
     [HttpDelete("DeleteProduct/{id:int}")]
+    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<Result<Unit>>> DeleteProduct(ISender sender, ILogger<int> logger, [FromRoute] int id,
         [FromBody] DeleteProductDto deleteProductDto)
     {
@@ -93,6 +100,7 @@ public sealed class ProductController : ControllerBase
 
     // DELETE api/<ProductController>/
     [HttpDelete("DeleteProducts")]
+    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<CollectionResult<Unit>>> DeleteProducts(ISender sender, ILogger<Unit> logger,
         [FromBody] DeleteProductsDto deleteProductsDto)
     {
