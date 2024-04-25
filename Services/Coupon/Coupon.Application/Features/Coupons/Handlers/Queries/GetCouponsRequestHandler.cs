@@ -1,4 +1,5 @@
-﻿using Coupon.Application.Features.Coupons.Requests.Queries;
+﻿using AutoMapper;
+using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Resources;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.Enum;
@@ -10,21 +11,24 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries;
 
-public sealed class GetCouponsRequestHandler(ICouponRepository couponRepository, IMemoryCache memoryCache)
-    : IRequestHandler<GetCouponsRequest, CollectionResult<GetCouponsDto>>
+public sealed class GetCouponsRequestHandler(
+    ICouponRepository couponRepository,
+    IMemoryCache memoryCache,
+    IMapper mapper)
+    : IRequestHandler<GetCouponsRequest, CollectionResult<CouponDto>>
 {
     private const string CacheKey = "couponsCacheKey";
 
-    public async Task<CollectionResult<GetCouponsDto>> Handle(GetCouponsRequest request,
+    public async Task<CollectionResult<CouponDto>> Handle(GetCouponsRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
-            if (memoryCache.TryGetValue(CacheKey, out IReadOnlyCollection<GetCouponsDto>? coupons))
+            if (memoryCache.TryGetValue(CacheKey, out IReadOnlyCollection<CouponDto>? coupons))
             {
                 if (coupons is not null)
                 {
-                    return new CollectionResult<GetCouponsDto>
+                    return new CollectionResult<CouponDto>
                     {
                         Data = coupons,
                         Count = coupons!.Count,
@@ -33,12 +37,13 @@ public sealed class GetCouponsRequestHandler(ICouponRepository couponRepository,
                 }
             }
 
-            var couponsFromDb = await couponRepository.GetAllAsync().ToListAsync(cancellationToken);
+            var couponsFromDb = await couponRepository.GetAllAsync().OrderByDescending(key => key.CouponCode)
+                .ToListAsync(cancellationToken);
 
             if (couponsFromDb.Count == 0)
             {
                 memoryCache.Remove(CacheKey);
-                return new CollectionResult<GetCouponsDto>()
+                return new CollectionResult<CouponDto>()
                 {
                     Data = [],
                     StatusCode = (int)StatusCode.NotFound,
@@ -51,21 +56,13 @@ public sealed class GetCouponsRequestHandler(ICouponRepository couponRepository,
                 };
             }
 
-            var getCoupons = couponsFromDb.Select(key => new GetCouponsDto
-            (
-                CouponId: key.CouponId,
-                CouponCode: key.CouponCode,
-                DiscountAmount: key.DiscountAmount,
-                MinAmount: key.MinAmount
-            )).OrderByDescending(key => key.CouponId).ToList();
+            memoryCache.Remove(CacheKey);
 
-            memoryCache.Set(CacheKey, getCoupons);
-
-            return new CollectionResult<GetCouponsDto>
+            return new CollectionResult<CouponDto>
             {
-                Data = getCoupons,
-                Count = getCoupons.Count,
+                Count = couponsFromDb.Count,
                 StatusCode = (int)StatusCode.Ok,
+                Data = mapper.Map<IReadOnlyCollection<CouponDto>>(couponsFromDb),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("CouponsSuccessfullyGet", SuccessMessage.Culture)
             };
@@ -74,7 +71,7 @@ public sealed class GetCouponsRequestHandler(ICouponRepository couponRepository,
         catch (Exception ex)
         {
             memoryCache.Remove(CacheKey);
-            return new CollectionResult<GetCouponsDto>()
+            return new CollectionResult<CouponDto>()
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

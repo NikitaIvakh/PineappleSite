@@ -25,8 +25,8 @@ public sealed class CouponEndpoints : ICarterModule
         group.MapDelete("/DeleteCoupons", DeleteCoupons).RequireAuthorization(AdministratorPolicy);
     }
 
-    private static async Task<Results<Ok<CollectionResult<GetCouponsDto>>, BadRequest<string>>> GetCoupons(
-        ISender sender, ILogger<GetCouponsDto> logger)
+    private static async Task<Results<Ok<CollectionResult<CouponDto>>, BadRequest<string>>> GetCoupons(
+        ISender sender, ILogger<CouponDto> logger)
     {
         var request = await sender.Send(new GetCouponsRequest());
 
@@ -40,8 +40,8 @@ public sealed class CouponEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponById(string couponId,
-        ISender sender, ILogger<GetCouponDto> logger)
+    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponById(string couponId,
+        ISender sender, ILogger<CouponDto> logger)
     {
         var request = await sender.Send(new GetCouponRequest(couponId));
 
@@ -55,8 +55,8 @@ public sealed class CouponEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<GetCouponDto>>, BadRequest<string>>> GetCouponByCode(string couponCode,
-        ISender sender, ILogger<GetCouponDto> logger)
+    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponByCode(string couponCode,
+        ISender sender, ILogger<CouponDto> logger)
     {
         var request = await sender.Send(new GetCouponByCodeRequest(couponCode));
 

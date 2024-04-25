@@ -12,7 +12,7 @@ public sealed class GetCouponsRequestHandlerTest : TestQueryHandler
     public async Task GetCouponListRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new GetCouponsRequestHandler(Repository, MemoryCache);
+        var handler = new GetCouponsRequestHandler(Repository, MemoryCache, Mapper);
 
         // Act
         var result = await handler.Handle(new GetCouponsRequest(), CancellationToken.None);

@@ -21,13 +21,16 @@ public sealed class MappingProfile : Profile
     {
         #region Coupon Mapping
 
-        CreateMap<GetCouponDto, GetCouponViewModel>().ReverseMap();
-        CreateMap<GetCouponsDto, GetCouponsViewModel>().ReverseMap();
-
+        CreateMap<CouponDto, CouponViewModel>().ReverseMap();
+        CreateMap<CouponDtoResult, CouponViewModel>().ReverseMap();
         CreateMap<CreateCouponDto, CreateCouponViewModel>().ReverseMap();
         CreateMap<UpdateCouponDto, UpdateCouponViewModel>().ReverseMap();
         CreateMap<DeleteCouponDto, DeleteCouponViewModel>().ReverseMap();
         CreateMap<DeleteCouponsDto, DeleteCouponsViewModel>().ReverseMap();
+        CreateMap<CouponDto, ResultViewModel>().ReverseMap();
+
+        CreateMap<CouponDtoResult, ResultViewModel>().ReverseMap();
+        CreateMap<CouponDtoCollectionResult, CollectionResultViewModel<CouponViewModel>>().ReverseMap();
 
         #endregion
 

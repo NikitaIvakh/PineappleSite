@@ -13,7 +13,7 @@ public sealed class GetCouponRequestHandlerTest : TestQueryHandler
     [Fact]
     public async Task GetCouponRequestHandlerTest_Success()
     {
-        var handler = new GetCouponRequestHandler(Repository, MemoryCache);
+        var handler = new GetCouponRequestHandler(Repository, MemoryCache, Mapper);
         var couponId = Guid.Parse("a70b2384-54bf-4c01-91be-689ba8dd1a31").ToString();
         
         // Act
@@ -34,7 +34,7 @@ public sealed class GetCouponRequestHandlerTest : TestQueryHandler
     [Fact]
     public async Task GetCouponRequestHandlerTest_FailOrWrong_CouponId()
     {
-        var handler = new GetCouponRequestHandler(Repository, MemoryCache);
+        var handler = new GetCouponRequestHandler(Repository, MemoryCache, Mapper);
         const string couponId = "a70b2384-54bf-4c01-91be-689ba8dd1a99";
 
         // Act

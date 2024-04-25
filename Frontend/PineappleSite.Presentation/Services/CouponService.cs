@@ -14,33 +14,19 @@ public sealed class CouponService(
 {
     private readonly ICouponClient _couponClient = couponClient;
 
-    public async Task<CollectionResultViewModel<GetCouponsViewModel>> GetAllCouponsAsync()
+    public async Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync()
     {
         AddBearerToken();
         try
         {
             var coupons = await _couponClient.GetCouponsAsync();
-            var getCoupons = coupons.Data
-                .Select(coupon => new GetCouponsViewModel
-                (
-                    coupon.CouponId,
-                    coupon.CouponCode,
-                    coupon.DiscountAmount,
-                    coupon.MinAmount
-                )).ToList();
 
             if (coupons.IsSuccess)
             {
-                return new CollectionResultViewModel<GetCouponsViewModel>
-                {
-                    Count = coupons.Count,
-                    StatusCode = coupons.StatusCode,
-                    SuccessMessage = coupons.SuccessMessage,
-                    Data = getCoupons,
-                };
+                return mapper.Map<CollectionResultViewModel<CouponViewModel>>(coupons);
             }
 
-            return new CollectionResultViewModel<GetCouponsViewModel>
+            return new CollectionResultViewModel<CouponViewModel>
             {
                 StatusCode = coupons.StatusCode,
                 ErrorMessage = coupons.ErrorMessage,
@@ -50,7 +36,7 @@ public sealed class CouponService(
 
         catch (CouponExceptions<string> ex)
         {
-            return new CollectionResultViewModel<GetCouponsViewModel>()
+            return new CollectionResultViewModel<CouponViewModel>()
             {
                 StatusCode = ex.StatusCode,
                 ErrorMessage = ex.Response,
@@ -58,27 +44,26 @@ public sealed class CouponService(
             };
         }
     }
-    
-    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponByIdAsync(string couponId)
+
+    public async Task<ResultViewModel<CouponViewModel>> GetCouponByIdAsync(string couponId)
     {
         AddBearerToken();
         try
         {
             var coupon = await _couponClient.GetCouponByIdAsync(couponId);
-            var getCoupon = new GetCouponViewModel(coupon.Data.CouponId, coupon.Data.CouponCode,
-                coupon.Data.DiscountAmount, coupon.Data.MinAmount);
+
 
             if (coupon.IsSuccess)
             {
-                return new ResultViewModel<GetCouponViewModel>
+                return new ResultViewModel<CouponViewModel>
                 {
-                    Data = getCoupon,
                     StatusCode = coupon.StatusCode,
                     SuccessMessage = coupon.SuccessMessage,
+                    Data = mapper.Map<CouponViewModel>(coupon.Data),
                 };
             }
 
-            return new ResultViewModel<GetCouponViewModel>
+            return new ResultViewModel<CouponViewModel>
             {
                 StatusCode = coupon.StatusCode,
                 ErrorMessage = coupon.ErrorMessage,
@@ -88,7 +73,7 @@ public sealed class CouponService(
 
         catch (CouponExceptions<string> ex)
         {
-            return new ResultViewModel<GetCouponViewModel>
+            return new ResultViewModel<CouponViewModel>
             {
                 StatusCode = ConvertCouponExceptions(ex).StatusCode,
                 ErrorMessage = ConvertCouponExceptions(ex).ErrorMessage,
@@ -96,27 +81,25 @@ public sealed class CouponService(
             };
         }
     }
-    
-    public async Task<ResultViewModel<GetCouponViewModel>> GetCouponByCodeAsync(string couponCode)
+
+    public async Task<ResultViewModel<CouponViewModel>> GetCouponByCodeAsync(string couponCode)
     {
         AddBearerToken();
         try
         {
             var coupon = await _couponClient.GetCouponByCodeAsync(couponCode);
-            var getCoupon = new GetCouponViewModel(coupon.Data.CouponId, coupon.Data.CouponCode,
-                coupon.Data.DiscountAmount, coupon.Data.MinAmount);
 
             if (coupon.IsSuccess)
             {
-                return new ResultViewModel<GetCouponViewModel>
+                return new ResultViewModel<CouponViewModel>
                 {
-                    Data = getCoupon,
                     StatusCode = coupon.StatusCode,
                     SuccessMessage = coupon.SuccessMessage,
+                    Data = mapper.Map<CouponViewModel>(coupon.Data),
                 };
             }
 
-            return new ResultViewModel<GetCouponViewModel>
+            return new ResultViewModel<CouponViewModel>
             {
                 StatusCode = coupon.StatusCode,
                 ErrorMessage = coupon.ErrorMessage,
@@ -126,7 +109,7 @@ public sealed class CouponService(
 
         catch (CouponExceptions<string> ex)
         {
-            return new ResultViewModel<GetCouponViewModel>
+            return new ResultViewModel<CouponViewModel>
             {
                 StatusCode = ConvertCouponExceptions(ex).StatusCode,
                 ErrorMessage = ConvertCouponExceptions(ex).ErrorMessage,
@@ -160,7 +143,7 @@ public sealed class CouponService(
                 ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
             };
         }
-        
+
         catch (CouponExceptions<string> ex)
         {
             return new ResultViewModel<string>
@@ -171,7 +154,7 @@ public sealed class CouponService(
             };
         }
     }
-    
+
     public async Task<ResultViewModel> UpdateCouponAsync(string couponId, UpdateCouponViewModel updateCoupon)
     {
         AddBearerToken();
@@ -207,7 +190,7 @@ public sealed class CouponService(
             };
         }
     }
-    
+
     public async Task<ResultViewModel> DeleteCouponAsync(string couponId, DeleteCouponViewModel deleteCoupon)
     {
         AddBearerToken();

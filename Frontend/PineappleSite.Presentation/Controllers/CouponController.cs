@@ -28,7 +28,7 @@ public sealed class CouponController(ICouponService couponService) : Controller
                                        .Contains(searchCode, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
 
-                    coupons = new CollectionResultViewModel<GetCouponsViewModel>
+                    coupons = new CollectionResultViewModel<CouponViewModel>
                     {
                         Data = filteredCouponsList
                     };
@@ -40,7 +40,7 @@ public sealed class CouponController(ICouponService couponService) : Controller
                 const int pageSize = 10;
                 var filteredCoupons = coupons.Data!.AsQueryable();
                 var paginatedCoupons =
-                    PaginatedList<GetCouponsViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
+                    PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
 
                 return paginatedCoupons.Count == 0 ? View() : View(paginatedCoupons);
             }

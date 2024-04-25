@@ -1,4 +1,5 @@
-﻿using Coupon.Application.Features.Coupons.Requests.Queries;
+﻿using AutoMapper;
+using Coupon.Application.Features.Coupons.Requests.Queries;
 using Coupon.Application.Resources;
 using Coupon.Domain.DTOs;
 using Coupon.Domain.Enum;
@@ -10,20 +11,20 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace Coupon.Application.Features.Coupons.Handlers.Queries;
 
-public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemoryCache memoryCache)
-    : IRequestHandler<GetCouponRequest, Result<GetCouponDto>>
+public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemoryCache memoryCache, IMapper mapper)
+    : IRequestHandler<GetCouponRequest, Result<CouponDto>>
 {
     private const string CacheKey = "couponsCacheKey";
 
-    public async Task<Result<GetCouponDto>> Handle(GetCouponRequest request, CancellationToken cancellationToken)
+    public async Task<Result<CouponDto>> Handle(GetCouponRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            if (memoryCache.TryGetValue(CacheKey, out GetCouponDto? coupon))
+            if (memoryCache.TryGetValue(CacheKey, out CouponDto? coupon))
             {
                 if (coupon is not null)
                 {
-                    return new Result<GetCouponDto>
+                    return new Result<CouponDto>
                     {
                         Data = coupon,
                         StatusCode = (int)StatusCode.Ok,
@@ -37,7 +38,7 @@ public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemor
             if (couponFromDb is null)
             {
                 memoryCache.Remove(CacheKey);
-                return new Result<GetCouponDto>
+                return new Result<CouponDto>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("CouponNotFound", ErrorMessage.Culture),
@@ -49,20 +50,12 @@ public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemor
                 };
             }
 
-            var getCoupon = new GetCouponDto
-            (
-                CouponId: couponFromDb!.CouponId,
-                CouponCode: couponFromDb.CouponCode,
-                DiscountAmount: couponFromDb.DiscountAmount,
-                MinAmount: couponFromDb.MinAmount
-            );
+            memoryCache.Remove(CacheKey);
 
-            memoryCache.Set(CacheKey, coupon);
-
-            return new Result<GetCouponDto>
+            return new Result<CouponDto>
             {
-                Data = getCoupon,
                 StatusCode = (int)StatusCode.Ok,
+                Data = mapper.Map<CouponDto>(couponFromDb),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("CouponSuccessfullyGet", SuccessMessage.Culture)
             };
@@ -71,7 +64,7 @@ public sealed class GetCouponRequestHandler(ICouponRepository repository, IMemor
         catch (Exception ex)
         {
             memoryCache.Remove(CacheKey);
-            return new Result<GetCouponDto>
+            return new Result<CouponDto>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

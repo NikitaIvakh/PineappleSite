@@ -24,30 +24,30 @@ public partial interface ICouponClient
 {
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync();
+    System.Threading.Tasks.Task<CouponDtoCollectionResult> GetCouponsAsync();
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken);
+    System.Threading.Tasks.Task<CouponDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken);
 
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId);
-
-    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-    /// <returns>Success</returns>
-    /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken);
-
-    /// <returns>Success</returns>
-    /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode);
+    System.Threading.Tasks.Task<CouponDtoResult> GetCouponByIdAsync(string couponId);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken);
+    System.Threading.Tasks.Task<CouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken);
+
+    /// <returns>Success</returns>
+    /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+    System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode);
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="CouponExceptions">A server side error occurred.</exception>
+    System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken);
 
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
@@ -114,7 +114,7 @@ public partial class CouponClient : ICouponClient
 
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync()
+    public virtual System.Threading.Tasks.Task<CouponDtoCollectionResult> GetCouponsAsync()
     {
         return GetCouponsAsync(System.Threading.CancellationToken.None);
     }
@@ -122,7 +122,7 @@ public partial class CouponClient : ICouponClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<GetCouponsDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<CouponDtoCollectionResult> GetCouponsAsync(System.Threading.CancellationToken cancellationToken)
     {
         var client_ = HttpClient;
         var disposeClient_ = false;
@@ -164,7 +164,7 @@ public partial class CouponClient : ICouponClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<GetCouponsDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<CouponDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -203,7 +203,7 @@ public partial class CouponClient : ICouponClient
 
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId)
+    public virtual System.Threading.Tasks.Task<CouponDtoResult> GetCouponByIdAsync(string couponId)
     {
         return GetCouponByIdAsync(couponId, System.Threading.CancellationToken.None);
     }
@@ -211,7 +211,7 @@ public partial class CouponClient : ICouponClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<CouponDtoResult> GetCouponByIdAsync(string couponId, System.Threading.CancellationToken cancellationToken)
     {
         if (couponId == null)
             throw new System.ArgumentNullException("couponId");
@@ -258,7 +258,7 @@ public partial class CouponClient : ICouponClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<GetCouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -297,7 +297,7 @@ public partial class CouponClient : ICouponClient
 
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode)
+    public virtual System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode)
     {
         return GetCouponByCodeAsync(couponCode, System.Threading.CancellationToken.None);
     }
@@ -305,7 +305,7 @@ public partial class CouponClient : ICouponClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="CouponExceptions">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<GetCouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<CouponDtoResult> GetCouponByCodeAsync(string couponCode, System.Threading.CancellationToken cancellationToken)
     {
         if (couponCode == null)
             throw new System.ArgumentNullException("couponCode");
@@ -352,7 +352,7 @@ public partial class CouponClient : ICouponClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<GetCouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<CouponDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new CouponExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -913,6 +913,72 @@ public partial class BooleanCollectionResult
 }
 
 [System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class CouponDto
+{
+    [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string CouponId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string CouponCode { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public double DiscountAmount { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public double MinAmount { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class CouponDtoCollectionResult
+{
+    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<CouponDto> Data { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int Count { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class CouponDtoResult
+{
+    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public CouponDto Data { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class CreateCouponDto
 {
     [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
@@ -939,89 +1005,6 @@ public partial class DeleteCouponsDto
 {
     [Newtonsoft.Json.JsonProperty("couponIds", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public System.Collections.Generic.ICollection<string> CouponIds { get; set; }
-
-}
-
-[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public partial class GetCouponDto
-{
-    [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string CouponId { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string CouponCode { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public double DiscountAmount { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public double MinAmount { get; set; }
-
-}
-
-[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public partial class GetCouponDtoResult
-{
-    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public bool IsSuccess { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string SuccessMessage { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string ErrorMessage { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public int? StatusCode { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public GetCouponDto Data { get; set; }
-
-}
-
-[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public partial class GetCouponsDto
-{
-    [Newtonsoft.Json.JsonProperty("couponId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string CouponId { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("couponCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string CouponCode { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("discountAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public double DiscountAmount { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("minAmount", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public double MinAmount { get; set; }
-
-}
-
-[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
-public partial class GetCouponsDtoCollectionResult
-{
-    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public bool IsSuccess { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string SuccessMessage { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public string ErrorMessage { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public int? StatusCode { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public System.Collections.Generic.ICollection<GetCouponsDto> Data { get; set; }
-
-    [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
-    public int Count { get; set; }
 
 }
 

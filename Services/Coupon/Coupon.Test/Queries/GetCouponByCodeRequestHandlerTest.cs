@@ -12,7 +12,7 @@ public sealed class GetCouponByCodeRequestHandlerTest : TestQueryHandler
     public async Task GtCouponByCodeRequestHandler_Success()
     {
         // Arrange
-        var handler = new GetCouponByCodeRequestHandler(Repository, MemoryCache);
+        var handler = new GetCouponByCodeRequestHandler(Repository, MemoryCache, Mapper);
         const string couponCode = "10OFF";
 
         // Act
@@ -20,15 +20,15 @@ public sealed class GetCouponByCodeRequestHandlerTest : TestQueryHandler
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.ErrorMessage.Should().BeNullOrEmpty(); 
-        result.ValidationErrors.Should().BeNullOrEmpty(); 
+        result.ErrorMessage.Should().BeNullOrEmpty();
+        result.ValidationErrors.Should().BeNullOrEmpty();
     }
-    
+
     [Fact]
     public async Task GtCouponByCodeRequestHandler_FailOrWrong_CouponCode()
     {
         // Arrange
-        var handler = new GetCouponByCodeRequestHandler(Repository, MemoryCache);
+        var handler = new GetCouponByCodeRequestHandler(Repository, MemoryCache, Mapper);
         const string couponCode = "10O1FF";
 
         // Act

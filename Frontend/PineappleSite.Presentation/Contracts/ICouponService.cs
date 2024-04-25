@@ -5,11 +5,11 @@ namespace PineappleSite.Presentation.Contracts;
 
 public interface ICouponService
 {
-    Task<CollectionResultViewModel<GetCouponsViewModel>> GetAllCouponsAsync();
+    Task<CollectionResultViewModel<CouponViewModel>> GetAllCouponsAsync();
 
-    Task<ResultViewModel<GetCouponViewModel>> GetCouponByIdAsync(string couponId);
+    Task<ResultViewModel<CouponViewModel>> GetCouponByIdAsync(string couponId);
 
-    Task<ResultViewModel<GetCouponViewModel>> GetCouponByCodeAsync(string couponCode);
+    Task<ResultViewModel<CouponViewModel>> GetCouponByCodeAsync(string couponCode);
 
     Task<ResultViewModel<string>> CreateCouponAsync(CreateCouponViewModel createCoupon);
 

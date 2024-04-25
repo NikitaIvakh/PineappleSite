@@ -8,9 +8,7 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<CouponEntity, GetCouponDto>().ReverseMap();
-        CreateMap<CouponEntity, GetCouponsDto>().ReverseMap();
-            
+        CreateMap<CouponEntity, CouponDto>().ReverseMap();
         CreateMap<CouponEntity, CreateCouponDto>().ReverseMap();
         CreateMap<CouponEntity, UpdateCouponDto>().ReverseMap();
         CreateMap<CouponEntity, DeleteCouponDto>().ReverseMap();
