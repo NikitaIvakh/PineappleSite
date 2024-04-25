@@ -39,9 +39,6 @@
       <LastGenOutput>ErrorMessage.Designer.cs</LastGenOutput>
       <Generator>ResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resources\ErrorMessage.ru.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="Resources\SuccessMessage.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>SuccessMessage.Designer.cs</LastGenOutput>

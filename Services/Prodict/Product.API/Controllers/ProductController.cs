@@ -1,159 +1,110 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Product.API.Utility;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Features.Requests.Queries;
 using Product.Domain.DTOs;
 using Product.Domain.ResultProduct;
 
-namespace Product.API.Controllers
+namespace Product.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public sealed class ProductController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductController(IMediator mediator, ILogger<ProductDto> logger) : ControllerBase
+    [HttpGet("GetProductsDto")]
+    public async Task<ActionResult<CollectionResult<GetProductsDto>>> Get(ISender sender,
+        ILogger<GetProductsDto> logger)
     {
-        private readonly IMediator _mediator = mediator;
-        private readonly ILogger<ProductDto> _logger = logger;
+        var request = await sender.Send(new GetProductsRequest());
 
-        // GET: api/<ProductController>
-        [HttpGet]
-        public async Task<ActionResult<CollectionResult<ProductDto>>> Get()
+        if (request.IsSuccess)
         {
-            var query = await _mediator.Send(new GetProductListRequest());
-
-            if (query.IsSuccess)
-            {
-                _logger.LogDebug("LogDebug ================ Продукты успешно получены");
-                return Ok(query);
-            }
-
-            _logger.LogError("LogDebugError ================ Ошибка получения продуктов");
-            foreach (var error in query.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug("LogDebug ================ Продукты успешно получены");
+            return Ok(request);
         }
 
-        // GET api/<ProductController>/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Result<ProductDto>>> Get(int id)
+        logger.LogError("LogDebugError ================ Ошибка получения продуктов");
+        return BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    [HttpGet("GetProduct/{id:int}")]
+    public async Task<ActionResult<Result<GetProductDto>>> GetProduct(ISender sender, ILogger<GetProductDto> logger,
+        [FromRoute] int id)
+    {
+        var request = await sender.Send(new GetProductRequest(id));
+
+        if (request.IsSuccess)
         {
-            var query = await _mediator.Send(new GetProductDetailsRequest { Id = id });
-
-            if (query.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Продукт успешно получен: {id}");
-                return Ok(query);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка получения продукта: {id}");
-            foreach (var error in query.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Продукт успешно получен: {id}");
+            return Ok(request);
         }
 
-        // POST api/<ProductController>
-        [HttpPost]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<ProductDto>>> Post([FromForm] CreateProductDto createProductDto)
+        logger.LogError($"LogDebugError ================ Ошибка получения продукта: {id}");
+        return BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    [HttpPost("CreateProduct")]
+    public async Task<ActionResult<Result<int>>> CreateProduct(ISender sender, ILogger<int> logger,
+        [FromForm] CreateProductDto createProductDto)
+    {
+        var command = await sender.Send(new CreateProductRequest(createProductDto));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new CreateProductDtoRequest { CreateProduct = createProductDto });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Продукт успешно добавлен: {createProductDto.Name}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка добавления продукта: {createProductDto.Name}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Продукт успешно добавлен: {createProductDto.Name}");
+            return Ok(command);
         }
 
-        // PUT api/<ProductController>/5
-        [HttpPut("{productId}")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<ProductDto>>> Put(int productId, [FromForm] UpdateProductDto updateProductDto)
+        logger.LogError($"LogDebugError ================ Ошибка добавления продукта: {createProductDto.Name}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpPut("UpdateProduct/{id:int}")]
+    public async Task<ActionResult<Result<Unit>>> UpdateProduct(ISender sender, ILogger<Unit> logger,
+        [FromRoute] int id, [FromForm] UpdateProductDto updateProductDto)
+    {
+        var command = await sender.Send(new UpdateProductRequest(updateProductDto));
+
+        if (command.IsSuccess && id == updateProductDto.Id)
         {
-            if (productId == updateProductDto.Id)
-            {
-                var command = await _mediator.Send(new UpdateProductDtoRequest { UpdateProduct = updateProductDto });
-
-                if (command.IsSuccess)
-                {
-                    _logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
-                    return Ok(command);
-                }
-
-                _logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
-                foreach (var error in command.ValidationErrors!)
-                {
-                    return BadRequest(error);
-                }
-
-                return NoContent();
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
+            return Ok(command);
         }
 
-        // DELETE api/<ProductController>/5
-        [HttpDelete("{productId}")]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<Result<ProductDto>>> Delete(int productId, [FromBody] DeleteProductDto deleteProductDto)
+        logger.LogError($"LogDebugError ================ Ошибка обновления продукта: {updateProductDto.Id}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpDelete("DeleteProduct/{id:int}")]
+    public async Task<ActionResult<Result<Unit>>> DeleteProduct(ISender sender, ILogger<int> logger, [FromRoute] int id,
+        [FromBody] DeleteProductDto deleteProductDto)
+    {
+        var command = await sender.Send(new DeleteProductRequest(deleteProductDto));
+
+        if (command.IsSuccess)
         {
-            if (productId == deleteProductDto.Id)
-            {
-                var command = await _mediator.Send(new DeleteProductDtoRequest { DeleteProduct = deleteProductDto });
-
-                if (command.IsSuccess)
-                {
-                    _logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
-                    return Ok(command);
-                }
-
-                _logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
-                foreach (var error in command.ValidationErrors!)
-                {
-                    return BadRequest(error);
-                }
-
-                return NoContent();
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
+            return Ok(command);
         }
 
-        // DELETE api/<ProductController>/
-        [HttpDelete]
-        [Authorize(Roles = StaticDetails.RoleAdministrator)]
-        public async Task<ActionResult<CollectionResult<ProductDto>>> Delete([FromBody] DeleteProductsDto deleteProductsDto)
+        logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    // DELETE api/<ProductController>/
+    [HttpDelete("DeleteProducts")]
+    public async Task<ActionResult<CollectionResult<Unit>>> DeleteProducts(ISender sender, ILogger<Unit> logger,
+        [FromBody] DeleteProductsDto deleteProductsDto)
+    {
+        var command = await sender.Send(new DeleteProductsRequest(deleteProductsDto));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new DeleteProductsDtoRequest { DeleteProducts = deleteProductsDto });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Продукты успешно удалены: {deleteProductsDto.ProductIds}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка удаления продуктов: {deleteProductsDto.ProductIds}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Продукты успешно удалены: {deleteProductsDto.ProductIds}");
+            return Ok(command);
         }
+
+        logger.LogError($"LogDebugError ================ Ошибка удаления продуктов: {deleteProductsDto.ProductIds}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

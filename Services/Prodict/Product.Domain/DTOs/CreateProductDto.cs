@@ -1,18 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Product.Domain.Enum;
 
-namespace Product.Domain.DTOs
-{
-    public class CreateProductDto : IProductDto
-    {
-        public string Name { get; set; }
+namespace Product.Domain.DTOs;
 
-        public string Description { get; set; }
-
-        public ProductCategory ProductCategory { get; set; }
-
-        public double Price { get; set; }
-
-        public IFormFile? Avatar { get; set; }
-    }
-}
+public sealed record CreateProductDto(
+    string Name,
+    string Description,
+    ProductCategory ProductCategory,
+    double Price,
+    IFormFile? Avatar) : IProductDto;

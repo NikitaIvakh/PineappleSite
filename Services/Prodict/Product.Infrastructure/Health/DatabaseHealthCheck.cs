@@ -1,32 +1,29 @@
 ﻿using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Npgsql;
-using System.Data;
 
-namespace Product.Infrastructure.Health
+namespace Product.Infrastructure.Health;
+
+public sealed class DatabaseHealthCheck(DbConnectionFactory connectionFactory) : IHealthCheck
 {
-    public class DatabaseHealthCheck(DbConnectionFactory connectionFactory) : IHealthCheck
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context,
+        CancellationToken cancellationToken = default)
     {
-        private readonly DbConnectionFactory _connectionFactory = connectionFactory;
-
-        public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
+        try
         {
-            try
-            {
-                using IDbConnection dbConnection = _connectionFactory.OpenConnection();
-                using var command = new NpgsqlCommand("SELECT 1", (NpgsqlConnection)dbConnection);
-                var result = await command.ExecuteScalarAsync(cancellationToken);
+            using var dbConnection = connectionFactory.OpenConnection();
+            await using var command = new NpgsqlCommand("SELECT 1", (NpgsqlConnection)dbConnection);
+            var result = await command.ExecuteScalarAsync(cancellationToken);
 
-                return result switch
-                {
-                    int and 1 => HealthCheckResult.Healthy(),
-                    _ => HealthCheckResult.Unhealthy(),
-                };
-            }
-
-            catch (Exception ex)
+            return result switch
             {
-                return HealthCheckResult.Unhealthy(exception: ex);
-            }
+                1 => HealthCheckResult.Healthy(),
+                _ => HealthCheckResult.Unhealthy(),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return HealthCheckResult.Unhealthy(exception: ex);
         }
     }
 }

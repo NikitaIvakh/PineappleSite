@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
+﻿namespace Product.Domain.ResultProduct;
 
-namespace Product.Domain.ResultProduct
+public sealed class CollectionResult<T> : Result<IReadOnlyCollection<T>>
 {
-    public class CollectionResult<TEntity> : Result<IReadOnlyCollection<TEntity>> where TEntity : class
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; init; }
 }

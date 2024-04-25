@@ -1,7 +1,3 @@
-﻿namespace Product.Domain.DTOs
-{
-    public class DeleteProductsDto
-    {
-        public IList<int> ProductIds { get; set; }
-    }
-}
+﻿namespace Product.Domain.DTOs;
+
+public sealed record DeleteProductsDto(IList<int> ProductIds);

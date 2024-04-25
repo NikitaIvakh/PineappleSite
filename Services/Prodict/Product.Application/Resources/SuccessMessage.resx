@@ -132,4 +132,10 @@
   <data name="ProductSuccessfullyDeleted" xml:space="preserve">
     <value>Продукт успешно удален</value>
   </data>
+  <data name="ProductsSuccessfullyGot" xml:space="preserve">
+    <value>Продукты успешно получены</value>
+  </data>
+  <data name="ProductSuccessfullyGot" xml:space="preserve">
+    <value>Продукт успешно получен</value>
+  </data>
 </root>
