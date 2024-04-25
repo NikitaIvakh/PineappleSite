@@ -3,390 +3,280 @@ using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Services.Products;
 
-namespace PineappleSite.Presentation.Services
+namespace PineappleSite.Presentation.Services;
+
+public sealed class ProductService(
+    ILocalStorageService localStorageService,
+    IProductClient productClient,
+    IMapper mapper,
+    IHttpContextAccessor contextAccessor)
+    : BaseProductService(localStorageService, productClient, contextAccessor), IProductService
 {
-    public class ProductService(ILocalStorageService localStorageService, IProductClient productClient, IMapper mapper, IHttpContextAccessor contextAccessor)
-        : BaseProductService(localStorageService, productClient, contextAccessor), IProductService
+    private readonly IProductClient _productClient = productClient;
+
+    public async Task<ProductsCollectionResultViewModel<GetProductsViewModel>> GetAllProductsAsync()
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IProductClient _productClient = productClient;
-        private readonly IMapper _mapper = mapper;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        public async Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync()
+        AddBearerToken();
+        try
         {
-            try
+            var products = await _productClient.GetProductsAsync();
+            var getProducts = products.Data.Select(key => new GetProductsViewModel
+            (
+                Id: key.Id,
+                Name: key.Name,
+                Description: key.Description,
+                ProductCategory: key.ProductCategory,
+                Price: key.Price,
+                ImageUrl: key.ImageUrl,
+                ImageLocalPath: key.ImageLocalPath,
+                Count: 1
+            )).ToList();
+
+            if (products.IsSuccess)
             {
-                var products = await _productClient.ProductGETAsync();
-
-                if (products.IsSuccess)
+                return new ProductsCollectionResultViewModel<GetProductsViewModel>()
                 {
-                    return _mapper.Map<ProductsCollectionResultViewModel<ProductViewModel>>(products);
-                }
-
-                else
-                {
-                    foreach (var error in products.ValidationErrors)
-                    {
-                        return new ProductsCollectionResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = products.ErrorCode,
-                            ErrorMessage = products.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductsCollectionResultViewModel<ProductViewModel>();
-            }
-
-            catch (ProductExceptions exceptions)
-            {
-                return new ProductsCollectionResultViewModel<ProductViewModel>
-                {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
+                    Data = getProducts,
+                    Count = products.Count,
+                    StatusCode = products.StatusCode,
+                    SuccessMessage = products.SuccessMessage,
                 };
             }
+
+            return new ProductsCollectionResultViewModel<GetProductsViewModel>
+            {
+                StatusCode = products.StatusCode,
+                ErrorMessage = products.ErrorMessage,
+                ValidationErrors = string.Join(", ", products.ValidationErrors),
+            };
         }
 
-        public async Task<ProductResultViewModel<ProductViewModel>> GetProductAsync(int id)
+        catch (ProductExceptions<string> exceptions)
         {
-            try
+            return new ProductsCollectionResultViewModel<GetProductsViewModel>
             {
-                var product = await _productClient.ProductGET2Async(id);
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (product.IsSuccess)
-                {
-                    return new ProductResultViewModel<ProductViewModel>
-                    {
-                        Data = _mapper.Map<ProductViewModel>(product.Data),
-                    };
-                }
+    public async Task<ProductResultViewModel<GetProductViewModel>> GetProductAsync(int id)
+    {
+        AddBearerToken();
+        try
+        {
+            var product = await _productClient.GetProductAsync(id);
+            var getProduct = new GetProductViewModel(
+                Id: product.Data.Id,
+                Name: product.Data.Name,
+                Description: product.Data.Description,
+                ProductCategory: product.Data.ProductCategory,
+                Price: product.Data.Price,
+                ImageUrl: product.Data.ImageUrl,
+                ImageLocalPath: product.Data.ImageLocalPath,
+                Count: 1);
 
-                else
-                {
-                    foreach (string error in product.ValidationErrors)
-                    {
-                        return new ProductResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = product.ErrorCode,
-                            ErrorMessage = product.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductResultViewModel<ProductViewModel>();
-            }
-
-            catch (ProductExceptions exceptions)
+            if (product.IsSuccess)
             {
-                return new ProductResultViewModel<ProductViewModel>
+                return new ProductResultViewModel<GetProductViewModel>
                 {
-                    ErrorMessage = exceptions.Response,
-                    ErrorCode = exceptions.StatusCode,
-                    ValidationErrors = [exceptions.Response]
+                    Data = getProduct,
+                    StatusCode = product.StatusCode,
+                    SuccessMessage = product.SuccessMessage,
                 };
             }
+
+            return new ProductResultViewModel<GetProductViewModel>
+            {
+                StatusCode = product.StatusCode,
+                ErrorMessage = product.ErrorMessage,
+                ValidationErrors = string.Join(", ", product.ValidationErrors),
+            };
         }
 
-        public async Task<ProductResultViewModel<ProductViewModel>> CreateProductAsync(CreateProductViewModel product)
+        catch (ProductExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new ProductResultViewModel<GetProductViewModel>
             {
-                FileParameter avatarFileParameter = null;
-                if (product.Avatar is not null)
-                {
-                    avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
-                }
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result
+            };
+        }
+    }
 
-                ProductDtoResult apiREsponse = await _productClient.ProductPOSTAsync(
-                    product.Name,
-                    product.Description,
-                    (ProductCategory?)product.ProductCategory,
-                    product.Price,
-                    avatarFileParameter);
-
-                if (apiREsponse.IsSuccess)
-                {
-                    return new ProductResultViewModel<ProductViewModel>
-                    {
-                        SuccessCode = apiREsponse.SuccessCode,
-                        SuccessMessage = apiREsponse.SuccessMessage,
-                        Data = _mapper.Map<ProductViewModel>(apiREsponse.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (string error in apiREsponse.ValidationErrors)
-                    {
-                        return new ProductResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = apiREsponse.ErrorCode,
-                            ErrorMessage = apiREsponse.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductResultViewModel<ProductViewModel>();
+    public async Task<ProductResultViewModel<int>> CreateProductAsync(CreateProductViewModel product)
+    {
+        AddBearerToken();
+        try
+        {
+            FileParameter avatarFileParameter = null;
+            if (product.Avatar is not null)
+            {
+                avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
             }
 
-            catch (ProductExceptions exceptions)
+            var apiResponse = await _productClient.CreateProductAsync(
+                product.Name,
+                product.Description,
+                (ProductCategory?)product.ProductCategory,
+                product.Price,
+                avatarFileParameter);
+
+            if (apiResponse.IsSuccess)
             {
-                if (exceptions.StatusCode == 403)
+                return new ProductResultViewModel<int>
                 {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response]
-                    };
-                }
+                    Data = apiResponse.Data,
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
             }
+
+            return new ProductResultViewModel<int>
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<ProductResultViewModel<ProductViewModel>> UpdateProductAsync(int id, UpdateProductViewModel product)
+        catch (ProductExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new ProductResultViewModel<int>()
             {
-                FileParameter avatarFileParameter = null;
+                StatusCode = exceptions.StatusCode,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (product.Avatar is not null)
-                {
-                    avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
-                }
+    public async Task<ProductResultViewModel> UpdateProductAsync(int id,
+        UpdateProductViewModel product)
+    {
+        AddBearerToken();
+        try
+        {
+            FileParameter avatarFileParameter = null;
 
-                ProductDtoResult apiResponse = await _productClient.ProductPUTAsync(
-                    id,
-                    product.Id,
-                    product.Name,
-                    product.Description,
-                    (ProductCategory?)product.ProductCategory,
-                    product.Price,
-                    avatarFileParameter,
-                    product.ImageUrl,
-                    product.ImageLocalPath);
-
-                if (apiResponse.IsSuccess)
-                {
-                    return new ProductResultViewModel<ProductViewModel>
-                    {
-                        SuccessCode = apiResponse.SuccessCode,
-                        SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (string error in apiResponse.ValidationErrors)
-                    {
-                        return new ProductResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
-                            ErrorMessage = apiResponse.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductResultViewModel<ProductViewModel>();
+            if (product.Avatar is not null)
+            {
+                avatarFileParameter = new FileParameter(product.Avatar.OpenReadStream(), product.Avatar.FileName);
             }
 
-            catch (ProductExceptions exceptions)
+            var apiResponse = await _productClient.UpdateProductAsync(
+                id,
+                product.Id,
+                product.Name,
+                product.Description,
+                (ProductCategory?)product.ProductCategory,
+                product.Price,
+                avatarFileParameter,
+                product.ImageUrl,
+                product.ImageLocalPath);
+
+            if (apiResponse.IsSuccess)
             {
-                if (exceptions.StatusCode == 403)
+                return new ProductResultViewModel
                 {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response]
-                    };
-                }
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
             }
+
+            return new ProductResultViewModel
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<ProductResultViewModel<ProductViewModel>> DeleteProductAsync(int id, DeleteProductViewModel product)
+        catch (ProductExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new ProductResultViewModel()
             {
-                DeleteProductDto deleteProductDto = _mapper.Map<DeleteProductDto>(product);
-                ProductDtoResult apiResponse = await _productClient.ProductDELETE2Async(deleteProductDto.Id, deleteProductDto);
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (apiResponse.IsSuccess)
+    public async Task<ProductResultViewModel> DeleteProductAsync(int id,
+        DeleteProductViewModel product)
+    {
+        AddBearerToken();
+        try
+        {
+            var deleteProductDto = mapper.Map<DeleteProductDto>(product);
+            var apiResponse = await _productClient.DeleteProductAsync(deleteProductDto.Id, deleteProductDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new ProductResultViewModel
                 {
-                    return new ProductResultViewModel<ProductViewModel>
-                    {
-                        SuccessCode = apiResponse.SuccessCode,
-                        SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<ProductViewModel>(apiResponse.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (string error in apiResponse.ValidationErrors)
-                    {
-                        return new ProductResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
-                            ErrorMessage = apiResponse.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductResultViewModel<ProductViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
             }
 
-            catch (ProductExceptions exceptions)
+            return new ProductResultViewModel<ProductViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else
-                {
-                    return new ProductResultViewModel<ProductViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response]
-                    };
-                }
-            }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<ProductsCollectionResultViewModel<ProductViewModel>> DeleteProductsAsync(DeleteProductsViewModel product)
+        catch (ProductExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new ProductResultViewModel<ProductViewModel>()
             {
-                DeleteProductsDto deleteProductsDto = _mapper.Map<DeleteProductsDto>(product);
-                ProductDtoCollectionResult apiResponse = await _productClient.ProductDELETEAsync(deleteProductsDto);
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (apiResponse.IsSuccess)
+    public async Task<ProductsCollectionResultViewModel<bool>> DeleteProductsAsync(
+        DeleteProductsViewModel product)
+    {
+        AddBearerToken();
+        try
+        {
+            var deleteProductsDto = mapper.Map<DeleteProductsDto>(product);
+            var apiResponse = await _productClient.DeleteProductsAsync(deleteProductsDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new ProductsCollectionResultViewModel<bool>
                 {
-                    return new ProductsCollectionResultViewModel<ProductViewModel>
-                    {
-                        SuccessCode = apiResponse.SuccessCode,
-                        SuccessMessage = apiResponse.SuccessMessage,
-                        Data = _mapper.Map<IReadOnlyCollection<ProductViewModel>>(apiResponse.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (string error in apiResponse.ValidationErrors)
-                    {
-                        return new ProductsCollectionResultViewModel<ProductViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = apiResponse.ErrorCode,
-                            ErrorMessage = apiResponse.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new ProductsCollectionResultViewModel<ProductViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
             }
 
-            catch (ProductExceptions exceptions)
+            return new ProductsCollectionResultViewModel<bool>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new ProductsCollectionResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
+        }
 
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new ProductsCollectionResultViewModel<ProductViewModel>()
-                    {
-                        ErrorCode = exceptions.StatusCode,
-                        ErrorMessage = exceptions.Response,
-                        ValidationErrors = ConvertProductException(exceptions).ValidationErrors,
-                    };
-                }
-
-                else
-                {
-                    return new ProductsCollectionResultViewModel<ProductViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response]
-                    };
-                }
-            }
+        catch (ProductExceptions<string> exceptions)
+        {
+            return new ProductsCollectionResultViewModel<bool>()
+            {
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
         }
     }
 }

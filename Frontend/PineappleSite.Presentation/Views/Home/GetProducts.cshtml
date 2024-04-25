@@ -2,11 +2,11 @@
 @using PineappleSite.Presentation.Models.Paginated
 @using PineappleSite.Presentation.Services.Products
 @using System.Globalization
-@model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
+@model PaginatedList<PineappleSite.Presentation.Models.Products.GetProductsViewModel>
 
 @{
     ViewData["Title"] = @Localizer["Products"];
-    <link rel="stylesheet" href="~/css/home/getProducts.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/getProducts.css" asp-append-version="true"/>
 }
 
 <div class="col-12 form-text">
@@ -16,7 +16,7 @@
                 <label for="searchProduct" style="color:white; font-size: 20px;">@Localizer["Search product"]</label>
             </p>
             <div class="input-group mb-3">
-                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
+                <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
                 <div class="input-group-append">
                     <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
                     <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
@@ -36,7 +36,7 @@
                         <div class="p-0 my-3 border rounded">
                             <div class="card d-flex flex-column h-100">
                                 <h3 class="card-title text-black-50 text-center py-2">@product.Name</h3>
-                                <img src="@product.ImageUrl" class="card-img-top custom-image">
+                                <img src="@product.ImageUrl" class="card-img-top custom-image" alt="">
                                 <div class="card-body d-flex flex-column flex-fill">
                                     <p class="card-text">@Html.Raw(product.Description.Substring(0, Math.Min(product.Description.Length, 11)))...</p>
                                     <div class="d-flex justify-content-between py-2">
@@ -82,7 +82,7 @@
 <script src="~/js/home/getProducts.js" asp-append-version="true"></script>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
 
 <script>

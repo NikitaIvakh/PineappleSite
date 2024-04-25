@@ -7,4 +7,6 @@ public sealed record GetProductDto(
     string Name,
     string Description,
     ProductCategory ProductCategory,
-    double Price) : IProductDto;
+    double Price,
+    string? ImageUrl,
+    string? ImageLocalPath) : IProductDto;

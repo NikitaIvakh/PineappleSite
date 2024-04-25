@@ -513,7 +513,7 @@
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/GetProduct/{id}",
+      "DownstreamPathTemplate": "/api/Product/GetProduct/{id}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -521,7 +521,7 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/GetProduct/{id}",
+      "UpstreamPathTemplate": "/api/Product/GetProduct/{id}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 

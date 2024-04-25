@@ -53,7 +53,9 @@ public sealed class GetProductRequestHandler(IProductRepository repository, IMem
                 Name: getProductFromDb.Name,
                 Description: getProductFromDb.Description,
                 ProductCategory: getProductFromDb.ProductCategory,
-                Price: getProductFromDb.Price
+                Price: getProductFromDb.Price,
+                ImageUrl: getProductFromDb.ImageUrl,
+                ImageLocalPath: getProductFromDb.ImageLocalPath
             );
 
             memoryCache.Remove(CacheKey);

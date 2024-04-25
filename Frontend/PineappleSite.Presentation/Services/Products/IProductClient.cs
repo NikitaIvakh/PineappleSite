@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Products
+﻿namespace PineappleSite.Presentation.Services.Products;
+
+public partial interface IProductClient
 {
-    public partial interface IProductClient
-    {
-        public HttpClient HttpClient { get; }
-    }
+    public HttpClient HttpClient { get; }
 }

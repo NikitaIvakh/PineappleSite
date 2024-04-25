@@ -10,6 +10,7 @@ using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
+using System.Globalization;
 using System.Security.Claims;
 using PineappleSite.Presentation.Services.Favourite;
 
@@ -37,19 +38,19 @@ public sealed class HomeController(
             {
                 if (!string.IsNullOrEmpty(searchProduct))
                 {
-                    var filteredProductList = products.Data.Where(
+                    var filteredProductList = products.Data!.Where(
                             key => key.Name.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                                    key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                                    key.ProductCategory.GetDisplayName().Contains(searchProduct,
                                        StringComparison.CurrentCultureIgnoreCase) ||
                                    key.Description.Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
-                                   key.Price.ToString()
+                                   key.Price.ToString(CultureInfo.InvariantCulture)
                                        .Contains(searchProduct, StringComparison.CurrentCultureIgnoreCase) ||
                                    key.Count.ToString().Contains(searchProduct,
                                        StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
 
-                    products = new ProductsCollectionResultViewModel<ProductViewModel>
+                    products = new ProductsCollectionResultViewModel<GetProductsViewModel>
                     {
                         Data = filteredProductList,
                     };
@@ -58,29 +59,22 @@ public sealed class HomeController(
                 ViewData["SearchProduct"] = searchProduct;
                 ViewData["CurrentFilter"] = currentFilter;
 
-                var pageIndex = 9;
-                var filteredProducts = products.Data.AsQueryable();
+                const int pageIndex = 9;
+                var filteredProducts = products.Data!.AsQueryable();
                 var paginatedProducts =
-                    PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
+                    PaginatedList<GetProductsViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
 
                 return View(paginatedProducts);
             }
 
-            else
-            {
-                foreach (var error in products.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(GetProducts));
-            }
+            TempData["error"] = products.ValidationErrors;
+            return RedirectToAction(nameof(GetProducts));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -95,7 +89,7 @@ public sealed class HomeController(
             {
                 ProductViewModel productViewModel = new()
                 {
-                    Id = product.Data.Id,
+                    Id = product.Data!.Id,
                     Name = product.Data.Name,
                     Description = product.Data.Description,
                     ProductCategory = product.Data.ProductCategory,
@@ -105,13 +99,14 @@ public sealed class HomeController(
                     ImageLocalPath = product.Data.ImageLocalPath,
                 };
 
-                string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
+                var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
                     ?.Value;
-                FavouriteResult<FavouriteViewModel> result = await favouriteService.GetFavouriteProductsAsync(userId);
-                var allFavouriteProducts =
-                    result.Data.FavouriteDetails.FindAll(key => key.ProductId == productViewModel.Id);
 
-                if (result is null || result.Data.FavouriteDetails.Count == 0 || allFavouriteProducts.Count == 0)
+                var result = await favouriteService.GetFavouriteProductsAsync(userId!);
+                var allFavouriteProducts =
+                    result.Data!.FavouriteDetails.FindAll(key => key.ProductId == productViewModel.Id);
+
+                if (result.Data.FavouriteDetails.Count == 0 || allFavouriteProducts.Count == 0)
                 {
                     var favouriteProduct1 = new ProductFavouriteViewModel
                     {
@@ -141,21 +136,14 @@ public sealed class HomeController(
                 return View(favouriteProduct);
             }
 
-            else
-            {
-                foreach (var error in product.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(GetProducts));
-            }
+            TempData["error"] = product.ValidationErrors;
+            return RedirectToAction(nameof(GetProducts));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 

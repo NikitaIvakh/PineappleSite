@@ -13,11 +13,11 @@ namespace Product.Application.Features.Commands.Handlers;
 public sealed class DeleteProductsRequestHandler(
     IProductRepository repository,
     DeleteProductsValidator validations,
-    IMemoryCache memoryCache) : IRequestHandler<DeleteProductsRequest, CollectionResult<Unit>>
+    IMemoryCache memoryCache) : IRequestHandler<DeleteProductsRequest, CollectionResult<bool>>
 {
     private const string CacheKey = "cacheProductKey";
 
-    public async Task<CollectionResult<Unit>> Handle(DeleteProductsRequest request,
+    public async Task<CollectionResult<bool>> Handle(DeleteProductsRequest request,
         CancellationToken cancellationToken)
     {
         try
@@ -35,7 +35,7 @@ public sealed class DeleteProductsRequestHandler(
                 {
                     if (existsErrorMessages.TryGetValue(error.Key, out var errorMessage))
                     {
-                        return new CollectionResult<Unit>
+                        return new CollectionResult<bool>
                         {
                             ValidationErrors = errorMessage,
                             StatusCode = (int)StatusCode.NoContent,
@@ -45,7 +45,7 @@ public sealed class DeleteProductsRequestHandler(
                     }
                 }
 
-                return new CollectionResult<Unit>
+                return new CollectionResult<bool>
                 {
                     StatusCode = (int)StatusCode.NoContent,
                     ValidationErrors = validator.Errors.Select(key => key.ErrorMessage).ToList(),
@@ -59,7 +59,7 @@ public sealed class DeleteProductsRequestHandler(
 
             if (products.Count == 0)
             {
-                return new CollectionResult<Unit>
+                return new CollectionResult<bool>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("ProductsNotFound", ErrorMessage.Culture),
@@ -92,9 +92,9 @@ public sealed class DeleteProductsRequestHandler(
 
             memoryCache.Remove(CacheKey);
 
-            return new CollectionResult<Unit>
+            return new CollectionResult<bool>
             {
-                Data = [Unit.Value],
+                Data = [true],
                 Count = products.Count,
                 StatusCode = (int)StatusCode.Deleted,
                 SuccessMessage =
@@ -104,7 +104,7 @@ public sealed class DeleteProductsRequestHandler(
 
         catch (Exception ex)
         {
-            return new CollectionResult<Unit>
+            return new CollectionResult<bool>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

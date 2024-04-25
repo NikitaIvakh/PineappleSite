@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Models.Products
+﻿namespace PineappleSite.Presentation.Models.Products;
+
+public sealed class DeleteProductViewModel(int id)
 {
-    public class DeleteProductViewModel
-    {
-        public int Id { get; set; }
-    }
+    public int Id { get; set; } = id;
 }

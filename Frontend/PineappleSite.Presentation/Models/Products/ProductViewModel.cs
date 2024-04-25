@@ -1,26 +1,25 @@
 ﻿using PineappleSite.Presentation.Models.Products.Enum;
 using System.ComponentModel.DataAnnotations;
 
-namespace PineappleSite.Presentation.Models.Products
+namespace PineappleSite.Presentation.Models.Products;
+
+public class ProductViewModel
 {
-    public class ProductViewModel
-    {
-        public int Id { get; set; }
+    public int Id { get; set; }
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string Description { get; set; }
+    public string Description { get; set; }
 
-        public ProductCategory ProductCategory { get; set; }
+    public ProductCategory ProductCategory { get; set; }
 
-        public double Price { get; set; }
+    public double Price { get; set; }
 
-        [Required(ErrorMessage = "Поле обязательно для заполения")]
-        [Range(1, 10, ErrorMessage = "Выбор в диапазоне от 1 до 10")]
-        public int Count { get; set; } = 1;
+    [Required(ErrorMessage = "Поле обязательно для заполения")]
+    [Range(1, 10, ErrorMessage = "Выбор в диапазоне от 1 до 10")]
+    public int Count { get; set; } = 1;
 
-        public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; set; }
 
-        public string? ImageLocalPath { get; set; }
-    }
+    public string? ImageLocalPath { get; set; }
 }

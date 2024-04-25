@@ -2,53 +2,49 @@
 using PineappleSite.Presentation.Models.Products;
 using System.Net.Http.Headers;
 
-namespace PineappleSite.Presentation.Services.Products
+namespace PineappleSite.Presentation.Services.Products;
+
+public class BaseProductService(
+    ILocalStorageService localStorageService,
+    IProductClient productClient,
+    IHttpContextAccessor contextAccessor)
 {
-    public class BaseProductService(ILocalStorageService localStorageService, IProductClient productClient, IHttpContextAccessor contextAccessor)
+    protected static ProductResultViewModel<ProductViewModel> ConvertProductException(
+        ProductExceptions<string> productExceptions)
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IProductClient _productClient = productClient;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        protected ProductResultViewModel<ProductViewModel> ConvertProductException(ProductExceptions productExceptions)
+        return productExceptions.StatusCode switch
         {
-            if (productExceptions.StatusCode == 403)
+            403 => new ProductResultViewModel<ProductViewModel>
             {
-                return new ProductResultViewModel<ProductViewModel>
-                {
-                    ErrorCode = 403,
-                    ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                    ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                };
-            }
+                StatusCode = 403,
+                ErrorMessage =
+                    "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
+                ValidationErrors =
+                    "Пользователям не доступна эта страница. Эта страница доступна только администраторам."
+            },
 
-            else if (productExceptions.StatusCode == 401)
+            401 => new ProductResultViewModel<ProductViewModel>
             {
-                return new ProductResultViewModel<ProductViewModel>
-                {
-                    ErrorCode = 401,
-                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                };
-            }
+                StatusCode = 401,
+                ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                ValidationErrors = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."
+            },
 
-            else
+            _ => new ProductResultViewModel<ProductViewModel>
             {
-                return new ProductResultViewModel<ProductViewModel>
-                {
-                    ErrorCode = 500,
-                    ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
-                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
-                };
+                StatusCode = 500,
+                ErrorMessage = productExceptions.Result,
+                ValidationErrors = productExceptions.Result
             }
-        }
+        };
+    }
 
-        protected void AddBearerToken()
+    protected void AddBearerToken()
+    {
+        if (contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
         {
-            if (_contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
-            {
-                _productClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
-            }
+            productClient.HttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
         }
     }
 }

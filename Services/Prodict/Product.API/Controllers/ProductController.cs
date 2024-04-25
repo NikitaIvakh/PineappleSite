@@ -101,7 +101,7 @@ public sealed class ProductController : ControllerBase
     // DELETE api/<ProductController>/
     [HttpDelete("DeleteProducts")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<CollectionResult<Unit>>> DeleteProducts(ISender sender, ILogger<Unit> logger,
+    public async Task<ActionResult<CollectionResult<bool>>> DeleteProducts(ISender sender, ILogger<Unit> logger,
         [FromBody] DeleteProductsDto deleteProductsDto)
     {
         var command = await sender.Send(new DeleteProductsRequest(deleteProductsDto));

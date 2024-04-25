@@ -37,7 +37,7 @@ public sealed class ProductController(
                                        StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
 
-                    products = new ProductsCollectionResultViewModel<ProductViewModel>
+                    products = new ProductsCollectionResultViewModel<GetProductsViewModel>
                     {
                         Data = filteredProductsList,
                     };
@@ -49,23 +49,19 @@ public sealed class ProductController(
                 const int pageSize = 10;
                 var filteredProducts = products.Data!.AsQueryable();
                 var paginatedProducts =
-                    PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
+                    PaginatedList<GetProductsViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
 
                 return paginatedProducts.Count == 0 ? View() : View(paginatedProducts);
             }
 
-            foreach (var error in products.ValidationErrors!)
-            {
-                TempData["error"] = error;
-            }
-
+            TempData["error"] = products.ValidationErrors;
             return RedirectToAction("Index", "Home");
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 
@@ -78,43 +74,25 @@ public sealed class ProductController(
 
             if (product.IsSuccess)
             {
-                ProductViewModel productViewModel = new()
-                {
-                    Id = product.Data.Id,
-                    Name = product.Data.Name,
-                    Description = product.Data.Description,
-                    ProductCategory = product.Data.ProductCategory,
-                    Price = product.Data.Price,
-                    Count = product.Data.Count,
-                    ImageUrl = product.Data.ImageUrl,
-                    ImageLocalPath = product.Data.ImageLocalPath,
-                };
-
+                var productViewModel = product.Data!;
                 return View(productViewModel);
             }
 
-            else
-            {
-                foreach (var error in product.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(GetProducts));
-            }
+            TempData["error"] = product.ValidationErrors;
+            return RedirectToAction(nameof(GetProducts));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 
     // GET: ProductController/Create
-    public async Task<ActionResult> Create()
+    public Task<ActionResult> Create()
     {
-        return View();
+        return Task.FromResult<ActionResult>(View());
     }
 
     // POST: ProductController/Create
@@ -132,20 +110,14 @@ public sealed class ProductController(
                 return RedirectToAction(nameof(GetProducts));
             }
 
-            else
-            {
-                foreach (var error in response.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(Create));
-            }
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Create));
         }
 
-        catch
+        catch (Exception exception)
         {
-            return View(createProductViewModel);
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction("Index", "Home");
         }
     }
 
@@ -160,7 +132,7 @@ public sealed class ProductController(
             {
                 UpdateProductViewModel updateUserViewModel = new()
                 {
-                    Id = product.Data.Id,
+                    Id = product.Data!.Id,
                     Name = product.Data.Name,
                     Description = product.Data.Description,
                     ProductCategory = product.Data.ProductCategory,
@@ -170,21 +142,14 @@ public sealed class ProductController(
                 return View(updateUserViewModel);
             }
 
-            else
-            {
-                foreach (var error in product.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(GetProducts));
-            }
+            TempData["error"] = product.ValidationErrors;
+            return RedirectToAction(nameof(GetProducts));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction("Index", "Home");
         }
     }
 
@@ -195,8 +160,7 @@ public sealed class ProductController(
     {
         try
         {
-            ProductResultViewModel response =
-                await productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
+            var response = await productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
 
             if (response.IsSuccess)
             {
@@ -204,20 +168,14 @@ public sealed class ProductController(
                 return RedirectToAction(nameof(GetProducts));
             }
 
-            else
-            {
-                foreach (var error in response.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(Edit));
-            }
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Edit));
         }
 
-        catch
+        catch (Exception exception)
         {
-            return View(updateProductViewModel);
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction("Index", "Home");
         }
     }
 
@@ -228,62 +186,57 @@ public sealed class ProductController(
     {
         try
         {
-            ProductResultViewModel response =
-                await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
+            var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
             await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
-            
+
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
                 return RedirectToAction(nameof(GetProducts));
             }
 
-            else
-            {
-                foreach (var error in response.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
-                return RedirectToAction(nameof(GetProducts));
-            }
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(GetProducts));
         }
 
-        catch
+        catch (Exception exception)
         {
-            return RedirectToAction(nameof(Index));
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction("Index", "Home");
         }
     }
 
     public async Task<ActionResult> DeleteProductList(List<int> selectedProducts)
     {
-        if (selectedProducts.Count <= 1)
+        try
         {
-            TempData["error"] = "Выберите хотя бы один продукт для удаления.";
-            return RedirectToAction(nameof(GetProducts));
-        }
-
-        var deleteProducts = new DeleteProductsViewModel { ProductIds = selectedProducts };
-        var response = await productService.DeleteProductsAsync(deleteProducts);
-
-        await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
-        await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
-
-        if (response.IsSuccess)
-        {
-            TempData["success"] = response.SuccessMessage;
-            return RedirectToAction(nameof(GetProducts));
-        }
-
-        else
-        {
-            foreach (var error in response.ValidationErrors!)
+            if (selectedProducts.Count <= 1)
             {
-                TempData["error"] = error;
+                TempData["error"] = "Выберите хотя бы один продукт для удаления.";
+                return RedirectToAction(nameof(GetProducts));
             }
 
+            var deleteProducts = new DeleteProductsViewModel(selectedProducts);
+            var response = await productService.DeleteProductsAsync(deleteProducts);
+
+            await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
+            await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetProducts));
+            }
+
+            TempData["error"] = response.ValidationErrors;
             return RedirectToAction(nameof(GetProducts));
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction("Index", "Home");
         }
     }
 }

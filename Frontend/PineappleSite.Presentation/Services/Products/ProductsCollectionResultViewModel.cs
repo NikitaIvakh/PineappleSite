@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Products
+﻿namespace PineappleSite.Presentation.Services.Products;
+
+public sealed class ProductsCollectionResultViewModel<T> : ProductResultViewModel<IReadOnlyCollection<T>>
 {
-    public class ProductsCollectionResultViewModel<Type> : ProductResultViewModel<IReadOnlyCollection<Type>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; init; }
 }
