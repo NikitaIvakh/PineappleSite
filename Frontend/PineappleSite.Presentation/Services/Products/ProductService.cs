@@ -318,15 +318,15 @@ namespace PineappleSite.Presentation.Services.Products
                         content_.Add(new System.Net.Http.StringContent(ConvertToString(price, System.Globalization.CultureInfo.InvariantCulture)), "Price");
                     }
 
-                    if (avatar == null)
-                        throw new System.ArgumentNullException("avatar");
-                    else
+                    var content_avatar_ = avatar != null && avatar.Data != null ? new System.Net.Http.StreamContent(avatar.Data) : null;
+
+                    if (content_avatar_ != null)
                     {
-                        var content_avatar_ = new System.Net.Http.StreamContent(avatar.Data);
                         if (!string.IsNullOrEmpty(avatar.ContentType))
                             content_avatar_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(avatar.ContentType);
                         content_.Add(content_avatar_, "Avatar", avatar.FileName ?? "Avatar");
                     }
+
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("POST");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
@@ -450,29 +450,18 @@ namespace PineappleSite.Presentation.Services.Products
                         content_.Add(new System.Net.Http.StringContent(ConvertToString(price, System.Globalization.CultureInfo.InvariantCulture)), "Price");
                     }
 
-                    if (avatar == null)
-                        throw new System.ArgumentNullException("avatar");
-                    else
+                    var content_avatar_ = avatar != null && avatar.Data != null ? new System.Net.Http.StreamContent(avatar.Data) : null;
+
+                    if (content_avatar_ != null)
                     {
-                        var content_avatar_ = new System.Net.Http.StreamContent(avatar.Data);
                         if (!string.IsNullOrEmpty(avatar.ContentType))
                             content_avatar_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse(avatar.ContentType);
                         content_.Add(content_avatar_, "Avatar", avatar.FileName ?? "Avatar");
                     }
 
-                    if (imageUrl == null)
-                        throw new System.ArgumentNullException("imageUrl");
-                    else
-                    {
-                        content_.Add(new System.Net.Http.StringContent(ConvertToString(imageUrl, System.Globalization.CultureInfo.InvariantCulture)), "ImageUrl");
-                    }
+                    content_.Add(new System.Net.Http.StringContent(ConvertToString(imageUrl, System.Globalization.CultureInfo.InvariantCulture)), "ImageUrl");
+                    content_.Add(new System.Net.Http.StringContent(ConvertToString(imageLocalPath, System.Globalization.CultureInfo.InvariantCulture)), "ImageLocalPath");
 
-                    if (imageLocalPath == null)
-                        throw new System.ArgumentNullException("imageLocalPath");
-                    else
-                    {
-                        content_.Add(new System.Net.Http.StringContent(ConvertToString(imageLocalPath, System.Globalization.CultureInfo.InvariantCulture)), "ImageLocalPath");
-                    }
                     request_.Content = content_;
                     request_.Method = new System.Net.Http.HttpMethod("PUT");
                     request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));

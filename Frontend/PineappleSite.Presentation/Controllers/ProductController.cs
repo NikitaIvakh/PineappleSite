@@ -182,13 +182,15 @@ public sealed class ProductController(
     // POST: ProductController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(DeleteProductViewModel deleteProductViewModel)
+    public async Task<ActionResult> Delete(int id)
     {
         try
         {
+            var deleteProductViewModel = new DeleteProductViewModel(id);
             var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
-            await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
-            await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
+            // TODO: 
+            // await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
+            // await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
 
             if (response.IsSuccess)
             {
@@ -220,8 +222,9 @@ public sealed class ProductController(
             var deleteProducts = new DeleteProductsViewModel(selectedProducts);
             var response = await productService.DeleteProductsAsync(deleteProducts);
 
-            await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
-            await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
+            // TODO:
+            // await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
+            // await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)
             {

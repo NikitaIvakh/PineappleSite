@@ -114,8 +114,8 @@ public sealed class CreateProductRequestHandler(
 
             else
             {
-                product.ImageUrl = product.ImageUrl;
-                product.ImageLocalPath = product.ImageLocalPath;
+                product.ImageUrl = "https://placehold.co/600x400";
+                product.ImageLocalPath = "https://placehold.co/600x400";
             }
 
             memoryCache.Remove(CacheKey);
