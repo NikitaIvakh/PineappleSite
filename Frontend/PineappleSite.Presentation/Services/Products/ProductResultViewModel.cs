@@ -1,4 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Products;
+﻿using PineappleSite.Presentation.Models.Products;
+
+namespace PineappleSite.Presentation.Services.Products;
 
 public class ProductResultViewModel
 {
@@ -20,7 +22,7 @@ public class ProductResultViewModel<T> : ProductResultViewModel
         SuccessMessage = successMessage;
         Data = data;
     }
-
+    
     public ProductResultViewModel(string? errorMessage, int? statusCode, T? data, string validationErrors)
     {
         ErrorMessage = errorMessage;
@@ -50,5 +52,5 @@ public class ProductResultViewModel<T> : ProductResultViewModel
     {
     }
 
-    public T? Data { get; set; }
+    public T Data { get; set; }
 }

@@ -50,7 +50,7 @@ public sealed class HomeController(
                                        StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
 
-                    products = new ProductsCollectionResultViewModel<GetProductsViewModel>
+                    products = new ProductsCollectionResultViewModel<ProductViewModel>
                     {
                         Data = filteredProductList,
                     };
@@ -62,7 +62,7 @@ public sealed class HomeController(
                 const int pageIndex = 9;
                 var filteredProducts = products.Data!.AsQueryable();
                 var paginatedProducts =
-                    PaginatedList<GetProductsViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
+                    PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
 
                 return View(paginatedProducts);
             }
@@ -87,7 +87,7 @@ public sealed class HomeController(
 
             if (product.IsSuccess)
             {
-                ProductViewModel productViewModel = new()
+                var productViewModel = new ProductViewModel
                 {
                     Id = product.Data!.Id,
                     Name = product.Data.Name,
@@ -96,13 +96,13 @@ public sealed class HomeController(
                     Price = product.Data.Price,
                     Count = product.Data.Count,
                     ImageUrl = product.Data.ImageUrl,
-                    ImageLocalPath = product.Data.ImageLocalPath,
+                    ImageLocalPath = product.Data.ImageLocalPath
                 };
 
                 var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
                     ?.Value;
 
-                var result = await favouriteService.GetFavouriteProductsAsync(userId!);
+                var result = await favouriteService.GetFavouriteProductsAsync(userId);
                 var allFavouriteProducts =
                     result.Data!.FavouriteDetails.FindAll(key => key.ProductId == productViewModel.Id);
 
@@ -192,7 +192,7 @@ public sealed class HomeController(
         {
             var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
             var favouriteHeader = new FavouriteHeaderViewModel { UserId = userId, };
-            var favoriteDetailsViewModel = new FavouriteDetailsViewModel { ProductId = productViewModel.Product.Id, };
+            var favoriteDetailsViewModel = new FavouriteDetailsViewModel { ProductId = productViewModel.Product.Id };
             List<FavouriteDetailsViewModel> favoriteDetailsViewModels = [favoriteDetailsViewModel];
 
             FavouriteViewModel favouritesViewModel = new(favouriteHeader, favoriteDetailsViewModels);

@@ -21,10 +21,10 @@ public sealed class DeleteFavouriteProductRequestHandler(
     {
         try
         {
-            var favouriteProduct =
-                detailsRepository.GetAll().FirstOrDefault(key => key.ProductId == request.ProductId);
+            var favouriteProducts =
+                detailsRepository.GetAll().Where(key => key.ProductId == request.ProductId).ToList();
 
-            if (favouriteProduct is null)
+            if (favouriteProducts.Count == 0)
             {
                 return new Result<Unit>
                 {
@@ -38,26 +38,29 @@ public sealed class DeleteFavouriteProductRequestHandler(
                 };
             }
 
-            var totalRemoveFavouriteItems = detailsRepository
-                .GetAll().Count(key => key.FavouriteHeaderId == favouriteProduct.FavouriteHeaderId);
-
-            await detailsRepository.DeleteAsync(favouriteProduct);
-
-            if (totalRemoveFavouriteItems == 1)
+            foreach (var favouriteProduct in favouriteProducts)
             {
-                var favouriteHeaderDelete = headerRepository.GetAll()
-                    .FirstOrDefault(key => key.FavouriteHeaderId == favouriteProduct.FavouriteHeaderId);
+                await detailsRepository.DeleteAsync(favouriteProduct);
+            }
 
+            var favouriteHeaderIds = favouriteProducts.Select(fp => fp.FavouriteHeaderId).Distinct().ToList();
+
+            foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds let totalDetailsWithHeader = detailsRepository.GetAll()
+                         .Count(key => key.FavouriteHeaderId == favouriteHeaderId) where totalDetailsWithHeader == 1 select headerRepository.GetAll()
+                         .FirstOrDefault(key => key.FavouriteHeaderId == favouriteHeaderId))
+            {
                 if (favouriteHeaderDelete is null)
                 {
                     return new Result<Unit>
                     {
                         StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage =
-                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture),
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound",
+                                ErrorMessages.Culture),
                         ValidationErrors =
                         [
-                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture) ??
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound",
+                                ErrorMessages.Culture) ??
                             string.Empty
                         ]
                     };

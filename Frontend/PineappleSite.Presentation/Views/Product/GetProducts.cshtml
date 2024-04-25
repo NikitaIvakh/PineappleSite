@@ -1,6 +1,6 @@
 ﻿@using PineappleSite.Presentation.Models.Paginated
 @using System.Globalization
-@model PaginatedList<PineappleSite.Presentation.Models.Products.GetProductsViewModel>
+@model PaginatedList<PineappleSite.Presentation.Models.Products.ProductViewModel>
 
 @{
     ViewData["Title"] = Localizer["List of products"];
@@ -82,15 +82,15 @@
                                             <img src="@item.ImageUrl" alt="" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: 0;">
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-sm btn-success" asp-action="Details" asp-route-id="@item.Id">@Localizer["Details"]</a>
+                                            <a class="btn btn-sm btn-success" asp-action="Details" asp-route-productId="@item.Id">@Localizer["Details"]</a>
                                         </td>
                                         <td class="text-center">
-                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-id="@item.Id">
+                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-productId="@item.Id">
                                                 <i class="bi bi-pencil-square"></i>
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-id="@item.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-productId="@item.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name">
                                                 <i class="bi bi-trash">Удалить</i>
                                             </button>
                                         </td>

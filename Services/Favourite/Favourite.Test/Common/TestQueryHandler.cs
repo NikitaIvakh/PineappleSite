@@ -26,7 +26,7 @@ public class TestQueryHandler : IDisposable
     {
         var productMock = new Mock<IProductService>();
 
-        productMock.Setup(mock => mock.GetProductListAsync())
+        productMock.Setup(mock => mock.GetProductsAsync())
             .ReturnsAsync(new CollectionResult<ProductDto>
             {
                 Data = new List<ProductDto>()

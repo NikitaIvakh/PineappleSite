@@ -100,15 +100,14 @@ public sealed class FavouriteService(
 
             if (apiResponse.IsSuccess)
             {
-                return new FavouriteResult<FavouriteHeaderViewModel>
+                return new FavouriteResult
                 {
                     StatusCode = apiResponse.StatusCode,
                     SuccessMessage = apiResponse.SuccessMessage,
-                    Data = mapper.Map<FavouriteHeaderViewModel>(apiResponse.Data),
                 };
             }
 
-            return new FavouriteResult<FavouriteHeaderViewModel>
+            return new FavouriteResult
             {
                 StatusCode = apiResponse.StatusCode,
                 ErrorMessage = apiResponse.ErrorMessage,
@@ -118,7 +117,7 @@ public sealed class FavouriteService(
 
         catch (FavouriteExceptions<string> exceptions)
         {
-            return new FavouriteResult<FavouriteHeaderViewModel>
+            return new FavouriteResult
             {
                 StatusCode = exceptions.StatusCode,
                 ErrorMessage = exceptions.Response,

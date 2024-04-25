@@ -4,6 +4,6 @@ using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Requests.Queries;
 
-public sealed class GetProductsRequest : IRequest<CollectionResult<GetProductsDto>>
+public sealed class GetProductsRequest : IRequest<CollectionResult<ProductDto>>
 {
 }

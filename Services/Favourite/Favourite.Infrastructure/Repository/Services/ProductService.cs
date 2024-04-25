@@ -7,10 +7,10 @@ namespace Favourite.Infrastructure.Repository.Services;
 
 public sealed class ProductService(IHttpClientFactory httpClientFactory) : IProductService
 {
-    public async Task<CollectionResult<ProductDto>> GetProductListAsync()
+    public async Task<CollectionResult<ProductDto>> GetProductsAsync()
     {
         var httpClient = httpClientFactory.CreateClient("Product");
-        var response = await httpClient.GetAsync($"/api/Product");
+        var response = await httpClient.GetAsync($"/api/Product/GetProducts");
 
         if (!response.IsSuccessStatusCode)
         {

@@ -86,7 +86,7 @@ public sealed class GetFavouriteProductsRequestHandler(
             }
 
             var getFavouriteDto = new FavouriteDto(favouriteHeader, favouriteDetails);
-            var products = await productService.GetProductListAsync();
+            var products = await productService.GetProductsAsync();
 
             foreach (var item in getFavouriteDto.FavouriteDetails)
             {

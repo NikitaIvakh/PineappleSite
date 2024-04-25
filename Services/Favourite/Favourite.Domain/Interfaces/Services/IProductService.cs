@@ -5,5 +5,5 @@ namespace Favourite.Domain.Interfaces.Services;
 
 public interface IProductService
 {
-    Task<CollectionResult<ProductDto>> GetProductListAsync();
+    Task<CollectionResult<ProductDto>> GetProductsAsync();
 }

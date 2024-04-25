@@ -1,8 +1,8 @@
-﻿using Favourite.Domain.Enum;
+﻿using Product.Domain.Enum;
 
-namespace Favourite.Domain.DTOs;
+namespace Product.Domain.DTOs;
 
-public sealed class ProductDto
+public sealed class ProductDto : IProductDto
 {
     public int Id { get; init; }
 

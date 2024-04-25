@@ -47,9 +47,12 @@ public sealed class MappingProfile : Profile
 
         #region Product Mapping
 
-        CreateMap<GetProductDto, ProductViewModel>().ReverseMap();
-        CreateMap<GetProductsDto, ProductViewModel>().ReverseMap();
+        CreateMap<Services.Products.ProductDto, ProductViewModel>().ReverseMap();
         CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+
+        CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
+        CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
+        CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
         CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
 
         #endregion

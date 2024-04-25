@@ -37,7 +37,7 @@ public sealed class ProductController(
                                        StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
 
-                    products = new ProductsCollectionResultViewModel<GetProductsViewModel>
+                    products = new ProductsCollectionResultViewModel<ProductViewModel>
                     {
                         Data = filteredProductsList,
                     };
@@ -49,7 +49,7 @@ public sealed class ProductController(
                 const int pageSize = 10;
                 var filteredProducts = products.Data!.AsQueryable();
                 var paginatedProducts =
-                    PaginatedList<GetProductsViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
+                    PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
 
                 return paginatedProducts.Count == 0 ? View() : View(paginatedProducts);
             }
@@ -66,15 +66,23 @@ public sealed class ProductController(
     }
 
     // GET: ProductController/Details/5
-    public async Task<ActionResult> Details(int id)
+    public async Task<ActionResult> Details(int productId)
     {
         try
         {
-            var product = await productService.GetProductAsync(id);
+            var product = await productService.GetProductAsync(productId);
 
             if (product.IsSuccess)
             {
-                var productViewModel = product.Data!;
+                var productViewModel = new ProductViewModel()
+                {
+                    Id = product.Data!.Id,
+                    Name = product.Data.Name,
+                    Description = product.Data.Description,
+                    ProductCategory = product.Data.ProductCategory,
+                    Price = product.Data.Price,
+                };
+                
                 return View(productViewModel);
             }
 
@@ -122,11 +130,11 @@ public sealed class ProductController(
     }
 
     // GET: ProductController/Edit/5
-    public async Task<ActionResult> Edit(int id)
+    public async Task<ActionResult> Edit(int productId)
     {
         try
         {
-            var product = await productService.GetProductAsync(id);
+            var product = await productService.GetProductAsync(productId);
 
             if (product.IsSuccess)
             {
@@ -182,15 +190,15 @@ public sealed class ProductController(
     // POST: ProductController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(int id)
+    public async Task<ActionResult> Delete(int productId)
     {
         try
         {
-            var deleteProductViewModel = new DeleteProductViewModel(id);
+            var deleteProductViewModel = new DeleteProductViewModel(productId);
             var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
             // TODO: 
             // await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
-            // await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
+            await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
 
             if (response.IsSuccess)
             {
@@ -224,7 +232,7 @@ public sealed class ProductController(
 
             // TODO:
             // await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
-            // await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
+            await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)
             {

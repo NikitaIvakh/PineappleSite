@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Product.Application.Features.Requests.Queries;
@@ -10,19 +11,19 @@ using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Commands.Queries;
 
-public class GetProductsRequestHandler(IProductRepository repository, IMemoryCache memoryCache)
-    : IRequestHandler<GetProductsRequest, CollectionResult<GetProductsDto>>
+public class GetProductsRequestHandler(IProductRepository repository, IMemoryCache memoryCache, IMapper mapper)
+    : IRequestHandler<GetProductsRequest, CollectionResult<ProductDto>>
 {
     private const string CacheKey = "cacheProductKey";
 
-    public async Task<CollectionResult<GetProductsDto>> Handle(GetProductsRequest request,
+    public async Task<CollectionResult<ProductDto>> Handle(GetProductsRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
-            if (memoryCache.TryGetValue(CacheKey, out IReadOnlyCollection<GetProductsDto>? products))
+            if (memoryCache.TryGetValue(CacheKey, out IReadOnlyCollection<ProductDto>? products))
             {
-                return new CollectionResult<GetProductsDto>
+                return new CollectionResult<ProductDto>
                 {
                     Data = products,
                     Count = products!.Count,
@@ -32,11 +33,11 @@ public class GetProductsRequestHandler(IProductRepository repository, IMemoryCac
                 };
             }
 
-            var getAllProducts = await repository.GetAll().ToListAsync(cancellationToken);
+            var getAllProducts = await repository.GetAll().OrderBy(key => key.Id).ToListAsync(cancellationToken);
 
             if (getAllProducts.Count == 0)
             {
-                return new CollectionResult<GetProductsDto>
+                return new CollectionResult<ProductDto>
                 {
                     StatusCode = (int)StatusCode.NoContent,
                     ErrorMessage = SuccessMessage.ResourceManager.GetString("ProductsNotFound", ErrorMessage.Culture),
@@ -48,24 +49,13 @@ public class GetProductsRequestHandler(IProductRepository repository, IMemoryCac
                 };
             }
 
-            var getProducts = getAllProducts.Select(key => new GetProductsDto
-            (
-                Id: key.Id,
-                Name: key.Name,
-                Description: key.Description,
-                ProductCategory: key.ProductCategory,
-                Price: key.Price,
-                ImageUrl: key.ImageUrl,
-                ImageLocalPath: key.ImageLocalPath
-            )).OrderByDescending(key => key.Id).ToList();
-
             memoryCache.Remove(CacheKey);
 
-            return new CollectionResult<GetProductsDto>
+            return new CollectionResult<ProductDto>
             {
-                Data = getProducts,
-                Count = getProducts.Count,
+                Count = getAllProducts.Count,
                 StatusCode = (int)StatusCode.Ok,
+                Data = mapper.Map<IReadOnlyCollection<ProductDto>>(getAllProducts),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("ProductsSuccessfullyGot", SuccessMessage.Culture)
             };
@@ -74,7 +64,7 @@ public class GetProductsRequestHandler(IProductRepository repository, IMemoryCac
         catch (Exception ex)
         {
             memoryCache.Remove(CacheKey);
-            return new CollectionResult<GetProductsDto>
+            return new CollectionResult<ProductDto>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

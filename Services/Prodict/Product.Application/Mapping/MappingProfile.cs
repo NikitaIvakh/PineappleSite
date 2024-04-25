@@ -8,8 +8,7 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<ProductEntity, GetProductsDto>().ReverseMap();
-        CreateMap<ProductEntity, GetProductDto>().ReverseMap();
+        CreateMap<ProductEntity, ProductDto>().ReverseMap();
         CreateMap<ProductEntity, CreateProductDto>().ReverseMap();
         CreateMap<ProductEntity, UpdateProductDto>().ReverseMap();
         CreateMap<ProductEntity, DeleteProductDto>().ReverseMap();

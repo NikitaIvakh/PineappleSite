@@ -9,12 +9,11 @@ public class BaseProductService(
     IProductClient productClient,
     IHttpContextAccessor contextAccessor)
 {
-    protected static ProductResultViewModel<ProductViewModel> ConvertProductException(
-        ProductExceptions<string> productExceptions)
+    protected static ProductResultViewModel ConvertProductException(ProductExceptions<string> productExceptions)
     {
         return productExceptions.StatusCode switch
         {
-            403 => new ProductResultViewModel<ProductViewModel>
+            403 => new ProductResultViewModel
             {
                 StatusCode = 403,
                 ErrorMessage =
@@ -23,14 +22,14 @@ public class BaseProductService(
                     "Пользователям не доступна эта страница. Эта страница доступна только администраторам."
             },
 
-            401 => new ProductResultViewModel<ProductViewModel>
+            401 => new ProductResultViewModel
             {
                 StatusCode = 401,
                 ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
                 ValidationErrors = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."
             },
 
-            _ => new ProductResultViewModel<ProductViewModel>
+            _ => new ProductResultViewModel
             {
                 StatusCode = 500,
                 ErrorMessage = productExceptions.Result,

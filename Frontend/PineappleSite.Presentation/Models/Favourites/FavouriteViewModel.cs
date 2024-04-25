@@ -4,7 +4,7 @@ public sealed class FavouriteViewModel(
     FavouriteHeaderViewModel favouriteHeader,
     List<FavouriteDetailsViewModel> favouriteDetails)
 {
-    public FavouriteHeaderViewModel FavouriteHeader { get; set; } = favouriteHeader;
+    public FavouriteHeaderViewModel FavouriteHeader { get; init; } = favouriteHeader;
 
-    public List<FavouriteDetailsViewModel> FavouriteDetails { get; set; } = favouriteDetails;
+    public List<FavouriteDetailsViewModel> FavouriteDetails { get; init; } = favouriteDetails;
 }

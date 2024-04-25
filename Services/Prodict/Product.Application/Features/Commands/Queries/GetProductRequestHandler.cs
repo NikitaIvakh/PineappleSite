@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Product.Application.Features.Requests.Queries;
@@ -10,18 +11,18 @@ using Product.Domain.ResultProduct;
 
 namespace Product.Application.Features.Commands.Queries;
 
-public sealed class GetProductRequestHandler(IProductRepository repository, IMemoryCache memoryCache)
-    : IRequestHandler<GetProductRequest, Result<GetProductDto>>
+public sealed class GetProductRequestHandler(IProductRepository repository, IMemoryCache memoryCache, IMapper mapper)
+    : IRequestHandler<GetProductRequest, Result<ProductDto>>
 {
     private const string CacheKey = "cacheProductKey";
 
-    public async Task<Result<GetProductDto>> Handle(GetProductRequest request, CancellationToken cancellationToken)
+    public async Task<Result<ProductDto>> Handle(GetProductRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            if (memoryCache.TryGetValue(CacheKey, out GetProductDto? productDto))
+            if (memoryCache.TryGetValue(CacheKey, out ProductDto? productDto))
             {
-                return new Result<GetProductDto>
+                return new Result<ProductDto>
                 {
                     Data = productDto,
                     StatusCode = (int)StatusCode.Ok,
@@ -30,12 +31,12 @@ public sealed class GetProductRequestHandler(IProductRepository repository, IMem
                 };
             }
 
-            var getProductFromDb =
+            var product =
                 await repository.GetAll().FirstOrDefaultAsync(key => key.Id == request.Id, cancellationToken);
 
-            if (getProductFromDb is null)
+            if (product is null)
             {
-                return new Result<GetProductDto>
+                return new Result<ProductDto>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("ProductNotFound", ErrorMessage.Culture),
@@ -47,22 +48,11 @@ public sealed class GetProductRequestHandler(IProductRepository repository, IMem
                 };
             }
 
-            var getProduct = new GetProductDto
-            (
-                Id: getProductFromDb.Id,
-                Name: getProductFromDb.Name,
-                Description: getProductFromDb.Description,
-                ProductCategory: getProductFromDb.ProductCategory,
-                Price: getProductFromDb.Price,
-                ImageUrl: getProductFromDb.ImageUrl,
-                ImageLocalPath: getProductFromDb.ImageLocalPath
-            );
-
             memoryCache.Remove(CacheKey);
 
-            return new Result<GetProductDto>
+            return new Result<ProductDto>
             {
-                Data = getProduct,
+                Data = mapper.Map<ProductDto>(product),
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("ProductSuccessfullyGot", SuccessMessage.Culture)
@@ -72,7 +62,7 @@ public sealed class GetProductRequestHandler(IProductRepository repository, IMem
         catch (Exception ex)
         {
             memoryCache.Remove(CacheKey);
-            return new Result<GetProductDto>
+            return new Result<ProductDto>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

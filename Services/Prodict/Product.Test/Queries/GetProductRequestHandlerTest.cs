@@ -13,7 +13,7 @@ public sealed class GetProductRequestHandlerTest : TestQueryHandler
     public async Task GetProductDetailsRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new GetProductRequestHandler(Repository, MemoryCache);
+        var handler = new GetProductRequestHandler(Repository, MemoryCache, Mapper);
         const int producId = 4;
 
         // Act
@@ -30,7 +30,7 @@ public sealed class GetProductRequestHandlerTest : TestQueryHandler
     public async Task GetProductDetailsRequestHandlerTest_FailOrWrongId()
     {
         // Arrange
-        var handler = new GetProductRequestHandler(Repository, MemoryCache);
+        var handler = new GetProductRequestHandler(Repository, MemoryCache, Mapper);
         const int productId = 999;
 
         // Act && Assert

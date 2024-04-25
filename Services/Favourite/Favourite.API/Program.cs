@@ -1,5 +1,7 @@
+using System.Net.Http.Headers;
 using Carter;
 using Favourite.API;
+using Favourite.API.Utility;
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
 using HealthChecks.UI.Client;
@@ -16,7 +18,10 @@ builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 
 builder.Services.AddHttpClient("Product",
-    key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]!));
+    key =>
+    {
+        key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]!);
+    });
 
 builder.Host.UseSerilog((context, logConfig) =>
 {

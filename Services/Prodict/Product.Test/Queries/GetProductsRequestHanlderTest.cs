@@ -13,7 +13,7 @@ public sealed class GetProductListRequestHanlderTest : TestQueryHandler
     public async Task GetProductListRequestHanlderTest_Success()
     {
         // Arrange
-        var handler = new GetProductsRequestHandler(Repository, MemoryCache);
+        var handler = new GetProductsRequestHandler(Repository, MemoryCache, Mapper);
 
         // Act
         var result = await handler.Handle(new GetProductsRequest(), CancellationToken.None);

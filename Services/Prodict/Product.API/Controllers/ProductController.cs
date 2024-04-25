@@ -14,9 +14,8 @@ namespace Product.API.Controllers;
 public sealed class ProductController : ControllerBase
 {
     [HttpGet("GetProducts")]
-    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<CollectionResult<GetProductsDto>>> GetProducts(ISender sender,
-        ILogger<GetProductsDto> logger)
+    public async Task<ActionResult<CollectionResult<ProductDto>>> GetProducts(ISender sender,
+        ILogger<ProductDto> logger)
     {
         var request = await sender.Send(new GetProductsRequest());
 
@@ -29,21 +28,21 @@ public sealed class ProductController : ControllerBase
         logger.LogError("LogDebugError ================ Ошибка получения продуктов");
         return BadRequest(string.Join(", ", request.ValidationErrors!));
     }
-
-    [HttpGet("GetProduct/{id:int}")]
+    
+    [HttpGet("GetProduct/{productId:int}")]
     [Authorize(Policy = StaticDetails.UserAndAdministratorPolicy)]
-    public async Task<ActionResult<Result<GetProductDto>>> GetProduct(ISender sender, ILogger<GetProductDto> logger,
-        [FromRoute] int id)
+    public async Task<ActionResult<Result<ProductDto>>> GetProduct(ISender sender, ILogger<ProductDto> logger,
+        [FromRoute] int productId)
     {
-        var request = await sender.Send(new GetProductRequest(id));
+        var request = await sender.Send(new GetProductRequest(productId));
 
         if (request.IsSuccess)
         {
-            logger.LogDebug($"LogDebug ================ Продукт успешно получен: {id}");
+            logger.LogDebug($"LogDebug ================ Продукт успешно получен: {productId}");
             return Ok(request);
         }
 
-        logger.LogError($"LogDebugError ================ Ошибка получения продукта: {id}");
+        logger.LogError($"LogDebugError ================ Ошибка получения продукта: {productId}");
         return BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
@@ -64,14 +63,14 @@ public sealed class ProductController : ControllerBase
         return BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    [HttpPut("UpdateProduct/{id:int}")]
+    [HttpPut("UpdateProduct/{productId:int}")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<Result<Unit>>> UpdateProduct(ISender sender, ILogger<Unit> logger,
-        [FromRoute] int id, [FromForm] UpdateProductDto updateProductDto)
+        [FromRoute] int productId, [FromForm] UpdateProductDto updateProductDto)
     {
         var command = await sender.Send(new UpdateProductRequest(updateProductDto));
 
-        if (command.IsSuccess && id == updateProductDto.Id)
+        if (command.IsSuccess && productId == updateProductDto.Id)
         {
             logger.LogDebug($"LogDebug ================ Продукт успешно обновлен: {updateProductDto.Id}");
             return Ok(command);
@@ -81,19 +80,19 @@ public sealed class ProductController : ControllerBase
         return BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    [HttpDelete("DeleteProduct/{id:int}")]
+    [HttpDelete("DeleteProduct/{productId:int}")]
     [Authorize(Policy = StaticDetails.AdministratorPolicy)]
-    public async Task<ActionResult<Result<Unit>>> DeleteProduct(ISender sender, ILogger<int> logger, [FromRoute] int id,
+    public async Task<ActionResult<Result<Unit>>> DeleteProduct(ISender sender, ILogger<int> logger, [FromRoute] int productId,
         [FromBody] DeleteProductDto deleteProductDto)
     {
         var command = await sender.Send(new DeleteProductRequest(deleteProductDto));
 
-        if (command.IsSuccess)
+        if (command.IsSuccess && productId == deleteProductDto.Id)
         {
             logger.LogDebug($"LogDebug ================ Продукт успешно удален: {deleteProductDto.Id}");
             return Ok(command);
         }
-
+        
         logger.LogError($"LogDebugError ================ Ошибка удаления продукта: {deleteProductDto.Id}");
         return BadRequest(string.Join(", ", command.ValidationErrors!));
     }

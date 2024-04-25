@@ -14,36 +14,19 @@ public sealed class ProductService(
 {
     private readonly IProductClient _productClient = productClient;
 
-    public async Task<ProductsCollectionResultViewModel<GetProductsViewModel>> GetAllProductsAsync()
+    public async Task<ProductsCollectionResultViewModel<ProductViewModel>> GetAllProductsAsync()
     {
         AddBearerToken();
         try
         {
             var products = await _productClient.GetProductsAsync();
-            var getProducts = products.Data.Select(key => new GetProductsViewModel
-            (
-                Id: key.Id,
-                Name: key.Name,
-                Description: key.Description,
-                ProductCategory: key.ProductCategory,
-                Price: key.Price,
-                ImageUrl: key.ImageUrl,
-                ImageLocalPath: key.ImageLocalPath,
-                Count: 1
-            )).ToList();
 
             if (products.IsSuccess)
             {
-                return new ProductsCollectionResultViewModel<GetProductsViewModel>()
-                {
-                    Data = getProducts,
-                    Count = products.Count,
-                    StatusCode = products.StatusCode,
-                    SuccessMessage = products.SuccessMessage,
-                };
+                return mapper.Map<ProductsCollectionResultViewModel<ProductViewModel>>(products);
             }
 
-            return new ProductsCollectionResultViewModel<GetProductsViewModel>
+            return new ProductsCollectionResultViewModel<ProductViewModel>
             {
                 StatusCode = products.StatusCode,
                 ErrorMessage = products.ErrorMessage,
@@ -53,7 +36,7 @@ public sealed class ProductService(
 
         catch (ProductExceptions<string> exceptions)
         {
-            return new ProductsCollectionResultViewModel<GetProductsViewModel>
+            return new ProductsCollectionResultViewModel<ProductViewModel>
             {
                 ErrorMessage = exceptions.Result,
                 StatusCode = exceptions.StatusCode,
@@ -62,33 +45,24 @@ public sealed class ProductService(
         }
     }
 
-    public async Task<ProductResultViewModel<GetProductViewModel>> GetProductAsync(int id)
+    public async Task<ProductResultViewModel<ProductViewModel>> GetProductAsync(int productId)
     {
         AddBearerToken();
         try
         {
-            var product = await _productClient.GetProductAsync(id);
-            var getProduct = new GetProductViewModel(
-                Id: product.Data.Id,
-                Name: product.Data.Name,
-                Description: product.Data.Description,
-                ProductCategory: product.Data.ProductCategory,
-                Price: product.Data.Price,
-                ImageUrl: product.Data.ImageUrl,
-                ImageLocalPath: product.Data.ImageLocalPath,
-                Count: 1);
+            var product = await _productClient.GetProductAsync(productId);
 
             if (product.IsSuccess)
             {
-                return new ProductResultViewModel<GetProductViewModel>
+                return new ProductResultViewModel<ProductViewModel>
                 {
-                    Data = getProduct,
                     StatusCode = product.StatusCode,
                     SuccessMessage = product.SuccessMessage,
+                    Data = mapper.Map<ProductViewModel>(product.Data),
                 };
             }
 
-            return new ProductResultViewModel<GetProductViewModel>
+            return new ProductResultViewModel<ProductViewModel>
             {
                 StatusCode = product.StatusCode,
                 ErrorMessage = product.ErrorMessage,
@@ -98,7 +72,7 @@ public sealed class ProductService(
 
         catch (ProductExceptions<string> exceptions)
         {
-            return new ProductResultViewModel<GetProductViewModel>
+            return new ProductResultViewModel<ProductViewModel>
             {
                 ErrorMessage = exceptions.Result,
                 StatusCode = exceptions.StatusCode,
@@ -154,8 +128,7 @@ public sealed class ProductService(
         }
     }
 
-    public async Task<ProductResultViewModel> UpdateProductAsync(int id,
-        UpdateProductViewModel product)
+    public async Task<ProductResultViewModel> UpdateProductAsync(int productId, UpdateProductViewModel product)
     {
         AddBearerToken();
         try
@@ -168,7 +141,7 @@ public sealed class ProductService(
             }
 
             var apiResponse = await _productClient.UpdateProductAsync(
-                id,
+                productId,
                 product.Id,
                 product.Name,
                 product.Description,
@@ -206,8 +179,7 @@ public sealed class ProductService(
         }
     }
 
-    public async Task<ProductResultViewModel> DeleteProductAsync(int id,
-        DeleteProductViewModel product)
+    public async Task<ProductResultViewModel> DeleteProductAsync(int productId, DeleteProductViewModel product)
     {
         AddBearerToken();
         try

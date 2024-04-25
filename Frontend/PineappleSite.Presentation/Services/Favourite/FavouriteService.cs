@@ -590,13 +590,13 @@ public partial class FavouriteDetailsDto
     [JsonProperty("favouriteDetailsId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public int FavouriteDetailsId { get; set; }
 
-    [JsonProperty("favouriteHeader", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteHeader", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public FavouriteHeaderDto FavouriteHeader { get; set; }
 
     [JsonProperty("favouriteHeaderId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public int FavouriteHeaderId { get; set; }
 
-    [JsonProperty("product", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("product", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public ProductDto Product { get; set; }
 
     [JsonProperty("productId", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
@@ -607,10 +607,10 @@ public partial class FavouriteDetailsDto
 [GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class FavouriteDto
 {
-    [JsonProperty("favouriteHeader", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteHeader", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public FavouriteHeaderDto FavouriteHeader { get; set; }
 
-    [JsonProperty("favouriteDetails", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteDetails", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public ICollection<FavouriteDetailsDto> FavouriteDetails { get; set; }
 
 }
