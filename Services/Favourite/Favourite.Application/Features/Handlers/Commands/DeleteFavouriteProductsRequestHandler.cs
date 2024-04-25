@@ -43,24 +43,24 @@ public sealed class DeleteFavouriteProductsRequestHandler(
                 await favouriteDetailsRepository.DeleteAsync(favouriteDetail);
             }
 
-            var totalRemoveProducts = favouriteDetailsRepository.GetAll().Count(key =>
-                key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
+            var favouriteHeaderIds = favouriteDetails.Select(fd => fd.FavouriteHeaderId).Distinct().ToList();
 
-            if (totalRemoveProducts == 1)
+            foreach (var favouriteHeaderFromDb in from favouriteHeaderId in favouriteHeaderIds let totalDetailsWithHeader = favouriteDetailsRepository.GetAll().Count(key =>
+                         key.FavouriteHeaderId == favouriteHeaderId) where totalDetailsWithHeader == 1 select favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
+                         key.FavouriteHeaderId == favouriteHeaderId))
             {
-                var favouriteHeaderFromDb = favouriteHeaderRepository.GetAll().FirstOrDefault(key =>
-                    key.FavouriteHeaderId == favouriteDetails.FirstOrDefault()!.FavouriteHeaderId);
-
                 if (favouriteHeaderFromDb is null)
                 {
                     return new CollectionResult<Unit>()
                     {
                         StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage =
-                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture),
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound",
+                                ErrorMessages.Culture),
                         ValidationErrors =
                         [
-                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound", ErrorMessages.Culture) ??
+                            ErrorMessages.ResourceManager.GetString("FavouriteHeaderNotFound",
+                                ErrorMessages.Culture) ??
                             string.Empty
                         ]
                     };
@@ -73,7 +73,7 @@ public sealed class DeleteFavouriteProductsRequestHandler(
 
             return new CollectionResult<Unit>
             {
-                Data = [Unit.Value],
+                Data = new List<Unit> { Unit.Value },
                 Count = favouriteDetails.Count,
                 StatusCode = (int)StatusCode.Deleted,
                 SuccessMessage =
