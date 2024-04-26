@@ -2,7 +2,6 @@
 
 public sealed class CouponDto
 {
-    
     public required string CouponId { get; init; }
 
     public required string CouponCode { get; init; }

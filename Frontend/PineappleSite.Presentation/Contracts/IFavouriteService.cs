@@ -10,7 +10,7 @@ public interface IFavouriteService
 
     Task<FavouriteResult<FavouriteHeaderViewModel>> FavouriteProductUpsertAsync(FavouriteViewModel favouriteViewModel);
 
-    Task<FavouriteResult> DeleteFavouriteProductAsync(int productUd);
+    Task<FavouriteResult> DeleteFavouriteProductAsync(int productId);
 
     Task<FavouriteCollectionResult> DeleteFavouriteProductsAsync(DeleteProductsViewModel deleteProductsViewModel);
 }

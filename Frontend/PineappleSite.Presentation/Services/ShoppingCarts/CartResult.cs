@@ -1,59 +1,54 @@
-﻿namespace PineappleSite.Presentation.Services.ShoppingCarts
+﻿namespace PineappleSite.Presentation.Services.ShoppingCarts;
+
+public class CartResult
 {
-    public class CartResult
+    public bool IsSuccess => ErrorMessage == null;
+
+    public string? SuccessMessage { get; init; }
+
+    public string? ErrorMessage { get; init; }
+
+    public int? StatusCode { get; init; }
+
+    public string? ValidationErrors { get; init; }
+}
+
+public class CartResult<T> : CartResult
+{
+    public CartResult(string? successMessage, T? data)
     {
-        public bool IsSuccess => ErrorMessage == null;
-
-        public string? ErrorMessage { get; set; }
-
-        public string? SuccessMessage { get; set; }
-
-        public int? ErrorCode { get; set; }
-
-        public int? SuccessCode { get; set; }
-
-        public List<string>? ValidationErrors { get; set; }
+        SuccessMessage = successMessage;
+        Data = data;
     }
 
-    public class CartResult<TEntity> : CartResult
+    public CartResult(string? errorMessage, int? statusCode, T? data, string validationErrors)
     {
-        public CartResult(string? successMessage, int? successCode, TEntity? data)
-        {
-            SuccessMessage = successMessage;
-            SuccessCode = successCode;
-            Data = data;
-        }
-
-        public CartResult(string? errorMessage, int? errorCode, TEntity? data, List<string> validationErrors)
-        {
-            ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
-            Data = data;
-            ValidationErrors = validationErrors;
-        }
-
-        public CartResult(string? errorMessage, int? errorCode, List<string>? validationErrors)
-        {
-            ErrorMessage = errorMessage;
-            ErrorCode = errorCode;
-            ValidationErrors = validationErrors;
-        }
-
-        public CartResult(string? successMessage)
-        {
-            SuccessMessage = successMessage;
-        }
-
-        public CartResult(TEntity? data)
-        {
-            Data = data;
-        }
-
-        public CartResult()
-        {
-
-        }
-
-        public TEntity? Data { get; set; }
+        ErrorMessage = errorMessage;
+        StatusCode = statusCode;
+        Data = data;
+        ValidationErrors = validationErrors;
     }
+
+    public CartResult(string? errorMessage, int? statusCode, string? validationErrors)
+    {
+        ErrorMessage = errorMessage;
+        StatusCode = statusCode;
+        ValidationErrors = validationErrors;
+    }
+
+    public CartResult(string? successMessage)
+    {
+        SuccessMessage = successMessage;
+    }
+
+    public CartResult(T? data)
+    {
+        Data = data;
+    }
+
+    public CartResult()
+    {
+    }
+
+    public T? Data { get; set; }
 }

@@ -48,7 +48,7 @@ public class TestQueryHandler : IDisposable
 
         var couponMock = new Mock<ICouponService>();
 
-        couponMock.Setup(mock => mock.GetCouponAsync("5OFF"))
+        couponMock.Setup(mock => mock.GetCouponByCode("5OFF"))
             .ReturnsAsync(new Result<CouponDto>
             {
                 Data = new CouponDto

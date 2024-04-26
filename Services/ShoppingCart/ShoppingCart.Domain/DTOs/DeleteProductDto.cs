@@ -1,6 +1,6 @@
 ﻿namespace ShoppingCart.Domain.DTOs;
 
-public sealed class DeleteProductDto(int productId)
+public sealed class DeleteProductDto(int id)
 {
-    public int ProductId { get; set; } = productId;
+    public int Id { get; set; } = id;
 }

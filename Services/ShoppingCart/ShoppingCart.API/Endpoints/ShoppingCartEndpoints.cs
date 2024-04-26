@@ -58,7 +58,7 @@ public class ShoppingCartEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> ApplyCoupon(ISender sender,
+    private static async Task<Results<Ok<Result<CartHeaderDto>>, BadRequest<string>>> ApplyCoupon(ISender sender,
         ILogger<CartDto> logger, [FromBody] CartDto cartDto)
     {
         var command = await sender.Send(new ApplyCouponRequest(cartDto));
@@ -75,7 +75,7 @@ public class ShoppingCartEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveCoupon(ISender sender,
+    private static async Task<Results<Ok<Result<CartHeaderDto>>, BadRequest<string>>> RemoveCoupon(ISender sender,
         ILogger<CartDto> logger, [FromBody] CartDto cartDto)
     {
         var command = await sender.Send(new RemoveCouponRequest(cartDto));
@@ -92,36 +92,36 @@ public class ShoppingCartEndpoints : ICarterModule
     }
 
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProduct(ISender sender,
-        ILogger<DeleteProductDto> logger, [FromBody] DeleteProductDto deleteProductDto)
+        ILogger<int> logger, [FromBody] DeleteProductDto deleteProductDto)
     {
         var command = await sender.Send(new RemoveShoppingCartProductRequest(deleteProductDto));
 
         if (command.IsSuccess)
         {
             logger.LogDebug(
-                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductDto.ProductId}");
+                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductDto.Id}");
             return TypedResults.Ok(command);
         }
 
         logger.LogError(
-            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId}");
+            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.Id}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProductByUser(ISender sender,
-        ILogger<DeleteProductDto> logger, string userId, [FromBody] DeleteProductDto deleteProductDto)
+        ILogger<DeleteProductByUserDto> logger, [FromBody] DeleteProductByUserDto deleteProductByUserDto)
     {
-        var command = await sender.Send(new DeleteCartProductByUserRequest(deleteProductDto, userId));
+        var command = await sender.Send(new DeleteCartProductByUserRequest(deleteProductByUserDto));
 
         if (command.IsSuccess)
         {
             logger.LogDebug(
-                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductDto.ProductId} UserId: {userId}");
+                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductByUserDto.UserId}: ProductId: {deleteProductByUserDto.ProductId}");
             return TypedResults.Ok(command);
         }
 
         logger.LogError(
-            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId} UserId: {userId}");
+            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductByUserDto.UserId}: ProductId: {deleteProductByUserDto.ProductId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 

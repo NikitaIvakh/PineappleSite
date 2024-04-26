@@ -1,19 +1,21 @@
 ﻿using PineappleSite.Presentation.Models.Products;
 
-namespace PineappleSite.Presentation.Models.ShoppingCart
+namespace PineappleSite.Presentation.Models.ShoppingCart;
+
+public sealed class CartDetailsViewModel
 {
-    public class CartDetailsViewModel
-    {
-        public int CartDetailsId { get; set; }
+    
+    public int CartDetailsId { get; set; }
+    
 
-        public CartHeaderViewModel? CartHeader { get; set; }
+    public CartViewModel? CartHeader { get; init; }
+    
 
-        public int CartHeaderId { get; set; }
+    public int CartHeaderId { get; set; }
 
-        public ProductViewModel? Product { get; set; }
+    public ProductViewModel? Product { get; set; }
 
-        public int ProductId { get; set; }
+    public int ProductId { get; init; }
 
-        public double Count { get; set; }
-    }
+    public double Count { get; set; }
 }

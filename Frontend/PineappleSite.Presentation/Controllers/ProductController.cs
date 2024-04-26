@@ -196,9 +196,8 @@ public sealed class ProductController(
         {
             var deleteProductViewModel = new DeleteProductViewModel(productId);
             var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
-            // TODO: 
-            // await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel.Id);
             await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
+            await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel);
 
             if (response.IsSuccess)
             {
@@ -229,10 +228,8 @@ public sealed class ProductController(
 
             var deleteProducts = new DeleteProductsViewModel(selectedProducts);
             var response = await productService.DeleteProductsAsync(deleteProducts);
-
-            // TODO:
-            // await shoppingCartService.RemoveCartDetailsListAsync(deleteProducts);
             await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
+            await shoppingCartService.RemoveCartDetailsAsync(deleteProducts);
 
             if (response.IsSuccess)
             {

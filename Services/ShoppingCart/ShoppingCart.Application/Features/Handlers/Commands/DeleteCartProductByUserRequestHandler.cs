@@ -13,7 +13,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands;
 public sealed class DeleteCartProductByUserRequestHandler(
     IBaseRepository<CartHeader> cartHeaderRepository,
     IBaseRepository<CartDetails> cartDetailsRepository,
-    DeleteValidator deleteValidator,
+    DeleteByUserValidator deleteValidator,
     IMemoryCache memoryCache)
     : IRequestHandler<DeleteCartProductByUserRequest, Result<Unit>>
 {
@@ -23,13 +23,15 @@ public sealed class DeleteCartProductByUserRequestHandler(
     {
         try
         {
-            var validatorResult = await deleteValidator.ValidateAsync(request.DeleteProductDto, cancellationToken);
+            var validatorResult =
+                await deleteValidator.ValidateAsync(request.DeleteProductByUserDto, cancellationToken);
 
             if (!validatorResult.IsValid)
             {
                 var existErrorMessage = new Dictionary<string, List<string>>()
                 {
-                    { "ProductId", validatorResult.Errors.Select(key => key.ErrorMessage).ToList() }
+                    { "ProductId", validatorResult.Errors.Select(key => key.ErrorMessage).ToList() },
+                    { "UserId", validatorResult.Errors.Select(key => key.ErrorMessage).ToList() },
                 };
 
                 foreach (var error in existErrorMessage)
@@ -61,8 +63,8 @@ public sealed class DeleteCartProductByUserRequestHandler(
 
             var cartDetail = cartDetailsRepository.GetAll()
                 .FirstOrDefault(key =>
-                    key.ProductId == request.DeleteProductDto.ProductId &&
-                    key.CartHeader!.UserId == request.UserId);
+                    key.ProductId == request.DeleteProductByUserDto.ProductId &&
+                    key.CartHeader!.UserId == request.DeleteProductByUserDto.UserId);
 
             if (cartDetail is null)
             {
@@ -78,18 +80,25 @@ public sealed class DeleteCartProductByUserRequestHandler(
                 };
             }
 
-            await cartDetailsRepository.DeleteAsync(cartDetail);
-
             var getDeleteProductsCount = cartDetailsRepository.GetAll()
                 .Count(key => key.CartHeaderId == cartDetail.CartHeaderId);
 
-            if (getDeleteProductsCount == 1)
+            switch (getDeleteProductsCount)
             {
-                var cartHeader = cartHeaderRepository.GetAll().FirstOrDefault(key =>
-                    key.CartHeaderId == cartDetail.CartHeaderId &&
-                    key.UserId == cartDetail.CartHeader!.UserId)!;
+                case > 1:
+                    await cartDetailsRepository.DeleteAsync(cartDetail);
+                    break;
 
-                await cartHeaderRepository.DeleteAsync(cartHeader);
+                case 1:
+                {
+                    var cartHeader = cartHeaderRepository.GetAll().FirstOrDefault(key =>
+                        key.CartHeaderId == cartDetail.CartHeaderId &&
+                        key.UserId == request.DeleteProductByUserDto.UserId)!;
+
+                    await cartDetailsRepository.DeleteAsync(cartDetail);
+                    await cartHeaderRepository.DeleteAsync(cartHeader);
+                    break;
+                }
             }
 
             memoryCache.Remove(CacheKey);

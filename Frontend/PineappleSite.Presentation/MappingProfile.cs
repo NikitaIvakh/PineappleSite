@@ -12,6 +12,9 @@ using PineappleSite.Presentation.Services.Identities;
 using PineappleSite.Presentation.Services.Orders;
 using PineappleSite.Presentation.Services.Products;
 using PineappleSite.Presentation.Services.ShoppingCarts;
+using DeleteProductDto = PineappleSite.Presentation.Services.Products.DeleteProductDto;
+using DeleteProductsDto = PineappleSite.Presentation.Services.Products.DeleteProductsDto;
+using DeleteProductViewModel = PineappleSite.Presentation.Models.Products.DeleteProductViewModel;
 
 namespace PineappleSite.Presentation;
 
@@ -51,22 +54,30 @@ public sealed class MappingProfile : Profile
         #region Product Mapping
 
         CreateMap<Services.Products.ProductDto, ProductViewModel>().ReverseMap();
-        CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+        CreateMap<Services.Products.DeleteProductDto, Models.Products.DeleteProductViewModel>().ReverseMap();
 
         CreateMap<ProductDtoResult, ProductViewModel>().ReverseMap();
         CreateMap<ProductDtoResult, ProductResultViewModel>().ReverseMap();
         CreateMap<ProductDtoCollectionResult, ProductsCollectionResultViewModel<ProductViewModel>>().ReverseMap();
-        CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
+        CreateMap<Services.Products.DeleteProductDto, Models.Products.DeleteProductsViewModel>().ReverseMap();
 
         #endregion
 
         #region ShoppingCart Mapping
 
         CreateMap<Services.ShoppingCarts.CartDto, CartViewModel>().ReverseMap();
+        CreateMap<Services.ShoppingCarts.CartHeaderDto, CartViewModel>().ReverseMap();
+        CreateMap<Services.ShoppingCarts.CartDetailsDto, CartViewModel>().ReverseMap();
         CreateMap<Services.ShoppingCarts.CartHeaderDto, CartHeaderViewModel>().ReverseMap();
         CreateMap<Services.ShoppingCarts.CartDetailsDto, CartDetailsViewModel>().ReverseMap();
-        CreateMap<Services.ShoppingCarts.DeleteProductList, DeleteProductListViewModel>().ReverseMap();
-        CreateMap<DeleteProductsViewModel, DeleteProductList>().ReverseMap();
+        CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
+
+        CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
+        CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
+        CreateMap<DeleteProductByUserDto, DeleteProductByUserViewModel>().ReverseMap();
+
+        CreateMap<DeleteProductViewModel, PineappleSite.Presentation.Services.ShoppingCarts.DeleteProductDto>().ReverseMap();
+        CreateMap<DeleteProductsViewModel, PineappleSite.Presentation.Services.ShoppingCarts.DeleteProductsDto>();
 
         CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
         CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
@@ -79,8 +90,8 @@ public sealed class MappingProfile : Profile
         CreateMap<FavouriteHeaderDto, FavouriteHeaderViewModel>().ReverseMap();
         CreateMap<FavouriteDetailsDto, FavouriteDetailsViewModel>().ReverseMap();
         CreateMap<DeleteFavouriteProductsDto, DeleteFavouriteProductsViewModel>().ReverseMap();
-        CreateMap<DeleteProductsViewModel, DeleteFavouriteProductsViewModel>().ReverseMap();
-        CreateMap<DeleteProductsViewModel, DeleteFavouriteProductsDto>().ReverseMap();
+        CreateMap<Models.Products.DeleteProductsViewModel, DeleteFavouriteProductsViewModel>().ReverseMap();
+        CreateMap<Models.Products.DeleteProductsViewModel, DeleteFavouriteProductsDto>().ReverseMap();
 
         CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
         CreateMap<Services.Favourite.ProductDto, ProductViewModel>().ReverseMap();

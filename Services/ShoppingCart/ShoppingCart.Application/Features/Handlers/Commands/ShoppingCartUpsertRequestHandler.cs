@@ -26,8 +26,7 @@ public sealed class ShoppingCartUpsertRequestHandler(
         {
             var cartHeaderFromDb = cartHeaderRepository.GetAll()
                 .FirstOrDefault(key =>
-                    key.UserId == request.CartDto.CartHeader.UserId &&
-                    key.CartHeaderId == request.CartDto.CartHeader.CartHeaderId);
+                    key.UserId == request.CartDto.CartHeader.UserId);
 
             if (cartHeaderFromDb is null)
             {

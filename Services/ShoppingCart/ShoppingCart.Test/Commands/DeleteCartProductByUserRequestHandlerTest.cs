@@ -14,10 +14,11 @@ public sealed class DeleteCartProductByUserRequestHandlerTest : TestCommandHandl
     public async Task DeleteCartProductByUserRequestHandlerTest_Success()
     {
         // Arrange
-        var hander = new DeleteCartProductByUserRequestHandler(CartHeader, CartDetails, DeleteValidator, MemoryCache);
+        var hander =
+            new DeleteCartProductByUserRequestHandler(CartHeader, CartDetails, DeleteByUserValidator, MemoryCache);
         const int productId = 3;
         const string userId = "TestuserId23";
-        var deleteProductDto = new DeleteProductDto(productId);
+        var deleteProductByUserDto = new DeleteProductByUserDto(productId, userId);
 
         foreach (var entity in Context.ChangeTracker.Entries())
         {
@@ -25,7 +26,7 @@ public sealed class DeleteCartProductByUserRequestHandlerTest : TestCommandHandl
         }
 
         // Act
-        var result = await hander.Handle(new DeleteCartProductByUserRequest(deleteProductDto, userId),
+        var result = await hander.Handle(new DeleteCartProductByUserRequest(deleteProductByUserDto),
             CancellationToken.None);
 
         // Assert
@@ -33,18 +34,19 @@ public sealed class DeleteCartProductByUserRequestHandlerTest : TestCommandHandl
         result.StatusCode.Should().Be(205);
         result.SuccessMessage.Should().Be("Продукт успешно удален");
     }
-    
+
     [Fact]
     public async Task DeleteCartProductByUserRequestHandlerTest_FailOrWrong_ProductId()
     {
         // Arrange
-        var hander = new DeleteCartProductByUserRequestHandler(CartHeader, CartDetails, DeleteValidator, MemoryCache);
+        var hander =
+            new DeleteCartProductByUserRequestHandler(CartHeader, CartDetails, DeleteByUserValidator, MemoryCache);
         const int productId = 31;
         const string userId = "TestuserId23";
-        var deleteProductDto = new DeleteProductDto(productId);
+        var deleteProductByUserDto = new DeleteProductByUserDto(productId, userId);
 
         // Act
-        var result = await hander.Handle(new DeleteCartProductByUserRequest(deleteProductDto, userId),
+        var result = await hander.Handle(new DeleteCartProductByUserRequest(deleteProductByUserDto),
             CancellationToken.None);
 
         // Assert

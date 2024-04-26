@@ -2,53 +2,48 @@
 using PineappleSite.Presentation.Models.ShoppingCart;
 using System.Net.Http.Headers;
 
-namespace PineappleSite.Presentation.Services.ShoppingCarts
+namespace PineappleSite.Presentation.Services.ShoppingCarts;
+
+public class BaseShoppingCartService(
+    ILocalStorageService localStorageService,
+    IShoppingCartClient shoppingCartClient,
+    IHttpContextAccessor contextAccessor)
 {
-    public class BaseShoppingCartService(ILocalStorageService localStorageService, IShoppingCartClient shoppingCartClient, IHttpContextAccessor contextAccessor)
+    protected static CartResult<CartViewModel> ConvertShoppingCartExceptions(ShoppingCartExceptions<string> exceptions)
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IShoppingCartClient _shoppingCartClient = shoppingCartClient;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        public CartResult<CartViewModel> ConvertShoppingCartExceptions(ShoppingCartExceptions exceptions)
+        return exceptions.StatusCode switch
         {
-            if (exceptions.StatusCode == 403)
+            403 => new CartResult<CartViewModel>
             {
-                return new CartResult<CartViewModel>
-                {
-                    ErrorCode = 403,
-                    ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                    ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                };
-            }
+                StatusCode = 403,
+                ErrorMessage =
+                    "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
+                ValidationErrors =
+                    "Пользователям не доступна эта страница. Эта страница доступна только администраторам."
+            },
 
-            else if (exceptions.StatusCode == 401)
+            401 => new CartResult<CartViewModel>
             {
-                return new CartResult<CartViewModel>
-                {
-                    ErrorCode = 401,
-                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                };
-            }
+                StatusCode = 401,
+                ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                ValidationErrors = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."
+            },
 
-            else
+            _ => new CartResult<CartViewModel>
             {
-                return new CartResult<CartViewModel>
-                {
-                    ErrorCode = 500,
-                    ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
-                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
-                };
+                StatusCode = 500,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
             }
-        }
+        };
+    }
 
-        protected void AddBearerToken()
+    protected void AddBearerToken()
+    {
+        if (contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
         {
-            if (_contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
-            {
-                _shoppingCartClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
-            }
+            shoppingCartClient.HttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
         }
     }
 }

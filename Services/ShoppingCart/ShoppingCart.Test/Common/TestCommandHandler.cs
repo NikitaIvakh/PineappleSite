@@ -25,6 +25,7 @@ public class TestCommandHandler : IDisposable
     protected readonly ICouponService CouponService;
     protected readonly IMemoryCache MemoryCache;
     protected readonly DeleteValidator DeleteValidator;
+    protected readonly DeleteByUserValidator DeleteByUserValidator;
     protected readonly DeleteProductsValidator DeleteProductsValidator;
 
     protected TestCommandHandler()
@@ -51,7 +52,7 @@ public class TestCommandHandler : IDisposable
 
         var couponMock = new Mock<ICouponService>();
 
-        couponMock.Setup(mock => mock.GetCouponAsync("5OFF"))
+        couponMock.Setup(mock => mock.GetCouponByCode("5OFF"))
             .ReturnsAsync(new Result<CouponDto>
             {
                 Data = new CouponDto
@@ -76,6 +77,7 @@ public class TestCommandHandler : IDisposable
         Mapper = mapperComfiguration.CreateMapper();
         DeleteValidator = new DeleteValidator();
         DeleteProductsValidator = new DeleteProductsValidator();
+        DeleteByUserValidator = new DeleteByUserValidator();
     }
 
     public void Dispose() => ShoppingCartDbContextFactory.Destroy(Context);

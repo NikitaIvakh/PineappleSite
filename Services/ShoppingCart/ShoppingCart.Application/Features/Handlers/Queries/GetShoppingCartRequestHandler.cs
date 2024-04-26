@@ -105,7 +105,7 @@ public sealed class GetShoppingCartRequestHandler(
 
             if (!string.IsNullOrEmpty(getCartDto?.CartHeader.CouponCode))
             {
-                var coupon = await couponService.GetCouponAsync(getCartDto.CartHeader.CouponCode);
+                var coupon = await couponService.GetCouponByCode(getCartDto.CartHeader.CouponCode);
 
                 if (coupon.Data is null)
                 {

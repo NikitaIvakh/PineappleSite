@@ -4,7 +4,7 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Requests.Commands;
 
-public class RemoveCouponRequest(CartDto cartDto) : IRequest<Result<Unit>>
+public class RemoveCouponRequest(CartDto cartDto) : IRequest<Result<CartHeaderDto>>
 {
     public CartDto CartDto { get; init; } = cartDto;
 }

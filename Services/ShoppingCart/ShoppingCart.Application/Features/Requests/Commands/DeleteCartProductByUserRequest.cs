@@ -4,9 +4,8 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Requests.Commands;
 
-public sealed class DeleteCartProductByUserRequest(DeleteProductDto deleteProductDto, string userId) : IRequest<Result<Unit>>
+public sealed class DeleteCartProductByUserRequest(DeleteProductByUserDto deleteProductByUserDto)
+    : IRequest<Result<Unit>>
 {
-    public DeleteProductDto DeleteProductDto { get; set; } = deleteProductDto;
-    
-    public string UserId { get; set; } = userId;
+    public DeleteProductByUserDto DeleteProductByUserDto { get; set; } = deleteProductByUserDto;
 }

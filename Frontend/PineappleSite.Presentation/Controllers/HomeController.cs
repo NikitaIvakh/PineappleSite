@@ -151,37 +151,36 @@ public sealed class HomeController(
     [ActionName("AddToCart")]
     public async Task<IActionResult> AddToCart(ProductFavouriteViewModel productViewModel)
     {
-        CartViewModel cartViewModel = new()
+        try
         {
-            CartHeader = new CartHeaderViewModel
+            var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+            var cartHeader = new CartHeaderViewModel() { UserId = userId };
+            CartDetailsViewModel cartDetailsViewModel = new()
             {
-                UserId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier).FirstOrDefault()?.Value,
-            },
-        };
+                Count = productViewModel.Product.Count,
+                ProductId = productViewModel.Product.Id,
+            };
 
-        CartDetailsViewModel cartDetailsViewModel = new()
-        {
-            Count = productViewModel.Product.Count,
-            ProductId = productViewModel.Product.Id,
-        };
+            List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
+            
+            var cartViewModel = new CartViewModel() { CartHeader = cartHeader, CartDetails = cartViewModels };
+            var response = await shoppingCartService.CartUpsertAsync(cartViewModel);
 
-        List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
-        cartViewModel.CartDetails = cartViewModels;
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetProducts));
+            }
 
-        CartResult<CartViewModel> response = await shoppingCartService.CartUpsertAsync(cartViewModel);
-
-        if (response.IsSuccess)
-        {
-            TempData["success"] = response.SuccessMessage;
-            return RedirectToAction(nameof(GetProducts));
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(Index));
         }
 
-        else
+        catch (Exception exception)
         {
-            TempData["error"] = response.ErrorMessage;
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(Index));
         }
-
-        return RedirectToAction(nameof(Index));
     }
 
     [HttpPost]

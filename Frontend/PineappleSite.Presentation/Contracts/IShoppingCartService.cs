@@ -2,22 +2,23 @@
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 
-namespace PineappleSite.Presentation.Contracts
+namespace PineappleSite.Presentation.Contracts;
+
+public interface IShoppingCartService
 {
-    public interface IShoppingCartService
-    {
-        Task<CartResult<CartViewModel>> GetCartAsync(string userId);
+    Task<CartResult<CartViewModel>> GetCartAsync(string userId);
 
-        Task<CartResult<CartViewModel>> CartUpsertAsync(CartViewModel cartViewModel);
+    Task<CartResult> CartUpsertAsync(CartViewModel cartViewModel);
 
-        Task<CartResult<CartViewModel>> ApplyCouponAsync(CartViewModel cartViewModel);
+    Task<CartResult<CartHeaderViewModel>> ApplyCouponAsync(CartViewModel cartViewModel);
 
-        Task<CartResult<CartViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
+    Task<CartResult<CartHeaderViewModel>> RemoveCouponAsync(CartViewModel cartViewModel);
 
-        Task<CartResult<CartViewModel>> RemoveCartDetailsAsync(int productId);
+    Task<CartResult> RemoveCartDetailsAsync(DeleteProductViewModel deleteProductViewModel);
 
-        Task<CartResult<CartViewModel>> RemoveCartDetailsListAsync(DeleteProductsViewModel deleteProductListViewModel);
+    Task<CartResult> RemoveCartDetailsByUserAsync(DeleteProductByUserViewModel deleteProductByUserViewModel);
 
-        Task<CartResult<bool>> RabbitMQShoppingCartAsync(CartViewModel cartViewModel);
-    }
+    Task<CartCollectionResult<bool>> RemoveCartDetailsAsync(DeleteProductsViewModel deleteProductListViewModel);
+
+    Task<CartResult<bool>> RabbitMqShoppingCartAsync(CartViewModel cartViewModel);
 }

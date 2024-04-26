@@ -1,9 +1,8 @@
-﻿namespace PineappleSite.Presentation.Models.ShoppingCart
-{
-    public class CartViewModel
-    {
-        public CartHeaderViewModel CartHeader { get; set; }
+﻿namespace PineappleSite.Presentation.Models.ShoppingCart;
 
-        public List<CartDetailsViewModel> CartDetails { get; set; }
-    }
+public sealed class CartViewModel
+{
+    public required CartHeaderViewModel CartHeader { get; init; } 
+
+    public required List<CartDetailsViewModel> CartDetails { get; set; }
 }

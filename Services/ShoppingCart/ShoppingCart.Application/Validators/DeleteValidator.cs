@@ -7,7 +7,7 @@ public sealed class DeleteValidator : AbstractValidator<DeleteProductDto>
 {
     public DeleteValidator()
     {
-        RuleFor(key => key.ProductId)
+        RuleFor(key => key.Id)
             .NotNull().NotEmpty().WithMessage("Идентификатор продукта не может быть пустым");
     }
 }
