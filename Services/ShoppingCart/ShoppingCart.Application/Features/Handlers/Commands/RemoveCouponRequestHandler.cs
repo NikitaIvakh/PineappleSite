@@ -14,20 +14,22 @@ namespace ShoppingCart.Application.Features.Handlers.Commands;
 public sealed class RemoveCouponRequestHandler(
     IBaseRepository<CartHeader> cartHeaderRepository,
     IMapper mapper,
-    IMemoryCache memoryCache) : IRequestHandler<RemoveCouponRequest, Result<CartHeaderDto>>
+    IMemoryCache memoryCache) : IRequestHandler<RemoveCouponRequest, Result<Unit>>
 {
     private const string CacheKey = "cacheGetShoppingCartKey";
 
-    public async Task<Result<CartHeaderDto>> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(RemoveCouponRequest request, CancellationToken cancellationToken)
     {
         try
         {
             var cartHeader = cartHeaderRepository.GetAll()
-                .FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
+                .FirstOrDefault(key =>
+                    key.UserId == request.CartDto.CartHeader.UserId &&
+                    key.CartHeaderId == request.CartDto.CartHeader.CartHeaderId);
 
             if (cartHeader is null)
             {
-                return new Result<CartHeaderDto>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture),
@@ -43,10 +45,10 @@ public sealed class RemoveCouponRequestHandler(
             await cartHeaderRepository.UpdateAsync(cartHeader);
             memoryCache.Remove(CacheKey);
 
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
+                Data = Unit.Value,
                 StatusCode = (int)StatusCode.Deleted,
-                Data = mapper.Map<CartHeaderDto>(cartHeader),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("CouponSuccessfullyDeleted", SuccessMessage.Culture),
             };
@@ -54,7 +56,7 @@ public sealed class RemoveCouponRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

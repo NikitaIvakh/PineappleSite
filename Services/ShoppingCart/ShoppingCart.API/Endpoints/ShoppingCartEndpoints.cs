@@ -18,8 +18,10 @@ public class ShoppingCartEndpoints : ICarterModule
         group.MapGet("/GetShoppingCart/{userId}", GetShoppingCart);
         group.MapPost("/ShoppingCartUpsert", ShoppingCartUpsert);
         group.MapPost("/ApplyCoupon", ApplyCoupon);
-        group.MapDelete("/RemoveCoupon", RemoveCoupon);
+        group.MapPost("/RemoveCoupon", RemoveCoupon);
         group.MapDelete("/RemoveProduct", RemoveProduct);
+        group.MapDelete("/RemoveProductByUser", RemoveProductByUser);
+        group.MapDelete("/RemoveProducts", RemoveProducts);
         group.MapPost("/SendMessage", SendMessage);
     }
 
@@ -38,7 +40,7 @@ public class ShoppingCartEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<CartHeaderDto>>, BadRequest<string>>> ShoppingCartUpsert(ISender sender,
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> ShoppingCartUpsert(ISender sender,
         ILogger<CartDto> logger, [FromBody] CartDto cartDto)
     {
         var command = await sender.Send(new ShoppingCartUpsertRequest(cartDto));
@@ -55,7 +57,7 @@ public class ShoppingCartEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<CartHeaderDto>>, BadRequest<string>>> ApplyCoupon(ISender sender,
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> ApplyCoupon(ISender sender,
         ILogger<CartDto> logger, [FromBody] CartDto cartDto)
     {
         var command = await sender.Send(new ApplyCouponRequest(cartDto));
@@ -72,7 +74,7 @@ public class ShoppingCartEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<CartHeaderDto>>, BadRequest<string>>> RemoveCoupon(ISender sender,
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveCoupon(ISender sender,
         ILogger<CartDto> logger, [FromBody] CartDto cartDto)
     {
         var command = await sender.Send(new RemoveCouponRequest(cartDto));
@@ -89,17 +91,36 @@ public class ShoppingCartEndpoints : ICarterModule
     }
 
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProduct(ISender sender,
-        ILogger<int> logger, [FromRoute] int productId)
+        ILogger<DeleteProductDto> logger, [FromBody] DeleteProductDto deleteProductDto)
     {
-        var command = await sender.Send(new RemoveShoppingCartProductRequest(productId));
+        var command = await sender.Send(new RemoveShoppingCartProductRequest(deleteProductDto));
 
         if (command.IsSuccess)
         {
-            logger.LogDebug($"LogDebug ================ Продукт из корзины успешно удален: {productId}");
+            logger.LogDebug(
+                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductDto.ProductId}");
             return TypedResults.Ok(command);
         }
 
-        logger.LogError($"LogDebugError ================ Ошибка удаления продукта из корзины: {productId}");
+        logger.LogError(
+            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProductByUser(ISender sender,
+        ILogger<DeleteProductDto> logger, [FromRoute] string userId, [FromBody] DeleteProductDto deleteProductDto)
+    {
+        var command = await sender.Send(new DeleteCartProductByUserRequest(deleteProductDto, userId));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug(
+                $"LogDebug ================ Продукт из корзины успешно удален: {deleteProductDto.ProductId} UserId: {userId}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError(
+            $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId} UserId: {userId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 

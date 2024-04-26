@@ -15,17 +15,19 @@ public sealed class ShoppingCartUpsertRequestHandler(
     IBaseRepository<CartHeader> cartHeaderRepository,
     IBaseRepository<CartDetails> cartDetailsRepository,
     IMapper mapper,
-    IMemoryCache memoryCache) : IRequestHandler<ShoppingCartUpsertRequest, Result<CartHeaderDto>>
+    IMemoryCache memoryCache) : IRequestHandler<ShoppingCartUpsertRequest, Result<Unit>>
 {
     private const string CacheKey = "cacheGetShoppingCartKey";
 
-    public async Task<Result<CartHeaderDto>> Handle(ShoppingCartUpsertRequest request,
+    public async Task<Result<Unit>> Handle(ShoppingCartUpsertRequest request,
         CancellationToken cancellationToken)
     {
         try
         {
             var cartHeaderFromDb = cartHeaderRepository.GetAll()
-                .FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
+                .FirstOrDefault(key =>
+                    key.UserId == request.CartDto.CartHeader.UserId &&
+                    key.CartHeaderId == request.CartDto.CartHeader.CartHeaderId);
 
             if (cartHeaderFromDb is null)
             {
@@ -38,10 +40,10 @@ public sealed class ShoppingCartUpsertRequestHandler(
 
                 memoryCache.Remove(CacheKey);
 
-                return new Result<CartHeaderDto>
+                return new Result<Unit>
                 {
+                    Data = Unit.Value,
                     StatusCode = (int)StatusCode.Created,
-                    Data = mapper.Map<CartHeaderDto>(cartHeader),
                     SuccessMessage = SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedShoppingCart",
                         SuccessMessage.Culture),
                 };
@@ -51,7 +53,8 @@ public sealed class ShoppingCartUpsertRequestHandler(
                 .GetAll()
                 .FirstOrDefault(key =>
                     key.ProductId == request.CartDto.CartDetails.First().ProductId &&
-                    key.CartHeaderId == cartHeaderFromDb.CartHeaderId);
+                    key.CartHeaderId == cartHeaderFromDb.CartHeaderId &&
+                    key.CartHeader!.UserId == cartHeaderFromDb.UserId);
 
             if (cartDetailsFromDb is null)
             {
@@ -72,10 +75,10 @@ public sealed class ShoppingCartUpsertRequestHandler(
 
             memoryCache.Remove(CacheKey);
 
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
+                Data = Unit.Value,
                 StatusCode = (int)StatusCode.Created,
-                Data = mapper.Map<CartHeaderDto>(cartHeaderFromDb),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedShoppingCart",
                         SuccessMessage.Culture),
@@ -84,7 +87,7 @@ public sealed class ShoppingCartUpsertRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

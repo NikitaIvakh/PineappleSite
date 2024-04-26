@@ -16,11 +16,11 @@ public sealed class ApplyCouponRequestHandler(
     IBaseRepository<CartHeader> cartHeaderRepository,
     IMapper mapper,
     ICouponService couponService,
-    IMemoryCache memoryCache) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
+    IMemoryCache memoryCache) : IRequestHandler<ApplyCouponRequest, Result<Unit>>
 {
     private const string CacheKey = "cacheGetShoppingCartKey";
 
-    public async Task<Result<CartHeaderDto>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -29,7 +29,7 @@ public sealed class ApplyCouponRequestHandler(
 
             if (cartHeader is null)
             {
-                return new Result<CartHeaderDto>
+                return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture),
@@ -45,9 +45,8 @@ public sealed class ApplyCouponRequestHandler(
 
             if (coupon.Data is null)
             {
-                return new Result<CartHeaderDto>
+                return new Result<Unit>
                 {
-                    Data = mapper.Map<CartHeaderDto>(cartHeader),
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture),
                     ValidationErrors =
                     [
@@ -62,10 +61,10 @@ public sealed class ApplyCouponRequestHandler(
             memoryCache.Remove(CacheKey);
 
 
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
+                Data = Unit.Value,
                 StatusCode = (int)StatusCode.Modify,
-                Data = mapper.Map<CartHeaderDto>(cartHeader),
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("CouponSuccessfullyApplied", SuccessMessage.Culture),
             };
@@ -73,7 +72,7 @@ public sealed class ApplyCouponRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<CartHeaderDto>
+            return new Result<Unit>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],

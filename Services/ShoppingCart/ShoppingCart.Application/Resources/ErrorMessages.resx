@@ -129,4 +129,13 @@
   <data name="InternalServerError" xml:space="preserve">
     <value>Внутренняя проблемы сервера</value>
   </data>
+  <data name="ProductCanNotDeleted" xml:space="preserve">
+    <value>Продукт не может быть удален</value>
+  </data>
+  <data name="ProductsCanNotDeleted" xml:space="preserve">
+    <value>Продукты не могут быть удалены</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Продукт не найден</value>
+  </data>
 </root>

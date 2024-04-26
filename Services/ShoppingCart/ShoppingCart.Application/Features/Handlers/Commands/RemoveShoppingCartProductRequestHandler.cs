@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Caching.Memory;
 using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Resources;
+using ShoppingCart.Application.Validators;
 using ShoppingCart.Domain.Entities;
 using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Interfaces.Repository;
@@ -12,6 +13,7 @@ namespace ShoppingCart.Application.Features.Handlers.Commands;
 public sealed class RemoveShoppingCartProductRequestHandler(
     IBaseRepository<CartHeader> cartHeaderRepository,
     IBaseRepository<CartDetails> cartDetailsRepository,
+    DeleteValidator deleteValidator,
     IMemoryCache memoryCache) : IRequestHandler<RemoveShoppingCartProductRequest, Result<Unit>>
 {
     private const string CacheKey = "cacheGetShoppingCartKey";
@@ -21,8 +23,41 @@ public sealed class RemoveShoppingCartProductRequestHandler(
     {
         try
         {
+            var validationResult = await deleteValidator.ValidateAsync(request.DeleteProductDto, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var existErrorMessage = new Dictionary<string, List<string>>()
+                {
+                    { "ProductId", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
+                };
+
+                foreach (var error in existErrorMessage)
+                {
+                    if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
+                    {
+                        return new Result<Unit>()
+                        {
+                            ValidationErrors = errorMessage,
+                            StatusCode = (int)StatusCode.NoContent,
+                            ErrorMessage =
+                                ErrorMessages.ResourceManager.GetString("ProductCanNotDeleted", ErrorMessages.Culture),
+                        };
+                    }
+                }
+
+                return new Result<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoContent,
+                    ErrorMessage =
+                        ErrorMessages.ResourceManager.GetString("ProductCanNotDeleted", ErrorMessages.Culture),
+                    ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList(),
+                };
+            }
+
             var cartDetails =
-                cartDetailsRepository.GetAll().Where(key => key.ProductId == request.ProductId).ToList();
+                cartDetailsRepository.GetAll().Where(key => key.ProductId == request.DeleteProductDto.ProductId)
+                    .ToList();
 
             if (cartDetails.Count == 0)
             {
@@ -46,7 +81,8 @@ public sealed class RemoveShoppingCartProductRequestHandler(
             var cartHeaderIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
 
             foreach (var cartHeaderDelete in from cartHeaderId in cartHeaderIds
-                     let totalDetailsWithHeader = cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
+                     let totalDetailsWithHeader =
+                         cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
                      where totalDetailsWithHeader == 1
                      select cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartHeaderId))
             {

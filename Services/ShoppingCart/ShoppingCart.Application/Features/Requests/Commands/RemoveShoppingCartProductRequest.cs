@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Requests.Commands;
 
-public sealed class RemoveShoppingCartProductRequest(int productId) : IRequest<Result<Unit>>
+public sealed class RemoveShoppingCartProductRequest(DeleteProductDto deleteProductDto) : IRequest<Result<Unit>>
 {
-    public int ProductId { get; init; } = productId;
+    public DeleteProductDto DeleteProductDto { get; init; } = deleteProductDto;
 }
