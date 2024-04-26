@@ -50,7 +50,7 @@ public sealed class RemoveShoppingCartProductRequestHandlerTest : TestCommandHan
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Детали не найдены");
-        result.ValidationErrors.Should().Equal("Детали не найдены");
+        result.ErrorMessage.Should().Be("Продукты не найдены");
+        result.ValidationErrors.Should().Equal("Продукты не найдены");
     }
 }
