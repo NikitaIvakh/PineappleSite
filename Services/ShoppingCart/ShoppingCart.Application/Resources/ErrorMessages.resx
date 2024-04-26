@@ -123,6 +123,9 @@
   <data name="CouponNotFound" xml:space="preserve">
     <value>Купон не найден</value>
   </data>
+  <data name="CouponsNotFound" xml:space="preserve">
+    <value>Купон не найден</value>
+  </data>
   <data name="ProductsNotFound" xml:space="preserve">
     <value>Продукты не найдены</value>
   </data>

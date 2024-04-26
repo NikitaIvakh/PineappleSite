@@ -23,6 +23,7 @@ public class ShoppingCartEndpoints : ICarterModule
         group.MapDelete("/RemoveProduct", RemoveProduct).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapDelete("/RemoveProductByUser", RemoveProductByUser).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapDelete("/RemoveProducts", RemoveProducts).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapDelete("/RemoveCouponCode", RemoveCouponCode).RequireAuthorization(AdministratorPolicy);
         group.MapPost("/SendMessage", SendMessage).RequireAuthorization(UserAndAdministratorPolicy);
     }
 
@@ -139,6 +140,21 @@ public class ShoppingCartEndpoints : ICarterModule
 
         logger.LogError(
             $"LogDebugError ================ Ошибка удаления продуктов из корзины: {deleteProductsDto.ProductIds}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveCouponCode(ISender sender,
+        ILogger<DeleteCouponDto> logger, [FromBody] DeleteCouponDto deleteCouponDto)
+    {
+        var command = await sender.Send(new DeleteCouponRequest(deleteCouponDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.CouponCode}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.CouponCode}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 

@@ -123,6 +123,9 @@
   <data name="CouponSuccessfullyDeleted" xml:space="preserve">
     <value>Купон успешно удален</value>
   </data>
+  <data name="CouponsSuccessfullyUpdated" xml:space="preserve">
+    <value>Купоны успешно обновлены</value>
+  </data>
   <data name="MessageSentSuccessfully" xml:space="preserve">
     <value>Сообщение успешно отправлено</value>
   </data>

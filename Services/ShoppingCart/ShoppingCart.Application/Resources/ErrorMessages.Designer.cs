@@ -78,6 +78,15 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Купон не найден.
+        /// </summary>
+        internal static string CouponsNotFound {
+            get {
+                return ResourceManager.GetString("CouponsNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Внутренняя проблемы сервера.
         /// </summary>
         internal static string InternalServerError {

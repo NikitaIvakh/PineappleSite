@@ -20,5 +20,7 @@ public interface IShoppingCartService
 
     Task<CartCollectionResult<bool>> RemoveCartDetailsAsync(DeleteProductsViewModel deleteProductListViewModel);
 
+    Task<CartResult> RemoveCouponByCode(DeleteCouponByCodeViewModel deleteCouponByCodeViewModel);
+
     Task<CartResult<bool>> RabbitMqShoppingCartAsync(CartViewModel cartViewModel);
 }

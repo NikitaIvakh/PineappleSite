@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Coupons;
 using PineappleSite.Presentation.Models.Paginated;
+using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Coupons;
 
 namespace PineappleSite.Presentation.Controllers;
 
-public sealed class CouponController(ICouponService couponService) : Controller
+public sealed class CouponController(ICouponService couponService, IShoppingCartService shoppingCartService)
+    : Controller
 {
     // GET: CouponController
     public async Task<ActionResult> Index(string searchCode, string currentFilter, int? pageNumber)
@@ -157,6 +159,10 @@ public sealed class CouponController(ICouponService couponService) : Controller
     {
         try
         {
+            var coupon = await couponService.GetCouponByIdAsync(couponId);
+            var deleteCouponByCode = new DeleteCouponByCodeViewModel(coupon.Data!.CouponCode);
+            await shoppingCartService.RemoveCouponByCode(deleteCouponByCode);
+            
             var response = await couponService.DeleteCouponAsync(couponId, deleteCoupon);
 
             if (response.IsSuccess)
