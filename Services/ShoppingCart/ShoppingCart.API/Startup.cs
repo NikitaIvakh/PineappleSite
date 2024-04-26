@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using static ShoppingCart.API.Utility.StaticDetails;
 
 namespace ShoppingCart.API
 {
@@ -47,10 +48,10 @@ namespace ShoppingCart.API
         public static void AddAppAuthenticate(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
+                {
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
                 .AddJwtBearer(options =>
                 {
                     options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -61,26 +62,29 @@ namespace ShoppingCart.API
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = configuration["Jwt:Issuer"],
                         ValidAudience = configuration["Jwt:Audience"],
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!))
+                        IssuerSigningKey =
+                            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Secret"]!))
                     };
                 });
 
             services.AddAuthorizationBuilder()
-                .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
+                .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
+                    .RequireAuthenticatedUser().Build());
         }
 
         public static void AddSwaggerAuthenticate(this IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
             {
-                options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Description = "Enter the Bearer Authoriation stirng as following: `Bearer Generated-JWT-Token`",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                });
+                options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
+                    securityScheme: new OpenApiSecurityScheme
+                    {
+                        Name = "Authorization",
+                        Description = "Enter the Bearer Authoriation stirng as following: `Bearer Generated-JWT-Token`",
+                        In = ParameterLocation.Header,
+                        Type = SecuritySchemeType.ApiKey,
+                        Scheme = "Bearer",
+                    });
 
                 options.AddSecurityRequirement(securityRequirement: new OpenApiSecurityRequirement
                 {
@@ -115,6 +119,16 @@ namespace ShoppingCart.API
                     Console.WriteLine($"XML-файл документации не найден: {xmlPath}");
                 }
             });
+        }
+
+        public static void AddAuthenticatePolicy(this IServiceCollection services)
+        {
+            services.AddAuthorizationBuilder()
+                .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
+
+            services.AddAuthorizationBuilder()
+                .AddPolicy(name: UserAndAdministratorPolicy,
+                    policy => { policy.RequireRole(RoleUser, RoleAdministrator); });
         }
     }
 }

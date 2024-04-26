@@ -6,6 +6,7 @@ using ShoppingCart.Application.Features.Requests.Commands;
 using ShoppingCart.Application.Features.Requests.Queries;
 using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
+using static ShoppingCart.API.Utility.StaticDetails;
 
 namespace ShoppingCart.API.Endpoints;
 
@@ -15,14 +16,14 @@ public class ShoppingCartEndpoints : ICarterModule
     {
         var group = app.MapGroup("api/shoppingCart");
 
-        group.MapGet("/GetShoppingCart/{userId}", GetShoppingCart);
-        group.MapPost("/ShoppingCartUpsert", ShoppingCartUpsert);
-        group.MapPost("/ApplyCoupon", ApplyCoupon);
-        group.MapPost("/RemoveCoupon", RemoveCoupon);
-        group.MapDelete("/RemoveProduct", RemoveProduct);
-        group.MapDelete("/RemoveProductByUser", RemoveProductByUser);
-        group.MapDelete("/RemoveProducts", RemoveProducts);
-        group.MapPost("/SendMessage", SendMessage);
+        group.MapGet("/GetShoppingCart/{userId}", GetShoppingCart).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/ShoppingCartUpsert", ShoppingCartUpsert).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/ApplyCoupon", ApplyCoupon).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/RemoveCoupon", RemoveCoupon).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapDelete("/RemoveProduct", RemoveProduct).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapDelete("/RemoveProductByUser", RemoveProductByUser).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapDelete("/RemoveProducts", RemoveProducts).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/SendMessage", SendMessage).RequireAuthorization(UserAndAdministratorPolicy);
     }
 
     private static async Task<Results<Ok<Result<CartDto>>, BadRequest<string>>> GetShoppingCart(ISender sender,
@@ -106,7 +107,7 @@ public class ShoppingCartEndpoints : ICarterModule
             $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
-    
+
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProductByUser(ISender sender,
         ILogger<DeleteProductDto> logger, string userId, [FromBody] DeleteProductDto deleteProductDto)
     {
