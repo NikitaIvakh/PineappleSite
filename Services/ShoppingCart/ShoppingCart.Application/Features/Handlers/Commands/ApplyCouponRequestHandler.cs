@@ -43,10 +43,11 @@ public sealed class ApplyCouponRequestHandler(
 
             var coupon = await couponService.GetCouponAsync(request.CartDto.CartHeader.CouponCode);
 
-            if (coupon.Data is null)
+            if (coupon?.Data is null)
             {
                 return new Result<Unit>
                 {
+                    StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture),
                     ValidationErrors =
                     [
