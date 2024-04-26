@@ -100,18 +100,17 @@ public sealed class GetShoppingCartRequestHandler(
             foreach (var product in getCartDto.CartDetails)
             {
                 product.Product = products.Data?.FirstOrDefault(key => key.Id == product.ProductId);
-                cartDto!.CartHeader.CartTotal += (product.Count * product.Product?.Price ?? 0);
+                getCartDto.CartHeader.CartTotal += (product.Count * product.Product?.Price ?? 0);
             }
 
-            if (!string.IsNullOrEmpty(cartDto?.CartHeader.CouponCode))
+            if (!string.IsNullOrEmpty(getCartDto?.CartHeader.CouponCode))
             {
-                var coupon = await couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
+                var coupon = await couponService.GetCouponAsync(getCartDto.CartHeader.CouponCode);
 
                 if (coupon.Data is null)
                 {
                     return new Result<CartDto>
                     {
-                        Data = cartDto,
                         ErrorMessage = ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture),
                         ValidationErrors =
                         [
@@ -121,10 +120,10 @@ public sealed class GetShoppingCartRequestHandler(
                     };
                 }
 
-                if (cartDto.CartHeader.CartTotal > coupon.Data.MinAmount)
+                if (getCartDto.CartHeader.CartTotal > coupon.Data.MinAmount)
                 {
-                    cartDto.CartHeader.CartTotal -= coupon.Data.DiscountAmount;
-                    cartDto.CartHeader.Discount = coupon.Data.DiscountAmount;
+                    getCartDto.CartHeader.CartTotal -= coupon.Data.DiscountAmount;
+                    getCartDto.CartHeader.Discount = coupon.Data.DiscountAmount;
                 }
             }
 

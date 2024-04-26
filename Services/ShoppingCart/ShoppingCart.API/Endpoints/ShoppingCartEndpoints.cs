@@ -106,9 +106,9 @@ public class ShoppingCartEndpoints : ICarterModule
             $"LogDebugError ================ Ошибка удаления продукта из корзины: {deleteProductDto.ProductId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
-
+    
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> RemoveProductByUser(ISender sender,
-        ILogger<DeleteProductDto> logger, [FromRoute] string userId, [FromBody] DeleteProductDto deleteProductDto)
+        ILogger<DeleteProductDto> logger, string userId, [FromBody] DeleteProductDto deleteProductDto)
     {
         var command = await sender.Send(new DeleteCartProductByUserRequest(deleteProductDto, userId));
 
