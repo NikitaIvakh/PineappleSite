@@ -29,6 +29,6 @@ public sealed class DeleteCouponRequestHandlerTest : TestCommandHandler
         // Assert
         resulty.IsSuccess.Should().BeTrue();
         resulty.StatusCode.Should().Be(203);
-        resulty.SuccessMessage.Should().Be("Купоны успешно удалены");
+        resulty.SuccessMessage.Should().Be("Купоны успешно обновлены");
     }
 }
