@@ -1,67 +1,51 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ShoppingCart.Domain.Interfaces.Repository;
 
-namespace ShoppingCart.Infrastructure.Repository.Implement
+namespace ShoppingCart.Infrastructure.Repository.Implement;
+
+public class BaseRepository<TEntity>(ApplicationDbContext context) : IBaseRepository<TEntity> where TEntity : class
 {
-    public class BaseRepository<TEntity>(ApplicationDbContext context) : IBaseRepository<TEntity> where TEntity : class
+    public IQueryable<TEntity> GetAll()
     {
-        private readonly ApplicationDbContext _context = context;
+        return context.Set<TEntity>().AsNoTracking();
+    }
 
-        public IQueryable<TEntity> GetAll()
+    public async Task<TEntity> CreateAsync(TEntity entity)
+    {
+        if (entity is null)
         {
-            return _context.Set<TEntity>().AsNoTracking();
-        }
-
-        public Task<TEntity> CreateAsync(TEntity entity)
-        {
-            if (entity is not null)
-            {
-                _context.Add(entity);
-                _context.SaveChanges();
-
-                return Task.FromResult(entity);
-            }
-
             throw new ArgumentNullException(nameof(entity), "Объект пустой");
         }
 
-        public Task<TEntity> UpdateAsync(TEntity entity)
+        await context.AddAsync(entity);
+        await context.SaveChangesAsync();
+
+        return await Task.FromResult(entity);
+    }
+
+    public async Task<TEntity> UpdateAsync(TEntity entity)
+    {
+        if (entity is null)
         {
-            if (entity is not null)
-            {
-                _context.Update(entity);
-                _context.SaveChanges();
-
-                return Task.FromResult(entity);
-            }
-
             throw new ArgumentNullException(nameof(entity), "Объект пустой");
         }
 
-        public Task DeleteAsync(TEntity entity)
+        context.Update(entity);
+        await context.SaveChangesAsync();
+
+        return await Task.FromResult(entity);
+    }
+
+    public async Task<TEntity> DeleteAsync(TEntity entity)
+    {
+        if (entity is null)
         {
-            if (entity is not null)
-            {
-                _context.Remove(entity);
-                _context.SaveChanges();
-
-                return Task.FromResult(entity);
-            }
-
             throw new ArgumentNullException(nameof(entity), "Объект пустой");
         }
 
-        public Task DeleteListAsync(List<TEntity> entities)
-        {
-            if (entities is not null)
-            {
-                _context.RemoveRange(entities);
-                _context.SaveChanges();
+        context.Remove(entity);
+        await context.SaveChangesAsync();
 
-                return Task.FromResult(entities);
-            }
-
-            throw new ArgumentNullException(nameof(entities), "Объект пустой");
-        }
+        return await Task.FromResult(entity);
     }
 }

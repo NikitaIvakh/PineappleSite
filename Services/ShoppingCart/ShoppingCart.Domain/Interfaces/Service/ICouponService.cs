@@ -1,10 +1,9 @@
 ﻿using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
-namespace ShoppingCart.Domain.Interfaces.Service
+namespace ShoppingCart.Domain.Interfaces.Service;
+
+public interface ICouponService
 {
-    public interface ICouponService
-    {
-        Task<Result<GetCouponDto>> GetCouponAsync(string couponCode);
-    }
+    Task<Result<CouponDto>> GetCouponAsync(string? couponCode);
 }

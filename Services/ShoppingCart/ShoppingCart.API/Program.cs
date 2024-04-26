@@ -1,3 +1,4 @@
+using Carter;
 using ShoppingCart.Infrastructure.DependencyInjection;
 using ShoppingCart.Application.DependencyInjection;
 using ShoppingCart.API;
@@ -5,20 +6,20 @@ using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 
-WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCarter();
 
 builder.Services.ConfigureApplicationServices();
 builder.Services.ConfigureInfrastructureServices(builder.Configuration);
 
-builder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]));
-builder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]));
+builder.Services.AddHttpClient("Product",
+    key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Product"]!));
+
+builder.Services.AddHttpClient("Coupon",
+    key => key.BaseAddress = new Uri(builder.Configuration["ServiceUrls:Coupon"]!));
 
 builder.Host.UseSerilog((context, logConfig) =>
 {
@@ -31,16 +32,7 @@ builder.Services.AddMemoryCache();
 builder.Services.AddSwaggerAuthenticate();
 builder.Services.AddAppAuthenticate(builder.Configuration);
 
-builder.Services.AddCors(key =>
-{
-    key.AddPolicy("CorsPolicy",
-        applicationBuilder => applicationBuilder
-        .AllowAnyOrigin()
-        .AllowAnyMethod()
-        .AllowAnyHeader());
-});
-
-WebApplication app = builder.Build();
+var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -55,8 +47,7 @@ app.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
 });
 
+app.MapCarter();
+app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors();
-app.MapControllers();
-
 app.Run();

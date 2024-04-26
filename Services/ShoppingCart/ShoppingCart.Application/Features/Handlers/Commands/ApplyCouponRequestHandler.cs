@@ -10,78 +10,75 @@ using ShoppingCart.Domain.Interfaces.Repository;
 using ShoppingCart.Domain.Interfaces.Service;
 using ShoppingCart.Domain.Results;
 
-namespace ShoppingCart.Application.Features.Handlers.Commands
+namespace ShoppingCart.Application.Features.Handlers.Commands;
+
+public sealed class ApplyCouponRequestHandler(
+    IBaseRepository<CartHeader> cartHeaderRepository,
+    IMapper mapper,
+    ICouponService couponService,
+    IMemoryCache memoryCache) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
 {
-    public class ApplyCouponRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IMapper mapper, ICouponService couponService, IMemoryCache memoryCache) : IRequestHandler<ApplyCouponRequest, Result<CartHeaderDto>>
+    private const string CacheKey = "cacheGetShoppingCartKey";
+
+    public async Task<Result<CartHeaderDto>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
     {
-        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
-        private readonly ICouponService _couponService = couponService;
-        private readonly IMapper _mapper = mapper;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "cacheGetShoppingCartKey";
-
-        public async Task<Result<CartHeaderDto>> Handle(ApplyCouponRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
-            {
-                CartHeader? cartHeader = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
+            var cartHeader = cartHeaderRepository.GetAll()
+                .FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
 
-                if (cartHeader is null)
-                {
-                    return new Result<CartHeaderDto>
-                    {
-                        ErrorCode = (int)ErrorCodes.CartHeaderNotFound,
-                        ErrorMessage = ErrorMessages.CartHeaderNotFound,
-                        ValidationErrors = [ErrorMessages.CartHeaderNotFound]
-                    };
-                }
-
-                else
-                {
-                    var coupon = await _couponService.GetCouponAsync(request.CartDto.CartHeader.CouponCode);
-
-                    if (coupon.Data is null)
-                    {
-                        return new Result<CartHeaderDto>
-                        {
-                            ErrorMessage = ErrorMessages.CouponNotFound,
-                            Data = _mapper.Map<CartHeaderDto>(cartHeader),
-                            ValidationErrors = [ErrorMessages.CouponNotFound]
-                        };
-                    }
-
-                    else
-                    {
-                        cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode.Trim();
-                        await _cartHeaderRepository.UpdateAsync(cartHeader);
-
-                        var getAllheaders = _cartHeaderRepository.GetAll().ToList();
-
-                        _memoryCache.Remove(getAllheaders);
-                        _memoryCache.Remove(cartHeader!);
-
-                        _memoryCache.Set(cacheKey, getAllheaders);
-
-                        return new Result<CartHeaderDto>
-                        {
-                            SuccessCode = (int)SuccessCode.Updated,
-                            Data = _mapper.Map<CartHeaderDto>(cartHeader),
-                            SuccessMessage = SuccessMessage.CouponSuccessfullyApplied,
-                        };
-                    }
-                }
-            }
-
-            catch
+            if (cartHeader is null)
             {
                 return new Result<CartHeaderDto>
                 {
-                    ErrorMessage = ErrorMessages.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [ErrorMessages.InternalServerError]
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture) ??
+                        string.Empty
+                    ]
                 };
             }
+
+            var coupon = await couponService.GetCouponAsync(request.CartDto.CartHeader.CouponCode);
+
+            if (coupon.Data is null)
+            {
+                return new Result<CartHeaderDto>
+                {
+                    Data = mapper.Map<CartHeaderDto>(cartHeader),
+                    ErrorMessage = ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            cartHeader.CouponCode = request.CartDto.CartHeader.CouponCode?.Trim();
+            await cartHeaderRepository.UpdateAsync(cartHeader);
+            memoryCache.Remove(CacheKey);
+
+
+            return new Result<CartHeaderDto>
+            {
+                StatusCode = (int)StatusCode.Modify,
+                Data = mapper.Map<CartHeaderDto>(cartHeader),
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("CouponSuccessfullyApplied", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<CartHeaderDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

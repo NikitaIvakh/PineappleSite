@@ -18,7 +18,7 @@ public sealed class CouponEndpoints : ICarterModule
 
         group.MapGet("/GetCoupons", GetCoupons).RequireAuthorization(AdministratorPolicy);
         group.MapGet("/GetCouponById/{couponId}", GetCouponById).RequireAuthorization(UserAndAdministratorPolicy);
-        group.MapGet("/GetCouponByCode/{couponCode}", GetCouponByCode).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetCouponByCode/{couponCode}", GetCouponByCode);
         group.MapPost("/CreateCoupon", CreateCoupon).RequireAuthorization(AdministratorPolicy);
         group.MapPut("/UpdateCoupon/{couponId}", UpdateCoupon).RequireAuthorization(AdministratorPolicy);
         group.MapDelete("/DeleteCoupon/{couponId}", DeleteCoupon).RequireAuthorization(AdministratorPolicy);

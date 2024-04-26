@@ -2,16 +2,13 @@
 using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Entities;
 
-namespace ShoppingCart.Application.Mapping
+namespace ShoppingCart.Application.Mapping;
+
+public sealed class MappingProfile : Profile
 {
-    public class MappingProfile : Profile
+    public MappingProfile()
     {
-        public MappingProfile()
-        {
-            #region ShoppingCart Mapping
-            CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
-            CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
-            #endregion
-        }
+        CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
+        CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
     }
 }

@@ -1,9 +1,8 @@
-﻿namespace ShoppingCart.Domain.DTOs
-{
-    public class CartDto
-    {
-        public CartHeaderDto CartHeader { get; set; }
+﻿namespace ShoppingCart.Domain.DTOs;
 
-        public List<CartDetailsDto> CartDetails { get; set; }
-    }
+public sealed class CartDto(CartHeaderDto cartHeader, List<CartDetailsDto> cartDetails)
+{
+    public CartHeaderDto CartHeader { get; init; } = cartHeader;
+
+    public List<CartDetailsDto> CartDetails { get; init; } = cartDetails;
 }

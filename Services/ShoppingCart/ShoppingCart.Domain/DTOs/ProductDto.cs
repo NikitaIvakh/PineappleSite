@@ -1,21 +1,23 @@
 ﻿using ShoppingCart.Domain.Enum;
 
-namespace ShoppingCart.Domain.DTOs
+namespace ShoppingCart.Domain.DTOs;
+
+public sealed class ProductDto
 {
-    public class ProductDto
-    {
-        public int Id { get; set; }
+    public int Id { get; init; }
 
-        public string Name { get; set; }
+    public required string Name { get; init; }
 
-        public string Description { get; set; }
+    public required string Description { get; init; }
+    
 
-        public ProductCategory ProductCategory { get; set; }
+    public ProductCategory ProductCategory { get; init; }
 
-        public double Price { get; set; }
+    public double Price { get; init; }
+    
 
-        public string? ImageUrl { get; set; }
+    public string? ImageUrl { get; init; }
+    
 
-        public string? ImageLocalPath { get; set; }
-    }
+    public string? ImageLocalPath { get; init; }
 }

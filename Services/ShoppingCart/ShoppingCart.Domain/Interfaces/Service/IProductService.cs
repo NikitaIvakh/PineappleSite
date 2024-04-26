@@ -1,10 +1,9 @@
 ﻿using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
-namespace ShoppingCart.Domain.Interfaces.Service
+namespace ShoppingCart.Domain.Interfaces.Service;
+
+public interface IProductService
 {
-    public interface IProductService
-    {
-        Task<CollectionResult<ProductDto>> GetProductListAsync();
-    }
+    Task<CollectionResult<ProductDto>> GetProductsAsync();
 }

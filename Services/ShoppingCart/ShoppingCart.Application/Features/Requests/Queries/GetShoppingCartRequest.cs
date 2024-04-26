@@ -2,10 +2,9 @@
 using ShoppingCart.Domain.DTOs;
 using ShoppingCart.Domain.Results;
 
-namespace ShoppingCart.Application.Features.Requests.Queries
+namespace ShoppingCart.Application.Features.Requests.Queries;
+
+public sealed class GetShoppingCartRequest(string userId) : IRequest<Result<CartDto>>
 {
-    public class GetShoppingCartRequest : IRequest<Result<CartDto>>
-    {
-        public string UserId { get; set; }
-    }
+    public string UserId { get; init; } = userId;
 }

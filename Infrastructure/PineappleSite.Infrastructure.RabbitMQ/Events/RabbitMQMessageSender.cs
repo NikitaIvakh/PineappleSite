@@ -19,7 +19,7 @@ namespace PineappleSite.Infrastructure.RabbitMQ.Events
             _password = "guest";
         }
 
-        public bool SendMessage(object baseMessage, string queueName)
+        public bool SendMessage(object baseMessage, string? queueName)
         {
             var connectionFactory = new ConnectionFactory
             {

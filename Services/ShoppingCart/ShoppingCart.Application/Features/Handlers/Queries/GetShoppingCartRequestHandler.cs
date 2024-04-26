@@ -10,135 +10,142 @@ using ShoppingCart.Domain.Interfaces.Repository;
 using ShoppingCart.Application.Features.Requests.Queries;
 using Microsoft.Extensions.Caching.Memory;
 
-namespace ShoppingCart.Application.Features.Handlers.Queries
+namespace ShoppingCart.Application.Features.Handlers.Queries;
+
+public sealed class GetShoppingCartRequestHandler(
+    IBaseRepository<CartHeader> cartHeaderRepository,
+    IBaseRepository<CartDetails> cartDetailsRepository,
+    IProductService productService,
+    ICouponService couponService,
+    IMapper mapper,
+    IMemoryCache memoryCache) : IRequestHandler<GetShoppingCartRequest, Result<CartDto>>
 {
-    public class GetShoppingCartRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository,
-        IProductService productService, ICouponService couponService, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<GetShoppingCartRequest, Result<CartDto>>
+    private const string CacheKey = "cacheGetShoppingCartKey";
+
+    public async Task<Result<CartDto>> Handle(GetShoppingCartRequest request, CancellationToken cancellationToken)
     {
-        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
-        private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
-        private readonly IProductService _productService = productService;
-        private readonly ICouponService _couponService = couponService;
-        private readonly IMapper _mapper = mapper;
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "cacheGetShoppingCartKey";
-
-        public async Task<Result<CartDto>> Handle(GetShoppingCartRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            if (memoryCache.TryGetValue(CacheKey, out CartDto? cartDto))
             {
-                if (_memoryCache.TryGetValue(cacheKey, out CartDto? cartDto))
+                return new Result<CartDto>
+                {
+                    Data = cartDto,
+                    StatusCode = (int)StatusCode.Ok,
+                    SuccessMessage =
+                        SuccessMessage.ResourceManager.GetString("YourShoppingCart", SuccessMessage.Culture),
+                };
+            }
+
+            var cartHeader = cartHeaderRepository.GetAll()
+                .Select(key => new CartHeaderDto
+                {
+                    CartHeaderId = key.CartHeaderId,
+                    UserId = key.UserId,
+                    CouponCode = key.CouponCode,
+                    Discount = key.Discount,
+                    CartTotal = key.CartTotal,
+                }).FirstOrDefault(key => key.UserId == request.UserId);
+
+            if (cartHeader is null)
+            {
+                return new Result<CartDto>
+                {
+                    Data = new CartDto
+                    (
+                        cartHeader: new CartHeaderDto(),
+                        cartDetails: []
+                    ),
+
+                    StatusCode = (int)StatusCode.Ok,
+                    SuccessMessage =
+                        SuccessMessage.ResourceManager.GetString("ShoppingCartIsEmpty", SuccessMessage.Culture),
+                };
+            }
+
+            var cartDetails = cartDetailsRepository.GetAll()
+                .Where(key =>
+                    key.CartHeader!.UserId == cartHeader.UserId &&
+                    key.CartHeaderId == cartHeader.CartHeaderId)
+                .Select(key =>
+                    new CartDetailsDto
+                    {
+                        CartDetailsId = key.CartDetailsId,
+                        CartHeader = mapper.Map<CartHeaderDto>(key.CartHeader),
+                        CartHeaderId = key.CartHeaderId,
+                        Product = key.Product,
+                        ProductId = key.ProductId,
+                        Count = key.Count,
+                    }).OrderByDescending(key => key.CartDetailsId).ToList();
+
+            if (cartDetails.Count == 0)
+            {
+                return new Result<CartDto>()
+                {
+                    Data = new CartDto
+                    (
+                        cartHeader: new CartHeaderDto(),
+                        cartDetails: []
+                    ),
+
+                    StatusCode = (int)StatusCode.Ok,
+                    SuccessMessage =
+                        SuccessMessage.ResourceManager.GetString("ShoppingCartIsEmpty", SuccessMessage.Culture),
+                };
+            }
+
+            var getCartDto = new CartDto(cartHeader, cartDetails);
+            var products = await productService.GetProductsAsync();
+
+            foreach (var product in getCartDto.CartDetails)
+            {
+                product.Product = products.Data?.FirstOrDefault(key => key.Id == product.ProductId);
+                cartDto!.CartHeader.CartTotal += (product.Count * product.Product?.Price ?? 0);
+            }
+
+            if (!string.IsNullOrEmpty(cartDto?.CartHeader.CouponCode))
+            {
+                var coupon = await couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
+
+                if (coupon.Data is null)
                 {
                     return new Result<CartDto>
                     {
                         Data = cartDto,
-                        SuccessCode = (int)SuccessCode.Ok,
+                        ErrorMessage = ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture),
+                        ValidationErrors =
+                        [
+                            ErrorMessages.ResourceManager.GetString("CouponNotFound", ErrorMessages.Culture) ??
+                            string.Empty
+                        ]
                     };
                 }
 
-                else
+                if (cartDto.CartHeader.CartTotal > coupon.Data.MinAmount)
                 {
-                    CartHeaderDto? cartHeader = _cartHeaderRepository.GetAll().Select(key => new CartHeaderDto
-                    {
-                        CartHeaderId = key.CartHeaderId,
-                        UserId = key.UserId,
-                        CouponCode = key.CouponCode,
-                        Discount = key.Discount,
-                        CartTotal = key.CartTotal,
-                    }).FirstOrDefault(key => key.UserId == request.UserId);
-
-                    if (cartHeader is null)
-                    {
-                        return new Result<CartDto>
-                        {
-                            Data = new CartDto
-                            {
-                                CartHeader = new CartHeaderDto(),
-                                CartDetails = new List<CartDetailsDto>(),
-                            },
-
-                            SuccessCode = (int)SuccessCode.Ok,
-                            SuccessMessage = SuccessMessage.ShoppingCartIsEmpty,
-                        };
-                    }
-
-                    else
-                    {
-                        List<CartDetailsDto> cartDetails = _cartDetailsRepository.GetAll().Select(key => new CartDetailsDto
-                        {
-                            CartDetailsId = key.CartDetailsId,
-                            CartHeader = _mapper.Map<CartHeaderDto>(key.CartHeader),
-                            CartHeaderId = key.CartHeaderId,
-                            Product = key.Product,
-                            ProductId = key.ProductId,
-                            Count = key.Count,
-                        }).OrderByDescending(key => key.CartDetailsId).Where(key => key.CartHeaderId == cartHeader.CartHeaderId).ToList();
-
-                        cartDto = new()
-                        {
-                            CartHeader = cartHeader,
-                            CartDetails = cartDetails,
-                        };
-
-                        CollectionResult<ProductDto> products = await _productService.GetProductListAsync();
-
-                        foreach (var product in cartDto.CartDetails)
-                        {
-                            product.Product = products.Data.FirstOrDefault(key => key.Id == product.ProductId);
-                            cartDto.CartHeader.CartTotal += (product.Count * product.Product?.Price ?? 0);
-                        }
-
-                        if (!string.IsNullOrEmpty(cartDto.CartHeader.CouponCode))
-                        {
-                            var coupon = await _couponService.GetCouponAsync(cartDto.CartHeader.CouponCode);
-
-                            if (coupon.Data is null)
-                            {
-                                return new Result<CartDto>
-                                {
-                                    Data = cartDto,
-                                    ErrorMessage = ErrorMessages.CouponNotFound,
-                                    ValidationErrors = [ErrorMessages.CouponNotFound]
-                                };
-                            }
-
-                            else if (coupon is not null && cartDto.CartHeader.CartTotal > coupon.Data.MinAmount)
-                            {
-                                cartDto.CartHeader.CartTotal -= coupon.Data.DiscountAmount;
-                                cartDto.CartHeader.Discount = coupon.Data.DiscountAmount;
-                            }
-                        }
-
-                        var getAllheaders = _cartHeaderRepository.GetAll().ToList();
-                        var getAlldetails = _cartDetailsRepository.GetAll().ToList();
-
-                        _memoryCache.Remove(getAllheaders);
-                        _memoryCache.Remove(getAlldetails);
-
-                        _memoryCache.Set(cacheKey, getAllheaders);
-                        _memoryCache.Set(cacheKey, getAlldetails);
-
-                        return new Result<CartDto>
-                        {
-                            Data = cartDto,
-                            SuccessCode = (int)SuccessCode.Ok,
-                            SuccessMessage = SuccessMessage.YourShoppingCart,
-                        };
-                    }
+                    cartDto.CartHeader.CartTotal -= coupon.Data.DiscountAmount;
+                    cartDto.CartHeader.Discount = coupon.Data.DiscountAmount;
                 }
             }
 
-            catch
+            memoryCache.Remove(CacheKey);
+
+            return new Result<CartDto>
             {
-                _memoryCache.Remove(cacheKey);
-                return new Result<CartDto>
-                {
-                    ErrorMessage = ErrorMessages.InternalServerError,
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ValidationErrors = [ErrorMessages.InternalServerError]
-                };
-            }
+                Data = getCartDto,
+                StatusCode = (int)StatusCode.Ok,
+                SuccessMessage = SuccessMessage.ResourceManager.GetString("YourShoppingCart", SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<CartDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }

@@ -1,18 +1,15 @@
 ﻿using Npgsql;
 using System.Data;
 
-namespace ShoppingCart.Infrastructure.Health
+namespace ShoppingCart.Infrastructure.Health;
+
+public sealed class DbConnectionFactory(string connectionString)
 {
-    public class DbConnectionFactory(string connectionString)
+    public IDbConnection OpenConnection()
     {
-        private readonly string _connectionString = connectionString;
+        var connection = new NpgsqlConnection(connectionString);
+        connection.Open();
 
-        public IDbConnection OpenConnection()
-        {
-            var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-
-            return connection;
-        }
+        return connection;
     }
 }

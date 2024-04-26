@@ -1,19 +1,18 @@
 ﻿using ShoppingCart.Domain.DTOs;
 
-namespace ShoppingCart.Domain.Entities
+namespace ShoppingCart.Domain.Entities;
+
+public class CartDetails
 {
-    public class CartDetails
-    {
-        public int CartDetailsId { get; set; }
+    public int CartDetailsId { get; init; }
 
-        public CartHeader? CartHeader { get; set; }
+    public CartHeader? CartHeader { get; init; }
 
-        public int CartHeaderId { get; set; }
+    public int CartHeaderId { get; init; }
 
-        public ProductDto? Product { get; set; }
+    public ProductDto? Product { get; init; }
 
-        public int ProductId { get; set; }
+    public int ProductId { get; init; }
 
-        public double Count { get; set; }
-    }
+    public double Count { get; init; }
 }

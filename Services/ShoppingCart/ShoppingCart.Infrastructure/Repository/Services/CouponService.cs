@@ -3,30 +3,26 @@ using ShoppingCart.Domain.Interfaces.Service;
 using ShoppingCart.Domain.Results;
 using System.Text.Json;
 
-namespace ShoppingCart.Infrastructure.Repository.Services
+namespace ShoppingCart.Infrastructure.Repository.Services;
+
+public sealed class CouponService(IHttpClientFactory httpClientFactory) : ICouponService
 {
-    public class CouponService(IHttpClientFactory httpClientFactory) : ICouponService
+    public async Task<Result<CouponDto>> GetCouponAsync(string? couponCode)
     {
-        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+        var httpClient = httpClientFactory.CreateClient("Coupon");
+        var response = await httpClient.GetAsync($"/api/coupons/GetCouponByCode/{couponCode}");
 
-        public async Task<Result<GetCouponDto>> GetCouponAsync(string couponCode)
+        if (!response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient("Coupon");
-            var response = await httpClient.GetAsync($"/api/Coupon/GetCouponByCode/{couponCode}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                using var stream = await response.Content.ReadAsStreamAsync();
-                JsonSerializerOptions jsonSerializerOptions = new()
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                var options = jsonSerializerOptions;
-                return await JsonSerializer.DeserializeAsync<Result<GetCouponDto>>(stream, options);
-            }
-
-            return new Result<GetCouponDto>();
+            return new Result<CouponDto>();
         }
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        JsonSerializerOptions jsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true,
+        };
+
+        return (await JsonSerializer.DeserializeAsync<Result<CouponDto>>(stream, jsonSerializerOptions))!;
     }
 }

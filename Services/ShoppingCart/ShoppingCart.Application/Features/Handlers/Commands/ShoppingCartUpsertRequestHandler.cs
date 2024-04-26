@@ -9,97 +9,87 @@ using ShoppingCart.Domain.Enum;
 using ShoppingCart.Domain.Interfaces.Repository;
 using ShoppingCart.Domain.Results;
 
-namespace ShoppingCart.Application.Features.Handlers.Commands
+namespace ShoppingCart.Application.Features.Handlers.Commands;
+
+public sealed class ShoppingCartUpsertRequestHandler(
+    IBaseRepository<CartHeader> cartHeaderRepository,
+    IBaseRepository<CartDetails> cartDetailsRepository,
+    IMapper mapper,
+    IMemoryCache memoryCache) : IRequestHandler<ShoppingCartUpsertRequest, Result<CartHeaderDto>>
 {
-    public class ShoppingCartUpsertRequestHandler(IBaseRepository<CartHeader> cartHeaderRepository, IBaseRepository<CartDetails> cartDetailsRepository, IMapper mapper, IMemoryCache memoryCache) : IRequestHandler<ShoppingCartUpsertRequest, Result<CartHeaderDto>>
+    private const string CacheKey = "cacheGetShoppingCartKey";
+
+    public async Task<Result<CartHeaderDto>> Handle(ShoppingCartUpsertRequest request,
+        CancellationToken cancellationToken)
     {
-        private readonly IBaseRepository<CartHeader> _cartHeaderRepository = cartHeaderRepository;
-        private readonly IBaseRepository<CartDetails> _cartDetailsRepository = cartDetailsRepository;
-        private readonly IMapper _mapper = mapper;
-
-        private readonly IMemoryCache _memoryCache = memoryCache;
-
-        private readonly string cacheKey = "cacheGetShoppingCartKey";
-
-        public async Task<Result<CartHeaderDto>> Handle(ShoppingCartUpsertRequest request, CancellationToken cancellationToken)
+        try
         {
-            try
+            var cartHeaderFromDb = cartHeaderRepository.GetAll()
+                .FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
+
+            if (cartHeaderFromDb is null)
             {
-                var cartHeaderFromDb = _cartHeaderRepository.GetAll().FirstOrDefault(key => key.UserId == request.CartDto.CartHeader.UserId);
+                var cartHeader = mapper.Map<CartHeader>(request.CartDto.CartHeader);
+                await cartHeaderRepository.CreateAsync(cartHeader);
 
-                if (cartHeaderFromDb is null)
-                {
-                    CartHeader? cartHeader = _mapper.Map<CartHeader>(request.CartDto.CartHeader);
-                    await _cartHeaderRepository.CreateAsync(cartHeader);
+                request.CartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
+                await cartDetailsRepository.CreateAsync(
+                    mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
 
-                    request.CartDto.CartDetails.First().CartHeaderId = cartHeader.CartHeaderId;
-                    await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
+                memoryCache.Remove(CacheKey);
 
-                    var getAllheaders = _cartHeaderRepository.GetAll().ToList();
-                    var getAlldetails = _cartDetailsRepository.GetAll().ToList();
-
-                    _memoryCache.Remove(getAllheaders);
-                    _memoryCache.Remove(getAlldetails);
-
-                    _memoryCache.Set(cacheKey, getAllheaders);
-                    _memoryCache.Set(cacheKey, getAlldetails);
-
-                    return new Result<CartHeaderDto>
-                    {
-                        SuccessCode = (int)SuccessCode.Created,
-                        Data = _mapper.Map<CartHeaderDto>(cartHeader),
-                        SuccessMessage = SuccessMessage.ProductSuccessfullyAddedShoppingCart,
-                    };
-                }
-
-                else
-                {
-                    var cartDetailsFromDb = _cartDetailsRepository
-                        .GetAll()
-                        .FirstOrDefault(key => key.ProductId == request.CartDto.CartDetails.First().ProductId && key.CartHeaderId == cartHeaderFromDb.CartHeaderId);
-
-                    if (cartDetailsFromDb is null)
-                    {
-                        request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
-                        await _cartDetailsRepository.CreateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
-                    }
-
-                    else
-                    {
-                        request.CartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
-                        request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
-                        request.CartDto.CartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
-
-                        await _cartDetailsRepository.UpdateAsync(_mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
-                    }
-
-                    var getAllheaders = _cartHeaderRepository.GetAll().ToList();
-                    var getAlldetails = _cartDetailsRepository.GetAll().ToList();
-
-                    _memoryCache.Remove(getAllheaders);
-                    _memoryCache.Remove(getAlldetails);
-
-                    _memoryCache.Set(cacheKey, getAllheaders);
-                    _memoryCache.Set(cacheKey, getAlldetails);
-
-                    return new Result<CartHeaderDto>
-                    {
-                        SuccessCode = (int)SuccessCode.Created,
-                        Data = _mapper.Map<CartHeaderDto>(cartHeaderFromDb),
-                        SuccessMessage = SuccessMessage.ProductSuccessfullyAddedShoppingCart,
-                    };
-                }
-            }
-
-            catch
-            {
                 return new Result<CartHeaderDto>
                 {
-                    ErrorCode = (int)ErrorCodes.InternalServerError,
-                    ErrorMessage = ErrorMessages.InternalServerError,
-                    ValidationErrors = [ErrorMessages.InternalServerError]
+                    StatusCode = (int)StatusCode.Created,
+                    Data = mapper.Map<CartHeaderDto>(cartHeader),
+                    SuccessMessage = SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedShoppingCart",
+                        SuccessMessage.Culture),
                 };
             }
+
+            var cartDetailsFromDb = cartDetailsRepository
+                .GetAll()
+                .FirstOrDefault(key =>
+                    key.ProductId == request.CartDto.CartDetails.First().ProductId &&
+                    key.CartHeaderId == cartHeaderFromDb.CartHeaderId);
+
+            if (cartDetailsFromDb is null)
+            {
+                request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
+                await cartDetailsRepository.CreateAsync(
+                    mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
+            }
+
+            else
+            {
+                request.CartDto.CartDetails.First().Count += cartDetailsFromDb.Count;
+                request.CartDto.CartDetails.First().CartHeaderId = cartHeaderFromDb.CartHeaderId;
+                request.CartDto.CartDetails.First().CartDetailsId = cartDetailsFromDb.CartDetailsId;
+
+                await cartDetailsRepository.UpdateAsync(
+                    mapper.Map<CartDetails>(request.CartDto.CartDetails.First()));
+            }
+
+            memoryCache.Remove(CacheKey);
+
+            return new Result<CartHeaderDto>
+            {
+                StatusCode = (int)StatusCode.Created,
+                Data = mapper.Map<CartHeaderDto>(cartHeaderFromDb),
+                SuccessMessage =
+                    SuccessMessage.ResourceManager.GetString("ProductSuccessfullyAddedShoppingCart",
+                        SuccessMessage.Culture),
+            };
+        }
+
+        catch (Exception ex)
+        {
+            return new Result<CartHeaderDto>
+            {
+                ErrorMessage = ex.Message,
+                ValidationErrors = [ex.Message],
+                StatusCode = (int)StatusCode.InternalServerError,
+            };
         }
     }
 }
