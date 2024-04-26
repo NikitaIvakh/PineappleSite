@@ -1,30 +1,56 @@
-﻿// using FluentAssertions;
-// using ShoppingCart.Application.Features.Handlers.Commands;
-// using ShoppingCart.Application.Features.Requests.Commands;
-// using ShoppingCart.Test.Common;
-// using Xunit;
-//
-// namespace ShoppingCart.Test.Commands
-// {
-//     public class RemoveShoppingCartProductRequestHandlerTest : TestCommandHandler
-//     {
-//         [Fact]
-//         public async Task RemoveShoppingCartDetailsRequestHandlerTest_Success()
-//         {
-//             // Arrange
-//             var handler = new RemoveShoppingCartProductRequestHandler(CartHeader, CartDetails, Mapper, MemoryCache);
-//             var productId = 2;
-//
-//             // Act
-//             var result = await handler.Handle(new RemoveShoppingCartProductRequest
-//             {
-//                 ProductId = productId,
-//             }, CancellationToken.None);
-//
-//             // Assert
-//             result.IsSuccess.Should().BeFalse();
-//             result.ErrorMessage.Should().Be("Внутренняя проблемы сервера");
-//             result.ErrorCode.Should().Be(500);
-//         }
-//     }
-// }
+﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
+using ShoppingCart.Application.Features.Handlers.Commands;
+using ShoppingCart.Application.Features.Requests.Commands;
+using ShoppingCart.Domain.DTOs;
+using ShoppingCart.Test.Common;
+using Xunit;
+
+namespace ShoppingCart.Test.Commands;
+
+public class RemoveShoppingCartProductRequestHandlerTest : TestCommandHandler
+{
+    [Fact]
+    public async Task RemoveShoppingCartDetailsRequestHandlerTest_Success()
+    {
+        // Arrange
+        var handler = new RemoveShoppingCartProductRequestHandler(CartHeader, CartDetails, DeleteValidator, MemoryCache);
+        const int productId = 3;
+        var deleteProductDto = new DeleteProductDto(productId);
+
+        foreach (var entity in Context.ChangeTracker.Entries())
+        {
+            entity.State = EntityState.Detached;
+        }
+
+        // Act
+        var result = await handler.Handle(new RemoveShoppingCartProductRequest(deleteProductDto), CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeTrue();
+        result.StatusCode.Should().Be(205);
+        result.SuccessMessage.Should().Be("Продукт успешно удален");
+    }
+    
+    [Fact]
+    public async Task RemoveShoppingCartDetailsRequestHandlerTest_FailOrWrong_ProductId()
+    {
+        // Arrange
+        var handler = new RemoveShoppingCartProductRequestHandler(CartHeader, CartDetails, DeleteValidator, MemoryCache);
+        const int productId = 32;
+        var deleteProductDto = new DeleteProductDto(productId);
+
+        foreach (var entity in Context.ChangeTracker.Entries())
+        {
+            entity.State = EntityState.Detached;
+        }
+
+        // Act
+        var result = await handler.Handle(new RemoveShoppingCartProductRequest(deleteProductDto), CancellationToken.None);
+
+        // Assert
+        result.IsSuccess.Should().BeFalse();
+        result.ErrorMessage.Should().Be("Детали не найдены");
+        result.ValidationErrors.Should().Equal("Детали не найдены");
+    }
+}
