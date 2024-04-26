@@ -64,10 +64,10 @@ public sealed class RemoveShoppingCartProductRequestHandler(
                 return new Result<Unit>
                 {
                     StatusCode = (int)StatusCode.NotFound,
-                    ErrorMessage = ErrorMessages.ResourceManager.GetString("DetailsNotFound", ErrorMessages.Culture),
+                    ErrorMessage = ErrorMessages.ResourceManager.GetString("ProductsNotFound", ErrorMessages.Culture),
                     ValidationErrors =
                     [
-                        ErrorMessages.ResourceManager.GetString("DetailsNotFound", ErrorMessages.Culture) ??
+                        ErrorMessages.ResourceManager.GetString("ProductsNotFound", ErrorMessages.Culture) ??
                         string.Empty
                     ]
                 };

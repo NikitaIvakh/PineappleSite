@@ -8,7 +8,7 @@ using Xunit;
 
 namespace ShoppingCart.Test.Commands;
 
-public class RemoveShoppingCartProductRequestHandlerTest : TestCommandHandler
+public sealed class RemoveShoppingCartProductRequestHandlerTest : TestCommandHandler
 {
     [Fact]
     public async Task RemoveShoppingCartDetailsRequestHandlerTest_Success()

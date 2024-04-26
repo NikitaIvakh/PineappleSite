@@ -123,8 +123,8 @@
   <data name="CouponNotFound" xml:space="preserve">
     <value>Купон не найден</value>
   </data>
-  <data name="DetailsNotFound" xml:space="preserve">
-    <value>Детали не найдены</value>
+  <data name="ProductsNotFound" xml:space="preserve">
+    <value>Продукты не найдены</value>
   </data>
   <data name="InternalServerError" xml:space="preserve">
     <value>Внутренняя проблемы сервера</value>

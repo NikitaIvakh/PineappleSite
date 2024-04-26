@@ -6,7 +6,7 @@ using Xunit;
 
 namespace ShoppingCart.Test.Queries;
 
-public class GetShoppingCartRequestHandlerTest : TestQueryHandler
+public sealed class GetShoppingCartRequestHandlerTest : TestQueryHandler
 {
     [Fact]
     public async Task GetShoppingCartRequestHandlerTest_Success()

@@ -78,15 +78,6 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Детали не найдены.
-        /// </summary>
-        internal static string DetailsNotFound {
-            get {
-                return ResourceManager.GetString("DetailsNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Внутренняя проблемы сервера.
         /// </summary>
         internal static string InternalServerError {
@@ -119,6 +110,15 @@ namespace ShoppingCart.Application.Resources {
         internal static string ProductsCanNotDeleted {
             get {
                 return ResourceManager.GetString("ProductsCanNotDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Продукты не найдены.
+        /// </summary>
+        internal static string ProductsNotFound {
+            get {
+                return ResourceManager.GetString("ProductsNotFound", resourceCulture);
             }
         }
     }
