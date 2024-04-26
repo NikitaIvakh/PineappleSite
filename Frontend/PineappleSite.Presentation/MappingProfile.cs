@@ -77,6 +77,7 @@ public sealed class MappingProfile : Profile
         CreateMap<DeleteProductsDto, DeleteProductsViewModel>().ReverseMap();
         CreateMap<DeleteProductByUserDto, DeleteProductByUserViewModel>().ReverseMap();
         CreateMap<DeleteCouponDto, DeleteCouponByCodeViewModel>().ReverseMap();
+        CreateMap<DeleteCouponsByCodeDto, DeleteCouponsByCodeViewModel>().ReverseMap();
 
         CreateMap<DeleteProductViewModel, PineappleSite.Presentation.Services.ShoppingCarts.DeleteProductDto>().ReverseMap();
         CreateMap<DeleteProductsViewModel, PineappleSite.Presentation.Services.ShoppingCarts.DeleteProductsDto>();

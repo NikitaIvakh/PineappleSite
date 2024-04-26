@@ -77,12 +77,14 @@ public sealed class RemoveShoppingCartProductsRequestHandler(
                 };
             }
 
-            foreach (var product in cartDetails)
+            var cartHearerIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
+            var cartDetailsToDelete =
+                cartDetails.Where(cd => request.DeleteProductDto.ProductIds.Contains(cd.ProductId)).ToList();
+
+            foreach (var product in cartDetailsToDelete)
             {
                 await cartDetailsRepository.DeleteAsync(product);
             }
-
-            var cartHearerIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
 
             foreach (var cartHeaderFromDb in from cartHeaderId in cartHearerIds
                      let totalDetailsWithHeader = cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
@@ -95,12 +97,10 @@ public sealed class RemoveShoppingCartProductsRequestHandler(
                     {
                         StatusCode = (int)StatusCode.NotFound,
                         ErrorMessage =
-                            ErrorMessages.ResourceManager.GetString("CartHeaderNotFound",
-                                ErrorMessages.Culture),
+                            ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture),
                         ValidationErrors =
                         [
-                            ErrorMessages.ResourceManager.GetString("CartHeaderNotFound",
-                                ErrorMessages.Culture) ??
+                            ErrorMessages.ResourceManager.GetString("CartHeaderNotFound", ErrorMessages.Culture) ??
                             string.Empty
                         ]
                     };

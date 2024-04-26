@@ -38,12 +38,12 @@ public sealed class DeleteFavouriteProductRequestHandler(
                 };
             }
 
+            var favouriteHeaderIds = favouriteProducts.Select(fp => fp.FavouriteHeaderId).Distinct().ToList();
+            
             foreach (var favouriteProduct in favouriteProducts)
             {
                 await detailsRepository.DeleteAsync(favouriteProduct);
             }
-
-            var favouriteHeaderIds = favouriteProducts.Select(fp => fp.FavouriteHeaderId).Distinct().ToList();
 
             foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds let totalDetailsWithHeader = detailsRepository.GetAll()
                          .Count(key => key.FavouriteHeaderId == favouriteHeaderId) where totalDetailsWithHeader == 1 select headerRepository.GetAll()

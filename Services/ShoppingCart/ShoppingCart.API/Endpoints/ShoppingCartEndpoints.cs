@@ -24,6 +24,7 @@ public class ShoppingCartEndpoints : ICarterModule
         group.MapDelete("/RemoveProductByUser", RemoveProductByUser).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapDelete("/RemoveProducts", RemoveProducts).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapDelete("/RemoveCouponCode", RemoveCouponCode).RequireAuthorization(AdministratorPolicy);
+        group.MapDelete("/RemoveCouponsByCode", RemoveCouponsByCode).RequireAuthorization(AdministratorPolicy);
         group.MapPost("/SendMessage", SendMessage).RequireAuthorization(UserAndAdministratorPolicy);
     }
 
@@ -150,11 +151,29 @@ public class ShoppingCartEndpoints : ICarterModule
 
         if (command.IsSuccess)
         {
-            logger.LogDebug($"LogDebug ================ Купон успешно удален: {deleteCouponDto.CouponCode}");
+            logger.LogDebug($"LogDebug ================ Купоны успешно обновлены: {deleteCouponDto.CouponCode}");
             return TypedResults.Ok(command);
         }
 
-        logger.LogError($"LogDebugError ================ Ошибка удаления купона: {deleteCouponDto.CouponCode}");
+        logger.LogError($"LogDebugError ================ Ошибка обновления купонов: {deleteCouponDto.CouponCode}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<CollectionResult<bool>>, BadRequest<string>>> RemoveCouponsByCode(
+        ISender sender, ILogger<DeleteCouponsByCodeDto> logger,
+        [FromBody] DeleteCouponsByCodeDto deleteCouponsByCodeDto)
+    {
+        var command = await sender.Send(new DeleteCouponsByCodeRequest(deleteCouponsByCodeDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug(
+                $"LogDebug ================ Купоны успешно обновлены: {deleteCouponsByCodeDto.CouponCodes}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError(
+            $"LogDebugError ================ Ошибка обновления купонов: {deleteCouponsByCodeDto.CouponCodes}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 

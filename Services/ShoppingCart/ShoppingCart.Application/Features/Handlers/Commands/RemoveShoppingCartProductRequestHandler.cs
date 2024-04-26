@@ -72,12 +72,12 @@ public sealed class RemoveShoppingCartProductRequestHandler(
                 };
             }
 
+            var cartHeaderIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
+            
             foreach (var product in cartDetails)
             {
                 await cartDetailsRepository.DeleteAsync(product);
             }
-
-            var cartHeaderIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
 
             foreach (var cartHeaderDelete in from cartHeaderId in cartHeaderIds
                      let totalDetailsWithHeader = cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)

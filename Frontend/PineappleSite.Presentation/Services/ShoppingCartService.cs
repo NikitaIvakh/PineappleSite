@@ -309,6 +309,43 @@ public sealed class ShoppingCartService(
         }
     }
 
+    public async Task<CartCollectionResult<bool>> RemoveCouponsByCode(
+        DeleteCouponsByCodeViewModel deleteCouponsByCodeViewModel)
+    {
+        AddBearerToken();
+        try
+        {
+            var deleteCouponsByCodeDto = mapper.Map<DeleteCouponsByCodeDto>(deleteCouponsByCodeViewModel);
+            var apiResponse = await shoppingCartClient.RemoveCouponsByCodeAsync(deleteCouponsByCodeDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new CartCollectionResult<bool>()
+                {
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
+            }
+
+            return new CartCollectionResult<bool>()
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
+        }
+
+        catch (ShoppingCartExceptions<string> exceptions)
+        {
+            return new CartCollectionResult<bool>()
+            {
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
+
     public async Task<CartResult<bool>> RabbitMqShoppingCartAsync(CartViewModel cartViewModel)
     {
         AddBearerToken();

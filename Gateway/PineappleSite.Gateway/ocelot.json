@@ -728,6 +728,23 @@
 
     {
       //"ShoppingCart.API": "https://localhost:7101"
+      "DownstreamPathTemplate": "/api/shoppingCart/RemoveCouponsByCode",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7101
+        }
+      ],
+      "UpstreamPathTemplate": "/api/shoppingCart/RemoveCouponsByCode",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"ShoppingCart.API": "https://localhost:7101"
       "DownstreamPathTemplate": "/api/shoppingCart/SendMessage",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

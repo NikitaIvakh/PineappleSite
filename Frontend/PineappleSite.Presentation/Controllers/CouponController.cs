@@ -162,7 +162,7 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             var coupon = await couponService.GetCouponByIdAsync(couponId);
             var deleteCouponByCode = new DeleteCouponByCodeViewModel(coupon.Data!.CouponCode);
             await shoppingCartService.RemoveCouponByCode(deleteCouponByCode);
-            
+
             var response = await couponService.DeleteCouponAsync(couponId, deleteCoupon);
 
             if (response.IsSuccess)
@@ -184,6 +184,25 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
 
     public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons)
     {
+        var coupons = await couponService.GetAllCouponsAsync();
+        var matchingCoupons = new List<string>();
+
+        foreach (var selectedCouponCode in selectedCoupons)
+        {
+            foreach (var coupon in coupons.Data!)
+            {
+                if (coupon.CouponId != selectedCouponCode)
+                {
+                    continue;
+                }
+                
+                matchingCoupons.Add(coupon.CouponCode);
+                break;
+            }
+        }
+        
+        await shoppingCartService.RemoveCouponsByCode(new DeleteCouponsByCodeViewModel(matchingCoupons));
+
         DeleteCouponsViewModel deleteCoupons = new(selectedCoupons);
         var response = await couponService.DeleteCouponsAsync(deleteCoupons);
 
