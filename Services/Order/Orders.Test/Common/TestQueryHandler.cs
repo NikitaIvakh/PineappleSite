@@ -3,68 +3,82 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using Order.Application.Mapping;
+using Order.Domain.DTOs;
 using Order.Domain.Entities;
+using Order.Domain.Enum;
 using Order.Domain.Interfaces.Repository;
 using Order.Domain.Interfaces.Services;
+using Order.Domain.ResultOrder;
 using Order.Infrastructure;
 using Order.Infrastructure.Repository.Implementation;
 
-namespace Orders.Test.Common
+namespace Orders.Test.Common;
+
+public class TestQueryHandler : IDisposable
 {
-    [CollectionDefinition("QueryCollection")]
-    public class TestQueryHandler : IDisposable
+    protected ApplicationDbContext Context;
+    protected IMapper Mapper;
+    protected IMemoryCache MemoryCache;
+    protected IHttpContextAccessor HttpContextAccessor;
+    protected IBaseRepository<OrderHeader> OrderHeader;
+    protected IBaseRepository<OrderDetails> OrderDetails;
+
+    protected IProductService ProductService;
+    protected IUserService UserService;
+
+    protected TestQueryHandler()
     {
-        protected ApplicationDbContext Context;
-        protected IMapper Mapper;
-        protected IMemoryCache MemoryCache;
-        protected IUserService UserService;
-        protected IHttpContextAccessor HttpContextAccessor;
-        protected IBaseRepository<OrderHeader> OrderHeader;
-        protected IBaseRepository<OrderDetails> OrderDetails;
+        var httpContextAccessorObjet = new Mock<IHttpContextAccessor>();
+        Context = OrdersDbContextFactory.Create();
 
-        public TestQueryHandler()
-        {
-            var httpContextAccessorObjet = new Mock<IHttpContextAccessor>();
-            Context = OrdersDbContextFactory.Create();
+        var mapperConfiguration = new MapperConfiguration(options => { options.AddProfile<MappingProfile>(); });
 
-            var mapperConfiguration = new MapperConfiguration(options =>
+        Mapper = mapperConfiguration.CreateMapper();
+        MemoryCache = new MemoryCache(new MemoryCacheOptions());
+        HttpContextAccessor = httpContextAccessorObjet.Object;
+        OrderHeader = new BaseRepository<OrderHeader>(Context);
+        OrderDetails = new BaseRepository<OrderDetails>(Context);
+
+        var productMock = new Mock<IProductService>();
+        productMock.Setup(mock => mock.GetProductsAsync())
+            .ReturnsAsync(new CollectionResult<ProductDto>
             {
-                options.AddProfile<MappingProfile>();
+                Data = new List<ProductDto>
+                {
+                    new()
+                    {
+                        Id = 1, Name = "Product 1", Price = 10.0, Description = "description 1",
+                        ProductCategory = ProductCategory.Drinks, ImageUrl = "", ImageLocalPath = ""
+                    },
+
+                    new()
+                    {
+                        Id = 2, Name = "Product 2", Price = 20.0, Description = "description 2",
+                        ProductCategory = ProductCategory.Drinks, ImageUrl = "", ImageLocalPath = ""
+                    },
+                }
             });
 
-            Mapper = mapperConfiguration.CreateMapper();
-            MemoryCache = new MemoryCache(new MemoryCacheOptions());
-            HttpContextAccessor = httpContextAccessorObjet.Object;
-            OrderHeader = new BaseRepository<OrderHeader>(Context);
-            OrderDetails = new BaseRepository<OrderDetails>(Context);
+        var userMock = new Mock<IUserService>();
+        userMock.Setup(mock => mock.GetUserAsync("testuser5t654"))
+            .ReturnsAsync(new Result<GetUserDto>
+            {
+                Data = new GetUserDto
+                (
+                    UserId: "testuser5t654",
+                    FirstName: "firstname",
+                    LastName: "lastname",
+                    EmailAddress: "emailaddress@gmail.com",
+                    UserName: "usernamswswqdweq",
+                    CreatedTime: DateTime.Today,
+                    ModifiedTime: DateTime.Today,
+                    Role: new List<string>() { "User" }
+                ),
+            });
 
-            var userServiceObject = new Mock<IUserService>();
-
-            userServiceObject.Setup(mock => mock.GetUserAsync("tetsuserid"))
-                .ReturnsAsync(new Order.Domain.ResultOrder.Result<Order.Domain.DTOs.GetUserDto>
-                {
-                    Data = new Order.Domain.DTOs.GetUserDto
-                    (
-                        UserId: "test1",
-                        FirstName: "test1",
-                        LastName: "test1",
-                        UserName: "TestUsername",
-                        EmailAddress: "EmailAddress@gmail.com",
-                        Role: ["Administrator"],
-                        CreatedTime: DateTime.Now,
-                        ModifiedTime: DateTime.Now
-                    )
-                });
-
-            UserService = userServiceObject.Object;
-        }
-
-        public void Dispose()
-        {
-            OrdersDbContextFactory.Destroy(Context);
-        }
+        ProductService = productMock.Object;
+        UserService = userMock.Object;
     }
 
-    [CollectionDefinition("QueryCollection")]
-    public class QueryCollection : ICollectionFixture<TestQueryHandler> { }
+    public void Dispose() => OrdersDbContextFactory.Destroy(Context);
 }
