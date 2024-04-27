@@ -26,7 +26,7 @@ public sealed class ValidateStripeSessionRequestHandler(
     {
         try
         {
-            var orderHeader = orderHeaderRepository.GetAll().First(key => key.OrderHeaderId == request.OrderHeaderId);
+            var orderHeader = orderHeaderRepository.GetAll().First(key => key.OrderHeaderId == request.ValidateStripeSessionDto.OrderHeaderId);
             var service = new SessionService();
             var session = service.Get(orderHeader.StripeSessionId);
 

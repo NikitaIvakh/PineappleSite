@@ -78,36 +78,38 @@ public sealed class OrderController : ControllerBase
     }
 
     [HttpPost("ValidateStripeSession")]
-    public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession(ISender sender, ILogger<int> logger,
-        [FromBody] int orderHeaderId)
+    public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession(ISender sender,
+        ILogger<ValidateStripeSessionDto> logger, [FromBody] ValidateStripeSessionDto validateStripeSessionDto)
     {
-        var command = await sender.Send(new ValidateStripeSessionRequest(orderHeaderId));
+        var command = await sender.Send(new ValidateStripeSessionRequest(validateStripeSessionDto));
 
         if (command.IsSuccess)
         {
-            logger.LogDebug($"LogDebug ================ Оплата успешно прошла валидацию: {orderHeaderId}");
-            return Ok(command);
-        }
-
-        logger.LogError($"LogDebugError ================ Оплата не успешно прошла валидацию: {orderHeaderId}");
-        return BadRequest(string.Join(", ", command.ValidationErrors!));
-    }
-
-    [HttpPost("UpdateOrderStatus")]
-    public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(ISender sender, ILogger<int> logger,
-        int orderHeaderId,
-        [FromBody] string newStatus)
-    {
-        var command = await sender.Send(new UpdateOrderStatusRequest(orderHeaderId, newStatus));
-
-        if (command.IsSuccess)
-        {
-            logger.LogDebug($"LogDebug ================ Статус заказ успешно обновлен: {orderHeaderId} - {newStatus}");
+            logger.LogDebug(
+                $"LogDebug ================ Оплата успешно прошла валидацию: {validateStripeSessionDto.OrderHeaderId}");
             return Ok(command);
         }
 
         logger.LogError(
-            $"LogDebugError ================ Ошибка обновления статуса заказа: {orderHeaderId} - {newStatus}");
+            $"LogDebugError ================ Оплата не успешно прошла валидацию: {validateStripeSessionDto.OrderHeaderId}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpPost("UpdateOrderStatus")]
+    public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(ISender sender,
+        ILogger<UpdateOrderStatusDto> logger, [FromBody] UpdateOrderStatusDto updateOrderStatusDto)
+    {
+        var command = await sender.Send(new UpdateOrderStatusRequest(updateOrderStatusDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug(
+                $"LogDebug ================ Статус заказ успешно обновлен: {updateOrderStatusDto.OrderHeaderId} - {updateOrderStatusDto.NewStatus}");
+            return Ok(command);
+        }
+
+        logger.LogError(
+            $"LogDebugError ================ Ошибка обновления статуса заказа: {updateOrderStatusDto.OrderHeaderId} - {updateOrderStatusDto.NewStatus}");
         return BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

@@ -27,7 +27,8 @@ public sealed class UpdateOrderStatusRequestHandler(
         try
         {
             var orderHeader = await orderHeaderRepository.GetAll()
-                .FirstOrDefaultAsync(key => key.OrderHeaderId == request.OrderHeaderId, cancellationToken);
+                .FirstOrDefaultAsync(key => key.OrderHeaderId == request.UpdateOrderStatusDto.OrderHeaderId,
+                    cancellationToken);
 
             if (orderHeader is null)
             {
@@ -44,7 +45,7 @@ public sealed class UpdateOrderStatusRequestHandler(
                 };
             }
 
-            if (request.NewStatus == StaticDetails.StatusCancelled)
+            if (request.UpdateOrderStatusDto.NewStatus == StaticDetails.StatusCancelled)
             {
                 var options = new RefundCreateOptions
                 {
@@ -56,7 +57,7 @@ public sealed class UpdateOrderStatusRequestHandler(
                 var refund = service.Create(options);
             }
 
-            orderHeader.Status = request.NewStatus;
+            orderHeader.Status = request.UpdateOrderStatusDto.NewStatus;
             await orderHeaderRepository.UpdateAsync(orderHeader);
 
             memoryCache.Remove(CacheKey);

@@ -4,9 +4,8 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Requests.Commands;
 
-public sealed class UpdateOrderStatusRequest(int orderHeaderId, string newStatus) : IRequest<Result<OrderHeaderDto>>
+public sealed class UpdateOrderStatusRequest(UpdateOrderStatusDto updateOrderStatusDto)
+    : IRequest<Result<OrderHeaderDto>>
 {
-    public int OrderHeaderId { get; init; } = orderHeaderId;
-
-    public string NewStatus { get; init; } = newStatus;
+    public UpdateOrderStatusDto UpdateOrderStatusDto { get; set; } = updateOrderStatusDto;
 }

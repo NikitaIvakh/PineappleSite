@@ -4,7 +4,8 @@ using Order.Domain.ResultOrder;
 
 namespace Order.Application.Features.Requests.Commands;
 
-public sealed class ValidateStripeSessionRequest(int orderHeaderId) : IRequest<Result<OrderHeaderDto>>
+public sealed class ValidateStripeSessionRequest(ValidateStripeSessionDto validateStripeSessionDto)
+    : IRequest<Result<OrderHeaderDto>>
 {
-    public int OrderHeaderId { get; init; } = orderHeaderId;
+    public ValidateStripeSessionDto ValidateStripeSessionDto { get; init; } = validateStripeSessionDto;
 }
