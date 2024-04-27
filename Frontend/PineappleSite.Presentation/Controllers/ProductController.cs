@@ -228,9 +228,10 @@ public sealed class ProductController(
             }
 
             var deleteProducts = new DeleteProductsViewModel(selectedProducts);
-            var response = await productService.DeleteProductsAsync(deleteProducts);
             await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProducts);
+            
+            var response = await productService.DeleteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)
             {
