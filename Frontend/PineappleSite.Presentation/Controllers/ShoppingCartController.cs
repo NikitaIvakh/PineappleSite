@@ -5,6 +5,7 @@ using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.ShoppingCarts;
 using PineappleSite.Presentation.Utility;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using PineappleSite.Presentation.Models.Products;
 
 namespace PineappleSite.Presentation.Controllers;
@@ -70,9 +71,9 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
     {
         try
         {
-            var userid = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
+            var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
                 ?.Value;
-            var result = await shoppingCartService.GetCartAsync(userid);
+            var result = await shoppingCartService.GetCartAsync(userId!);
 
             if (result.IsSuccess)
             {
@@ -168,7 +169,7 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
         {
             var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
                 ?.Value;
-            var result = await shoppingCartService.GetCartAsync(userId);
+            var result = await shoppingCartService.GetCartAsync(userId!);
 
             if (result.IsSuccess)
             {
@@ -257,12 +258,12 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
     {
         try
         {
-            var response = await orderService.ValidateStripeSessionAsync(orderId);
+            var validateStripSessionViewModel = new ValidateStripSessionViewModel(orderId);
+            var response = await orderService.ValidateStripeSessionAsync(validateStripSessionViewModel);
 
             if (!response.IsSuccess)
             {
                 return View(orderId);
-                ;
             }
 
             var orderHeaderDto = response.Data;

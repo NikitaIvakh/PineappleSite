@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Orders
+﻿namespace PineappleSite.Presentation.Services.Orders;
+
+public sealed class OrderCollectionResult<T> : OrderResult<IReadOnlyCollection<T>>
 {
-    public class OrderCollectionResult<TEntity> : OrderResult<IReadOnlyCollection<TEntity>>
-    {
-        public int Count { get; set; }
-    }
+    public int Count { get; set; }
 }

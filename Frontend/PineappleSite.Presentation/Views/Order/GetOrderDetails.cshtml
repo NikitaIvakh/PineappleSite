@@ -117,7 +117,7 @@
                                     }
                                 }
 
-                                if (Model.Status == StaticDetails.StatusApproved || Model.Status == StaticDetails.StatusReadyForPickup)
+                                if (Model.Status is StaticDetails.StatusApproved or StaticDetails.StatusReadyForPickup)
                                 {
                                     <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">@Localizer["Cancel the order"]</button>
                                 }

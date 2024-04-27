@@ -1,141 +1,151 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Utility;
 using System.Security.Claims;
 
-namespace PineappleSite.Presentation.Controllers
+namespace PineappleSite.Presentation.Controllers;
+
+public sealed class OrderController(IOrderService orderService) : Controller
 {
-    public class OrderController(IOrderService orderService) : Controller
+    // GET: OrderController
+    public Task<ActionResult> OrderIndex()
     {
-        private readonly IOrderService _orderService = orderService;
+        return Task.FromResult<ActionResult>(View());
+    }
 
-        // GET: OrderController
-        public async Task<ActionResult> OrderIndex()
+    public async Task<ActionResult> GetAllOrders(string status)
+    {
+        try
         {
-            return View();
-        }
+            IEnumerable<OrderHeaderViewModel>? orderHeaderDtos = null;
+            var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
 
-        public async Task<ActionResult> GetAllOrders(string status)
-        {
-            IEnumerable<OrderHeaderViewModel> orderHeaderDtos;
-            string? userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+            var response = await orderService.GetAllOrdersAsync(userId!);
 
-            var response = await _orderService.GetAllOrdersAsync(userId);
-
-            if (response is not null && response.IsSuccess)
+            if (response.IsSuccess)
             {
-                orderHeaderDtos = response.Data;
-                switch (status)
+                orderHeaderDtos = status switch
                 {
-                    case "approved":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusApproved);
-                        break;
-
-                    case "readyforpickup":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusReadyForPickup);
-                        break;
-
-                    case "cancelled":
-                        orderHeaderDtos = orderHeaderDtos.Where(key => key.Status == StaticDetails.StatusCancelled || key.Status == StaticDetails.StatusRefunded);
-                        break;
-
-                    default:
-                        break;
-                }
+                    "approved" => orderHeaderDtos?.Where(key => key.Status == StaticDetails.StatusApproved),
+                    "readyforpickup" => orderHeaderDtos?.Where(key => key.Status == StaticDetails.StatusReadyForPickup),
+                    "cancelled" => orderHeaderDtos?.Where(key =>
+                        key.Status is StaticDetails.StatusCancelled or StaticDetails.StatusRefunded),
+                    _ => response.Data
+                };
             }
 
             else
             {
-                foreach (var error in response!.ValidationErrors!)
-                {
-                    TempData["error"] = error;
-                }
-
+                TempData["error"] = response.ValidationErrors;
                 return RedirectToAction("Index", "Home");
             }
 
             return Json(new { data = orderHeaderDtos });
         }
 
-        public async Task<ActionResult> GetOrderDetails(int orderId)
+        catch (Exception exception)
         {
-            try
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction("Index", "Home");
+        }
+    }
+
+    public async Task<ActionResult> GetOrderDetails(int orderId)
+    {
+        try
+        {
+            var response = await orderService.GetOrderAsync(orderId);
+
+            if (!response.IsSuccess)
             {
-                OrderHeaderViewModel orderHeaderDto = new();
-                string userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()!.Value!;
-
-                var response = await _orderService.GetOrderAsync(orderId);
-
-                if (response is not null && response.IsSuccess)
-                {
-                    orderHeaderDto = response.Data;
-
-                    if (orderHeaderDto is not null)
-                    {
-                        return View(orderHeaderDto);
-                    }
-
-                    else
-                    {
-                        foreach (var error in response.ValidationErrors!)
-                        {
-                            TempData["error"] = error;
-                        }
-
-                        return RedirectToAction(nameof(OrderIndex));
-                    }
-                }
-
-                else
-                {
-                    return RedirectToAction(nameof(OrderIndex), new { orderId = orderId });
-                }
+                return RedirectToAction(nameof(OrderIndex), new { orderId = orderId });
             }
 
-            catch (Exception exception)
+            var orderHeaderDto = response.Data;
+
+            if (orderHeaderDto is not null)
             {
-                ModelState.AddModelError(string.Empty, exception.Message);
-                return RedirectToAction(nameof(OrderIndex));
+                return View(orderHeaderDto);
             }
+
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(OrderIndex));
         }
 
-        [HttpPost("OrderReadyForPickup")]
-        public async Task<ActionResult> OrderReadyForPickup(int orderId)
+        catch (Exception exception)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusReadyForPickup);
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
 
-            if (!response.IsSuccess) 
+    [HttpPost("OrderReadyForPickup")]
+    public async Task<ActionResult> OrderReadyForPickup(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel =
+                new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusReadyForPickup);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
                 return RedirectToAction(nameof(OrderIndex));
-            
+
             TempData["success"] = response.SuccessMessage;
             return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
         }
 
-        [HttpPost("CompleteOrder")]
-        public async Task<ActionResult> CompleteOrder(int orderId)
+        catch (Exception exception)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusCompleted);
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
 
-            if (!response.IsSuccess) 
+    [HttpPost("CompleteOrder")]
+    public async Task<ActionResult> CompleteOrder(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel =
+                new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusCompleted);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
                 return RedirectToAction(nameof(OrderIndex));
             TempData["success"] = response.SuccessMessage;
-            
+
             return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
         }
 
-        [HttpPost("CancelOrder")]
-        public async Task<ActionResult> CancelOrder(int orderId)
+        catch (Exception exception)
         {
-            var response = await _orderService.UpdateOrderStatusAsync(orderId, StaticDetails.StatusCancelled);
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
 
-            if (!response.IsSuccess) 
+    [HttpPost("CancelOrder")]
+    public async Task<ActionResult> CancelOrder(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel =
+                new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusCancelled);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
                 return RedirectToAction(nameof(OrderIndex));
-            
+
             TempData["success"] = response.SuccessMessage;
             return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+        }
 
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
         }
     }
 }

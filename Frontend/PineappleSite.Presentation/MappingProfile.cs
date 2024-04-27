@@ -84,7 +84,14 @@ public sealed class MappingProfile : Profile
 
         CreateMap<CartDtoResult, CartViewModel>().ReverseMap();
         CreateMap<Services.ShoppingCarts.ProductDto, ProductViewModel>().ReverseMap();
-
+        
+        CreateMap<CartViewModel, Services.ShoppingCarts.CartDto>().ReverseMap();
+        CreateMap<CartViewModel, Services.Orders.CartDto>().ReverseMap();
+        CreateMap<CartDetailsViewModel, Services.ShoppingCarts.CartDetailsDto>().ReverseMap();
+        CreateMap<CartDetailsViewModel, Services.Orders.CartDetailsDto>().ReverseMap();
+        CreateMap<CartHeaderViewModel, Services.ShoppingCarts.CartHeaderDto>().ReverseMap();
+        CreateMap<CartHeaderViewModel, Services.Orders.CartHeaderDto>().ReverseMap();
+        
         #endregion
 
         #region Favourite Mapping
@@ -117,7 +124,13 @@ public sealed class MappingProfile : Profile
         CreateMap<OrderHeaderDto, StripeRequestViewModel>().ReverseMap();
         CreateMap<OrderHeaderDtoResult, OrderHeaderViewModel>().ReverseMap();
         CreateMap<System.DateTimeOffset, System.DateTime>().ReverseMap();
-
+        
+        CreateMap<CartViewModel, Services.Orders.CartDto>().ReverseMap();
+        CreateMap<CartDetailsViewModel, Services.Orders.CartDetailsDto>().ReverseMap();
+        CreateMap<CartViewModel, Services.Orders.CartHeaderDto>().ReverseMap();
+        CreateMap<ValidateStripSessionViewModel, ValidateStripeSessionDto>().ReverseMap();
+        CreateMap<UpdateOrderStatusViewModel, UpdateOrderStatusDto>().ReverseMap();
+        
         #endregion
     }
 }

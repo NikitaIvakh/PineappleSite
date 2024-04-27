@@ -1,444 +1,240 @@
 ﻿using AutoMapper;
-using Newtonsoft.Json;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Models.Orders;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Orders;
 
-namespace PineappleSite.Presentation.Services
+namespace PineappleSite.Presentation.Services;
+
+public sealed class OrderService(
+    ILocalStorageService localStorageService,
+    IOrderClient orderClient,
+    IMapper mapper,
+    IHttpContextAccessor contextAccessor)
+    : BaseOrderService(localStorageService, orderClient, contextAccessor), IOrderService
 {
-    public class OrderService(ILocalStorageService localStorageService, IOrderClient orderClient, IMapper mapper, IHttpContextAccessor contextAccessor) : BaseOrderService(localStorageService, orderClient, contextAccessor), IOrderService
+    private readonly IOrderClient _orderClient = orderClient;
+
+    public async Task<OrderCollectionResult<OrderHeaderViewModel>> GetAllOrdersAsync(string userId)
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IOrderClient _orderClient = orderClient;
-        private readonly IMapper _mapper = mapper;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        public async Task<OrderCollectionResult<OrderHeaderViewModel>> GetAllOrdersAsync(string userId)
+        AddBearerToken();
+        try
         {
-            AddBearerToken();
-            if (_contextAccessor.HttpContext!.User.Identity!.IsAuthenticated)
-            {
-                try
-                {
-                    var result = await _orderClient.GetAllOrdersAsync(userId);
+            var apiResponse = await _orderClient.GetOrdersAsync(userId);
 
-                    if (result.IsSuccess)
-                    {
-                        return new OrderCollectionResult<OrderHeaderViewModel>
-                        {
-                            SuccessCode = result.SuccessCode,
-                            SuccessMessage = result.SuccessMessage,
-                            Data = _mapper.Map<IReadOnlyCollection<OrderHeaderViewModel>>(result.Data),
-                        };
-                    }
-
-                    else
-                    {
-                        foreach (var error in result.ValidationErrors)
-                        {
-                            return new OrderCollectionResult<OrderHeaderViewModel>
-                            {
-                                ValidationErrors = [error],
-                                ErrorCode = result.ErrorCode,
-                                ErrorMessage = result.ErrorMessage,
-                            };
-                        }
-                    }
-
-                    return new OrderCollectionResult<OrderHeaderViewModel>();
-                }
-
-                catch (JsonSerializationException ex)
-                {
-                    return new OrderCollectionResult<OrderHeaderViewModel>
-                    {
-                        ErrorMessage = "An error occurred while deserializing the response.",
-                        ErrorCode = 500,
-                        ValidationErrors = [ex.Message],
-                    };
-                }
-
-                catch (OrdersExceptions exceptions)
-                {
-                    if (exceptions.StatusCode == 403)
-                    {
-                        return new OrderCollectionResult<OrderHeaderViewModel>
-                        {
-                            ErrorCode = 403,
-                            ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                            ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                        };
-                    }
-
-                    else if (exceptions.StatusCode == 401)
-                    {
-                        return new OrderCollectionResult<OrderHeaderViewModel>
-                        {
-                            ErrorCode = 401,
-                            ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                            ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                        };
-                    }
-
-                    else
-                    {
-                        return new OrderCollectionResult<OrderHeaderViewModel>
-                        {
-                            ErrorMessage = exceptions.Response,
-                            ErrorCode = exceptions.StatusCode,
-                            ValidationErrors = [exceptions.Response],
-                        };
-                    }
-                }
-            }
-
-            else
+            if (apiResponse.IsSuccess)
             {
                 return new OrderCollectionResult<OrderHeaderViewModel>
                 {
-                    ErrorCode = 401,
-                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                    Data = mapper.Map<IReadOnlyCollection<OrderHeaderViewModel>>(apiResponse.Data),
                 };
             }
+
+            return new OrderCollectionResult<OrderHeaderViewModel>
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<OrderResult<OrderHeaderViewModel>> GetOrderAsync(int orderHeaderId)
+        catch (OrdersExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new OrderCollectionResult<OrderHeaderViewModel>
             {
-                var response = await _orderClient.GetOrderAsync(orderHeaderId);
+                StatusCode = 403,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (response.IsSuccess)
+    public async Task<OrderResult<OrderHeaderViewModel>> GetOrderAsync(int orderHeaderId)
+    {
+        AddBearerToken();
+        try
+        {
+            var apiResponse = await _orderClient.GetOrderAsync(orderHeaderId);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new OrderResult<OrderHeaderViewModel>
                 {
-                    return new OrderResult<OrderHeaderViewModel>
-                    {
-                        SuccessCode = response.SuccessCode,
-                        SuccessMessage = response.SuccessMessage,
-                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors)
-                    {
-                        return new OrderResult<OrderHeaderViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = response.ErrorCode,
-                            ErrorMessage = response.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new OrderResult<OrderHeaderViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                    Data = mapper.Map<OrderHeaderViewModel>(apiResponse.Data),
+                };
             }
 
-            catch (OrdersExceptions exceptions)
+            return new OrderResult<OrderHeaderViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 403,
-                        ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                        ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 401,
-                        ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                        ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                    };
-                }
-
-                else
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response],
-                    };
-                }
-            }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<OrderResult<OrderHeaderViewModel>> CreateOrderAsync(CartViewModel cartViewModel)
+        catch (OrdersExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new OrderResult<OrderHeaderViewModel>()
             {
-                CartDto cartDto = _mapper.Map<CartDto>(cartViewModel);
-                var response = await _orderClient.CreateOrderAsync(cartDto);
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (response.IsSuccess)
+    public async Task<OrderResult<OrderHeaderViewModel>> CreateOrderAsync(CartViewModel cartViewModel)
+    {
+        AddBearerToken();
+        try
+        {
+            var cartDto = mapper.Map<CartDto>(cartViewModel);
+            var apiResponse = await _orderClient.CreateOrderAsync(cartDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new OrderResult<OrderHeaderViewModel>
                 {
-                    return new OrderResult<OrderHeaderViewModel>
-                    {
-                        SuccessCode = response.SuccessCode,
-                        SuccessMessage = response.SuccessMessage,
-                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors)
-                    {
-                        return new OrderResult<OrderHeaderViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = response.ErrorCode,
-                            ErrorMessage = response.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new OrderResult<OrderHeaderViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                    Data = mapper.Map<OrderHeaderViewModel>(apiResponse.Data),
+                };
             }
 
-            catch (OrdersExceptions exceptions)
+            return new OrderResult<OrderHeaderViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 403,
-                        ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                        ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 401,
-                        ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                        ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                    };
-                }
-
-                else
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response],
-                    };
-                }
-            }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<OrderResult<StripeRequestViewModel>> CreateStripeSessionAsync(StripeRequestViewModel stripeRequest)
+        catch (OrdersExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new OrderResult<OrderHeaderViewModel>()
             {
-                StripeRequestDto stripeRequestDto = _mapper.Map<StripeRequestDto>(stripeRequest);
-                StripeRequestDtoResult response = await _orderClient.CreateStripeSessionAsync(stripeRequestDto);
+                StatusCode = exceptions.StatusCode,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (response.IsSuccess)
+    public async Task<OrderResult<StripeRequestViewModel>> CreateStripeSessionAsync(
+        StripeRequestViewModel stripeRequest)
+    {
+        AddBearerToken();
+        try
+        {
+            var stripeRequestDto = mapper.Map<StripeRequestDto>(stripeRequest);
+            var apiRespone = await _orderClient.CreateStripeSessionAsync(stripeRequestDto);
+
+            if (apiRespone.IsSuccess)
+            {
+                return new OrderResult<StripeRequestViewModel>
                 {
-                    return new OrderResult<StripeRequestViewModel>
-                    {
-                        SuccessCode = response.SuccessCode,
-                        SuccessMessage = response.SuccessMessage,
-                        Data = _mapper.Map<StripeRequestViewModel>(response.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors)
-                    {
-                        return new OrderResult<StripeRequestViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = response.ErrorCode,
-                            ErrorMessage = response.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new OrderResult<StripeRequestViewModel>();
+                    StatusCode = apiRespone.StatusCode,
+                    SuccessMessage = apiRespone.SuccessMessage,
+                    Data = mapper.Map<StripeRequestViewModel>(apiRespone.Data),
+                };
             }
 
-            catch (OrdersExceptions exceptions)
+            return new OrderResult<StripeRequestViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new OrderResult<StripeRequestViewModel>()
-                    {
-                        ErrorCode = 403,
-                        ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                        ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new OrderResult<StripeRequestViewModel>()
-                    {
-                        ErrorCode = 401,
-                        ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                        ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                    };
-                }
-
-                else
-                {
-                    return new OrderResult<StripeRequestViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response],
-                    };
-                }
-            }
+                StatusCode = apiRespone.StatusCode,
+                ErrorMessage = apiRespone.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiRespone.ValidationErrors),
+            };
         }
 
-        public async Task<OrderResult<OrderHeaderViewModel>> ValidateStripeSessionAsync(int orderHeaderId)
+        catch (OrdersExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new OrderResult<StripeRequestViewModel>()
             {
-                var response = await _orderClient.ValidateStripeSessionAsync(orderHeaderId);
+                StatusCode = exceptions.StatusCode,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result
+            };
+        }
+    }
 
-                if (response.IsSuccess)
+    public async Task<OrderResult<OrderHeaderViewModel>> ValidateStripeSessionAsync(
+        ValidateStripSessionViewModel validateStripSessionViewModel)
+    {
+        AddBearerToken();
+        try
+        {
+            var validateStripeSessionDto = mapper.Map<ValidateStripeSessionDto>(validateStripSessionViewModel);
+            var apiResponse = await _orderClient.ValidateStripeSessionAsync(validateStripeSessionDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new OrderResult<OrderHeaderViewModel>
                 {
-                    return new OrderResult<OrderHeaderViewModel>
-                    {
-                        SuccessCode = response.SuccessCode,
-                        SuccessMessage = response.SuccessMessage,
-                        Data = _mapper.Map<OrderHeaderViewModel>(response.Data),
-                    };
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors)
-                    {
-                        return new OrderResult<OrderHeaderViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = response.ErrorCode,
-                            ErrorMessage = response.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new OrderResult<OrderHeaderViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                    Data = mapper.Map<OrderHeaderViewModel>(apiResponse.Data),
+                };
             }
 
-            catch (OrdersExceptions exceptions)
+            return new OrderResult<OrderHeaderViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 403,
-                        ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                        ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                    };
-                }
-
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 401,
-                        ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                        ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                    };
-                }
-
-                else
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response],
-                    };
-                }
-            }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
         }
 
-        public async Task<OrderResult<OrderHeaderViewModel>> UpdateOrderStatusAsync(int orderHeaderId, string newStatus)
+        catch (OrdersExceptions<string> exceptions)
         {
-            AddBearerToken();
-            try
+            return new OrderResult<OrderHeaderViewModel>()
             {
-                var response = await _orderClient.UpdateOrderStatusAsync(orderHeaderId, newStatus);
+                StatusCode = exceptions.StatusCode,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
 
-                if (response.IsSuccess)
+    public async Task<OrderResult<OrderHeaderViewModel>> UpdateOrderStatusAsync(
+        UpdateOrderStatusViewModel updateOrderStatusViewModel)
+    {
+        AddBearerToken();
+        try
+        {
+            var updateOrderStatusDto = mapper.Map<UpdateOrderStatusDto>(updateOrderStatusViewModel);
+            var apiResponse = await _orderClient.UpdateOrderStatusAsync(updateOrderStatusDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new OrderResult<OrderHeaderViewModel>
                 {
-                    return new OrderResult<OrderHeaderViewModel>
-                    {
-                        SuccessCode = response.SuccessCode,
-                        SuccessMessage = response.SuccessMessage,
-                        Data = _mapper.Map<OrderHeaderViewModel>(response),
-                    };
-                }
-
-                else
-                {
-                    foreach (var error in response.ValidationErrors)
-                    {
-                        return new OrderResult<OrderHeaderViewModel>
-                        {
-                            ValidationErrors = [error],
-                            ErrorCode = response.ErrorCode,
-                            ErrorMessage = response.ErrorMessage,
-                        };
-                    }
-                }
-
-                return new OrderResult<OrderHeaderViewModel>();
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                    Data = mapper.Map<OrderHeaderViewModel>(apiResponse),
+                };
             }
 
-            catch (OrdersExceptions exceptions)
+            return new OrderResult<OrderHeaderViewModel>
             {
-                if (exceptions.StatusCode == 403)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 403,
-                        ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                        ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                    };
-                }
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
+        }
 
-                else if (exceptions.StatusCode == 401)
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorCode = 401,
-                        ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                        ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                    };
-                }
-
-                else
-                {
-                    return new OrderResult<OrderHeaderViewModel>()
-                    {
-                        ErrorMessage = exceptions.Response,
-                        ErrorCode = exceptions.StatusCode,
-                        ValidationErrors = [exceptions.Response],
-                    };
-                }
-            }
+        catch (OrdersExceptions<string> exceptions)
+        {
+            return new OrderResult<OrderHeaderViewModel>()
+            {
+                StatusCode = exceptions.StatusCode,
+                ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
         }
     }
 }

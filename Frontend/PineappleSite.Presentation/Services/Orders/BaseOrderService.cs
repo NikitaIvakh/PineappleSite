@@ -2,53 +2,48 @@
 using PineappleSite.Presentation.Models.Orders;
 using System.Net.Http.Headers;
 
-namespace PineappleSite.Presentation.Services.Orders
+namespace PineappleSite.Presentation.Services.Orders;
+
+public class BaseOrderService(
+    ILocalStorageService localStorageService,
+    IOrderClient orderClient,
+    IHttpContextAccessor contextAccessor)
 {
-    public class BaseOrderService(ILocalStorageService localStorageService, IOrderClient orderClient, IHttpContextAccessor contextAccessor)
+    protected OrderResult ConvertOrderExceptions(OrdersExceptions<string> ordersExceptions)
     {
-        private readonly ILocalStorageService _localStorageService = localStorageService;
-        private readonly IOrderClient _orderClient = orderClient;
-        private readonly IHttpContextAccessor _contextAccessor = contextAccessor;
-
-        protected OrderResult<OrderHeaderViewModel> ConvertOrderExceptions(OrdersExceptions ordersExceptions)
+        return ordersExceptions.StatusCode switch
         {
-            if (ordersExceptions.StatusCode == 403)
+            403 => new OrderResult<OrderHeaderViewModel>
             {
-                return new OrderResult<OrderHeaderViewModel>
-                {
-                    ErrorCode = 403,
-                    ErrorMessage = "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
-                    ValidationErrors = ["Пользователям не доступна эта страница. Эта страница доступна только администраторам."]
-                };
-            }
+                StatusCode = 403,
+                ErrorMessage =
+                    "Пользователям не доступна эта страница. Это страница доступна только администраторам.",
+                ValidationErrors =
+                    "Пользователям не доступна эта страница. Эта страница доступна только администраторам."
+            },
 
-            else if (ordersExceptions.StatusCode == 401)
+            401 => new OrderResult<OrderHeaderViewModel>
             {
-                return new OrderResult<OrderHeaderViewModel>
-                {
-                    ErrorCode = 401,
-                    ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
-                    ValidationErrors = ["Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."]
-                };
-            }
+                StatusCode = 401,
+                ErrorMessage = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться.",
+                ValidationErrors = "Чтобы получить доступ к ресурсу, необходимо зарегистрироваться."
+            },
 
-            else
+            _ => new OrderResult<OrderHeaderViewModel>
             {
-                return new OrderResult<OrderHeaderViewModel>
-                {
-                    ErrorCode = 500,
-                    ErrorMessage = "Что-то пошло не так, пожалуйста, попробуйте еще раз.",
-                    ValidationErrors = ["Что-то пошло не так, пожалуйста, попробуйте еще раз."]
-                };
+                StatusCode = 500,
+                ErrorMessage = ordersExceptions.Result,
+                ValidationErrors = ordersExceptions.Result
             }
-        }
+        };
+    }
 
-        protected void AddBearerToken()
+    protected void AddBearerToken()
+    {
+        if (contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
         {
-            if (_contextAccessor.HttpContext!.Request.Cookies.ContainsKey("JWTToken"))
-            {
-                _orderClient.HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
-            }
+            orderClient.HttpClient.DefaultRequestHeaders.Authorization =
+                new AuthenticationHeaderValue("Bearer", contextAccessor.HttpContext.Request.Cookies["JWTToken"]);
         }
     }
 }
