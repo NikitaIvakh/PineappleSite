@@ -22,7 +22,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
         try
         {
             var favouriteProducts =
-                detailsRepository.GetAll().Where(key => key.ProductId == request.ProductId).ToList();
+                detailsRepository.GetAll().Where(key => key.ProductId == request.DeleteFavouriteProductDto.Id).ToList();
 
             if (favouriteProducts.Count == 0)
             {
@@ -39,14 +39,16 @@ public sealed class DeleteFavouriteProductRequestHandler(
             }
 
             var favouriteHeaderIds = favouriteProducts.Select(fp => fp.FavouriteHeaderId).Distinct().ToList();
-            
+
             foreach (var favouriteProduct in favouriteProducts)
             {
                 await detailsRepository.DeleteAsync(favouriteProduct);
             }
 
-            foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds let totalDetailsWithHeader = detailsRepository.GetAll()
-                         .Count(key => key.FavouriteHeaderId == favouriteHeaderId) where totalDetailsWithHeader == 1 select headerRepository.GetAll()
+            foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds
+                     let totalDetailsWithHeader = detailsRepository.GetAll().Count(key => key.FavouriteHeaderId == favouriteHeaderId)
+                     where totalDetailsWithHeader == 1
+                     select headerRepository.GetAll()
                          .FirstOrDefault(key => key.FavouriteHeaderId == favouriteHeaderId))
             {
                 if (favouriteHeaderDelete is null)

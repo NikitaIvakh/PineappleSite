@@ -149,7 +149,7 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
-      "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct/{productId}",
+      "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -157,7 +157,7 @@
           "Port": 7247
         }
       ],
-      "UpstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct/{productId}",
+      "UpstreamPathTemplate": "/api/favourites/DeleteFavouriteProduct",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

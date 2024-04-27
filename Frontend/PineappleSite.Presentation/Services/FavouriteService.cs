@@ -91,12 +91,13 @@ public sealed class FavouriteService(
         }
     }
 
-    public async Task<FavouriteResult> DeleteFavouriteProductAsync(int productId)
+    public async Task<FavouriteResult> DeleteFavouriteProductAsync(DeleteProductViewModel deleteProductViewModel)
     {
         AddBearerToken();
         try
         {
-            var apiResponse = await _favouriteClient.DeleteFavouriteProductAsync(productId);
+            var deleteProductDto = mapper.Map<DeleteFavouriteProductDto>(deleteProductViewModel);
+            var apiResponse = await _favouriteClient.DeleteFavouriteProductAsync(deleteProductDto);
 
             if (apiResponse.IsSuccess)
             {

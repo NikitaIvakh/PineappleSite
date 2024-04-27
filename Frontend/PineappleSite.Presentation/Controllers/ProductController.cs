@@ -82,7 +82,7 @@ public sealed class ProductController(
                     ProductCategory = product.Data.ProductCategory,
                     Price = product.Data.Price,
                 };
-                
+
                 return View(productViewModel);
             }
 
@@ -196,7 +196,7 @@ public sealed class ProductController(
         {
             var deleteProductViewModel = new DeleteProductViewModel(productId);
             var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
-            await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel.Id);
+            await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel);
 
             if (response.IsSuccess)

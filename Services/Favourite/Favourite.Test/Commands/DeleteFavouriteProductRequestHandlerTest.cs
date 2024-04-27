@@ -1,5 +1,6 @@
 ﻿using Favourite.Application.Features.Handlers.Commands;
 using Favourite.Application.Features.Requests.Commands;
+using Favourite.Domain.DTOs;
 using Favourite.Test.Common;
 using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
         // Arrange
         var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
         const int productId = 2;
+        var deleteFavouriteProductDto = new DeleteFavouriteProductDto(productId);
 
         foreach (var entity in Context.ChangeTracker.Entries())
         {
@@ -22,7 +24,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
         }
 
         // Act
-        var result = await handler.Handle(new DeleteFavouriteProductRequest(productId: productId),
+        var result = await handler.Handle(new DeleteFavouriteProductRequest(deleteFavouriteProductDto),
             CancellationToken.None);
 
         // Assert
@@ -37,9 +39,10 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
         // Arrange
         var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
         const int productId = 13;
+        var deleteFavouriteProductDto = new DeleteFavouriteProductDto(productId);
 
         // Act
-        var result = await handler.Handle(new DeleteFavouriteProductRequest(productId: productId),
+        var result = await handler.Handle(new DeleteFavouriteProductRequest(deleteFavouriteProductDto),
             CancellationToken.None);
 
         // Assert

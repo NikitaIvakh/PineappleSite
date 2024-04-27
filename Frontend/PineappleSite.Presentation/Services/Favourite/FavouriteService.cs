@@ -50,12 +50,12 @@ public partial interface IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<UnitResult> DeleteFavouriteProductAsync(int productId);
+    Task<UnitResult> DeleteFavouriteProductAsync(DeleteFavouriteProductDto body);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    Task<UnitResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken);
+    Task<UnitResult> DeleteFavouriteProductAsync(DeleteFavouriteProductDto body, CancellationToken cancellationToken);
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
@@ -285,18 +285,18 @@ public partial class FavouriteClient : IFavouriteClient
 
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public Task<UnitResult> DeleteFavouriteProductAsync(int productId)
+    public Task<UnitResult> DeleteFavouriteProductAsync(DeleteFavouriteProductDto body)
     {
-        return DeleteFavouriteProductAsync(productId, CancellationToken.None);
+        return DeleteFavouriteProductAsync(body, CancellationToken.None);
     }
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="FavouriteExceptions">A server side error occurred.</exception>
-    public async Task<UnitResult> DeleteFavouriteProductAsync(int productId, CancellationToken cancellationToken)
+    public async Task<UnitResult> DeleteFavouriteProductAsync(DeleteFavouriteProductDto body, CancellationToken cancellationToken)
     {
-        if (productId == null)
-            throw new ArgumentNullException("productId");
+        if (body == null)
+            throw new ArgumentNullException("body");
 
         var client_ = HttpClient;
         var disposeClient_ = false;
@@ -304,6 +304,10 @@ public partial class FavouriteClient : IFavouriteClient
         {
             using (var request_ = new HttpRequestMessage())
             {
+                var json_ = JsonConvert.SerializeObject(body, _settings.Value);
+                var content_ = new StringContent(json_);
+                content_.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
+                request_.Content = content_;
                 request_.Method = new HttpMethod("DELETE");
                 request_.Headers.Accept.Add(MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
@@ -314,8 +318,6 @@ public partial class FavouriteClient : IFavouriteClient
                 urlBuilder_.Append("favourites");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("DeleteFavouriteProduct");
-                urlBuilder_.Append('/');
-                urlBuilder_.Append(Uri.EscapeDataString(ConvertToString(productId, CultureInfo.InvariantCulture)));
 
                 PrepareRequest(client_, request_, urlBuilder_);
 
@@ -577,6 +579,14 @@ public partial class FavouriteClient : IFavouriteClient
 }
 
 [GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class DeleteFavouriteProductDto
+{
+    [JsonProperty("id", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    public int Id { get; set; }
+
+}
+
+[GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class DeleteFavouriteProductsDto
 {
     [JsonProperty("productIds", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
@@ -610,7 +620,7 @@ public partial class FavouriteDto
     [JsonProperty("favouriteHeader", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
     public FavouriteHeaderDto FavouriteHeader { get; set; }
 
-    [JsonProperty("favouriteDetails", Required = Required.DisallowNull, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("favouriteDetails", Required = Required.Default, NullValueHandling = NullValueHandling.Ignore)]
     public ICollection<FavouriteDetailsDto> FavouriteDetails { get; set; }
 
 }

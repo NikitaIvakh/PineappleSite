@@ -18,7 +18,7 @@ public sealed class FavouriteEndpoints : ICarterModule
 
         group.MapGet("/GetFavouriteProducts/{userId}", GetFavouriteProducts);
         group.MapPost("/FavouriteUpsertAsync", FavouriteUpsertAsync);
-        group.MapDelete("/DeleteFavouriteProduct/{productId:int}", DeleteFavouriteProduct);
+        group.MapDelete("/DeleteFavouriteProduct", DeleteFavouriteProduct);
         group.MapDelete("/DeleteFavouriteProducts", DeleteFavouriteProducts);
     }
 
@@ -55,17 +55,19 @@ public sealed class FavouriteEndpoints : ICarterModule
     }
 
     private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteFavouriteProduct(ISender sender,
-        ILogger<FavouriteHeaderDto> logger, int productId)
+        ILogger<DeleteFavouriteProductDto> logger, [FromBody] DeleteFavouriteProductDto deleteFavouriteProductDto)
     {
-        var command = await sender.Send(new DeleteFavouriteProductRequest(productId));
+        var command = await sender.Send(new DeleteFavouriteProductRequest(deleteFavouriteProductDto));
 
         if (command.IsSuccess)
         {
-            logger.LogDebug($"LogDebug ================ Избранный товар успешно удален: {productId}");
+            logger.LogDebug(
+                $"LogDebug ================ Избранный товар успешно удален: {deleteFavouriteProductDto.Id}");
             return TypedResults.Ok(command);
         }
 
-        logger.LogError($"LogDebugError ================ Ошибка удаления избранного товара: {productId}");
+        logger.LogError(
+            $"LogDebugError ================ Ошибка удаления избранного товара: {deleteFavouriteProductDto.Id}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
