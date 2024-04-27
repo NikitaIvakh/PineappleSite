@@ -3,23 +3,17 @@ using Order.Infrastructure.DependencyInjection;
 using Stripe;
 using Order.API;
 using System.Text.Json.Serialization;
+using Carter;
 using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 
 var applicationBuilder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-applicationBuilder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-});
-
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddSwaggerGen();
+applicationBuilder.Services.AddCarter();
 
 applicationBuilder.Services.ConfigureApplicationServices();
 applicationBuilder.Services.ConfigureInfrastructureServices(applicationBuilder.Configuration);
@@ -61,9 +55,8 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
 });
 
+webApplication.MapCarter();
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
-
-webApplication.MapControllers();
 
 webApplication.Run();
