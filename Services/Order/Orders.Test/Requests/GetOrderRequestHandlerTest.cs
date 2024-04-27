@@ -30,7 +30,7 @@ public sealed class GetOrderRequestHandlerTest : TestQueryHandler
     }
 
     [Fact]
-    public async Task GetOrderRequestHandlerTest_FailOrWrong()
+    public async Task GetOrderRequestHandlerTest_FailOrWrong_OrderId()
     {
         // Arrange
         var handler = new GetOrderRequestHandler(OrderHeader, Mapper, MemoryCache);

@@ -21,7 +21,7 @@ public class TestCommandsHandler : IDisposable
     protected IMemoryCache MemoryCache;
     protected IBaseRepository<OrderHeader> OrderHeader;
     protected IBaseRepository<OrderDetails> OrderDetails;
-    protected OrderValidator CreateValidator;
+    protected OrderValidator OrderValidator;
 
     protected IProductService ProductService;
     protected IUserService UserService;
@@ -36,7 +36,7 @@ public class TestCommandsHandler : IDisposable
         MemoryCache = new MemoryCache(new MemoryCacheOptions());
         OrderHeader = new BaseRepository<OrderHeader>(Context);
         OrderDetails = new BaseRepository<OrderDetails>(Context);
-        CreateValidator = new OrderValidator();
+        OrderValidator = new OrderValidator();
 
         var productMock = new Mock<IProductService>();
 

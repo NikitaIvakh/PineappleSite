@@ -42,6 +42,17 @@ public sealed class GetOrdersRequestHandler(
             var userId = request.UserId;
             var user = await userService.GetUserAsync(userId);
 
+            if (user?.Data is null)
+            {
+                return new CollectionResult<OrderHeaderDto>()
+                {
+                    StatusCode = (int)StatusCode.NotFound,
+                    ErrorMessage = ErrorMessages.ResourceManager.GetString("UserNotFound", ErrorMessages.Culture),
+                    ValidationErrors =
+                        [ErrorMessages.ResourceManager.GetString("UserNotFound", ErrorMessages.Culture) ?? string.Empty]
+                };
+            }
+
             if (user.Data!.Role.Contains(StaticDetails.RoleAdmin))
                 orderHeader = mapper.Map<IReadOnlyCollection<OrderHeaderDto>>(await orderHeaderRepository
                     .GetAll()

@@ -132,4 +132,7 @@
   <data name="PaytmentError" xml:space="preserve">
     <value>Оплата прошла не успешно</value>
   </data>
+  <data name="UserNotFound" xml:space="preserve">
+    <value>Пользователь не найден</value>
+  </data>
 </root>

@@ -103,5 +103,14 @@ namespace Order.Application.Resources {
                 return ResourceManager.GetString("PaytmentError", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пользователь не найден.
+        /// </summary>
+        internal static string UserNotFound {
+            get {
+                return ResourceManager.GetString("UserNotFound", resourceCulture);
+            }
+        }
     }
 }
