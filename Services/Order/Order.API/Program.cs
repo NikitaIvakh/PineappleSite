@@ -39,6 +39,7 @@ applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
 applicationBuilder.Services.AddSwaggerAuthenticaton();
 applicationBuilder.Services.AddAppAuthenticate(applicationBuilder.Configuration);
+applicationBuilder.Services.AddAuthenticatePolicy();
 
 var webApplication = applicationBuilder.Build();
 
@@ -58,5 +59,4 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
 webApplication.MapCarter();
 webApplication.UseAuthentication();
 webApplication.UseAuthorization();
-
 webApplication.Run();

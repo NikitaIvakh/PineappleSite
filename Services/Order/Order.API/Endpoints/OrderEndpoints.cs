@@ -6,6 +6,7 @@ using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
 using Order.Domain.ResultOrder;
+using static Order.API.Utility.StaticDetails;
 
 namespace Order.API.Endpoints;
 
@@ -13,7 +14,7 @@ public sealed class OrderEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/order");
+        var group = app.MapGroup("api/order").RequireAuthorization(UserAndAdministratorPolicy);
 
         group.MapGet("/GetOrders/{userId}", GetOrders);
         group.MapGet("/GetOrder/{orderId:int}", GetOrder);
