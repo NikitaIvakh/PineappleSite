@@ -166,6 +166,23 @@
 
     {
       //"Favourite.API": "https://localhost:7247"
+      "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProductByUser",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7247
+        }
+      ],
+      "UpstreamPathTemplate": "/api/favourites/DeleteFavouriteProductByUser",
+      "UpstreamHttpMethod": [ "DELETE" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
+
+    {
+      //"Favourite.API": "https://localhost:7247"
       "DownstreamPathTemplate": "/api/favourites/DeleteFavouriteProducts",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [

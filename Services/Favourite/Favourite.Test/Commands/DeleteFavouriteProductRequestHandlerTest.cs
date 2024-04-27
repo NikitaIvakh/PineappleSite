@@ -14,7 +14,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
     public async Task RemoveFavoriteRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
+        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, DeleteValidator, MemoryCache);
         const int productId = 2;
         var deleteFavouriteProductDto = new DeleteFavouriteProductDto(productId);
 
@@ -37,7 +37,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
     public async Task RemoveFavoriteRequestHandlerTest_FailOrWrongId()
     {
         // Arrange
-        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, MemoryCache);
+        var handler = new DeleteFavouriteProductRequestHandler(FavouriteHeader, FavouriteDetails, DeleteValidator, MemoryCache);
         const int productId = 13;
         var deleteFavouriteProductDto = new DeleteFavouriteProductDto(productId);
 

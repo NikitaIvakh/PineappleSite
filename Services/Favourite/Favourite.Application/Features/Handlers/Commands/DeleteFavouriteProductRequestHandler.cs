@@ -1,5 +1,6 @@
 ﻿using Favourite.Application.Features.Requests.Commands;
 using Favourite.Application.Resources;
+using Favourite.Application.Validators;
 using Favourite.Domain.Entities;
 using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
@@ -12,6 +13,7 @@ namespace Favourite.Application.Features.Handlers.Commands;
 public sealed class DeleteFavouriteProductRequestHandler(
     IBaseRepository<FavouriteHeader> headerRepository,
     IBaseRepository<FavouriteDetails> detailsRepository,
+    DeleteValidator deleteValidator,
     IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductRequest, Result<Unit>>
 {
     private const string CacheKey = "FavouritesCacheKey";
@@ -21,6 +23,39 @@ public sealed class DeleteFavouriteProductRequestHandler(
     {
         try
         {
+            var validationResult =
+                await deleteValidator.ValidateAsync(request.DeleteFavouriteProductDto, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var existErrorMessage = new Dictionary<string, List<string>>()
+                {
+                    { "Id", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
+                };
+
+                foreach (var error in existErrorMessage)
+                {
+                    if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
+                    {
+                        return new Result<Unit>()
+                        {
+                            ValidationErrors = errorMessage,
+                            StatusCode = (int)StatusCode.NoAction,
+                            ErrorMessage =
+                                ErrorMessages.ResourceManager.GetString("ProductCanNotDeleted", ErrorMessages.Culture)
+                        };
+                    }
+                }
+
+                return new Result<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessages.ResourceManager.GetString("ProductCanNotDeleted", ErrorMessages.Culture),
+                    ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList(),
+                };
+            }
+
             var favouriteProducts =
                 detailsRepository.GetAll().Where(key => key.ProductId == request.DeleteFavouriteProductDto.Id).ToList();
 
@@ -46,7 +81,8 @@ public sealed class DeleteFavouriteProductRequestHandler(
             }
 
             foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds
-                     let totalDetailsWithHeader = detailsRepository.GetAll().Count(key => key.FavouriteHeaderId == favouriteHeaderId)
+                     let totalDetailsWithHeader = detailsRepository.GetAll()
+                         .Count(key => key.FavouriteHeaderId == favouriteHeaderId)
                      where totalDetailsWithHeader == 1
                      select headerRepository.GetAll()
                          .FirstOrDefault(key => key.FavouriteHeaderId == favouriteHeaderId))

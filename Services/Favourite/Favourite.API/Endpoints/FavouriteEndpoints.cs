@@ -19,9 +19,10 @@ public sealed class FavouriteEndpoints : ICarterModule
         group.MapGet("/GetFavouriteProducts/{userId}", GetFavouriteProducts);
         group.MapPost("/FavouriteUpsertAsync", FavouriteUpsertAsync);
         group.MapDelete("/DeleteFavouriteProduct", DeleteFavouriteProduct);
+        group.MapDelete("/DeleteFavouriteProductByUser", DeleteFavouriteProductByUser);
         group.MapDelete("/DeleteFavouriteProducts", DeleteFavouriteProducts);
     }
-
+    
     private static async Task<Results<Ok<Result<FavouriteDto>>, BadRequest<string>>> GetFavouriteProducts(string userId,
         ISender sender, ILogger<FavouriteDto> logger)
     {
@@ -68,6 +69,24 @@ public sealed class FavouriteEndpoints : ICarterModule
 
         logger.LogError(
             $"LogDebugError ================ Ошибка удаления избранного товара: {deleteFavouriteProductDto.Id}");
+        return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteFavouriteProductByUser(
+        ISender sender, ILogger<DeleteFavouriteProductByUserDto> logger,
+        [FromBody] DeleteFavouriteProductByUserDto deleteFavouriteProductByUserDto)
+    {
+        var command = await sender.Send(new DeleteFavouriteProductByUserRequest(deleteFavouriteProductByUserDto));
+
+        if (command.IsSuccess)
+        {
+            logger.LogDebug(
+                $"LogDebug ================ Избранный товар успешно удален: {deleteFavouriteProductByUserDto.ProductId}, UserId: {deleteFavouriteProductByUserDto.UserId}");
+            return TypedResults.Ok(command);
+        }
+
+        logger.LogError(
+            $"LogDebugError ================ Ошибка удаления избранного товара: {deleteFavouriteProductByUserDto.ProductId}, UserId: {deleteFavouriteProductByUserDto.UserId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 

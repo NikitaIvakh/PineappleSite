@@ -12,5 +12,8 @@ public interface IFavouriteService
 
     Task<FavouriteResult> DeleteFavouriteProductAsync(DeleteProductViewModel deleteProductViewModel);
 
+    Task<FavouriteResult> DeleteFavouriteProductByUserAsync(
+        DeleteFavouriteProductByUserViewModel deleteFavouriteProductByUserViewModel);
+
     Task<FavouriteCollectionResult> DeleteFavouriteProductsAsync(DeleteProductsViewModel deleteProductsViewModel);
 }

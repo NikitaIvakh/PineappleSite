@@ -95,6 +95,7 @@ public sealed class MappingProfile : Profile
         CreateMap<DeleteProductsViewModel, DeleteFavouriteProductsDto>().ReverseMap();
         CreateMap<DeleteProductDto, DeleteProductViewModel>().ReverseMap();
         CreateMap<DeleteFavouriteProductDto, DeleteProductViewModel>().ReverseMap();
+        CreateMap<DeleteFavouriteProductByUserDto, DeleteFavouriteProductByUserViewModel>().ReverseMap();
 
         CreateMap<FavouriteDtoResult, FavouriteViewModel>().ReverseMap();
         CreateMap<Services.Favourite.ProductDto, ProductViewModel>().ReverseMap();

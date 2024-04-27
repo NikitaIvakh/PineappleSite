@@ -1,5 +1,6 @@
 ﻿using Favourite.Application.Features.Requests.Commands;
 using Favourite.Application.Resources;
+using Favourite.Application.Validators;
 using Favourite.Domain.Entities;
 using Favourite.Domain.Enum;
 using Favourite.Domain.Interfaces.Repository;
@@ -12,6 +13,7 @@ namespace Favourite.Application.Features.Handlers.Commands;
 public sealed class DeleteFavouriteProductsRequestHandler(
     IBaseRepository<FavouriteHeader> favouriteHeaderRepository,
     IBaseRepository<FavouriteDetails> favouriteDetailsRepository,
+    DeleteProductsValidator deleteProductsValidator,
     IMemoryCache memoryCache) : IRequestHandler<DeleteFavouriteProductsRequest, CollectionResult<Unit>>
 {
     private const string CacheKey = "FavouritesCacheKey";
@@ -21,6 +23,39 @@ public sealed class DeleteFavouriteProductsRequestHandler(
     {
         try
         {
+            var validationResult =
+                await deleteProductsValidator.ValidateAsync(request.DeleteFavourite, cancellationToken);
+
+            if (!validationResult.IsValid)
+            {
+                var existErrorMessage = new Dictionary<string, List<string>>()
+                {
+                    { "ProductIds", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
+                };
+
+                foreach (var error in existErrorMessage)
+                {
+                    if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))
+                    {
+                        return new CollectionResult<Unit>()
+                        {
+                            ValidationErrors = errorMessage,
+                            StatusCode = (int)StatusCode.NoAction,
+                            ErrorMessage =
+                                ErrorMessages.ResourceManager.GetString("ProductsNotFound", ErrorMessages.Culture)
+                        };
+                    }
+                }
+
+                return new CollectionResult<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessages.ResourceManager.GetString("ProductsNotFound", ErrorMessages.Culture),
+                    ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList(),
+                };
+            }
+
             var favouriteDetails = favouriteDetailsRepository.GetAll()
                 .Where(key => request.DeleteFavourite.ProductIds.Contains(key.ProductId)).ToList();
 
@@ -48,7 +83,8 @@ public sealed class DeleteFavouriteProductsRequestHandler(
             }
 
             foreach (var favouriteHeaderFromDb in from favouriteHeaderId in favouriteHeaderIds
-                     let totalDetailsWithHeader = favouriteDetailsRepository.GetAll().Count(key => key.FavouriteHeaderId == favouriteHeaderId)
+                     let totalDetailsWithHeader = favouriteDetailsRepository.GetAll()
+                         .Count(key => key.FavouriteHeaderId == favouriteHeaderId)
                      where totalDetailsWithHeader == 0
                      select favouriteHeaderRepository.GetAll()
                          .FirstOrDefault(key => key.FavouriteHeaderId == favouriteHeaderId))

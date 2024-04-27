@@ -6,6 +6,7 @@ using Favourite.Domain.Interfaces.Repository;
 using Favourite.Domain.Interfaces.Services;
 using Favourite.Infrastructure;
 using Favourite.Application.Mapping;
+using Favourite.Application.Validators;
 using Moq;
 using Favourite.Infrastructure.Repository.Implement;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,6 +20,9 @@ public class TestCommandHandler : IDisposable
 
     protected readonly IBaseRepository<FavouriteHeader> FavouriteHeader;
     protected readonly IBaseRepository<FavouriteDetails> FavouriteDetails;
+    protected readonly DeleteValidator DeleteValidator;
+    protected readonly DeleteByUserValidator DeleteByUserValidator;
+    protected readonly DeleteProductsValidator DeleteProductsValidator;
     protected readonly IMemoryCache MemoryCache;
 
     protected TestCommandHandler()
@@ -44,6 +48,9 @@ public class TestCommandHandler : IDisposable
         var mapperConfiguration = new MapperConfiguration(config => { config.AddProfile<MappingProfile>(); });
 
         Mapper = mapperConfiguration.CreateMapper();
+        DeleteValidator = new DeleteValidator();
+        DeleteByUserValidator = new DeleteByUserValidator();
+        DeleteProductsValidator = new DeleteProductsValidator();
     }
 
     public void Dispose() => FavouriteProductsDbContextFactory.Destroy(Context);

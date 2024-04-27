@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using System.Security.Claims;
+using PineappleSite.Presentation.Models.Favourites;
 using PineappleSite.Presentation.Models.Products;
+using PineappleSite.Presentation.Models.ShoppingCart;
 
 namespace PineappleSite.Presentation.Controllers;
 
@@ -37,8 +39,10 @@ public sealed class FavouriteController(IFavouriteService favouriteService) : Co
     {
         try
         {
-            var deleteProductViewModel = new DeleteProductViewModel(productId);
-            var response = await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel);
+            var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+            var deleteFavouriteProductByUserViewModel = new DeleteFavouriteProductByUserViewModel(productId, userId!);
+            var response =
+                await favouriteService.DeleteFavouriteProductByUserAsync(deleteFavouriteProductByUserViewModel);
 
             if (response.IsSuccess)
             {

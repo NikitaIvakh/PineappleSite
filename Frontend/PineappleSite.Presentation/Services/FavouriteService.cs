@@ -127,6 +127,44 @@ public sealed class FavouriteService(
         }
     }
 
+    public async Task<FavouriteResult> DeleteFavouriteProductByUserAsync(
+        DeleteFavouriteProductByUserViewModel deleteFavouriteProductByUserViewModel)
+    {
+        AddBearerToken();
+        try
+        {
+            var deleteFavouriteProductByUserDto =
+                mapper.Map<DeleteFavouriteProductByUserDto>(deleteFavouriteProductByUserViewModel);
+            var apiResponse = await favouriteClient.DeleteFavouriteProductByUserAsync(deleteFavouriteProductByUserDto);
+
+            if (apiResponse.IsSuccess)
+            {
+                return new FavouriteResult()
+                {
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
+            }
+
+            return new FavouriteResult()
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
+        }
+
+        catch (FavouriteExceptions<string> exceptions)
+        {
+            return new FavouriteResult()
+            {
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
+
     public async Task<FavouriteCollectionResult> DeleteFavouriteProductsAsync(
         DeleteProductsViewModel deleteProductsViewModel)
     {
