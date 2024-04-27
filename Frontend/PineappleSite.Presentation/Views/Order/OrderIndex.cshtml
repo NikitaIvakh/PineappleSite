@@ -2,13 +2,13 @@
     ViewData["Title"] = Localizer["ViewOrders"];
 }
 
-﻿@{
+@{
     var status = Context.Request.Query["status"];
     var approved = "";
     var readyforpickup = "";
     var cancelled = "";
     var all = "";
-
+    
     switch (status)
     {
         case "approved":

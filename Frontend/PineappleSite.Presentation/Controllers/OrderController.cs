@@ -18,7 +18,7 @@ public sealed class OrderController(IOrderService orderService) : Controller
     {
         try
         {
-            IEnumerable<OrderHeaderViewModel>? orderHeaderDtos = null;
+            var orderHeaderDtos = Enumerable.Empty<OrderHeaderViewModel>();
             var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
 
             var response = await orderService.GetAllOrdersAsync(userId!);
