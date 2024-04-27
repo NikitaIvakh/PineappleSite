@@ -11,6 +11,6 @@ public sealed class DeleteByUserValidator : AbstractValidator<DeleteFavouritePro
             .NotEmpty().NotNull().WithMessage("Идентификатор продукта не может быть пустым");
 
         RuleFor(key => key.UserId)
-            .NotNull().NotEmpty().WithMessage("Идентификатор продукта не может быть пустым");
+            .NotNull().NotEmpty().WithMessage("Идентификатор пользователя не может быть пустым");
     }
 }
