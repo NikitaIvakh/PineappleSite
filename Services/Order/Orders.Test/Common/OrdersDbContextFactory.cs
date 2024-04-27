@@ -3,23 +3,22 @@ using Order.Application.Utility;
 using Order.Domain.Entities;
 using Order.Infrastructure;
 
-namespace Orders.Test.Common
-{
-    public static class OrdersDbContextFactory
-    {
-        public static ApplicationDbContext Create()
-        {
-            var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
-            var context = new ApplicationDbContext(options);
-            context.Database.EnsureCreated();
+namespace Orders.Test.Common;
 
-            var orderHeader = new OrderHeader
+public static class OrdersDbContextFactory
+{
+    public static ApplicationDbContext Create()
+    {
+        var options = new DbContextOptionsBuilder<ApplicationDbContext>().UseInMemoryDatabase(Guid.NewGuid().ToString()).Options;
+        var context = new ApplicationDbContext(options);
+        context.Database.EnsureCreated();
+        context.AddRange(new OrderHeader
             {
                 OrderHeaderId = 1,
-                UserId = "8e445865-a24d-4543-a6c6-9443d048cdb9",
+                UserId = "testuser5t654",
                 CouponCode = "5off",
                 Discount = 10,
-                OrderTotal = 10,
+                OrderTotal = 14,
 
                 Name = "name",
                 Email = "email@gmail.com",
@@ -31,29 +30,25 @@ namespace Orders.Test.Common
                 Status = StaticDetails.StatusPending,
                 StripeSessionId = "test",
                 PaymentIntentId = "test",
-            };
-
-            var orderDetails = new OrderDetails
+            },
+            
+            new OrderDetails
             {
                 OrderDetailsId = 1,
                 OrderHeaderId = 1,
-                ProductId = 1,
+                ProductId = 2,
                 ProductName = "name",
                 Price = 28,
                 Count = 2,
-            };
+            });
 
-            context.OrderDetails.Add(orderDetails);
-            context.OrderHeaders.Add(orderHeader);
-            context.SaveChanges();
+        context.SaveChanges();
+        return context;
+    }
 
-            return context;
-        }
-
-        public static void Destroy(ApplicationDbContext context)
-        {
-            context.Database.EnsureDeleted();
-            context.Dispose();
-        }
+    public static void Destroy(ApplicationDbContext context)
+    {
+        context.Database.EnsureDeleted();
+        context.Dispose();
     }
 }
