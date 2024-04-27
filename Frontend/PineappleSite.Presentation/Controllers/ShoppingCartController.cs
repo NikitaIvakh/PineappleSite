@@ -275,7 +275,6 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
             }
 
             TempData["error"] = response.ValidationErrors;
-
             return View(orderId);
         }
 
