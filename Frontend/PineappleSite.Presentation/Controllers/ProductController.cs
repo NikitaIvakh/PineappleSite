@@ -195,9 +195,10 @@ public sealed class ProductController(
         try
         {
             var deleteProductViewModel = new DeleteProductViewModel(productId);
-            var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
             await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel);
+            
+            var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
 
             if (response.IsSuccess)
             {
