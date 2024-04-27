@@ -414,7 +414,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/GetOrders/{userId}",
+      "DownstreamPathTemplate": "/api/order/GetOrders/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -422,7 +422,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/GetOrders/{userId}",
+      "UpstreamPathTemplate": "/api/order/GetOrders/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -431,7 +431,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/GetOrder/{orderId}",
+      "DownstreamPathTemplate": "/api/order/GetOrder/{orderId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -439,7 +439,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/GetOrder/{orderId}",
+      "UpstreamPathTemplate": "/api/order/GetOrder/{orderId}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -448,7 +448,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/CreateOrder",
+      "DownstreamPathTemplate": "/api/order/CreateOrder",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -456,7 +456,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/CreateOrder",
+      "UpstreamPathTemplate": "/api/order/CreateOrder",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -465,7 +465,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/CreateStripeSession",
+      "DownstreamPathTemplate": "/api/order/CreateStripeSession",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -473,7 +473,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/CreateStripeSession",
+      "UpstreamPathTemplate": "/api/order/CreateStripeSession",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -482,7 +482,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/ValidateStripeSession",
+      "DownstreamPathTemplate": "/api/order/ValidateStripeSession",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -490,7 +490,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/ValidateStripeSession",
+      "UpstreamPathTemplate": "/api/order/ValidateStripeSession",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -499,7 +499,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/UpdateOrderStatus",
+      "DownstreamPathTemplate": "/api/order/UpdateOrderStatus",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -507,7 +507,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/UpdateOrderStatus",
+      "UpstreamPathTemplate": "/api/order/UpdateOrderStatus",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

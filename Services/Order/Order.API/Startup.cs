@@ -1,16 +1,57 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using Serilog;
+using Stripe;
+using static Microsoft.AspNetCore.Authentication.JwtBearer.JwtBearerDefaults;
 using static Order.API.Utility.StaticDetails;
+using File = System.IO.File;
 
 namespace Order.API;
 
 public static class Startup
 {
-    public static void AddSwagger(this IServiceCollection services)
+    public static void AddDependency(this IServiceCollection services, WebApplicationBuilder applicationBuilder,
+        IConfiguration configuration)
+    {
+        ConfigureServices(services, configuration);
+        ConfigureStripeKey(applicationBuilder);
+        ConfigureSerilog(applicationBuilder);
+        AddSwagger(services);
+        AddAppAuthenticated(services, configuration);
+        AddSwaggerAuthentication(services);
+        AddAuthenticatePolicy(services);
+    }
+
+    private static void ConfigureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddHttpClient("Product",
+            key => key.BaseAddress = new Uri(configuration["ServiceUrls:Product"]!));
+
+        services.AddHttpClient("Coupon",
+            key => key.BaseAddress = new Uri(configuration["ServiceUrls:Coupon"]!));
+
+        services.AddHttpClient("User",
+            key => key.BaseAddress = new Uri(configuration["ServiceUrls:User"]!));
+    }
+
+    private static void ConfigureStripeKey(this WebApplicationBuilder applicationBuilder)
+    {
+        StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+    }
+
+    private static void ConfigureSerilog(this WebApplicationBuilder applicationBuilder)
+    {
+        applicationBuilder.Host.UseSerilog((context, logConfig) =>
+        {
+            logConfig.ReadFrom.Configuration(context.Configuration);
+            logConfig.WriteTo.Console();
+        });
+    }
+
+    private static void AddSwagger(this IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -44,12 +85,12 @@ public static class Startup
         });
     }
 
-    public static void AddAppAuthenticate(this IServiceCollection services, IConfiguration configuration)
+    private static void AddAppAuthenticated(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options =>
             {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = AuthenticationScheme;
+                options.DefaultChallengeScheme = AuthenticationScheme;
             })
             .AddJwtBearer(options =>
             {
@@ -66,32 +107,30 @@ public static class Startup
             });
 
         services.AddAuthorizationBuilder()
-            .SetDefaultPolicy(new AuthorizationPolicyBuilder(JwtBearerDefaults.AuthenticationScheme)
-                .RequireAuthenticatedUser().Build());
+            .SetDefaultPolicy(new AuthorizationPolicyBuilder(AuthenticationScheme).RequireAuthenticatedUser().Build());
     }
 
-    public static void AddSwaggerAuthenticaton(this IServiceCollection services)
+    private static void AddSwaggerAuthentication(this IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
-            options.AddSecurityDefinition(name: JwtBearerDefaults.AuthenticationScheme,
-                securityScheme: new OpenApiSecurityScheme
-                {
-                    Name = "Authorization",
-                    Description = "Enter the Bearer Authoriation stirng as following: `Bearer Generated-JWT-Token`",
-                    In = ParameterLocation.Header,
-                    Type = SecuritySchemeType.ApiKey,
-                    Scheme = "Bearer",
-                });
+            options.AddSecurityDefinition(name: AuthenticationScheme, securityScheme: new OpenApiSecurityScheme
+            {
+                Name = "Authorization",
+                Description = "Enter the Bearer Authorization string as following: `Bearer Generated-JWT-Token`",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                Scheme = "Bearer",
+            });
 
-            options.AddSecurityRequirement(securityRequirement: new OpenApiSecurityRequirement
+            options.AddSecurityRequirement(new OpenApiSecurityRequirement
             {
                 {
                     new OpenApiSecurityScheme
                     {
                         Reference = new OpenApiReference
                         {
-                            Id = JwtBearerDefaults.AuthenticationScheme,
+                            Id = AuthenticationScheme,
                             Type = ReferenceType.SecurityScheme,
                         },
 
@@ -119,14 +158,10 @@ public static class Startup
         });
     }
 
-    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    private static void AddAuthenticatePolicy(this IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
-            .AddPolicy(name: AdministratorPolicy,
-                policy => policy.RequireRole(RoleAdministrator));
-
-        services.AddAuthorizationBuilder()
-            .AddPolicy(name: UserAndAdministratorPolicy,
-                policy => { policy.RequireRole(RoleUser, RoleAdministrator); });
+            .AddPolicy(AdministratorPolicy, policy => policy.RequireRole(RoleAdministrator))
+            .AddPolicy(UserAndAdministratorPolicy, policy => policy.RequireRole(RoleUser, RoleAdministrator));
     }
 }

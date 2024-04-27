@@ -14,14 +14,14 @@ public sealed class OrderEndpoints : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("api/order").RequireAuthorization(UserAndAdministratorPolicy);
+        var group = app.MapGroup("api/order");
 
-        group.MapGet("/GetOrders/{userId}", GetOrders);
-        group.MapGet("/GetOrder/{orderId:int}", GetOrder);
-        group.MapPost("/CreateOrder", CreateOrder);
-        group.MapPost("/CreateStripeSession", CreateStripeSession);
-        group.MapPost("/ValidateStripeSession", ValidateStripeSession);
-        group.MapPost("/UpdateOrderStatus", UpdateOrderStatus);
+        group.MapGet("/GetOrders/{userId}", GetOrders).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapGet("/GetOrder/{orderId:int}", GetOrder).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/CreateOrder", CreateOrder).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/CreateStripeSession", CreateStripeSession).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/ValidateStripeSession", ValidateStripeSession).RequireAuthorization(UserAndAdministratorPolicy);
+        group.MapPost("/UpdateOrderStatus", UpdateOrderStatus).RequireAuthorization(AdministratorPolicy);
     }
 
     private static async Task<Results<Ok<CollectionResult<OrderHeaderDto>>, BadRequest<string>>> GetOrders(
