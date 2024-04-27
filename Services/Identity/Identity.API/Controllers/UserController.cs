@@ -30,7 +30,7 @@ public sealed class UserController : ControllerBase
     }
 
     [HttpGet("GetUser/{userId}")]
-    [Authorize(Policy = StaticDetails.AdministratorPolicy)]
+    // [Authorize(Policy = StaticDetails.AdministratorPolicy)]
     public async Task<ActionResult<Result<GetUserDto>>> GetUser(ISender sender, ILogger<GetUserDto> logger,
         [FromRoute] string userId)
     {

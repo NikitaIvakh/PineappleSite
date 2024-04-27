@@ -28,7 +28,7 @@ namespace Orders.Test.Common
                 DeliveryDate = DateTime.UtcNow,
 
                 OrderTime = DateTime.Now,
-                Status = StaticDetails.Status_Pending,
+                Status = StaticDetails.StatusPending,
                 StripeSessionId = "test",
                 PaymentIntentId = "test",
             };

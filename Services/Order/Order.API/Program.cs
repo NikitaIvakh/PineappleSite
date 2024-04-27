@@ -7,7 +7,7 @@ using Serilog;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using HealthChecks.UI.Client;
 
-WebApplicationBuilder applicationBuilder = WebApplication.CreateBuilder(args);
+var applicationBuilder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
@@ -24,9 +24,14 @@ applicationBuilder.Services.AddSwaggerGen();
 applicationBuilder.Services.ConfigureApplicationServices();
 applicationBuilder.Services.ConfigureInfrastructureServices(applicationBuilder.Configuration);
 
-applicationBuilder.Services.AddHttpClient("Product", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]));
-applicationBuilder.Services.AddHttpClient("Coupon", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]));
-applicationBuilder.Services.AddHttpClient("User", key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:User"]));
+applicationBuilder.Services.AddHttpClient("Product",
+    key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Product"]!));
+
+applicationBuilder.Services.AddHttpClient("Coupon",
+    key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:Coupon"]!));
+
+applicationBuilder.Services.AddHttpClient("User",
+    key => key.BaseAddress = new Uri(applicationBuilder.Configuration["ServiceUrls:User"]!));
 
 StripeConfiguration.ApiKey = applicationBuilder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
@@ -41,7 +46,7 @@ applicationBuilder.Services.AddMemoryCache();
 applicationBuilder.Services.AddSwaggerAuthenticaton();
 applicationBuilder.Services.AddAppAuthenticate(applicationBuilder.Configuration);
 
-WebApplication webApplication = applicationBuilder.Build();
+var webApplication = applicationBuilder.Build();
 
 // Configure the HTTP request pipeline.
 if (webApplication.Environment.IsDevelopment())

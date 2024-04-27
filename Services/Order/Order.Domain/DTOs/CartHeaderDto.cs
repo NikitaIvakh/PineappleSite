@@ -1,26 +1,25 @@
-﻿namespace Order.Domain.DTOs
+﻿namespace Order.Domain.DTOs;
+
+public sealed class CartHeaderDto
 {
-    public class CartHeaderDto
-    {
-        public int CartHeaderId { get; set; }
+    public int CartHeaderId { get; init; }
 
-        public string? UserId { get; set; }
+    public string? UserId { get; init; }
 
-        public string? CouponCode { get; set; }
+    public string? CouponCode { get; init; }
 
-        public double Discount { get; set; }
+    public double Discount { get; init; }
 
-        public double CartTotal { get; set; }
+    public double CartTotal { get; init; }
 
 
-        public string? Name { get; set; }
+    public string? Name { get; init; }
 
-        public string? Email { get; set; }
+    public string? Email { get; init; }
 
-        public string? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; init; }
 
-        public string? Address { get; set; }
+    public string? Address { get; init; }
 
-        public DateTime? DeliveryDate { get; set; }
-    }
+    public DateTime? DeliveryDate { get; init; }
 }

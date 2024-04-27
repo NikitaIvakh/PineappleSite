@@ -414,7 +414,7 @@
 
     {
       //"Order.API": "https://localhost:7017"
-      "DownstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
+      "DownstreamPathTemplate": "/api/Order/GetOrders/{userId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -422,7 +422,7 @@
           "Port": 7017
         }
       ],
-      "UpstreamPathTemplate": "/api/Order/GetAllOrders/{userId}",
+      "UpstreamPathTemplate": "/api/Order/GetOrders/{userId}",
       "UpstreamHttpMethod": [ "GET" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"

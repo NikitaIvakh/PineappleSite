@@ -16,7 +16,7 @@ namespace Orders.Test.Common
         protected IMemoryCache MemoryCache;
         protected IBaseRepository<OrderHeader> OrderHeader;
         protected IBaseRepository<OrderDetails> OrderDetails;
-        protected IOrderValidator CreateValidator;
+        protected OrderValidator CreateValidator;
 
         public TestCommandsHandler()
         {
@@ -31,7 +31,7 @@ namespace Orders.Test.Common
             MemoryCache = new MemoryCache(new MemoryCacheOptions());
             OrderHeader = new BaseRepository<OrderHeader>(Context);
             OrderDetails = new BaseRepository<OrderDetails>(Context);
-            CreateValidator = new IOrderValidator();
+            CreateValidator = new OrderValidator();
         }
 
         public void Dispose()

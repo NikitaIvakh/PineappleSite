@@ -3,31 +3,26 @@ using Order.Domain.Interfaces.Services;
 using Order.Domain.ResultOrder;
 using System.Text.Json;
 
-namespace Order.Infrastructure.Repository.Services
+namespace Order.Infrastructure.Repository.Services;
+
+public sealed class UserService(IHttpClientFactory httpClientFactory) : IUserService
 {
-    public class UserService(IHttpClientFactory httpClientFactory) : IUserService
+    public async Task<Result<GetUserDto>> GetUserAsync(string userId)
     {
-        private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
+        var httpClient = httpClientFactory.CreateClient("User");
+        var response = await httpClient.GetAsync($"/api/User/GetUser/{userId}");
 
-        public async Task<Result<GetUserDto>> GetUserAsync(string userId)
+        if (!response.IsSuccessStatusCode)
         {
-            HttpClient httpClient = _httpClientFactory.CreateClient("User");
-            var response = await httpClient.GetAsync($"/api/User/GetUserById/{userId}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                using var stream = await response.Content.ReadAsStreamAsync();
-
-                JsonSerializerOptions jsonSerializerOptions = new()
-                {
-                    PropertyNameCaseInsensitive = true,
-                };
-
-                var options = jsonSerializerOptions;
-                return await JsonSerializer.DeserializeAsync<Result<GetUserDto>>(stream, options);
-            }
-
             return new Result<GetUserDto>();
         }
+
+        await using var stream = await response.Content.ReadAsStreamAsync();
+        JsonSerializerOptions jsonSerializerOptions = new()
+        {
+            PropertyNameCaseInsensitive = true
+        };
+
+        return (await JsonSerializer.DeserializeAsync<Result<GetUserDto>>(stream, jsonSerializerOptions))!;
     }
 }

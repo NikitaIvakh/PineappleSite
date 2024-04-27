@@ -1,147 +1,113 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Order.API.Utility;
 using Order.Application.Features.Requests.Commands;
 using Order.Application.Features.Requests.Requests;
 using Order.Domain.DTOs;
 using Order.Domain.ResultOrder;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+namespace Order.API.Controllers;
 
-namespace Order.API.Controllers
+[ApiController]
+[Route("api/[controller]")]
+public sealed class OrderController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class OrderController(IMediator mediator, ILogger<OrderHeaderDto> logger) : ControllerBase
+    [HttpGet("GetOrders/{userId}")]
+    public async Task<ActionResult<CollectionResult<OrderHeaderDto>>> GetOrders(ISender sender,
+        ILogger<string> logger, [FromRoute] string userId)
     {
-        private readonly IMediator _mediator = mediator;
-        private readonly ILogger<OrderHeaderDto> _logger = logger;
+        var request = await sender.Send(new GetOrdersRequest(userId));
 
-        // GET: api/<OrderController>
-        [HttpGet("GetAllOrders/{userId}")]
-        public async Task<ActionResult<CollectionResult<OrderHeaderDto>>> GetAllOrders(string userId)
+        if (request.IsSuccess)
         {
-            var request = await _mediator.Send(new GetOrderListRequest { UserId = userId });
-
-            if (request.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Заказы успешно получены: {userId}");
-                return Ok(request);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка получения заказов: {userId}");
-            foreach (var error in request.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Заказы успешно получены: {userId}");
+            return Ok(request);
         }
 
-        // GET api/<OrderController>/5
-        [HttpGet("GetOrder/{orderId}")]
-        public async Task<ActionResult<Result<OrderHeaderDto>>> GetOrder(int orderId)
+        logger.LogError($"LogDebugError ================ Ошибка получения заказов: {userId}");
+        return BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    [HttpGet("GetOrder/{orderId:int}")]
+    public async Task<ActionResult<Result<OrderHeaderDto>>> GetOrder(ISender sender, ILogger<int> logger,
+        [FromRoute] int orderId)
+    {
+        var request = await sender.Send(new GetOrderRequest(orderId));
+
+        if (request.IsSuccess)
         {
-            var request = await _mediator.Send(new GetOrderRequest { OrderId = orderId });
-
-            if (request.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Заказ успешно получен: {orderId}");
-                return Ok(request);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка получения заказа: {orderId}");
-            foreach (var error in request.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Заказ успешно получен: {orderId}");
+            return Ok(request);
         }
 
-        // POST api/<OrderController>
-        [HttpPost("CreateOrder")]
-        public async Task<ActionResult<Result<OrderHeaderDto>>> CreateOrder([FromBody] CartDto cartDto)
+        logger.LogError($"LogDebugError ================ Ошибка получения заказа: {orderId}");
+        return BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    [HttpPost("CreateOrder")]
+    public async Task<ActionResult<Result<OrderHeaderDto>>> CreateOrder(ISender sender, ILogger<CartDto> logger,
+        [FromBody] CartDto cartDto)
+    {
+        var command = await sender.Send(new CreateOrderRequest(cartDto));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new CreateOrderRequest { CartDto = cartDto });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Заказ успешно создан: {cartDto.CartHeader.CartHeaderId}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка удаления заказа: {cartDto.CartHeader.CartHeaderId}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Заказ успешно создан: {cartDto.CartHeader.CartHeaderId}");
+            return Ok(command);
         }
 
-        // POST api/<OrderController>
-        [HttpPost("CreateStripeSession")]
-        public async Task<ActionResult<Result<StripeRequestDto>>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        logger.LogError($"LogDebugError ================ Ошибка удаления заказа: {cartDto.CartHeader.CartHeaderId}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpPost("CreateStripeSession")]
+    public async Task<ActionResult<Result<StripeRequestDto>>> CreateStripeSession(ISender sender,
+        ILogger<StripeRequestDto> logger, [FromBody] StripeRequestDto stripeRequestDto)
+    {
+        var command = await sender.Send(new CreateStripeSessionRequest(stripeRequestDto));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new CreateStripeRequest { StripeRequest = stripeRequestDto });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Сессия для оплаты успешно создана: {stripeRequestDto.StripeSessionId}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка создания сессии для оплаты: {stripeRequestDto.StripeSessionId}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug(
+                $"LogDebug ================ Сессия для оплаты успешно создана: {stripeRequestDto.StripeSessionId}");
+            return Ok(command);
         }
 
-        // POST api/<OrderController>
-        [HttpPost("ValidateStripeSession")]
-        public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession([FromBody] int orderHeaderId)
+        logger.LogError(
+            $"LogDebugError ================ Ошибка создания сессии для оплаты: {stripeRequestDto.StripeSessionId}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpPost("ValidateStripeSession")]
+    public async Task<ActionResult<Result<OrderHeaderDto>>> ValidateStripeSession(ISender sender, ILogger<int> logger,
+        [FromBody] int orderHeaderId)
+    {
+        var command = await sender.Send(new ValidateStripeSessionRequest(orderHeaderId));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new ValidateStripeSessionRequest { OrderHeaderId = orderHeaderId });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Оплата успешно прошла валидацию: {orderHeaderId}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Оплата не успешно прошла валидацию: {orderHeaderId}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Оплата успешно прошла валидацию: {orderHeaderId}");
+            return Ok(command);
         }
 
-        // POST api/<OrderController>
-        [HttpPost("UpdateOrderStatus")]
-        public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(int orderHeaderId, [FromBody] string newStatus)
+        logger.LogError($"LogDebugError ================ Оплата не успешно прошла валидацию: {orderHeaderId}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
+    }
+
+    [HttpPost("UpdateOrderStatus")]
+    public async Task<ActionResult<Result<OrderHeaderDto>>> UpdateOrderStatus(ISender sender, ILogger<int> logger,
+        int orderHeaderId,
+        [FromBody] string newStatus)
+    {
+        var command = await sender.Send(new UpdateOrderStatusRequest(orderHeaderId, newStatus));
+
+        if (command.IsSuccess)
         {
-            var command = await _mediator.Send(new UpdateOrderStatusRequest { OrderHeaderId = orderHeaderId, NewStatus = newStatus });
-
-            if (command.IsSuccess)
-            {
-                _logger.LogDebug($"LogDebug ================ Статус заказ успешно обновлен: {orderHeaderId} - {newStatus}");
-                return Ok(command);
-            }
-
-            _logger.LogError($"LogDebugError ================ Ошибка обновления статуса заказа: {orderHeaderId} - {newStatus}");
-            foreach (var error in command.ValidationErrors!)
-            {
-                return BadRequest(error);
-            }
-
-            return NoContent();
+            logger.LogDebug($"LogDebug ================ Статус заказ успешно обновлен: {orderHeaderId} - {newStatus}");
+            return Ok(command);
         }
+
+        logger.LogError(
+            $"LogDebugError ================ Ошибка обновления статуса заказа: {orderHeaderId} - {newStatus}");
+        return BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 }

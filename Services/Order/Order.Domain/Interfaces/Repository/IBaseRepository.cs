@@ -1,13 +1,12 @@
-﻿namespace Order.Domain.Interfaces.Repository
+﻿namespace Order.Domain.Interfaces.Repository;
+
+public interface IBaseRepository<TEntity> where TEntity : class
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
-    {
-        IQueryable<TEntity> GetAll();
+    IQueryable<TEntity> GetAll();
 
-        Task<TEntity> CreateAsync(TEntity entity);
+    Task<TEntity> CreateAsync(TEntity entity);
 
-        Task<TEntity> UpdateAsync(TEntity entity);
+    Task<TEntity> UpdateAsync(TEntity entity);
 
-        Task DeleteAsync(TEntity entity);
-    }
+    Task<TEntity> DeleteAsync(TEntity entity);
 }

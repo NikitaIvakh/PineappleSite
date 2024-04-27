@@ -1,10 +1,9 @@
 ﻿using Order.Domain.DTOs;
 using Order.Domain.ResultOrder;
 
-namespace Order.Domain.Interfaces.Services
+namespace Order.Domain.Interfaces.Services;
+
+public interface IUserService
 {
-    public interface IUserService
-    {
-        Task<Result<GetUserDto>> GetUserAsync(string userId);
-    }
+    Task<Result<GetUserDto>> GetUserAsync(string userId);
 }

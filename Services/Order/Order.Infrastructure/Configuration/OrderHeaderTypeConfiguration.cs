@@ -2,15 +2,14 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Order.Domain.Entities;
 
-namespace Order.Infrastructure.Configuration
+namespace Order.Infrastructure.Configuration;
+
+public sealed class OrderHeaderTypeConfiguration : IEntityTypeConfiguration<OrderHeader>
 {
-    public class OrderHeaderTypeConfiguration : IEntityTypeConfiguration<OrderHeader>
+    public void Configure(EntityTypeBuilder<OrderHeader> builder)
     {
-        public void Configure(EntityTypeBuilder<OrderHeader> builder)
-        {
-            builder.HasKey(key => key.OrderHeaderId);
-            builder.Property(key => key.UserId).IsRequired(false);
-            builder.Property(key => key.CouponCode).IsRequired(false);
-        }
+        builder.HasKey(key => key.OrderHeaderId);
+        builder.Property(key => key.UserId).IsRequired(false);
+        builder.Property(key => key.CouponCode).IsRequired(false);
     }
 }

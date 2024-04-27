@@ -1,37 +1,36 @@
-﻿namespace Order.Domain.Entities
+﻿namespace Order.Domain.Entities;
+
+public class OrderHeader
 {
-    public class OrderHeader
-    {
-        public int OrderHeaderId { get; set; }
+    public int OrderHeaderId { get; init; }
 
-        public string? UserId { get; set; }
+    public string? UserId { get; init; }
 
-        public string? CouponCode { get; set; }
+    public string? CouponCode { get; init; }
 
-        public double Discount { get; set; }
+    public double Discount { get; init; }
 
-        public double OrderTotal { get; set; }
+    public double OrderTotal { get; init; }
 
 
-        public string? Name { get; set; }
+    public string? Name { get; init; }
 
-        public string? Email { get; set; }
+    public string? Email { get; init; }
 
-        public string? PhoneNumber { get; set; }
+    public string? PhoneNumber { get; init; }
 
-        public string? Address { get; set; }
+    public string? Address { get; init; }
 
-        public DateTime? DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; init; }
 
 
-        public DateTime OrderTime { get; set; }
+    public DateTime OrderTime { get; init; }
 
-        public string? Status { get; set; }
+    public string? Status { get; set; }
 
-        public string? PaymentIntentId { get; set; }
+    public string? PaymentIntentId { get; set; }
 
-        public string? StripeSessionId { get; set; }
+    public string? StripeSessionId { get; set; }
 
-        public IEnumerable<OrderDetails> OrderDetails { get; set; }
-    }
+    public IEnumerable<OrderDetails>? OrderDetails { get; init; }
 }
