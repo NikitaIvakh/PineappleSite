@@ -141,4 +141,8 @@
   <data name="Users" xml:space="preserve">
     <value>Пользователи</value>
   </data>
+  <data name="Services provided" xml:space="preserve">
+    <value>Оказываемые услуги</value>
+    <comment>Оказываемые услуги</comment>
+  </data>
 </root>

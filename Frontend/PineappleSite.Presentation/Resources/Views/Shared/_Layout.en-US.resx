@@ -141,4 +141,8 @@
   <data name="Users" xml:space="preserve">
     <value>Users</value>
   </data>
+  <data name="Services provided" xml:space="preserve">
+    <value>Services provided</value>
+    <comment>Services provided</comment>
+  </data>
 </root>
