@@ -48,7 +48,7 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
                 {
                     return View(paginatedCoupons);
                 }
-                
+
                 TempData["error"] = "Нет результатов";
                 return RedirectToAction(nameof(Index));
             }
@@ -67,15 +67,24 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
     // GET: CouponController/Details/5
     public async Task<ActionResult> Details(string couponId)
     {
-        var coupon = await couponService.GetCouponByIdAsync(couponId);
-
-        if (coupon.IsSuccess)
+        try
         {
-            return View(coupon);
+            var coupon = await couponService.GetCouponByIdAsync(couponId);
+
+            if (coupon.IsSuccess)
+            {
+                return View(coupon);
+            }
+
+            TempData["error"] = coupon.ValidationErrors;
+            return RedirectToAction(nameof(Index));
         }
 
-        TempData["error"] = coupon.ValidationErrors;
-        return RedirectToAction(nameof(Index));
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
     }
 
     // GET: CouponController/Create
@@ -113,23 +122,32 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
     // GET: CouponController/Edit/5
     public async Task<ActionResult> Edit(string couponId)
     {
-        var coupon = await couponService.GetCouponByIdAsync(couponId);
-
-        if (coupon.IsSuccess)
+        try
         {
-            UpdateCouponViewModel couponViewModel = new()
-            {
-                CouponId = coupon.Data!.CouponId,
-                CouponCode = coupon.Data.CouponCode,
-                DiscountAmount = coupon.Data.DiscountAmount,
-                MinAmount = coupon.Data.MinAmount,
-            };
+            var coupon = await couponService.GetCouponByIdAsync(couponId);
 
-            return View(couponViewModel);
+            if (coupon.IsSuccess)
+            {
+                UpdateCouponViewModel couponViewModel = new()
+                {
+                    CouponId = coupon.Data!.CouponId,
+                    CouponCode = coupon.Data.CouponCode,
+                    DiscountAmount = coupon.Data.DiscountAmount,
+                    MinAmount = coupon.Data.MinAmount,
+                };
+
+                return View(couponViewModel);
+            }
+
+            TempData["error"] = coupon.ValidationErrors;
+            return RedirectToAction(nameof(Index));
         }
 
-        TempData["error"] = coupon.ValidationErrors;
-        return RedirectToAction(nameof(Index));
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
     }
 
     // POST: CouponController/Edit/5
@@ -190,35 +208,44 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
 
     public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons)
     {
-        var coupons = await couponService.GetAllCouponsAsync();
-        var matchingCoupons = new List<string>();
-
-        foreach (var selectedCouponCode in selectedCoupons)
+        try
         {
-            foreach (var coupon in coupons.Data!)
+            var coupons = await couponService.GetAllCouponsAsync();
+            var matchingCoupons = new List<string>();
+
+            foreach (var selectedCouponCode in selectedCoupons)
             {
-                if (coupon.CouponId != selectedCouponCode)
+                foreach (var coupon in coupons.Data!)
                 {
-                    continue;
+                    if (coupon.CouponId != selectedCouponCode)
+                    {
+                        continue;
+                    }
+
+                    matchingCoupons.Add(coupon.CouponCode);
+                    break;
                 }
-                
-                matchingCoupons.Add(coupon.CouponCode);
-                break;
             }
-        }
-        
-        await shoppingCartService.RemoveCouponsByCode(new DeleteCouponsByCodeViewModel(matchingCoupons));
 
-        DeleteCouponsViewModel deleteCoupons = new(selectedCoupons);
-        var response = await couponService.DeleteCouponsAsync(deleteCoupons);
+            await shoppingCartService.RemoveCouponsByCode(new DeleteCouponsByCodeViewModel(matchingCoupons));
 
-        if (response.IsSuccess)
-        {
-            TempData["success"] = response.SuccessMessage;
+            DeleteCouponsViewModel deleteCoupons = new(selectedCoupons);
+            var response = await couponService.DeleteCouponsAsync(deleteCoupons);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["error"] = response.ValidationErrors;
             return RedirectToAction(nameof(Index));
         }
 
-        TempData["error"] = response.ValidationErrors;
-        return RedirectToAction(nameof(Index));
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

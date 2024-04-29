@@ -90,8 +90,8 @@
                                             </a>
                                         </td>
                                         <td class="text-center">
-                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-productId="@item.Id" asp-route-culture="@CultureInfo.CurrentCulture.Name">
-                                                <i class="bi bi-trash">Удалить</i>
+                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-productId="@item.Id">
+                                                <i class="bi bi-trash">@Localizer["Delete product"]</i>
                                             </button>
                                         </td>
                                     </tr>
@@ -129,7 +129,7 @@
 
     else
     {
-        <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="font-size: 20px; color:white"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
+        <a asp-action="Create" class="btn btn-outline-primary" style="font-size: 20px; color:white"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
     }
 }
 

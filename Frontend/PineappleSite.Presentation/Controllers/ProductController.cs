@@ -51,17 +51,23 @@ public sealed class ProductController(
                 var paginatedProducts =
                     PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageSize);
 
-                return paginatedProducts.Count == 0 ? View() : View(paginatedProducts);
+                if (paginatedProducts.Count != 0)
+                {
+                    return View(paginatedProducts);
+                }
+                
+                TempData["error"] = "Нет результатов";
+                return RedirectToAction(nameof(GetProducts));
             }
 
             TempData["error"] = products.ValidationErrors;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -93,7 +99,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -125,7 +131,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -157,7 +163,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -183,7 +189,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -213,7 +219,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 
@@ -246,7 +252,7 @@ public sealed class ProductController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(GetProducts));
         }
     }
 }

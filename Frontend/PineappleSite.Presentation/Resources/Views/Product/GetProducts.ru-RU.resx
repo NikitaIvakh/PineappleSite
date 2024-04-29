@@ -139,10 +139,10 @@
     <value>Детали</value>
   </data>
   <data name="Do you really want to delete these records?" xml:space="preserve">
-    <value>Вы действительно хотите удалить данные записи?</value>
+    <value>Удалить?</value>
   </data>
   <data name="Do you really want to delete this entry?" xml:space="preserve">
-    <value>Вы действительно хотите удалить данную запись?</value>
+    <value>Удалить?</value>
   </data>
   <data name="Go back to the products" xml:space="preserve">
     <value>Вернуться назад</value>

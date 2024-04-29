@@ -33,7 +33,7 @@ public sealed class UserController(
                                        key.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)) ||
                                    key.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
-
+                    
                     users = new IdentityCollectionResult<GetUsersViewModel>
                     {
                         Data = searchUsers,
@@ -48,17 +48,23 @@ public sealed class UserController(
                 var paginatedUsers =
                     PaginatedList<GetUsersViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
 
-                return View(paginatedUsers);
+                if (paginatedUsers.Count != 0)
+                {
+                    return View(paginatedUsers);
+                }
+                
+                TempData["error"] = "Нет результатов";
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = users.ValidationErrors;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return View();
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -82,7 +88,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -114,7 +120,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -146,7 +152,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -172,7 +178,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -193,13 +199,13 @@ public sealed class UserController(
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -231,7 +237,7 @@ public sealed class UserController(
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -256,7 +262,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -288,7 +294,7 @@ public sealed class UserController(
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -311,11 +317,11 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction("Index", "User");
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction("Index", "User");
+            return RedirectToAction(nameof(Index));
         }
 
         catch (Exception ex)
@@ -336,17 +342,17 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction("Index", "User");
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction("Index", "User");
+            return RedirectToAction(nameof(Index));
         }
 
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return View(userName);
+            return RedirectToAction(nameof(Index));
         }
     }
 
@@ -360,11 +366,11 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction("Index", "User");
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction("Index", "User");
+            return RedirectToAction(nameof(Index));
         }
 
         catch (Exception ex)
