@@ -1,0 +1,65 @@
+﻿@model dynamic
+
+@{
+    ViewBag.Title = @Localizer["title"];
+    Layout = "_Layout";
+    <link rel="stylesheet" href="~/css/home/ServicesProvided.css">
+}
+
+<form asp-action="ServicesProvided">
+    <div class="card shadow border-4 mt-3 mb-md-4">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">@Localizer["Our contacts"]</h1>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row pb-3">
+                <div class="col-6">
+                </div>
+            </div>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="some-format">@Localizer["Contact number"]</th>
+                    <th class="some-format">@Localizer["Сontact description"]</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="some-format">
+                        <strong>1</strong>
+                    </td>
+                    <td class="some-format">
+                        <strong>@Localizer["EmailAddress"]</strong>
+                        <span>@Localizer["EmailAddress 2"]</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="some-format">
+                        <strong>2</strong>
+                    </td>
+                    <td class="some-format">
+                        <strong>@Localizer["PhoneNumber"]</strong>
+                        <span>@Localizer["PhoneNumber 2"]</span>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="some-format">
+                        <strong>3</strong>
+                    </td>
+                    <td class="some-format">
+                        <strong>@Localizer["Address"]</strong>
+                        <span>@Localizer["Address 2"]</span>
+                        <div style="margin-top: 10px">
+                            <iframe src="https://yandex.ru/map-widget/v1/?um=constructor%3A53d4433f31ad712ed98a35e3047843f3b2f77ac922616ff67e122a89a3dbf19e&amp;source=constructor" width="500" height="400" loading="lazy" frameborder="0"></iframe>
+                        </div>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>

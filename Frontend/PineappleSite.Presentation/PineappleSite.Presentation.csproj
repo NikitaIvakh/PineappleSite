@@ -31,6 +31,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>ServicesProvided.en-US.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Home\Contacts.ru-RU.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Contacts.ru-RU.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
