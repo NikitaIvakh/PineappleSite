@@ -9,7 +9,9 @@ public sealed class TokenExpirationMiddleware(RequestDelegate next)
     {
         if (!context.User.Identity!.IsAuthenticated && !context.Request.Cookies.ContainsKey("JWTToken") &&
             context.Request.Path.Value is not "/Authenticate/Login" &&
-            context.Request.Path.Value is not "/Authenticate/Register" && context.Request.Path.Value is not "/")
+            context.Request.Path.Value is not "/Authenticate/Register" &&
+            context.Request.Path.Value is not "/" &&
+            !context.Request.Path.Value.StartsWith("/Home/SetLanguage"))
         {
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             context.Response.Redirect("/");
@@ -18,7 +20,9 @@ public sealed class TokenExpirationMiddleware(RequestDelegate next)
 
         if (!context.Request.Cookies.ContainsKey("JWTToken") &&
             context.Request.Path.Value is not "/Authenticate/Login" &&
-            context.Request.Path.Value is not "/Authenticate/Register" && context.Request.Path.Value is not "/")
+            context.Request.Path.Value is not "/Authenticate/Register" &&
+            context.Request.Path.Value is not "/" &&
+            !context.Request.Path.Value.StartsWith("/Home/SetLanguage"))
         {
             await context.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             context.Response.Redirect("/");

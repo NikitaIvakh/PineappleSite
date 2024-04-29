@@ -44,7 +44,13 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
                 var paginatedCoupons =
                     PaginatedList<CouponViewModel>.Create(filteredCoupons, pageNumber ?? 1, pageSize);
 
-                return paginatedCoupons.Count == 0 ? View() : View(paginatedCoupons);
+                if (paginatedCoupons.Count != 0)
+                {
+                    return View(paginatedCoupons);
+                }
+                
+                TempData["error"] = "Нет результатов";
+                return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = coupons.ValidationErrors;

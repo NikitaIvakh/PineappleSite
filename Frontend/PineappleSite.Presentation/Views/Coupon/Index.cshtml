@@ -76,13 +76,12 @@
                                     <td>@item.DiscountAmount</td>
                                     <td>@item.MinAmount</td>
                                     <td>
-                                        <a class="btn btn-sm btn-success" asp-action="Details" asp-route-couponId="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
+                                        <a class="btn btn-sm btn-success" asp-action="Details" asp-route-couponId="@item.CouponId">
                                             @Localizer["Details"]
                                         </a>
                                     </td>
                                     <td>
-                                        <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-couponId="@item.CouponId" 
-                                                asp-route-culture="@CultureInfo.CurrentCulture.Name" onsubmit="return confirm('@Localizer["Remove entity"]')">
+                                        <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-couponId="@item.CouponId" onsubmit="return confirm('@Localizer["Remove entity"]')">
                                             <i class="bi bi-trash">@Localizer["Remove coupon"]</i>
                                         </button>
                                     </td>
@@ -99,7 +98,6 @@
                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                asp-route-searchCode="@ViewData["SearchCode"]"
                                asp-route-pageNumber="@(Model.PageIndex - 1)"
-                               asp-route-culture="@CultureInfo.CurrentCulture.Name"
                                class="page-item">
                                 <span>&laquo; @Localizer["Previous"]</span>
                             </a>
@@ -110,7 +108,6 @@
                                asp-route-currentFilter="@ViewData["CurrentFilter"]"
                                asp-route-searchCode="@ViewData["SearchCode"]"
                                asp-route-pageNumber="@(Model.PageIndex + 1)"
-                               asp-route-culture="@CultureInfo.CurrentCulture.Name"
                                class="page-item">
                                 <span>@Localizer["Next"] &raquo;</span>
                             </a>
@@ -123,7 +120,7 @@
 
     else
     {
-        <a asp-action="Create" class="btn btn-outline-primary" asp-route-culture="@CultureInfo.CurrentCulture.Name" style="font-size: 20px; color:white">
+        <a asp-action="Create" class="btn btn-outline-primary" style="font-size: 20px; color:white">
             <i class="bi bi-plus-square"></i> @Localizer["AddNewCoupon"]
         </a>
     }
