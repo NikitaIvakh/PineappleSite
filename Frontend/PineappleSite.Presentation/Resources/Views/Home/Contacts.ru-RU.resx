@@ -51,4 +51,10 @@
     <data name="Address 2" xml:space="preserve">
         <value>г. Минск, пр-т Победителей, 7а</value>
     </data>
+    <data name="Working hours" xml:space="preserve">
+        <value>Время работы:</value>
+    </data>
+    <data name="Working hours 2" xml:space="preserve">
+        <value>Пн. - Вс.: с 11.00 до 23.30</value>
+    </data>
 </root>

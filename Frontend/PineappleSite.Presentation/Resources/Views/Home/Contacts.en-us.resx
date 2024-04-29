@@ -44,4 +44,10 @@
     <data name="Address 2" xml:space="preserve">
         <value>Minsk, Pobediteley Ave., 7a</value>
     </data>
+    <data name="Working hours" xml:space="preserve">
+        <value>Working hours:</value>
+    </data>
+    <data name="Working hours 2" xml:space="preserve">
+        <value>Mon. - Sun: from 11.00 to 23.30</value>
+    </data>
 </root>
