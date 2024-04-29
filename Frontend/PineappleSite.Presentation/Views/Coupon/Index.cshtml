@@ -77,13 +77,13 @@
                                     <td>@item.MinAmount</td>
                                     <td>
                                         <a class="btn btn-sm btn-success" asp-action="Details" asp-route-couponId="@item.CouponId" asp-route-culture="@CultureInfo.CurrentCulture.Name">
-                                            Детали
+                                            @Localizer["Details"]
                                         </a>
                                     </td>
                                     <td>
                                         <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-couponId="@item.CouponId" 
                                                 asp-route-culture="@CultureInfo.CurrentCulture.Name" onsubmit="return confirm('@Localizer["Remove entity"]')">
-                                            <i class="bi bi-trash">Удалить</i>
+                                            <i class="bi bi-trash">@Localizer["Remove coupon"]</i>
                                         </button>
                                     </td>
                                 </tr>
