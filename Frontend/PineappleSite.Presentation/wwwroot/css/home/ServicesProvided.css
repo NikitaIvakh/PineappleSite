@@ -1,0 +1,10 @@
+﻿.table {
+    margin: 0 auto;
+    width: 90%;
+}
+
+.some-format {
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}

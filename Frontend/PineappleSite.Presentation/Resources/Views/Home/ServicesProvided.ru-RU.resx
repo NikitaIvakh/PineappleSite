@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:element name="root" msdata:IsDataSet="true">
+            
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="Calling a taxi to a client(s)" xml:space="preserve">
+        <value>Вызов такси клиенту(клиентам)</value>
+    </data>
+    <data name="Calling Description" xml:space="preserve">
+        <value>Эта услуга используется рестораном для того, чтобы клиенты могли приехать в ресторан или уехать домой без необходимости вызывать такси самостоятельно.</value>
+    </data>
+    <data name="Banquet service" xml:space="preserve">
+        <value>Банкетное обслуживание</value>
+    </data>
+    <data name="Banquet service description" xml:space="preserve">
+        <value>Эта услуга включает в себя слудующие моменты, такие как организацию и проведение банкетов, свадебных приемов, корпоративных вечеринок, юбилеев.Также включено отдельное меню для такихcлучаев.</value>
+    </data>
+    <data name="Catering" xml:space="preserve">
+        <value>Кейтеринг</value>
+    </data>
+    <data name="Catering description" xml:space="preserve">
+        <value>Кейтеринговое обслуживание включает приготовление и доставку блюд на выбранную локацию, где гости могут наслаждаться блюдами, созданными профессиональным поварами.</value>
+    </data>
+    <data name="Catering description 2" xml:space="preserve">
+        <value>Ресторанный персонал также обеспечивает качественную подачу и обслуживание, чтобы создать незабываемую атмосферу и впечатления.</value>
+    </data>
+    <data name="Conducting musical performances and show programs" xml:space="preserve">
+        <value>Проведение музыкальных выступлений и шоу-программ</value>
+    </data>
+    <data name="Conducting musical performances and show programs description" xml:space="preserve">
+        <value>Эта услуга предлагает организацию и проведение увлекательных музыкальных выступлений и шоу-программ. Независимо от того, нужно ли живое музыкальное исполнение, танцевальное шоу или другие развлекательные выступления, мероприятие будет по-настоящему запоминающимся.</value>
+    </data>
+    <data name="Providing a children's menu and entertainment for children description" xml:space="preserve">
+        <value>Эта услуга представляет специальное детское меню и развлекательные активности. В меню предусмотрены разнообразные здоровые и вкусные блюда, которые понравятся детям.Также для детей предусмотрена игровая зона.</value>
+    </data>
+    <data name="Providing a children's menu and entertainment for children" xml:space="preserve">
+        <value>Предоставление услуги детского меню и развлечений для детей</value>
+    </data>
+    <data name="Wi-Fi and comfortable working conditions" xml:space="preserve">
+        <value>Wi-Fi и комфортные условия для работы</value>
+    </data>
+    <data name="Wi-Fi and comfortable working conditions description" xml:space="preserve">
+        <value> Эта услуга предлагает бесплатный доступ к Wi-Fi для работы в удобной обстановке. Созданы условия для комфортной работы или для проведения деловых встречь в заведении.</value>
+    </data>
+    <data name="Organization of karaoke parties" xml:space="preserve">
+        <value>Организации караоке-вечеринок</value>
+    </data>
+    <data name="Organization of karaoke parties description" xml:space="preserve">
+        <value>Эта услуга предлагает организацию караоке-вечеринок, которые приносят множество веселья и развлечения. Присутствует широкий выбор песен, профессиональное звуковое оборудование и уютная атмосфера, чтобы каждый гость мог исполнить свои любимые хиты и провести незабываемое время в компании друзей.</value>
+    </data>
+    <data name="Wine list" xml:space="preserve">
+        <value>Винная карта</value>
+    </data>
+    <data name="Wine list description" xml:space="preserve">
+        <value>Предоставляет широкий выбор вин различных сортов, включая красные, белые, розовые и игристые вина. Наш опытный сомелье с радостью поможет подобрать вино, которое идеально подойдет по вашим предпочтениям.</value>
+    </data>
+    <data name="Organization of culinary contests and tournaments" xml:space="preserve">
+        <value>Организация кулинарных конкурсов и турниров</value>
+    </data>
+    <data name="Organization of culinary contests and tournaments description" xml:space="preserve">
+        <value>Организация кулинарных конкурсов и турниров - это одна из предлагаемых услуг. Создается атмосфера соревнования и организуются интересные кулинарные события для гостей.</value>
+    </data>
+    <data name="Prom and party organization services" xml:space="preserve">
+        <value>Услуги по организации выпускных вечеров и вечеринок</value>
+    </data>
+    <data name="Prom and party organization services description" xml:space="preserve">
+        <value>Предоставляются услуги по организации выпускных вечеров и вечеринок. Создается незабываемая атмосфера и ведется продумываение каждой детали, чтобы мероприятие было особенным и запоминающимся.</value>
+    </data>
+    <data name="Service number" xml:space="preserve">
+        <value>Номер услуги</value>
+    </data>
+    <data name="Name of the service" xml:space="preserve">
+        <value>Наименование услуги</value>
+    </data>
+    <data name="Description of the service" xml:space="preserve">
+        <value>Описание услуги</value>
+    </data>
+    <data name="Services provided" xml:space="preserve">
+        <value>Оказываемые услуги</value>
+    </data>
+    <data name="title" xml:space="preserve">
+        <value>Оказываемые услуги</value>
+    </data>
+</root>
