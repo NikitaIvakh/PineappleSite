@@ -75,30 +75,30 @@
                         }
                     }
                 </ul>
-                <ul class="navbar-nav">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @Thread.CurrentThread.CurrentCulture.DisplayName
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li>
-                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
-                                    <input class="dropdown-item" type="hidden" name="returnUrl" value="@Context.Request.Path"/>
-                                    <button class="dropdown-item" type="submit" name="culture" value="ru-RU">Русский</button>
-                                </form>
-                            </li>
-                            <li>
-                                <form asp-controller="Home" asp-action="SetLanguage" method="post">
-                                    <input class="dropdown-item" type="hidden" name="returnUrl" value="@Context.Request.Path"/>
-                                    <button class="dropdown-item" type="submit" name="culture" value="en-US">English</button>
-                                </form>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+                @* <ul class="navbar-nav"> *@
+                @*     <li class="nav-item dropdown"> *@
+                @*         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> *@
+                @*             @Thread.CurrentThread.CurrentCulture.DisplayName *@
+                @*         </a> *@
+                @*         <ul class="dropdown-menu" aria-labelledby="navbarDropdown"> *@
+                @*             <li> *@
+                @*                 <form asp-controller="Home" asp-action="SetLanguage" method="post"> *@
+                @*                     <input class="dropdown-item" type="hidden" name="returnUrl" value="@Context.Request.Path"/> *@
+                @*                     <button class="dropdown-item" type="submit" name="culture" value="ru-RU">Русский</button> *@
+                @*                 </form> *@
+                @*             </li> *@
+                @*             <li> *@
+                @*                 <form asp-controller="Home" asp-action="SetLanguage" method="post"> *@
+                @*                     <input class="dropdown-item" type="hidden" name="returnUrl" value="@Context.Request.Path"/> *@
+                @*                     <button class="dropdown-item" type="submit" name="culture" value="en-US">English</button> *@
+                @*                 </form> *@
+                @*             </li> *@
+                @*             <li> *@
+                @*                 <hr class="dropdown-divider"> *@
+                @*             </li> *@
+                @*         </ul> *@
+                @*     </li> *@
+                @* </ul> *@
                 <ul class="navbar-nav">
                     <partial name="_LoginPartial"/>
                 </ul>
