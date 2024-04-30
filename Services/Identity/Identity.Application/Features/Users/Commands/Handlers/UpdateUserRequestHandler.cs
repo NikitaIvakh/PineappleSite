@@ -27,6 +27,7 @@ public sealed class UpdateUserRequestHandler(
             {
                 var errorMessages = new Dictionary<string, List<string>>
                 {
+                    { "Id", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "FirstName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "LastName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "UserName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
@@ -75,8 +76,8 @@ public sealed class UpdateUserRequestHandler(
             user.Id = request.UpdateUser.Id;
             user.FirstName = request.UpdateUser.FirstName.Trim();
             user.LastName = request.UpdateUser.LastName.Trim();
-            user.Email = request.UpdateUser.EmailAddress.Trim();
             user.UserName = request.UpdateUser.UserName.Trim();
+            user.Email = request.UpdateUser.EmailAddress.Trim().ToLower();
 
             var result = await userRepository.UpdateUserAsync(user, cancellationToken);
 

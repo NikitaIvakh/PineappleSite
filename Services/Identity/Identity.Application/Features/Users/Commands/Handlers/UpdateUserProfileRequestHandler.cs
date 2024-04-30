@@ -33,6 +33,7 @@ public sealed class UpdateUserProfileRequestHandler(
             {
                 var errorMessages = new Dictionary<string, List<string>>
                 {
+                    { "Id", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "FirstName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "LastName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "UserName", validator.Errors.Select(x => x.ErrorMessage).ToList() },
@@ -81,8 +82,8 @@ public sealed class UpdateUserProfileRequestHandler(
             user.FirstName = request.UpdateUserProfile.FirstName!.Trim();
             user.LastName = request.UpdateUserProfile.LastName!.Trim();
             user.UserName = request.UpdateUserProfile.UserName!.Trim();
-            user.Email = request.UpdateUserProfile.EmailAddress!.Trim();
             user.Description = request.UpdateUserProfile.Description!.Trim();
+            user.Email = request.UpdateUserProfile.EmailAddress!.Trim().ToLower();
             user.Age = request.UpdateUserProfile.Age;
 
             if (!string.IsNullOrEmpty(request.UpdateUserProfile.Password))
@@ -170,7 +171,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 FirstName: user.FirstName,
                 LastName: user.LastName,
                 UserName: user.UserName,
-                EmailAddress: user.Email,
+                EmailAddress: user.Email.ToLower(),
                 Role: roles,
                 Description: user.Description,
                 Age: user.Age,

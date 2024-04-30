@@ -102,7 +102,7 @@ public sealed class RegisterUserRequestHandler(
                 FirstName = request.RegisterRequest.FirstName.Trim(),
                 LastName = request.RegisterRequest.LastName.Trim(),
                 UserName = request.RegisterRequest.UserName.Trim(),
-                Email = request.RegisterRequest.EmailAddress.Trim(),
+                Email = request.RegisterRequest.EmailAddress.Trim().ToLower(),
                 EmailConfirmed = true,
             };
 

@@ -100,8 +100,8 @@ public sealed class CreateUserRequestHandler(
                 Id = Guid.NewGuid().ToString(),
                 FirstName = request.CreateUser.FirstName.Trim(),
                 LastName = request.CreateUser.LastName.Trim(),
-                Email = request.CreateUser.EmailAddress.Trim(),
                 UserName = request.CreateUser.UserName.Trim(),
+                Email = request.CreateUser.EmailAddress.Trim().ToLower(),
                 EmailConfirmed = true,
             };
 
@@ -129,6 +129,7 @@ public sealed class CreateUserRequestHandler(
 
             return new Result<Unit>
             {
+                Data = Unit.Value,
                 StatusCode = (int)StatusCode.Created,
                 SuccessMessage =
                     SuccessMessage.ResourceManager.GetString("UserSuccessfullyCreated", SuccessMessage.Culture),
