@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Caching.Memory;
 using Product.Application.Features.Requests.Handlers;
 using Product.Application.Resources;
@@ -29,6 +30,7 @@ public sealed class UpdateProductRequestHandler(
             {
                 var errorMessages = new Dictionary<string, List<string>>
                 {
+                    { "Id", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "Name", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "Description", validator.Errors.Select(x => x.ErrorMessage).ToList() },
                     { "ProductCategory", validator.Errors.Select(x => x.ErrorMessage).ToList() },
@@ -69,6 +71,25 @@ public sealed class UpdateProductRequestHandler(
                     ValidationErrors =
                     [
                         ErrorMessage.ResourceManager.GetString("ProductNotUpdatedNull", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var productNameAndDescription = await repository.GetAll().FirstOrDefaultAsync(key =>
+                key.Name == request.UpdateProduct.Name &&
+                key.Description == request.UpdateProduct.Description &&
+                key.Id != request.UpdateProduct.Id, cancellationToken);
+
+            if (productNameAndDescription is not null)
+            {
+                return new Result<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoContent,
+                    ErrorMessage = ErrorMessage.ResourceManager.GetString("ProductAlreadyExists", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("ProductAlreadyExists", ErrorMessage.Culture) ??
                         string.Empty
                     ]
                 };

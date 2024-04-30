@@ -7,6 +7,9 @@ public sealed class UpdateValidator : AbstractValidator<UpdateProductDto>
 {
     public UpdateValidator()
     {
+        RuleFor(key => key.Id)
+            .NotNull().NotEmpty().WithMessage("Идентификатор продукта не может быть пустым");
+        
         RuleFor(key => key.Name).NotEmpty().NotNull()
             .MaximumLength(30).WithMessage("Строка не должна превышать 30 символов.")
             .MinimumLength(3).WithMessage("Строка должна быть более 3 символов.");
