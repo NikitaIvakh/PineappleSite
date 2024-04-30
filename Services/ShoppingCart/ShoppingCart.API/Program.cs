@@ -27,11 +27,8 @@ builder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-builder.Services.AddSwagger();
 builder.Services.AddMemoryCache();
-builder.Services.AddSwaggerAuthenticate();
-builder.Services.AddAppAuthenticate(builder.Configuration);
-builder.Services.AddAuthenticatePolicy();
+builder.Services.AddDependencyServices(builder.Configuration);
 
 var app = builder.Build();
 
