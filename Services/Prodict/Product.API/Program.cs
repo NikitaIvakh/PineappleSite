@@ -21,11 +21,8 @@ applicationBuilder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-applicationBuilder.Services.AddSwagger();
 applicationBuilder.Services.AddMemoryCache();
-applicationBuilder.Services.AddSwaggerAuthenticate();
-applicationBuilder.Services.AddAppAuthenticate(applicationBuilder.Configuration);
-applicationBuilder.Services.AddAuthenticatePolicy();
+applicationBuilder.Services.AddDependencyServices(applicationBuilder.Configuration);
 
 var webApplication = applicationBuilder.Build();
 

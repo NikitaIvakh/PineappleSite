@@ -9,7 +9,15 @@ namespace Product.API;
 
 public static class Startup
 {
-    public static void AddSwagger(this IServiceCollection services)
+    public static void AddDependencyServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        AddSwagger(services);
+        AddAppAuthenticate(services, configuration);
+        AddSwaggerAuthenticate(services);
+        AddAuthenticatePolicy(services);
+    }
+
+    private static void AddSwagger(IServiceCollection services)
     {
         services.AddSwaggerGen();
         services.AddSwaggerGen(option =>
@@ -42,7 +50,7 @@ public static class Startup
         });
     }
 
-    public static void AddAppAuthenticate(this IServiceCollection services, IConfiguration configuration)
+    private static void AddAppAuthenticate(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options =>
             {
@@ -69,7 +77,7 @@ public static class Startup
                     JwtBearerDefaults.AuthenticationScheme).RequireAuthenticatedUser().Build());
     }
 
-    public static void AddSwaggerAuthenticate(this IServiceCollection services)
+    private static void AddSwaggerAuthenticate(IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
@@ -118,7 +126,7 @@ public static class Startup
         });
     }
 
-    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    private static void AddAuthenticatePolicy(IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
             .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
