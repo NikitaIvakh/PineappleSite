@@ -34,14 +34,21 @@ public sealed partial class UpdateUserValidator : AbstractValidator<UpdateUserDt
             .MustAsync(BeValidEmailAddress).WithMessage("Введите действительный адрес электронной почты");
     }
 
-    private static Task<bool> BeUniqueUserName(string userName, CancellationToken token)
+    private static async Task<bool> BeUniqueEmailAddress(UpdateUserDto updateUser, string emailAddress,
+        CancellationToken arg3)
     {
-        return Task.FromResult(string.IsNullOrEmpty(userName) || !string.IsNullOrEmpty(userName));
+        if (updateUser.EmailAddress != emailAddress)
+        {
+            return false;
+        }
+
+        var isValid = MyRegex().IsMatch(emailAddress);
+        return await Task.FromResult(isValid);
     }
 
-    private static Task<bool> BeUniqueEmailAddress(string emailAddress, CancellationToken token)
+    private static async Task<bool> BeUniqueUserName(UpdateUserDto updateUser, string userName, CancellationToken arg3)
     {
-        return Task.FromResult(string.IsNullOrEmpty(emailAddress) || !string.IsNullOrEmpty(emailAddress));
+        return await Task.FromResult(updateUser.UserName == userName);
     }
 
     private static Task<bool> BeValidEmailAddress(string emailAddress, CancellationToken token)

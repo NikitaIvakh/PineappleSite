@@ -73,6 +73,48 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
+            var otherUserWithSameName = await userRepository.GetUsers()
+                .FirstOrDefaultAsync(key =>
+                        key.UserName == request.UpdateUser.UserName &&
+                        key.Id != request.UpdateUser.Id,
+                    cancellationToken);
+
+            if (otherUserWithSameName is not null)
+            {
+                return new Result<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("UserAlreadyExists", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserAlreadyExists", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
+            var existUserEmail = await userRepository.GetUsers()
+                .FirstOrDefaultAsync(key =>
+                        key.Email == request.UpdateUser.EmailAddress &&
+                        key.Id != request.UpdateUser.Id,
+                    cancellationToken);
+
+            if (existUserEmail is not null)
+            {
+                return new Result<Unit>()
+                {
+                    StatusCode = (int)StatusCode.NoAction,
+                    ErrorMessage =
+                        ErrorMessage.ResourceManager.GetString("UserAlreadyExists", ErrorMessage.Culture),
+                    ValidationErrors =
+                    [
+                        ErrorMessage.ResourceManager.GetString("UserAlreadyExists", ErrorMessage.Culture) ??
+                        string.Empty
+                    ]
+                };
+            }
+
             user.Id = request.UpdateUser.Id;
             user.FirstName = request.UpdateUser.FirstName.Trim();
             user.LastName = request.UpdateUser.LastName.Trim();
