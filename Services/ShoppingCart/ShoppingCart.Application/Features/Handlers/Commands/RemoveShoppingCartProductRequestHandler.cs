@@ -29,7 +29,7 @@ public sealed class RemoveShoppingCartProductRequestHandler(
             {
                 var existErrorMessage = new Dictionary<string, List<string>>()
                 {
-                    { "ProductId", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
+                    { "Id", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
                 };
 
                 foreach (var error in existErrorMessage)
