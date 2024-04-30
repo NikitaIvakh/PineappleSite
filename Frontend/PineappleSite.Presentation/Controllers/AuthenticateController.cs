@@ -83,7 +83,7 @@ public sealed class AuthenticateController(IIdentityService identityService, IHt
             return Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
         }
 
-        TempData["success"] = "www успешно вышли из аккаунта";
+        TempData["success"] = "Вы успешно вышли из аккаунта";
 
         httpContextAccessor.HttpContext!.Response.Cookies.Delete("JWTToken");
         httpContextAccessor.HttpContext!.Response.Cookies.Delete("AuthenticateCookie");
