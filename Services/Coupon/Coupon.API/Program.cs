@@ -23,10 +23,7 @@ builder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-builder.Services.AddSwagger();
-builder.Services.AddSwaggerAuthentication();
-builder.Services.AddAddAuthenticated(builder.Configuration);
-builder.Services.AddAuthenticatePolicy();
+builder.Services.AddDependencyServices(builder.Configuration);
 
 StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
@@ -39,7 +36,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("health", new HealthCheckOptions
-{ 
+{
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
 });
 

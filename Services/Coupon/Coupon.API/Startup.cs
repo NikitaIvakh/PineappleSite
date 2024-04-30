@@ -10,7 +10,15 @@ namespace Coupon.API;
 
 public static class Startup
 {
-    public static void AddSwagger(this IServiceCollection services)
+    public static void AddDependencyServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        AddSwagger(services);
+        AddAddAuthenticated(services, configuration);
+        AddSwaggerAuthentication(services);
+        AddAuthenticatePolicy(services);
+    }
+    
+    private static void AddSwagger(IServiceCollection services)
     {
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
@@ -54,7 +62,7 @@ public static class Startup
         });
     }
 
-    public static void AddAddAuthenticated(this IServiceCollection services, IConfiguration configuration)
+    private static void AddAddAuthenticated(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options =>
             {
@@ -79,7 +87,7 @@ public static class Startup
             .SetDefaultPolicy(new AuthorizationPolicyBuilder(AuthenticationScheme).RequireAuthenticatedUser().Build());
     }
 
-    public static void AddSwaggerAuthentication(this IServiceCollection services)
+    private static void AddSwaggerAuthentication(IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
@@ -127,7 +135,7 @@ public static class Startup
         });
     }
 
-    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    private static void AddAuthenticatePolicy(IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
             .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });
