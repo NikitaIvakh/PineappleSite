@@ -88,7 +88,7 @@ public sealed class RemoveShoppingCartProductsRequestHandler(
 
             foreach (var cartHeaderFromDb in from cartHeaderId in cartHearerIds
                      let totalDetailsWithHeader = cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
-                     where totalDetailsWithHeader == 1
+                     where totalDetailsWithHeader == 0
                      select cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartHeaderId))
             {
                 if (cartHeaderFromDb is null)

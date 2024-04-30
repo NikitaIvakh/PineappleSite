@@ -83,7 +83,7 @@ public sealed class DeleteFavouriteProductRequestHandler(
             foreach (var favouriteHeaderDelete in from favouriteHeaderId in favouriteHeaderIds
                      let totalDetailsWithHeader = detailsRepository.GetAll()
                          .Count(key => key.FavouriteHeaderId == favouriteHeaderId)
-                     where totalDetailsWithHeader == 1
+                     where totalDetailsWithHeader == 0
                      select headerRepository.GetAll()
                          .FirstOrDefault(key => key.FavouriteHeaderId == favouriteHeaderId))
             {

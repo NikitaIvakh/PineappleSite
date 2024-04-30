@@ -32,7 +32,7 @@ public sealed class DeleteFavouriteProductsRequestHandler(
                 {
                     { "ProductIds", validationResult.Errors.Select(key => key.ErrorMessage).ToList() }
                 };
-
+                
                 foreach (var error in existErrorMessage)
                 {
                     if (existErrorMessage.TryGetValue(error.Key, out var errorMessage))

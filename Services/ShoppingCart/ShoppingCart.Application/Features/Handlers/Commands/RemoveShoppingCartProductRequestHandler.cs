@@ -73,15 +73,16 @@ public sealed class RemoveShoppingCartProductRequestHandler(
             }
 
             var cartHeaderIds = cartDetails.Select(cd => cd.CartHeaderId).Distinct().ToList();
-            
+
             foreach (var product in cartDetails)
             {
                 await cartDetailsRepository.DeleteAsync(product);
             }
 
             foreach (var cartHeaderDelete in from cartHeaderId in cartHeaderIds
-                     let totalDetailsWithHeader = cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
-                     where totalDetailsWithHeader == 1
+                     let totalDetailsWithHeader =
+                         cartDetailsRepository.GetAll().Count(key => key.CartHeaderId == cartHeaderId)
+                     where totalDetailsWithHeader == 0
                      select cartHeaderRepository.GetAll().FirstOrDefault(key => key.CartHeaderId == cartHeaderId))
             {
                 if (cartHeaderDelete is null)
@@ -101,26 +102,7 @@ public sealed class RemoveShoppingCartProductRequestHandler(
                     };
                 }
 
-                var usersWithProductsCount = cartHeaderRepository.GetAll()
-                    .GroupBy(key => key.UserId)
-                    .Select(group => new { UserId = group.Key, ProductCount = group.Count() });
-                
-                foreach (var user in usersWithProductsCount)
-                {
-                    if (user.ProductCount == 1 )
-                    {
-                        var cartHeader = cartHeaderRepository.GetAll()
-                            .FirstOrDefault(key => key.UserId == user.UserId);
-
-                        if (cartHeader is not null)
-                        {
-                            await cartHeaderRepository.DeleteAsync(cartHeaderDelete);
-                            await cartHeaderRepository.DeleteAsync(cartHeader);
-                        }
-                    }
-                    
-                    await cartHeaderRepository.DeleteAsync(cartHeaderDelete);
-                }
+                await cartHeaderRepository.DeleteAsync(cartHeaderDelete);
             }
 
             memoryCache.Remove(CacheKey);
