@@ -55,7 +55,7 @@ public sealed class ProductController(
                 {
                     return View(paginatedProducts);
                 }
-                
+
                 TempData["error"] = "Нет результатов";
                 return RedirectToAction(nameof(GetProducts));
             }
@@ -130,6 +130,7 @@ public sealed class ProductController(
 
         catch (Exception exception)
         {
+            TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
             return RedirectToAction(nameof(GetProducts));
         }
@@ -162,6 +163,7 @@ public sealed class ProductController(
 
         catch (Exception exception)
         {
+            TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
             return RedirectToAction(nameof(GetProducts));
         }
@@ -175,7 +177,7 @@ public sealed class ProductController(
         try
         {
             var response = await productService.UpdateProductAsync(updateProductViewModel.Id, updateProductViewModel);
-
+            
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
@@ -188,6 +190,7 @@ public sealed class ProductController(
 
         catch (Exception exception)
         {
+            TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
             return RedirectToAction(nameof(GetProducts));
         }
@@ -203,7 +206,7 @@ public sealed class ProductController(
             var deleteProductViewModel = new DeleteProductViewModel(productId);
             await favouriteService.DeleteFavouriteProductAsync(deleteProductViewModel);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProductViewModel);
-            
+
             var response = await productService.DeleteProductAsync(deleteProductViewModel.Id, deleteProductViewModel);
 
             if (response.IsSuccess)
@@ -236,7 +239,7 @@ public sealed class ProductController(
             var deleteProducts = new DeleteProductsViewModel(selectedProducts);
             await favouriteService.DeleteFavouriteProductsAsync(deleteProducts);
             await shoppingCartService.RemoveCartDetailsAsync(deleteProducts);
-            
+
             var response = await productService.DeleteProductsAsync(deleteProducts);
 
             if (response.IsSuccess)

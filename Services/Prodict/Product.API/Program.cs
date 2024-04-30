@@ -1,3 +1,4 @@
+using Carter;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Product.API;
@@ -8,10 +9,10 @@ using Serilog;
 var applicationBuilder = WebApplication.CreateBuilder(args);
 
 applicationBuilder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 applicationBuilder.Services.AddEndpointsApiExplorer();
 applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddSwaggerGen();
+applicationBuilder.Services.AddCarter();
 
 applicationBuilder.Services.ConfigureInfrastructureService(applicationBuilder.Configuration);
 applicationBuilder.Services.ConfigureApplicationService();
@@ -40,10 +41,10 @@ webApplication.MapHealthChecks("health", new HealthCheckOptions
     ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse,
 });
 
+webApplication.MapCarter();
 webApplication.UseRouting();
+webApplication.UseAuthentication();
 webApplication.UseAuthorization();
-
 webApplication.UseStaticFiles();
 webApplication.MapControllers();
-
 webApplication.Run();

@@ -516,7 +516,7 @@
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/GetProducts",
+      "DownstreamPathTemplate": "/api/products/GetProducts",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -524,13 +524,13 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/GetProducts",
+      "UpstreamPathTemplate": "/api/products/GetProducts",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/GetProduct/{productId}",
+      "DownstreamPathTemplate": "/api/products/GetProduct/{productId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -538,13 +538,13 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/GetProduct/{productId}",
+      "UpstreamPathTemplate": "/api/products/GetProduct/{productId}",
       "UpstreamHttpMethod": [ "GET" ]
     },
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/CreateProduct",
+      "DownstreamPathTemplate": "/api/products/CreateProduct",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -552,7 +552,7 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/CreateProduct",
+      "UpstreamPathTemplate": "/api/products/CreateProduct",
       "UpstreamHttpMethod": [ "POST" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -561,7 +561,7 @@
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/UpdateProduct/{productId}",
+      "DownstreamPathTemplate": "/api/products/UpdateProduct/{productId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -569,7 +569,7 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/UpdateProduct/{productId}",
+      "UpstreamPathTemplate": "/api/products/UpdateProduct/{productId}",
       "UpstreamHttpMethod": [ "PUT" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -578,7 +578,7 @@
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/DeleteProduct/{productId}",
+      "DownstreamPathTemplate": "/api/products/DeleteProduct/{productId}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -586,7 +586,7 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/DeleteProduct/{productId}",
+      "UpstreamPathTemplate": "/api/products/DeleteProduct/{productId}",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
@@ -595,7 +595,7 @@
 
     {
       //"Product.API": "https://localhost:7100"
-      "DownstreamPathTemplate": "/api/Product/DeleteProducts",
+      "DownstreamPathTemplate": "/api/products/DeleteProducts",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -603,7 +603,7 @@
           "Port": 7100
         }
       ],
-      "UpstreamPathTemplate": "/api/Product/DeleteProducts",
+      "UpstreamPathTemplate": "/api/products/DeleteProducts",
       "UpstreamHttpMethod": [ "DELETE" ],
       "AuthenticationOptions": {
         "AuthenticationProviderKey": "Bearer"
