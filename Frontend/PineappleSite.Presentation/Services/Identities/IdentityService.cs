@@ -24,12 +24,12 @@ public partial interface IIdentityClient
 {
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<StringResult> LoginAsync(AuthRequestDto body);
+    System.Threading.Tasks.Task<AuthResponseDtoResult> LoginAsync(AuthRequestDto body);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-    System.Threading.Tasks.Task<StringResult> LoginAsync(AuthRequestDto body, System.Threading.CancellationToken cancellationToken);
+    System.Threading.Tasks.Task<AuthResponseDtoResult> LoginAsync(AuthRequestDto body, System.Threading.CancellationToken cancellationToken);
 
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
@@ -144,12 +144,11 @@ public partial interface IIdentityClient
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class IdentityClient : IIdentityClient
 {
-    private System.Net.Http.HttpClient _httpClient;
     private static System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings, true);
 
     public IdentityClient(System.Net.Http.HttpClient httpClient)
     {
-        _httpClient = httpClient;
+        HttpClient = httpClient;
     }
 
     private static Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
@@ -169,7 +168,7 @@ public partial class IdentityClient : IIdentityClient
 
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-    public virtual System.Threading.Tasks.Task<StringResult> LoginAsync(AuthRequestDto body)
+    public virtual System.Threading.Tasks.Task<AuthResponseDtoResult> LoginAsync(AuthRequestDto body)
     {
         return LoginAsync(body, System.Threading.CancellationToken.None);
     }
@@ -177,9 +176,12 @@ public partial class IdentityClient : IIdentityClient
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
-    public virtual async System.Threading.Tasks.Task<StringResult> LoginAsync(AuthRequestDto body, System.Threading.CancellationToken cancellationToken)
+    public virtual async System.Threading.Tasks.Task<AuthResponseDtoResult> LoginAsync(AuthRequestDto body, System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        if (body == null)
+            throw new System.ArgumentNullException("body");
+
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -190,13 +192,13 @@ public partial class IdentityClient : IIdentityClient
                 content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 request_.Content = content_;
                 request_.Method = new System.Net.Http.HttpMethod("POST");
-                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
-                urlBuilder_.Append("Authenticate");
+                urlBuilder_.Append("authenticate");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("Login");
 
@@ -223,12 +225,22 @@ public partial class IdentityClient : IIdentityClient
                     var status_ = (int)response_.StatusCode;
                     if (status_ == 200)
                     {
-                        var objectResponse_ = await ReadObjectResponseAsync<StringResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        var objectResponse_ = await ReadObjectResponseAsync<AuthResponseDtoResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                         }
                         return objectResponse_.Object;
+                    }
+                    else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                     }
                     else
                     {
@@ -262,7 +274,10 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<StringResult> RegisterAsync(RegisterRequestDto body, System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        if (body == null)
+            throw new System.ArgumentNullException("body");
+
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -273,13 +288,13 @@ public partial class IdentityClient : IIdentityClient
                 content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 request_.Content = content_;
                 request_.Method = new System.Net.Http.HttpMethod("POST");
-                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
-                urlBuilder_.Append("Authenticate");
+                urlBuilder_.Append("authenticate");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("Register");
 
@@ -314,6 +329,16 @@ public partial class IdentityClient : IIdentityClient
                         return objectResponse_.Object;
                     }
                     else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                    }
+                    else
                     {
                         var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                         throw new IdentityExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -345,7 +370,10 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<ObjectResultResult> RefreshTokenAsync(TokenModelDto body, System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        if (body == null)
+            throw new System.ArgumentNullException("body");
+
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -356,13 +384,13 @@ public partial class IdentityClient : IIdentityClient
                 content_.Headers.ContentType = System.Net.Http.Headers.MediaTypeHeaderValue.Parse("application/json");
                 request_.Content = content_;
                 request_.Method = new System.Net.Http.HttpMethod("POST");
-                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
-                urlBuilder_.Append("Authenticate");
+                urlBuilder_.Append("authenticate");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("RefreshToken");
 
@@ -395,6 +423,16 @@ public partial class IdentityClient : IIdentityClient
                             throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                         }
                         return objectResponse_.Object;
+                    }
+                    else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                     }
                     else
                     {
@@ -431,23 +469,25 @@ public partial class IdentityClient : IIdentityClient
         if (userName == null)
             throw new System.ArgumentNullException("userName");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
             using (var request_ = new System.Net.Http.HttpRequestMessage())
             {
-                request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "text/plain");
+                request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                 request_.Method = new System.Net.Http.HttpMethod("POST");
-                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
-                urlBuilder_.Append("Authenticate");
+                urlBuilder_.Append("authenticate");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("RevokeToken");
+                urlBuilder_.Append('/');
+                urlBuilder_.Append(System.Uri.EscapeDataString(ConvertToString(userName, System.Globalization.CultureInfo.InvariantCulture)));
 
                 PrepareRequest(client_, request_, urlBuilder_);
 
@@ -478,6 +518,16 @@ public partial class IdentityClient : IIdentityClient
                             throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
                         }
                         return objectResponse_.Object;
+                    }
+                    else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
                     }
                     else
                     {
@@ -511,21 +561,21 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<UnitCollectionResult> RevokeTokensAsync(System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
             using (var request_ = new System.Net.Http.HttpRequestMessage())
             {
-                request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "text/plain");
+                request_.Content = new System.Net.Http.StringContent(string.Empty, System.Text.Encoding.UTF8, "application/json");
                 request_.Method = new System.Net.Http.HttpMethod("POST");
-                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
-                urlBuilder_.Append("Authenticate");
+                urlBuilder_.Append("authenticate");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("RevokeTokens");
 
@@ -560,6 +610,16 @@ public partial class IdentityClient : IIdentityClient
                         return objectResponse_.Object;
                     }
                     else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                    }
+                    else
                     {
                         var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
                         throw new IdentityExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
@@ -591,7 +651,7 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<GetUsersDtoCollectionResult> GetUsersAsync(System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -673,7 +733,7 @@ public partial class IdentityClient : IIdentityClient
         if (userId == null)
             throw new System.ArgumentNullException("userId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -757,7 +817,7 @@ public partial class IdentityClient : IIdentityClient
         if (userId == null)
             throw new System.ArgumentNullException("userId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -844,7 +904,7 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<UnitResult> CreateUserAsync(CreateUserDto body, System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -930,7 +990,7 @@ public partial class IdentityClient : IIdentityClient
         if (useId == null)
             throw new System.ArgumentNullException("useId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -1002,7 +1062,7 @@ public partial class IdentityClient : IIdentityClient
                 client_.Dispose();
         }
     }
-    
+
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual System.Threading.Tasks.Task<GetUserForUpdateDtoResult> UpdateUserProfileAsync(string userId, string id, string firstName, string lastName, string emailAddress, string userName, string password, string description, int? age, FileParameter avatar, string imageUrl, string imageLocalPath)
@@ -1018,7 +1078,7 @@ public partial class IdentityClient : IIdentityClient
         if (userId == null)
             throw new System.ArgumentNullException("userId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -1056,7 +1116,7 @@ public partial class IdentityClient : IIdentityClient
                 request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
                 var urlBuilder_ = new System.Text.StringBuilder();
-                    
+                        
                 urlBuilder_.Append("api");
                 urlBuilder_.Append('/');
                 urlBuilder_.Append("User");
@@ -1130,7 +1190,7 @@ public partial class IdentityClient : IIdentityClient
         if (userId == null)
             throw new System.ArgumentNullException("userId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -1215,7 +1275,7 @@ public partial class IdentityClient : IIdentityClient
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     public virtual async System.Threading.Tasks.Task<UnitCollectionResult> DeleteUsersAsync(DeleteUsersDto body, System.Threading.CancellationToken cancellationToken)
     {
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -1459,6 +1519,52 @@ public partial class AuthRequestDto
 
     [Newtonsoft.Json.JsonProperty("password", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public string Password { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class AuthResponseDto
+{
+    [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string FirstName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string LastName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string UserName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string EmailAddress { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("jwtToken", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string JwtToken { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("refreshToken", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string RefreshToken { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class AuthResponseDtoResult
+{
+    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public AuthResponseDto Data { get; set; }
 
 }
 

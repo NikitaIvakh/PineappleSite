@@ -41,6 +41,7 @@ public sealed class MappingProfile : Profile
         #region Identity && User Mapping
 
         CreateMap<AuthRequestDto, AuthRequestViewModel>().ReverseMap();
+        CreateMap<AuthResponseDto, AuthResponseViewModel>().ReverseMap();
         CreateMap<RegisterRequestDto, RegisterRequestViewModel>().ReverseMap();
         CreateMap<TokenModelDto, TokenModelViewModel>().ReverseMap();
 

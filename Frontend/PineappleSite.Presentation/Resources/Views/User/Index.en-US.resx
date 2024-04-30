@@ -133,10 +133,10 @@
     <value>Details</value>
   </data>
   <data name="Do you really want to delete these records?" xml:space="preserve">
-    <value>Do you really want to delete these records?</value>
+    <value>Delete?</value>
   </data>
   <data name="Do you really want to delete this entry?" xml:space="preserve">
-    <value>Do you really want to delete this entry?</value>
+    <value>Delete?</value>
   </data>
   <data name="EmailAddress" xml:space="preserve">
     <value>Email address</value>

@@ -79,14 +79,14 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            user.FirstName = request.UpdateUserProfile.FirstName!.Trim();
-            user.LastName = request.UpdateUserProfile.LastName!.Trim();
-            user.UserName = request.UpdateUserProfile.UserName!.Trim();
-            user.Description = request.UpdateUserProfile.Description!.Trim();
-            user.Email = request.UpdateUserProfile.EmailAddress!.Trim().ToLower();
-            user.Age = request.UpdateUserProfile.Age;
+            user.FirstName = request.UpdateUserProfile.FirstName?.Trim() ?? string.Empty;;
+            user.LastName = request.UpdateUserProfile.LastName?.Trim() ?? string.Empty;
+            user.UserName = request.UpdateUserProfile.UserName?.Trim() ?? string.Empty;;
+            user.Description = request.UpdateUserProfile.Description?.Trim() ?? string.Empty;; 
+            user.Email = request.UpdateUserProfile.EmailAddress?.Trim().ToLower() ?? string.Empty;
+            user.Age = request.UpdateUserProfile?.Age;
 
-            if (!string.IsNullOrEmpty(request.UpdateUserProfile.Password))
+            if (!string.IsNullOrEmpty(request.UpdateUserProfile?.Password))
             {
                 var newPassword =
                     new PasswordHasher<ApplicationUser>().HashPassword(user, request.UpdateUserProfile.Password);
@@ -96,7 +96,7 @@ public sealed class UpdateUserProfileRequestHandler(
 
             await userRepository.UpdateUserAsync(user, cancellationToken);
 
-            if (request.UpdateUserProfile.Avatar is not null)
+            if (request.UpdateUserProfile?.Avatar is not null)
             {
                 if (!string.IsNullOrEmpty(user.ImageLocalPath))
                 {

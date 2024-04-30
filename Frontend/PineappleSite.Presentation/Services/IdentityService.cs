@@ -20,7 +20,7 @@ public sealed class IdentityService(
     private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
     private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new();
 
-    public async Task<IdentityResult<string>> LoginAsync(AuthRequestViewModel authRequestViewModel)
+    public async Task<IdentityResult<AuthResponseViewModel>> LoginAsync(AuthRequestViewModel authRequestViewModel)
     {
         try
         {
@@ -29,7 +29,7 @@ public sealed class IdentityService(
 
             if (!authResponse.IsSuccess)
             {
-                return new IdentityResult<string>
+                return new IdentityResult<AuthResponseViewModel>
                 {
                     StatusCode = authResponse.StatusCode,
                     ErrorMessage = authResponse.ErrorMessage,
@@ -37,9 +37,9 @@ public sealed class IdentityService(
                 };
             }
 
-            if (string.IsNullOrWhiteSpace(authResponse.Data))
+            if (string.IsNullOrWhiteSpace(authResponse.Data.JwtToken))
             {
-                return new IdentityResult<string>
+                return new IdentityResult<AuthResponseViewModel>
                 {
                     StatusCode = authResponse.StatusCode,
                     ErrorMessage = authResponse.ErrorMessage,
@@ -49,9 +49,11 @@ public sealed class IdentityService(
 
             try
             {
-                var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data);
-                var user = new ClaimsPrincipal(new ClaimsIdentity(tokenContent.Claims, CookieAuthenticationDefaults.AuthenticationScheme));
-                await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, user);
+                var tokenContent = _jwtSecurityTokenHandler.ReadJwtToken(authResponse.Data.JwtToken);
+                var user = new ClaimsPrincipal(new ClaimsIdentity(tokenContent.Claims,
+                    CookieAuthenticationDefaults.AuthenticationScheme));
+                await _httpContextAccessor.HttpContext!.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                    user);
 
                 var cookieOptions = new CookieOptions
                 {
@@ -69,17 +71,17 @@ public sealed class IdentityService(
                 await Console.Out.WriteLineAsync($"Ошибка: {ex.Message}");
             }
 
-            return new IdentityResult<string>
+            return new IdentityResult<AuthResponseViewModel>
             {
-                Data = authResponse.Data,
                 StatusCode = authResponse.StatusCode,
                 SuccessMessage = authResponse.SuccessMessage,
+                Data = mapper.Map<AuthResponseViewModel>(authResponse.Data),
             };
         }
 
         catch (IdentityExceptions<string> exceptions)
         {
-            return new IdentityResult<string>
+            return new IdentityResult<AuthResponseViewModel>
             {
                 ErrorMessage = exceptions.Result,
                 StatusCode = exceptions.StatusCode,
@@ -105,32 +107,19 @@ public sealed class IdentityService(
                 };
             }
 
-            if (!string.IsNullOrEmpty(registerResponse.Data))
+            var authRequest = new AuthRequestViewModel
             {
-                var authRequest = new AuthRequestViewModel
-                {
-                    EmailAddress = registerRequestViewModel.EmailAddress,
-                    Password = registerRequestViewModel.Password,
-                };
+                EmailAddress = registerRequestViewModel.EmailAddress,
+                Password = registerRequestViewModel.Password,
+            };
 
-                await LoginAsync(authRequest);
-            }
-
-            else
-            {
-                return new IdentityResult<string>
-                {
-                    StatusCode = registerResponse.StatusCode,
-                    ErrorMessage = registerResponse.ErrorMessage,
-                    ValidationErrors = string.Join(", ", registerResponse.ValidationErrors),
-                };
-            }
+            await LoginAsync(authRequest);
 
             return new IdentityResult<string>
             {
+                Data = registerResponse.Data,
                 StatusCode = registerResponse.StatusCode,
-                ErrorMessage = registerResponse.ErrorMessage,
-                ValidationErrors = string.Join(", ", registerResponse.ValidationErrors),
+                SuccessMessage = registerResponse.SuccessMessage,
             };
         }
 

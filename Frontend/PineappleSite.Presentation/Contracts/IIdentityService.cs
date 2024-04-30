@@ -5,7 +5,7 @@ namespace PineappleSite.Presentation.Contracts;
 
 public interface IIdentityService
 {
-    Task<IdentityResult<string>> LoginAsync(AuthRequestViewModel authRequestViewModel);
+    Task<IdentityResult<AuthResponseViewModel>> LoginAsync(AuthRequestViewModel authRequestViewModel);
 
     Task<IdentityResult<string>> RegisterAsync(RegisterRequestViewModel registerRequestViewModel);
 

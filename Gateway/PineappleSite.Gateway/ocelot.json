@@ -200,7 +200,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/Login",
+      "DownstreamPathTemplate": "/api/authenticate/Login",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -208,13 +208,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/Login",
+      "UpstreamPathTemplate": "/api/authenticate/Login",
       "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/Register",
+      "DownstreamPathTemplate": "/api/authenticate/Register",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -222,13 +222,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/Register",
+      "UpstreamPathTemplate": "/api/authenticate/Register",
       "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/Logout",
+      "DownstreamPathTemplate": "/api/authenticate/Logout",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -236,7 +236,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/Logout",
+      "UpstreamPathTemplate": "/api/authenticate/Logout",
       "UpstreamHttpMethod": [ "POST" ]
     },
 
@@ -372,7 +372,7 @@
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/RefreshToken",
+      "DownstreamPathTemplate": "/api/authenticate/RefreshToken",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -380,13 +380,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/RefreshToken",
+      "UpstreamPathTemplate": "/api/authenticate/RefreshToken",
       "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/RevokeToken/{userName}",
+      "DownstreamPathTemplate": "/api/authenticate/RevokeToken/{userName}",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -394,13 +394,13 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/RevokeToken/{userName}",
+      "UpstreamPathTemplate": "/api/authenticate/RevokeToken/{userName}",
       "UpstreamHttpMethod": [ "POST" ]
     },
 
     {
       //"Identity.API": "https://localhost:7133"
-      "DownstreamPathTemplate": "/api/Authenticate/RevokeTokens",
+      "DownstreamPathTemplate": "/api/authenticate/RevokeTokens",
       "DownstreamScheme": "https",
       "DownstreamHostAndPorts": [
         {
@@ -408,7 +408,7 @@
           "Port": 7133
         }
       ],
-      "UpstreamPathTemplate": "/api/Authenticate/RevokeTokens",
+      "UpstreamPathTemplate": "/api/authenticate/RevokeTokens",
       "UpstreamHttpMethod": [ "POST" ]
     },
 

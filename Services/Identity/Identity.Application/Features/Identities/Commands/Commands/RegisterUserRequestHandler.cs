@@ -61,7 +61,7 @@ public sealed class RegisterUserRequestHandler(
             }
 
             var existsEmail = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
+                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress.ToLower(), cancellationToken);
 
             if (existsEmail is not null)
             {
@@ -144,7 +144,7 @@ public sealed class RegisterUserRequestHandler(
             }
 
             var userFromDb = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress, cancellationToken);
+                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress.ToLower(), cancellationToken);
 
             if (userFromDb is null)
             {

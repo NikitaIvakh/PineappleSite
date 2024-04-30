@@ -3,6 +3,7 @@ using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
 using Identity.Application.Services;
 using Identity.Application.Validators;
+using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Enum;
 using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
@@ -16,9 +17,9 @@ public sealed class LoginUserRequestHandler(
     IUserRepository userRepository,
     AuthRequestValidator authValidator,
     ITokenService tokenService,
-    IConfiguration configuration) : IRequestHandler<LoginUserRequest, Result<string>>
+    IConfiguration configuration) : IRequestHandler<LoginUserRequest, Result<AuthResponseDto>>
 {
-    public async Task<Result<string>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
+    public async Task<Result<AuthResponseDto>> Handle(LoginUserRequest request, CancellationToken cancellationToken)
     {
         try
         {
@@ -36,7 +37,7 @@ public sealed class LoginUserRequestHandler(
                 {
                     if (existErrorMessages.TryGetValue(error.Key, out var message))
                     {
-                        return new Result<string>
+                        return new Result<AuthResponseDto>
                         {
                             ValidationErrors = message,
                             StatusCode = (int)StatusCode.NoAction,
@@ -46,7 +47,7 @@ public sealed class LoginUserRequestHandler(
                     }
                 }
 
-                return new Result<string>
+                return new Result<AuthResponseDto>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ValidationErrors = validationResult.Errors.Select(key => key.ErrorMessage).ToList(),
@@ -55,11 +56,11 @@ public sealed class LoginUserRequestHandler(
             }
 
             var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.AuthRequest.EmailAddress, cancellationToken);
+                .FirstOrDefaultAsync(key => key.Email == request.AuthRequest.EmailAddress.ToLower(), cancellationToken);
 
             if (user is null)
             {
-                return new Result<string>
+                return new Result<AuthResponseDto>
                 {
                     StatusCode = (int)StatusCode.NotFound,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("UserNotFound", ErrorMessage.Culture),
@@ -73,7 +74,7 @@ public sealed class LoginUserRequestHandler(
 
             if (!isValidPassword)
             {
-                return new Result<string>
+                return new Result<AuthResponseDto>
                 {
                     StatusCode = (int)StatusCode.NoAction,
                     ErrorMessage = ErrorMessage.ResourceManager.GetString("AccountLoginError", ErrorMessage.Culture),
@@ -92,9 +93,21 @@ public sealed class LoginUserRequestHandler(
             user.RefreshTokenExpiresTime = DateTime.UtcNow.AddDays(
                 int.Parse(configuration.GetSection("Jwt:RefreshTokenValidityInDays").Value!));
 
-            return new Result<string>
+            var outputUser = new AuthResponseDto
+            (
+                FirstName: user.FirstName,
+                LastName: user.LastName,
+                UserName: user.UserName!,
+                EmailAddress: user.Email!.ToLower(),
+                JwtToken: accessToken,
+                RefreshToken: user.RefreshToken
+            );
+
+            await userRepository.UpdateUserAsync(user, cancellationToken);
+
+            return new Result<AuthResponseDto>
             {
-                Data = accessToken,
+                Data = outputUser,
                 StatusCode = (int)StatusCode.Ok,
                 SuccessMessage = SuccessMessage.ResourceManager.GetString("SuccessfullyLogin", ErrorMessage.Culture),
             };
@@ -102,7 +115,7 @@ public sealed class LoginUserRequestHandler(
 
         catch (Exception ex)
         {
-            return new Result<string>
+            return new Result<AuthResponseDto>
             {
                 ErrorMessage = ex.Message,
                 ValidationErrors = [ex.Message],
