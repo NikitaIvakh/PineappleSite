@@ -77,7 +77,7 @@ public sealed class CreateCouponRequestHandler(
 
             var coupon = new CouponEntity
             {
-                CouponCode = request.CreateCoupon.CouponCode.Replace(" ", ""),
+                CouponCode = request.CreateCoupon.CouponCode.Replace(" ", "").ToLower(),
                 DiscountAmount = request.CreateCoupon.DiscountAmount,
                 MinAmount = request.CreateCoupon.MinAmount,
             };

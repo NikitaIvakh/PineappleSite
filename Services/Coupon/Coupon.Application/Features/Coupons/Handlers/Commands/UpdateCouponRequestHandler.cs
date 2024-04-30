@@ -73,7 +73,7 @@ public sealed class UpdateCouponRequestHandler(
                 };
             }
 
-            coupon.CouponCode = request.UpdateCouponDto.CouponCode.Replace(" ", "");
+            coupon.CouponCode = request.UpdateCouponDto.CouponCode.Replace(" ", "").ToLower();
             coupon.DiscountAmount = request.UpdateCouponDto.DiscountAmount;
             coupon.MinAmount = request.UpdateCouponDto.MinAmount;
 
