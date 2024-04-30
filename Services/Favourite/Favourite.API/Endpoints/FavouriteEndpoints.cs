@@ -23,8 +23,8 @@ public sealed class FavouriteEndpoints : ICarterModule
         group.MapDelete("/DeleteFavouriteProducts", DeleteFavouriteProducts);
     }
     
-    private static async Task<Results<Ok<Result<FavouriteDto>>, BadRequest<string>>> GetFavouriteProducts(string userId,
-        ISender sender, ILogger<FavouriteDto> logger)
+    private static async Task<Results<Ok<Result<FavouriteDto>>, BadRequest<string>>> GetFavouriteProducts(
+        ISender sender, ILogger<FavouriteDto> logger, [FromRoute] string userId)
     {
         var request = await sender.Send(new GetFavouriteProductsRequest(userId));
 

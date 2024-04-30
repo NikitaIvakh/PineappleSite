@@ -10,7 +10,15 @@ namespace Favourite.API;
 
 public static class Startup
 {
-    public static void AddSwagger(this IServiceCollection services)
+    public static void AddDependencyServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        AddSwagger(services);
+        AddAppAuthentication(services, configuration);
+        AddSwaggerAuthentication(services);
+        AddAuthenticatePolicy(services);
+    }
+    
+    private static void AddSwagger(IServiceCollection services)
     {
         services.AddHttpContextAccessor();
         services.AddSwaggerGen(options =>
@@ -43,7 +51,7 @@ public static class Startup
         });
     }
 
-    public static void AddAppAuthentication(this IServiceCollection services, IConfiguration configuration)
+    private static void AddAppAuthentication(IServiceCollection services, IConfiguration configuration)
     {
         services.AddAuthentication(options =>
             {
@@ -69,7 +77,7 @@ public static class Startup
                 .RequireAuthenticatedUser().Build());
     }
 
-    public static void AddSwaggerAuthentication(this IServiceCollection services)
+    private static void AddSwaggerAuthentication(IServiceCollection services)
     {
         services.AddSwaggerGen(options =>
         {
@@ -118,7 +126,7 @@ public static class Startup
         });
     }
 
-    public static void AddAuthenticatePolicy(this IServiceCollection services)
+    private static void AddAuthenticatePolicy(IServiceCollection services)
     {
         services.AddAuthorizationBuilder()
             .AddPolicy(name: AdministratorPolicy, policy => { policy.RequireRole(RoleAdministrator); });

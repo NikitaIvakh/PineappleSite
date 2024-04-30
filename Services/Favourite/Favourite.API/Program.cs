@@ -1,7 +1,5 @@
-using System.Net.Http.Headers;
 using Carter;
 using Favourite.API;
-using Favourite.API.Utility;
 using Favourite.Application.DependencyInjection;
 using Favourite.Infrastructure.DependencyInjection;
 using HealthChecks.UI.Client;
@@ -29,11 +27,8 @@ builder.Host.UseSerilog((context, logConfig) =>
     logConfig.WriteTo.Console();
 });
 
-builder.Services.AddSwagger();
 builder.Services.AddMemoryCache();
-builder.Services.AddSwaggerAuthentication();
-builder.Services.AddAppAuthentication(builder.Configuration);
-builder.Services.AddAuthenticatePolicy();
+builder.Services.AddDependencyServices(builder.Configuration);
 
 var app = builder.Build();
 

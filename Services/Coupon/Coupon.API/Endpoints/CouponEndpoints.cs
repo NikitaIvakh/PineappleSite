@@ -40,8 +40,8 @@ public sealed class CouponEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponById(string couponId,
-        ISender sender, ILogger<CouponDto> logger)
+    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponById(ISender sender,
+        ILogger<CouponDto> logger, [FromRoute] string couponId)
     {
         var request = await sender.Send(new GetCouponRequest(couponId));
 
@@ -55,8 +55,8 @@ public sealed class CouponEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponByCode(string couponCode,
-        ISender sender, ILogger<CouponDto> logger)
+    private static async Task<Results<Ok<Result<CouponDto>>, BadRequest<string>>> GetCouponByCode(ISender sender,
+        ILogger<CouponDto> logger, [FromRoute] string couponCode)
     {
         var request = await sender.Send(new GetCouponByCodeRequest(couponCode));
 
@@ -85,9 +85,9 @@ public sealed class CouponEndpoints : ICarterModule
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
 
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(string couponId,
-        ISender sender,
-        ILogger<UpdateCouponDto> logger, [FromBody] UpdateCouponDto updateCouponDto)
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> UpdateCoupon(
+        ISender sender, ILogger<UpdateCouponDto> logger, [FromBody] UpdateCouponDto updateCouponDto,
+        [FromRoute] string couponId)
     {
         var command = await sender.Send(new UpdateCouponRequest(updateCouponDto));
 
@@ -100,10 +100,10 @@ public sealed class CouponEndpoints : ICarterModule
         logger.LogError($"LogDebugError ================ Ошибка обновления купона: {updateCouponDto.CouponId}");
         return TypedResults.BadRequest(string.Join(", ", command.ValidationErrors!));
     }
-
-    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(string couponId,
-        ISender sender,
-        ILogger<DeleteCouponDto> logger, [FromBody] DeleteCouponDto deleteCouponDto)
+    
+    private static async Task<Results<Ok<Result<Unit>>, BadRequest<string>>> DeleteCoupon(
+        ISender sender, ILogger<DeleteCouponDto> logger, [FromBody] DeleteCouponDto deleteCouponDto,
+        [FromRoute] string couponId)
     {
         var command = await sender.Send(new DeleteCouponRequest(deleteCouponDto));
 
