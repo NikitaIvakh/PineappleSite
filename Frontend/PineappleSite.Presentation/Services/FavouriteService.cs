@@ -135,7 +135,7 @@ public sealed class FavouriteService(
         {
             var deleteFavouriteProductByUserDto =
                 mapper.Map<DeleteFavouriteProductByUserDto>(deleteFavouriteProductByUserViewModel);
-            var apiResponse = await favouriteClient.DeleteFavouriteProductByUserAsync(deleteFavouriteProductByUserDto);
+            var apiResponse = await _favouriteClient.DeleteFavouriteProductByUserAsync(deleteFavouriteProductByUserDto);
 
             if (apiResponse.IsSuccess)
             {

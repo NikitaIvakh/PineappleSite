@@ -279,7 +279,7 @@ public sealed class ShoppingCartService(
         try
         {
             var deleteCouponDto = mapper.Map<DeleteCouponDto>(deleteCouponByCodeViewModel);
-            var apiResponse = await shoppingCartClient.RemoveCouponCodeAsync(deleteCouponDto);
+            var apiResponse = await _shoppingCartClient.RemoveCouponCodeAsync(deleteCouponDto);
 
             if (apiResponse.IsSuccess)
             {
@@ -316,7 +316,7 @@ public sealed class ShoppingCartService(
         try
         {
             var deleteCouponsByCodeDto = mapper.Map<DeleteCouponsByCodeDto>(deleteCouponsByCodeViewModel);
-            var apiResponse = await shoppingCartClient.RemoveCouponsByCodeAsync(deleteCouponsByCodeDto);
+            var apiResponse = await _shoppingCartClient.RemoveCouponsByCodeAsync(deleteCouponsByCodeDto);
 
             if (apiResponse.IsSuccess)
             {

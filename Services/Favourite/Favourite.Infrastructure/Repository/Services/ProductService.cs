@@ -10,7 +10,7 @@ public sealed class ProductService(IHttpClientFactory httpClientFactory) : IProd
     public async Task<CollectionResult<ProductDto>> GetProductsAsync()
     {
         var httpClient = httpClientFactory.CreateClient("Product");
-        var response = await httpClient.GetAsync($"/api/Product/GetProducts");
+        var response = await httpClient.GetAsync($"/api/products/GetProducts");
 
         if (!response.IsSuccessStatusCode)
         {
