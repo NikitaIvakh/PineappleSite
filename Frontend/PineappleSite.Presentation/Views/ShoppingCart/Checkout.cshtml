@@ -11,9 +11,9 @@
 }
 
 <form method="post">
-    <input asp-for="CartHeader.UserId" hidden />
-    <input asp-for="CartHeader.CartHeaderId" hidden />
-    <input asp-for="CartHeader.CartTotal" hidden />
+    <input asp-for="CartHeader.UserId" hidden/>
+    <input asp-for="CartHeader.CartHeaderId" hidden/>
+    <input asp-for="CartHeader.CartTotal" hidden/>
 
     <div class="border mt-2 p-4 rounded bg-light">
         <div class="container row">
@@ -23,29 +23,29 @@
             <div class="col-md-5 col-12">
                 <a asp-action="Index" class="btn btn-outline-warning form-control">@Localizer["Return to the shopping cart"]</a>
             </div>
-            <br /><br /><br />
-            <hr />
+            <br/><br/><br/>
+            <hr/>
             <div class="col-7">
                 <div class="row pt-2">
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.Name" placeholder="@Localizer["Full name"]" />
+                        <input class="form-control" asp-for="CartHeader.Name" placeholder="@Localizer["Full name"]"/>
                         <span asp-validation-for="CartHeader.Name" class="text-danger"></span>
                     </div>
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.Email" placeholder="@Localizer["Email"]" />
+                        <input class="form-control" asp-for="CartHeader.Email" placeholder="@Localizer["Email"]"/>
                         <span asp-validation-for="CartHeader.Email" class="text-danger"></span>
                     </div>
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.PhoneNumber" placeholder="@Localizer["Phone"]" />
+                        <input class="form-control" asp-for="CartHeader.PhoneNumber" placeholder="@Localizer["Phone"]"/>
                         <span asp-validation-for="CartHeader.PhoneNumber" class="text-danger"></span>
                     </div>
                     <div class="col-12 py-2">
-                        <input class="form-control" asp-for="CartHeader.Address" placeholder="@Localizer["Delivery Address"]" />
+                        <input class="form-control" asp-for="CartHeader.Address" placeholder="@Localizer["Delivery Address"]"/>
                         <span asp-validation-for="CartHeader.Address" class="text-danger"></span>
                     </div>
                     <div class="col-6 py-2">
                         <input type="datetime-local" class="form-control" asp-for="CartHeader.DeliveryDate" placeholder="@Localizer["Дата доставки"]"
-                               min="@currentDate.ToString("yyyy-MM-ddTHH:mm")" max="@maxDateFormatted" onchange="checkTimeRange()" />
+                               min="@currentDate.ToString("yyyy-MM-ddTHH:mm")" max="@maxDateFormatted" onchange="checkTimeRange()"/>
                         <span id="timeValidationError" class="text-danger"></span>
                     </div>
                     <div class="col-12 pt-2">
@@ -63,7 +63,7 @@
                                 <div class="col-3">@Localizer["Quantity"]</div>
                             </div>
                         </div>
-                        <hr />
+                        <hr/>
                         @{
                             foreach (var cartObj in Model.CartDetails)
                             {
@@ -80,11 +80,11 @@
                                         <span style="font-size:17px;"> @cartObj.Count</span>
                                     </div>
                                 </div>
-                                <hr />
+                                <hr/>
                             }
                         }
                         <div class="row">
-                            <div class="col-12 text-center pr-4 text-danger">@Localizer["Total amount"]  @Model.CartHeader.CartTotal Byn<br /></div>
+                            <div class="col-12 text-center pr-4 text-danger">@Localizer["Total amount"] @Model.CartHeader.CartTotal Byn<br/></div>
                         </div>
 
                     </div>
@@ -105,7 +105,7 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

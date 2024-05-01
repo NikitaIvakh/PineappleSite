@@ -18,7 +18,7 @@ public sealed class OrderController(IOrderService orderService) : Controller
     {
         try
         {
-            var orderHeaderDtos = Enumerable.Empty<OrderHeaderViewModel>();
+            IEnumerable<OrderHeaderViewModel>? orderHeaderDtos;
             var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
 
             var response = await orderService.GetAllOrdersAsync(userId!);
@@ -27,9 +27,9 @@ public sealed class OrderController(IOrderService orderService) : Controller
             {
                 orderHeaderDtos = status switch
                 {
-                    "approved" => orderHeaderDtos?.Where(key => key.Status == StaticDetails.StatusApproved),
-                    "readyforpickup" => orderHeaderDtos?.Where(key => key.Status == StaticDetails.StatusReadyForPickup),
-                    "cancelled" => orderHeaderDtos?.Where(key =>
+                    "approved" => response.Data?.Where(key => key.Status == StaticDetails.StatusApproved),
+                    "readyforpickup" => response.Data?.Where(key => key.Status == StaticDetails.StatusReadyForPickup),
+                    "cancelled" => response.Data?.Where(key =>
                         key.Status is StaticDetails.StatusCancelled or StaticDetails.StatusRefunded),
                     _ => response.Data
                 };

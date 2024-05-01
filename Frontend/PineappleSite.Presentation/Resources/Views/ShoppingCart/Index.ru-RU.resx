@@ -159,4 +159,7 @@
   <data name="Use the search to find everything you need" xml:space="preserve">
     <value>Воспользуйтесь поиском, чтобы найти всё, что нужно...</value>
   </data>
+  <data name="Product Image" xml:space="preserve">
+    <value>Картинка продукта</value>
+  </data>
 </root>

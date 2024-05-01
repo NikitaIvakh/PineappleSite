@@ -21,7 +21,7 @@ public sealed class OrderEndpoints : ICarterModule
         group.MapPost("/CreateOrder", CreateOrder).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapPost("/CreateStripeSession", CreateStripeSession).RequireAuthorization(UserAndAdministratorPolicy);
         group.MapPost("/ValidateStripeSession", ValidateStripeSession).RequireAuthorization(UserAndAdministratorPolicy);
-        group.MapPost("/UpdateOrderStatus", UpdateOrderStatus).RequireAuthorization(AdministratorPolicy);
+        group.MapPost("/UpdateOrderStatus", UpdateOrderStatus).RequireAuthorization(UserAndAdministratorPolicy);
     }
 
     private static async Task<Results<Ok<CollectionResult<OrderHeaderDto>>, BadRequest<string>>> GetOrders(

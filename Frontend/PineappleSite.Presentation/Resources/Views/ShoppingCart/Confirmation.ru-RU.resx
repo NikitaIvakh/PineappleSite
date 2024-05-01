@@ -129,4 +129,7 @@
   <data name="Payment completion" xml:space="preserve">
     <value>Завершение оплаты</value>
   </data>
+  <data name="Thanks for order" xml:space="preserve">
+    <value>Спасибо за заказ</value>
+  </data>
 </root>

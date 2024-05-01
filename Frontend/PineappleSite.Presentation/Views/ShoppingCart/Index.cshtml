@@ -9,9 +9,9 @@
     if (Model.Data.CartHeader is not null && Model.Data.CartDetails?.Count > 0)
     {
         <form method="post" asp-action="RabbitMqShoppingCart">
-            <br />
-            <input asp-for="Data.CartHeader.UserId" hidden />
-            <input asp-for="Data.CartHeader.CartHeaderId" hidden />
+            <br/>
+            <input asp-for="Data.CartHeader.UserId" hidden/>
+            <input asp-for="Data.CartHeader.CartHeaderId" hidden/>
             <div class="">
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
@@ -32,18 +32,20 @@
                                 <div class="col-lg-1"></div>
                             </div>
                         </div>
-                        <hr />
+                        <hr/>
                         @{
                             foreach (var cartObj in Model.Data.CartDetails)
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
-                                        <img src="@cartObj?.Product?.ImageUrl" class="rounded" width="100%" />
+                                        <img src="@cartObj?.Product?.ImageUrl" class="rounded" width="100%" alt="@Localizer["Product Image"]" loading="lazy"/>
                                     </div>
                                     <div class="col-8 col-md-5">
                                         <h5>
                                             <a asp-action="GetProductDetails" asp-controller="Home" asp-route-id="@cartObj?.ProductId"
-                                               style="text-decoration: none; color: black;">@cartObj?.Product?.Name</a>
+                                               style="text-decoration: none; color: black;">
+                                                @cartObj?.Product?.Name
+                                            </a>
                                         </h5>
                                         <div style="font-size:11px;">@Html.Raw(cartObj?.Product?.Description)</div>
                                     </div>
@@ -61,28 +63,28 @@
                                 </div>
                             }
                         }
-                        <hr />
+                        <hr/>
                         <div class="row">
                             <div class="col-6">
                                 @{
                                     if (string.IsNullOrEmpty(Model.Data.CartHeader.CouponCode))
                                     {
                                         <span>@Localizer["Coupon"]</span>
-                                        <input name="CartViewModel.CartHeader.CouponCode" value="@Model.Data.CartHeader.CouponCode" />
+                                        <input name="CartViewModel.CartHeader.CouponCode" value="@Model.Data.CartHeader.CouponCode"/>
                                         <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">@Localizer["Apply"]</button>
                                         <span class="text-danger" name="CartViewModel.CartHeader.CouponCode" asp-validation-for="Data.CartHeader.CouponCode"></span>
                                     }
-                                    
+
                                     else
                                     {
                                         <span>@Localizer["Coupon"]</span>
-                                        <input asp-for="Data.CartHeader.CouponCode" disabled />
+                                        <input asp-for="Data.CartHeader.CouponCode" disabled/>
                                         <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">@Localizer["Delete"]</button>
                                     }
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Br<br /></span>
+                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Br<br/></span>
                                 @{
                                     if (Model.Data.CartHeader.Discount > 0)
                                     {
