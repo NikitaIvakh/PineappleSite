@@ -141,4 +141,7 @@
   <data name="Use the search to find everything you need..." xml:space="preserve">
     <value>Use the search to find everything you need...</value>
   </data>
+  <data name="Product Image" xml:space="preserve">
+    <value>Product image</value>
+  </data>
 </root>

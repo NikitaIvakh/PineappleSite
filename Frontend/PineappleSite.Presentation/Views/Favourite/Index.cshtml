@@ -9,9 +9,9 @@
     if (Model.Data.FavouriteHeader is not null && Model.Data.FavouriteDetails?.Count > 0)
     {
         <form method="post">
-            <br />
-            <input asp-for="Data.FavouriteHeader.UserId" hidden />
-            <input asp-for="Data.FavouriteDetails.First().FavouriteHeaderId" hidden />
+            <br/>
+            <input asp-for="Data.FavouriteHeader.UserId" hidden/>
+            <input asp-for="Data.FavouriteDetails.First().FavouriteHeaderId" hidden/>
             <div class="">
                 <div class="card border mt-4 container">
                     <div class="card-header bg-dark text-light ml-0 row ">
@@ -32,18 +32,20 @@
                                 <div class="col-lg-1"></div>
                             </div>
                         </div>
-                        <hr />
+                        <hr/>
                         @{
                             foreach (var favouriteObj in Model.Data.FavouriteDetails)
                             {
                                 <div class="row h-100">
                                     <div class="col-4 col-md-2 text-center py-2">
-                                        <img src="@favouriteObj?.Product?.ImageUrl" class="rounded" width="100%" />
+                                        <img src="@favouriteObj?.Product?.ImageUrl" class="rounded" width="100%" alt="@Localizer["Product Image"]" loading="lazy"/>
                                     </div>
                                     <div class="col-8 col-md-5">
                                         <h5>
                                             <a asp-action="GetProductDetails" asp-controller="Home" asp-route-id="@favouriteObj?.ProductId"
-                                               style="text-decoration: none; color: black;">@favouriteObj?.Product?.Name</a>
+                                               style="text-decoration: none; color: black;">
+                                                @favouriteObj?.Product?.Name
+                                            </a>
                                         </h5>
                                         <div style="font-size:11px;">@Html.Raw(favouriteObj?.Product?.Description)</div>
                                     </div>
@@ -58,7 +60,7 @@
                                 </div>
                             }
                         }
-                        <hr />
+                        <hr/>
                     </div>
                 </div>
             </div>
