@@ -8,7 +8,7 @@
     var readyforpickup = "";
     var cancelled = "";
     var all = "";
-    
+
     switch (status)
     {
         case "approved":
@@ -36,16 +36,16 @@
         </div>
         <ul class="list-group list-group-horizontal-sm pt-2">
             <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="approved">
-            <li class="list-group-item @approved">@Localizer["Approved"]</li>
+                <li class="list-group-item @approved">@Localizer["Approved"]</li>
             </a>
             <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="readyforpickup">
-            <li class="list-group-item @readyforpickup">@Localizer["Readyforpickup"]</li>
+                <li class="list-group-item @readyforpickup">@Localizer["Readyforpickup"]</li>
             </a>
             <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="cancelled">
-            <li class="list-group-item @cancelled">@Localizer["Cancelled"]</li>
+                <li class="list-group-item @cancelled">@Localizer["Cancelled"]</li>
             </a>
             <a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="all">
-            <li class="list-group-item @all">@Localizer["All"]</li>
+                <li class="list-group-item @all">@Localizer["All"]</li>
             </a>
         </ul>
     </div>
@@ -53,15 +53,15 @@
     <div class="card-body p-4">
         <table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%; text-align:center;">
             <thead>
-                <tr>
-                    <th style="text-align: center">@Localizer["Id"]</th>
-                    <th style="text-align: center">@Localizer["Email"]</th>
-                    <th style="text-align: center">@Localizer["FirstName"]</th>
-                    <th style="text-align: center">@Localizer["Phone"]</th>
-                    <th style="text-align: center">@Localizer["Status"]</th>
-                    <th style="text-align: center">@Localizer["Total"]</th>
-                    <th style="text-align: center">@Localizer["Details"]</th>
-                </tr>
+            <tr>
+                <th style="text-align: center">@Localizer["Id"]</th>
+                <th style="text-align: center">@Localizer["Email"]</th>
+                <th style="text-align: center">@Localizer["FirstName"]</th>
+                <th style="text-align: center">@Localizer["Phone"]</th>
+                <th style="text-align: center">@Localizer["Status"]</th>
+                <th style="text-align: center">@Localizer["Total"]</th>
+                <th style="text-align: center">@Localizer["Details"]</th>
+            </tr>
             </thead>
         </table>
     </div>

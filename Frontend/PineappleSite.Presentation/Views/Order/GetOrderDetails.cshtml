@@ -8,8 +8,8 @@
 }
 
 <form method="post">
-    <br />
-    <input asp-for="OrderHeaderId" hidden />
+    <br/>
+    <input asp-for="OrderHeaderId" hidden/>
     <div class="container">
         <div class="card">
             <div class="card-header bg-dark text-light ml-0">
@@ -26,29 +26,41 @@
                         <div class="col-12 col-lg-6 pb-4">
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Name"]</div>
-                                <div class="col-9"><input asp-for="Name" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input asp-for="Name" readonly class="form-control"/>
+                                </div>
                             </div>
 
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Phone"]</div>
-                                <div class="col-9"><input asp-for="PhoneNumber" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input asp-for="PhoneNumber" readonly class="form-control"/>
+                                </div>
                             </div>
 
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Email"]</div>
-                                <div class="col-9"> <input asp-for="Email" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input asp-for="Email" readonly class="form-control"/>
+                                </div>
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Delivery Address"]</div>
-                                <div class="col-9"> <input asp-for="Address" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input asp-for="Address" readonly class="form-control"/>
+                                </div>
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Ordrer Time"]</div>
-                                <div class="col-9"><input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control"/>
+                                </div>
                             </div>
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Delivery Date"]</div>
-                                <div class="col-9"><input value="@Model.DeliveryDate" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input value="@Model.DeliveryDate" readonly class="form-control"/>
+                                </div>
                             </div>
 
                             @{
@@ -56,23 +68,31 @@
                                 {
                                     <div class="row my-1">
                                         <div class="col-3">@Localizer["Session Id"]</div>
-                                        <div class="col-9"><input asp-for="StripeSessionId" readonly class="form-control" /></div>
+                                        <div class="col-9">
+                                            <input asp-for="StripeSessionId" readonly class="form-control"/>
+                                        </div>
                                     </div>
                                     <div class="row my-1">
                                         <div class="col-3">@Localizer["Payment Id"]</div>
-                                        <div class="col-9"><input asp-for="PaymentIntentId" readonly class="form-control" /></div>
+                                        <div class="col-9">
+                                            <input asp-for="PaymentIntentId" readonly class="form-control"/>
+                                        </div>
                                     </div>
                                 }
                             }
 
                             <div class="row my-1">
                                 <div class="col-3">@Localizer["Order status"]</div>
-                                <div class="col-9"><input asp-for="Status" readonly class="form-control" /></div>
+                                <div class="col-9">
+                                    <input asp-for="Status" readonly class="form-control"/>
+                                </div>
                             </div>
 
                         </div>
                         <div class="col-12 col-lg-5 offset-lg-1">
-                            <h4 class="d-flex justify-content-between align-items-center mb-3"><span class="text-warning">@Localizer["The total cost of the order"]</span></h4>
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-warning">@Localizer["The total cost of the order"]</span>
+                            </h4>
                             <label class="bg-info text-dark text-center form-control my-2">@Localizer["Order status"] - @Model.Status</label>
 
                             <ul class="list-group mb-3">
@@ -84,18 +104,24 @@
                                                 <div class="col-8">
 
                                                     <h6 class="my-0 text-muted">@Localizer["ProductName"] @detail.ProductName</h6>
-                                                    <small class="text-muted">@Localizer["Price"] @detail.Price Byn</small><br />
+                                                    <small class="text-muted">@Localizer["Price"] @detail.Price Byn</small><br/>
                                                     <small class="text-muted">@Localizer["Quantity"] @detail.Count</small>
                                                 </div>
-                                                <div class="col-4 text-end"><p class="text-success">@((detail.Count * detail.Price)) Byn</p></div>
+                                                <div class="col-4 text-end">
+                                                    <p class="text-success">@((detail.Count * detail.Price)) Byn</p>
+                                                </div>
                                             </div>
                                         </li>
                                     }
                                 }
                                 <li class="list-group-item bg-primary">
                                     <div class="row container">
-                                        <div class="col-6"><h5 class="text-white">@Localizer["TOTAL"]</h5></div>
-                                        <div class="col-6 text-end"><h5 class="text-white">@Model.OrderTotal Byn</h5></div>
+                                        <div class="col-6">
+                                            <h5 class="text-white">@Localizer["TOTAL"]</h5>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5 class="text-white">@Model.OrderTotal Byn</h5>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
