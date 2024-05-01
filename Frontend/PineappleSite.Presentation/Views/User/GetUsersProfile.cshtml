@@ -5,6 +5,19 @@
     <link rel="stylesheet" href="~/css/users/userList.css" asp-append-version="true"/>
 }
 
+<style>
+    .table {
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .some-format {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
 <form asp-action="GetUsersProfile" method="get">
     <div class="form-actions no-color">
         <p class="mb-0">
@@ -37,18 +50,18 @@
                     </div>
                 </div>
             </div>
-            <table class="table text-center">
+            <table class="table">
                 <thead>
                 <tr>
-                    <th>@Localizer["FirstName"]</th>
-                    <th>@Localizer["LastName"]</th>
-                    <th>@Localizer["UserName"]</th>
-                    <th>@Localizer["EmailAddress"]</th>
-                    <th>@Localizer["Age"]</th>
-                    <th>@Localizer["Description"]</th>
-                    <th>@Localizer["Role"]</th>
-                    <th>@Localizer["Profile Image"]</th>
-                    <th>@Localizer["Update"]</th>
+                    <th class="some-format">@Localizer["FirstName"]</th>
+                    <th class="some-format">@Localizer["LastName"]</th>
+                    <th class="some-format">@Localizer["UserName"]</th>
+                    <th class="some-format">@Localizer["EmailAddress"]</th>
+                    <th class="some-format">@Localizer["Age"]</th>
+                    <th class="some-format">@Localizer["Description"]</th>
+                    <th class="some-format">@Localizer["Role"]</th>
+                    <th class="some-format">@Localizer["Profile Image"]</th>
+                    <th class="some-format">@Localizer["Update"]</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -59,13 +72,13 @@
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td>@item.FirstName</td>
-                            <td>@item.LastName</td>
-                            <td>@item.UserName</td>
-                            <td>@item.EmailAddress</td>
-                            <td>@item.Age</td>
-                            <td>@(item.Description != null ? (item.Description.Length > 10 ? item.Description[..10] + "..." : item.Description) : "")</td>
-                            <td>
+                            <td class="some-format">@item.FirstName</td>
+                            <td class="some-format">@item.LastName</td>
+                            <td class="some-format">@item.UserName</td>
+                            <td class="some-format">@item.EmailAddress</td>
+                            <td class="some-format">@item.Age</td>
+                            <td class="some-format">@(item.Description != null ? (item.Description.Length > 10 ? item.Description[..10] + "..." : item.Description) : "")</td>
+                            <td class="some-format">
                                 @{
                                     foreach (var role in item.Role)
                                     {
@@ -73,10 +86,10 @@
                                     }
                                 }
                             </td>
-                            <td>
+                            <td class="some-format">
                                 <img src="@item.ImageUrl" loading="lazy" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: 0;" alt=""/>
                             </td>
-                            <td>
+                            <td class="some-format">
                                 <a class="btn btn-sm btn-success" asp-action="ProfileForAdmin" asp-route-userId="@item.UserId">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>

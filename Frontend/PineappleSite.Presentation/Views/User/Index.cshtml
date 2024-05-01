@@ -6,6 +6,19 @@
     <link rel="stylesheet" href="~/css/users/userList.css" asp-append-version="true"/>
 }
 
+<style>
+    .table {
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .some-format {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p class="mb-0">
@@ -43,17 +56,17 @@
                     </div>
                 </div>
             </div>
-            <table class="table text-center">
+            <table class="table">
                 <thead>
                 <tr>
-                    <th></th>
-                    <th>@Localizer["FirstName"]</th>
-                    <th>@Localizer["LastName"]</th>
-                    <th>@Localizer["UserName"]</th>
-                    <th>@Localizer["Role"]</th>
-                    <th>@Localizer["Details"]</th>
-                    <th>@Localizer["Update"]</th>
-                    <th>@Localizer["Delete"]</th>
+                    <th class="some-format"></th>
+                    <th class="some-format">@Localizer["FirstName"]</th>
+                    <th class="some-format">@Localizer["LastName"]</th>
+                    <th class="some-format">@Localizer["UserName"]</th>
+                    <th class="some-format">@Localizer["Role"]</th>
+                    <th class="some-format">@Localizer["Details"]</th>
+                    <th class="some-format">@Localizer["Update"]</th>
+                    <th class="some-format">@Localizer["Delete"]</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -64,13 +77,13 @@
                     foreach (var item in Model)
                     {
                         <tr>
-                            <td>
+                            <td class="some-format">
                                 <input type="checkbox" name="selectedUserIds" value="@item.UserId"/>
                             </td>
-                            <td>@item.FirstName</td>
-                            <td>@item.LastName</td>
-                            <td>@item.UserName</td>
-                            <td>
+                            <td class="some-format">@item.FirstName</td>
+                            <td class="some-format">@item.LastName</td>
+                            <td class="some-format">@item.UserName</td>
+                            <td class="some-format">
                                 @{
                                     foreach (var role in item.Role)
                                     {
@@ -78,17 +91,17 @@
                                     }
                                 }
                             </td>
-                            <td>
+                            <td class="some-format">
                                 <a class="btn btn-sm btn-success" asp-action="Details" asp-route-userId="@item.UserId">
                                     @Localizer["Details"]
                                 </a>
                             </td>
-                            <td>
+                            <td class="some-format">
                                 <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-userId="@item.UserId">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
                             </td>
-                            <td>
+                            <td class="some-format">
                                 <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-userId="@item.UserId">
                                     <i class="bi bi-trash">Удалить</i>
                                 </button>
