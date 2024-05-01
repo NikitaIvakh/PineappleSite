@@ -180,4 +180,7 @@
   <data name="Update" xml:space="preserve">
     <value>Обновление</value>
   </data>
+  <data name="Product Image" xml:space="preserve">
+    <value>Картинка продукта</value>
+  </data>
 </root>

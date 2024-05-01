@@ -4,7 +4,7 @@
 
 @{
     ViewData["Title"] = Localizer["List of products"];
-    <link rel="stylesheet" href="~/css/products/productList.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/products/productList.css" asp-append-version="true"/>
 }
 
 @{
@@ -17,7 +17,7 @@
                         <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Product Search"]</label>
                     </p>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]" />
+                        <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
                             <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
@@ -40,8 +40,10 @@
                         <div class="col-6">
                         </div>
                         <div class="col-6 text-end">
-                            <a asp-action="Create" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
-                            <br />  <br />
+                            <a asp-action="Create" class="btn btn-outline-primary">
+                                <i class="bi bi-plus-square"></i> @Localizer["Add a new product"]
+                            </a>
+                            <br/> <br/>
                             <button id="deleteAllButton" type="submit" class="btn btn-danger" style="display:none;" form="deleteSelectedForm">@Localizer["Delete selected ones"]</button>
                             <div class="col-12 form-text">
                             </div>
@@ -49,55 +51,55 @@
                     </div>
                     <table class="table text-center">
                         <thead>
-                            <tr>
-                                <th></th>
-                                <th>@Localizer["Id"]</th>
-                                <th>@Localizer["Product name"]</th>
-                                <th>@Localizer["Description"]</th>
-                                <th>@Localizer["ProductCategory"]</th>
-                                <th>@Localizer["Price"]</th>
-                                <th>@Localizer["Image"]</th>
-                                <th>@Localizer["Details"]</th>
-                                <th>@Localizer["Update"]</th>
-                                <th>@Localizer["Delete"]</th>
-                            </tr>
+                        <tr>
+                            <th></th>
+                            <th>@Localizer["Id"]</th>
+                            <th>@Localizer["Product name"]</th>
+                            <th>@Localizer["Description"]</th>
+                            <th>@Localizer["ProductCategory"]</th>
+                            <th>@Localizer["Price"]</th>
+                            <th>@Localizer["Image"]</th>
+                            <th>@Localizer["Details"]</th>
+                            <th>@Localizer["Update"]</th>
+                            <th>@Localizer["Delete"]</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @{
-                                int itemCount = 0;
+                        @{
+                            int itemCount = 0;
+                        }
+                        @{
+                            foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="selectedProducts" value="@item.Id"/>
+                                    </td>
+                                    <td class="text-center">@item.Id</td>
+                                    <td class="text-center">@item.Name</td>
+                                    <td class="text-center">@item.Description</td>
+                                    <td class="text-center">@item.ProductCategory</td>
+                                    <td class="text-center">@item.Price</td>
+                                    <td class="text-center" style="padding: 0;">
+                                        <img src="@item.ImageUrl" alt="@Localizer["Product Image"]" loading="lazy" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: 0;">
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-success" asp-action="Details" asp-route-productId="@item.Id">@Localizer["Details"]</a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-productId="@item.Id">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-productId="@item.Id">
+                                            <i class="bi bi-trash">@Localizer["Delete product"]</i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                itemCount++;
                             }
-                            @{
-                                foreach (var item in Model)
-                                {
-                                    <tr>
-                                        <td class="text-center">
-                                            <input type="checkbox" name="selectedProducts" value="@item.Id" />
-                                        </td>
-                                        <td class="text-center">@item.Id</td>
-                                        <td class="text-center">@item.Name</td>
-                                        <td class="text-center">@item.Description</td>
-                                        <td class="text-center">@item.ProductCategory</td>
-                                        <td class="text-center">@item.Price</td>
-                                        <td class="text-center" style="padding: 0;">
-                                            <img src="@item.ImageUrl" alt="" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: 0;">
-                                        </td>
-                                        <td class="text-center">
-                                            <a class="btn btn-sm btn-success" asp-action="Details" asp-route-productId="@item.Id">@Localizer["Details"]</a>
-                                        </td>
-                                        <td class="text-center">
-                                            <a class="btn btn-sm btn-success" asp-action="Edit" asp-route-productId="@item.Id">
-                                                <i class="bi bi-pencil-square"></i>
-                                            </a>
-                                        </td>
-                                        <td class="text-center">
-                                            <button class="btn btn-sm btn-danger" asp-action="Delete" asp-route-productId="@item.Id">
-                                                <i class="bi bi-trash">@Localizer["Delete product"]</i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    itemCount++;
-                                }
-                            }
+                        }
                         </tbody>
                     </table>
                     <div class="pagination">
@@ -129,7 +131,9 @@
 
     else
     {
-        <a asp-action="Create" class="btn btn-outline-primary" style="font-size: 20px; color:white"><i class="bi bi-plus-square"></i> @Localizer["Add a new product"]</a>
+        <a asp-action="Create" class="btn btn-outline-primary" style="font-size: 20px; color:white">
+            <i class="bi bi-plus-square"></i> @Localizer["Add a new product"]
+        </a>
     }
 }
 
