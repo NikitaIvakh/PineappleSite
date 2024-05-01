@@ -4,12 +4,11 @@
 
 @{
     ViewData["Title"] = @Localizer["Home Page"];
-    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true"/>
 }
 
 <form method="post" action="/GetProductDetails">
-    <input asp-for="Product.Id" hidden />
-
+    <input asp-for="Product.Id" hidden/>
     <div class="pt-4">
         <div class="card container" style="border:1px solid #808080;">
             <div class="card-header bg-dark text-light row" style="border-radius: 0px;">
@@ -24,7 +23,7 @@
                 <div class="container rounded p-2">
                     <div class="row">
                         <div class="col-12 col-lg-4 p-1 text-center">
-                            <img src="@Model.Product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" />
+                            <img src="@Model.Product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" alt="@Localizer["Product Image"]" loading="lazy"/>
                         </div>
                         <div class="col-12 col-lg-8">
                             <div class="row pl-3">
@@ -32,7 +31,7 @@
                                     <span class="badge bg-success text-white p-3 border">@Model.Product.ProductCategory.GetDisplayName()</span>
                                     <p class="text-secondary">Описание: @Html.Raw(Model.Product.Description)</p>
                                     <div class="row mx-0">
-                                        <input class="form-control" asp-for="Product.Count" />
+                                        <input class="form-control" asp-for="Product.Count"/>
                                         <span class="text-danger" asp-validation-for="Product.Count"></span>
                                     </div>
                                 </div>
@@ -66,5 +65,5 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

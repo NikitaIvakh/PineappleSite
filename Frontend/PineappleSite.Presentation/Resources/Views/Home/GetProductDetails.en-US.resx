@@ -129,4 +129,7 @@
   <data name="Home Page" xml:space="preserve">
     <value>Product Details</value>
   </data>
+  <data name="Product Image" xml:space="preserve">
+    <value>Product image</value>
+  </data>
 </root>
