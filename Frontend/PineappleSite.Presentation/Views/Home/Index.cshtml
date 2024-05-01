@@ -1,7 +1,7 @@
 ﻿@using PineappleSite.Presentation.Utility
 @{
     ViewData["Title"] = @Localizer["Home Page"];
-    <link rel="stylesheet" href="~/css/home/homeIndex.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/home/homeIndex.css" asp-append-version="true"/>
 }
 
 <div style="padding: 10px;"></div>
@@ -15,7 +15,9 @@
                 <small class="card-text">@Localizer["Welcome 2"]</small>
                 <small class="card-text">@Localizer["Welcome 3"]</small>
                 <small class="card-text">@Localizer["Welcome 4"]</small>
-                <p class="card-text"><small class="text-muted">@Localizer["Author"]</small></p>
+                <p class="card-text">
+                    <small class="text-muted">@Localizer["Author"]</small>
+                </p>
             </div>
         </div>
 
@@ -26,7 +28,7 @@
                 {
                     <div class="col">
                         <div class="card h-100">
-                            <img src="https://eda.yandex/images/3472725/9c63d886b068aa80f2a74180b809bfee-400x400.jpeg" alt="@Localizer["Alt 1"]" data-testid="smart-image-img" loading="lazy">
+                            <img src="~/images/homeImages/product_1.jpeg" alt="@Localizer["Alt 1"]" data-testid="smart-image-img" loading="lazy">
                             <div class="card-body text-center">
                                 <h5 class="card-title">@Localizer["Product 1"]</h5>
                                 <p class="card-text">
@@ -43,7 +45,7 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3749380/cb72079ede70127406fd3ab20bd0bf73-400x400.jpeg" alt="@Localizer["Alt 2"]" data-testid="smart-image-img" loading="lazy">
+                    <img src="~/images/homeImages/product_2.jpeg" alt="@Localizer["Alt 2"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
                         <h5 class="card-title">@Localizer["Product 2"]</h5>
                         <p class="card-text">
@@ -58,7 +60,7 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3377781/ed6447749d4ea649486f619b2b3a218a-400x400.jpeg" alt="@Localizer["Alt 3"]"
+                    <img src="~/images/homeImages/product_3.jpeg" alt="@Localizer["Alt 3"]"
                          class="SmartImage_image SmartImage_coverFitImg SmartImage_visibleImg SmartImage_animatedImg" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body text-center">
                         <h5 class="card-title">@Localizer["Product 3"]</h5>
@@ -77,7 +79,7 @@
                 {
                     <div class="col">
                         <div class="card h-100">
-                            <img src="https://eda.yandex/images/2783965/98bc932e95accd14040f0e041cb78046-400x400.jpeg" alt="@Localizer["Alt 4"]" data-testid="smart-image-img" loading="lazy">
+                            <img src="~/images/homeImages/product_4.jpeg" alt="@Localizer["Alt 4"]" data-testid="smart-image-img" loading="lazy">
                             <div class="card-body text-center">
                                 <h5 class="card-title">@Localizer["Product 4"]</h5>
                                 <p class="card-text">
@@ -112,7 +114,7 @@
         <div class="row row-cols-1 row-cols-md-3 g-4">
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3504598/5397bebd78c66a5ccdd0d042411d145f-400x400.jpeg" alt="@Localizer["Alt 5"]" data-testid="smart-image-img" loading="lazy">
+                    <img src="~/images/homeImages/product_5.jpeg" alt="@Localizer["Alt 5"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
                         <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
@@ -124,7 +126,7 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3595513/360fe75e8b8e4c148ec5da89a3d38933-400x400.jpeg" alt="@Localizer["Alt 6"]" data-testid="smart-image-img" loading="lazy">
+                    <img src="~/images/homeImages/product_6.jpeg" alt="@Localizer["Alt 6"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
                         <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
@@ -136,7 +138,7 @@
 
             <div class="col">
                 <div class="card h-100">
-                    <img src="https://eda.yandex/images/3521394/ed581a8b759b44af5295587045ffe23b-400x400.jpeg" alt="@Localizer["Alt 7"]" data-testid="smart-image-img" loading="lazy">
+                    <img src="~/images/homeImages/product_7.jpeg" alt="@Localizer["Alt 7"]" data-testid="smart-image-img" loading="lazy">
                     <div class="card-body">
                         <h5 class="card-title text-center">@Localizer["Product Not registered"]</h5>
                     </div>
@@ -152,5 +154,5 @@
 <script src="~/js/home/homeIndex.js" asp-append-version="true"></script>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }

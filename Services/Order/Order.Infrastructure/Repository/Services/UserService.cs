@@ -10,7 +10,7 @@ public sealed class UserService(IHttpClientFactory httpClientFactory) : IUserSer
     public async Task<Result<GetUserDto>> GetUserAsync(string userId)
     {
         var httpClient = httpClientFactory.CreateClient("User");
-        var response = await httpClient.GetAsync($"/api/User/GetUser/{userId}");
+        var response = await httpClient.GetAsync($"/api/users/GetUser/{userId}");
 
         if (!response.IsSuccessStatusCode)
         {
