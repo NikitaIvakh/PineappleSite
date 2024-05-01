@@ -177,4 +177,13 @@
   <data name="TOTAL" xml:space="preserve">
     <value>ИТОГО</value>
   </data>
+  <data name="The courier received the order" xml:space="preserve">
+    <value>Курьер получил заказ</value>
+  </data>
+  <data name="BeingDelivered" xml:space="preserve">
+    <value>Заказ доставляется</value>
+  </data>
+  <data name="OrderDelivered" xml:space="preserve">
+    <value>Заказ доставлен</value>
+  </data>
 </root>

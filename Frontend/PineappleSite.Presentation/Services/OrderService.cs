@@ -44,8 +44,8 @@ public sealed class OrderService(
         {
             return new OrderCollectionResult<OrderHeaderViewModel>
             {
-                StatusCode = 403,
                 ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
                 ValidationErrors = exceptions.Result,
             };
         }

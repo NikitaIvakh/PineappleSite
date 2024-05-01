@@ -156,4 +156,7 @@
   <data name="ViewOrders" xml:space="preserve">
     <value>Display of orders placed</value>
   </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completed</value>
+  </data>
 </root>

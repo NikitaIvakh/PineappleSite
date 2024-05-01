@@ -13,7 +13,7 @@ public sealed class OrderController(IOrderService orderService) : Controller
     {
         return Task.FromResult<ActionResult>(View());
     }
-
+    
     public async Task<ActionResult> GetAllOrders(string status)
     {
         try
@@ -113,9 +113,11 @@ public sealed class OrderController(IOrderService orderService) : Controller
             var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
 
             if (!response.IsSuccess)
+            {
                 return RedirectToAction(nameof(OrderIndex));
-            TempData["success"] = response.SuccessMessage;
+            }
 
+            TempData["success"] = response.SuccessMessage;
             return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
         }
 
@@ -136,7 +138,83 @@ public sealed class OrderController(IOrderService orderService) : Controller
             var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
 
             if (!response.IsSuccess)
+            {
                 return RedirectToAction(nameof(OrderIndex));
+            }
+
+            TempData["success"] = response.SuccessMessage;
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
+
+    [HttpPost("ReceivedByCourier")]
+    public async Task<ActionResult> ReceivedByCourier(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel =
+                new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusReceivedByCourier);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
+            {
+                return RedirectToAction(nameof(OrderIndex));
+            }
+
+            TempData["success"] = response.SuccessMessage;
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
+
+    [HttpPost("BeingDelivered")]
+    public async Task<ActionResult> BeingDelivered(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel =
+                new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusBeingDelivered);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
+            {
+                return RedirectToAction(nameof(OrderIndex));
+            }
+
+            TempData["success"] = response.SuccessMessage;
+            return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(OrderIndex));
+        }
+    }
+
+    [HttpPost("OrderDelivered")]
+    public async Task<ActionResult> OrderDelivered(int orderId)
+    {
+        try
+        {
+            var updateOrderStatusViewModel = new UpdateOrderStatusViewModel(orderId, StaticDetails.StatusDelivered);
+            var response = await orderService.UpdateOrderStatusAsync(updateOrderStatusViewModel);
+
+            if (!response.IsSuccess)
+            {
+                return RedirectToAction(nameof(OrderIndex));
+            }
 
             TempData["success"] = response.SuccessMessage;
             return RedirectToAction(nameof(GetOrderDetails), new { orderId = orderId });

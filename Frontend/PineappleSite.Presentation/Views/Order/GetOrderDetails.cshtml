@@ -139,11 +139,35 @@
                                 {
                                     if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                     {
+                                        <button asp-action="ReceivedByCourier" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["The courier received the order"]</button>
+                                    }
+                                }
+
+                                if (Model.Status == StaticDetails.StatusReceivedByCourier)
+                                {
+                                    if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                    {
+                                        <button asp-action="BeingDelivered" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["BeingDelivered"]</button>
+                                    }
+                                }
+
+                                if (Model.Status == StaticDetails.StatusBeingDelivered)
+                                {
+                                    if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                    {
+                                        <button asp-action="OrderDelivered" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["OrderDelivered"]</button>
+                                    }
+                                }
+
+                                if (Model.Status == StaticDetails.StatusDelivered)
+                                {
+                                    if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                                    {
                                         <button asp-action="CompleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-success form-control my-1">@Localizer["Complete the order"]</button>
                                     }
                                 }
 
-                                if (Model.Status is StaticDetails.StatusApproved or StaticDetails.StatusReadyForPickup)
+                                if (Model.Status is StaticDetails.StatusApproved or StaticDetails.StatusReadyForPickup or StaticDetails.StatusReceivedByCourier or StaticDetails.StatusBeingDelivered or StaticDetails.StatusDelivered)
                                 {
                                     <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">@Localizer["Cancel the order"]</button>
                                 }

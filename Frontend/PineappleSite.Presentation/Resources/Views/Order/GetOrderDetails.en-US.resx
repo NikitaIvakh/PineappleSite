@@ -177,4 +177,13 @@
   <data name="TOTAL" xml:space="preserve">
     <value>TOTAL</value>
   </data>
+  <data name="The courier received the order" xml:space="preserve">
+    <value>The courier received the order</value>
+  </data>
+  <data name="BeingDelivered" xml:space="preserve">
+    <value>Order being delivered</value>
+  </data>
+  <data name="OrderDelivered" xml:space="preserve">
+    <value>Order delivered</value>
+  </data>
 </root>
