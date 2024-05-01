@@ -138,4 +138,7 @@
   <data name="View details" xml:space="preserve">
     <value>Посмотреть детали</value>
   </data>
+  <data name="Product Image" xml:space="preserve">
+    <value>Картинка продукта</value>
+  </data>
 </root>
