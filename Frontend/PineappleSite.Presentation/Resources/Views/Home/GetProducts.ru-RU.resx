@@ -133,12 +133,12 @@
     <value>Поиск</value>
   </data>
   <data name="Search product" xml:space="preserve">
-    <value>Поиск продукта:</value>
+    <value>Поиск продукции:</value>
   </data>
   <data name="View details" xml:space="preserve">
     <value>Посмотреть детали</value>
   </data>
   <data name="Product Image" xml:space="preserve">
-    <value>Картинка продукта</value>
+    <value>Картинка</value>
   </data>
 </root>

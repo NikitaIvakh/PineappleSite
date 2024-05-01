@@ -127,15 +127,15 @@
     <value>Идентификатор</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Стоимость продукта</value>
+    <value>Стоимость</value>
   </data>
   <data name="Product details" xml:space="preserve">
-    <value>Детали продукта</value>
+    <value>Детали</value>
   </data>
   <data name="Product name" xml:space="preserve">
-    <value>Наименование продукта</value>
+    <value>Наименование</value>
   </data>
   <data name="ProductCategory" xml:space="preserve">
-    <value>Категория продукта</value>
+    <value>Категория</value>
   </data>
 </root>

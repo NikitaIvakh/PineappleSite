@@ -130,15 +130,15 @@
     <value>Картинка</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Стоимость продукта</value>
+    <value>Стоимость</value>
   </data>
   <data name="Product name" xml:space="preserve">
-    <value>Наименование продукта</value>
+    <value>Наименование</value>
   </data>
   <data name="ProductCategory" xml:space="preserve">
-    <value>Категория продукта</value>
+    <value>Категория</value>
   </data>
   <data name="Update product" xml:space="preserve">
-    <value>Обновить продукт</value>
+    <value>Обновить продукцию</value>
   </data>
 </root>

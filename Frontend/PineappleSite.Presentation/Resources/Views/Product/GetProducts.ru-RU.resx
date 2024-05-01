@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add a new product" xml:space="preserve">
-    <value>Добавить новый продукт</value>
+    <value>Добавить новую продукцию</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Очистить</value>
@@ -154,7 +154,7 @@
     <value>Картинка</value>
   </data>
   <data name="List of products" xml:space="preserve">
-    <value>Список продуктов</value>
+    <value>Список продукции ресторана</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Вперед</value>
@@ -163,16 +163,16 @@
     <value>Назад</value>
   </data>
   <data name="Price" xml:space="preserve">
-    <value>Стоимость продукта</value>
+    <value>Стоимость</value>
   </data>
   <data name="Product name" xml:space="preserve">
-    <value>Наименование продукта</value>
+    <value>Наименование</value>
   </data>
   <data name="Product Search" xml:space="preserve">
-    <value>Поиск продукта:</value>
+    <value>Поиск:</value>
   </data>
   <data name="ProductCategory" xml:space="preserve">
-    <value>Категория продукта</value>
+    <value>Категория</value>
   </data>
   <data name="Search" xml:space="preserve">
     <value>Поиск</value>
@@ -181,6 +181,6 @@
     <value>Обновление</value>
   </data>
   <data name="Product Image" xml:space="preserve">
-    <value>Картинка продукта</value>
+    <value>Картинка</value>
   </data>
 </root>

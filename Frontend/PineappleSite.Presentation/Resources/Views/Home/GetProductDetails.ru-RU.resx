@@ -124,12 +124,12 @@
     <value>Добавить в избранное</value>
   </data>
   <data name="Back to Products" xml:space="preserve">
-    <value>Вернуться к продуктам</value>
+    <value>Вернуться к продукции</value>
   </data>
   <data name="Home Page" xml:space="preserve">
-    <value>Детали продукта</value>
+    <value>Детали</value>
   </data>
   <data name="Product Image" xml:space="preserve">
-    <value>Картинка продукта</value>
+    <value>Картинка</value>
   </data>
 </root>
