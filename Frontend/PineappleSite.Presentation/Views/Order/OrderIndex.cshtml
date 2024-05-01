@@ -29,6 +29,19 @@
     }
 }
 
+<style>
+    .table {
+        margin: 0 auto;
+        width: 90%;
+    }
+
+    .some-format {
+        padding: 10px;
+        text-align: center;
+        vertical-align: middle;
+    }
+</style>
+
 <div class="card shadow border-0 mt-4">
     <div class="card-header bg-secondary bg-gradient ml-0 py-3 d-flex justify-content-between">
         <div class="row">
@@ -54,13 +67,13 @@
         <table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%; text-align:center;">
             <thead>
             <tr>
-                <th style="text-align: center">@Localizer["Id"]</th>
-                <th style="text-align: center">@Localizer["Email"]</th>
-                <th style="text-align: center">@Localizer["FirstName"]</th>
-                <th style="text-align: center">@Localizer["Phone"]</th>
-                <th style="text-align: center">@Localizer["Status"]</th>
-                <th style="text-align: center">@Localizer["Total"]</th>
-                <th style="text-align: center">@Localizer["Details"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Id"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Email"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["FirstName"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Phone"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Status"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Total"]</th>
+                <th class="some-format" style="text-align: center">@Localizer["Details"]</th>
             </tr>
             </thead>
         </table>
