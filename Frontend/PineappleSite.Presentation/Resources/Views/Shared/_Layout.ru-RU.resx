@@ -149,4 +149,7 @@
     <value>Контакты</value>
     <comment>Контакты</comment>
   </data>
+  <data name="Pineapple Logo" xml:space="preserve">
+    <value>Логотип Pineapple</value>
+  </data>
 </root>

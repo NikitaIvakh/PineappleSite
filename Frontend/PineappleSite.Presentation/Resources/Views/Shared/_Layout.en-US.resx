@@ -149,4 +149,7 @@
     <value>Contacts</value>
     <comment>Contacts</comment>
   </data>
+  <data name="Pineapple Logo" xml:space="preserve">
+    <value>Pineapple logo</value>
+  </data>
 </root>
