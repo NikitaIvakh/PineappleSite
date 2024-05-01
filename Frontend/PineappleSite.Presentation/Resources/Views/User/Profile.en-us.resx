@@ -47,4 +47,7 @@
     <data name="UserName" xml:space="preserve">
         <value>User name</value>
     </data>
+    <data name="User Profile Image" xml:space="preserve">
+        <value>User profile image</value>
+    </data>
 </root>

@@ -54,4 +54,7 @@
     <data name="SaveProfile" xml:space="preserve">
         <value>Сохранить профиль</value>
     </data>
+    <data name="User Profile Image" xml:space="preserve">
+        <value>Картинка профиля клиента</value>
+    </data>
 </root>

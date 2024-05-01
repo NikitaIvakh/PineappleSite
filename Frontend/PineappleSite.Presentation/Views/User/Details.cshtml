@@ -5,7 +5,7 @@
 }
 
 <form class="container col-7" asp-action="Details">
-    <br />
+    <br/>
     <div class="container border p-3 card shadow border-4 mt-3 mb-md-4">
         <div class="card-header bg-secondary bg-gradient ml-0 py-3">
             <div class="row">
@@ -14,14 +14,14 @@
                 </div>
             </div>
         </div>
-        <hr />
+        <hr/>
         <div class="row">
             <div class="row">
                 <div class="col-6">
                     <label class="control-label pt-2" style="font-size:20px;" hidden>@Localizer["Id"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="UserId" readonly hidden />
+                    <input class="form-control" asp-for="UserId" readonly hidden/>
                     <span class="text-danger" asp-validation-for="UserId" hidden></span>
                 </div>
             </div>
@@ -30,7 +30,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["FirstName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="FirstName" readonly />
+                    <input class="form-control" asp-for="FirstName" readonly/>
                     <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
             </div>
@@ -39,7 +39,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["LastName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="LastName" readonly />
+                    <input class="form-control" asp-for="LastName" readonly/>
                     <span class="text-danger" asp-validation-for="LastName"></span>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["EmailAddress"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="EmailAddress" readonly />
+                    <input class="form-control" asp-for="EmailAddress" readonly/>
                     <span class="text-danger" asp-validation-for="EmailAddress"></span>
                 </div>
             </div>
@@ -57,7 +57,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["UserName"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="UserName" readonly />
+                    <input class="form-control" asp-for="UserName" readonly/>
                     <span class="text-danger" asp-validation-for="UserName"></span>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     @{
                         foreach (var role in Model.Role)
                         {
-                            <input class="form-control" asp-for="@role" readonly />
+                            <input class="form-control" asp-for="@role" readonly/>
                         }
                     }
                     <span class="text-danger" asp-validation-for="Role"></span>
@@ -83,5 +83,5 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial"/>
 }
