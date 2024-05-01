@@ -256,6 +256,23 @@
         "AuthenticationProviderKey": "Bearer"
       }
     },
+    
+    {
+      //"Identity.API": "https://localhost:7133"
+      "DownstreamPathTemplate": "/api/users/GetUsersProfile",
+      "DownstreamScheme": "https",
+      "DownstreamHostAndPorts": [
+        {
+          "Host": "localhost",
+          "Port": 7133
+        }
+      ],
+      "UpstreamPathTemplate": "/api/users/GetUsersProfile",
+      "UpstreamHttpMethod": [ "GET" ],
+      "AuthenticationOptions": {
+        "AuthenticationProviderKey": "Bearer"
+      }
+    },
 
     {
       //"Identity.API": "https://localhost:7133"

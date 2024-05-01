@@ -17,6 +17,7 @@ public sealed class UserEndpoints : ICarterModule
         var group = app.MapGroup("api/users");
 
         group.MapGet("/GetUsers", GetUsers).RequireAuthorization(AdministratorPolicy);
+        group.MapGet("/GetUsersProfile", GetUsersProfile).RequireAuthorization(AdministratorPolicy);
         group.MapGet("/GetUser/{userId}", GetUser);
         group.MapGet("/GetUserForUpdateProfile/{userId}", GetUserForUpdateProfile)
             .RequireAuthorization(UserAndAdministratorPolicy);
@@ -39,6 +40,21 @@ public sealed class UserEndpoints : ICarterModule
         }
 
         logger.LogError($"LogDebugError ================ Получить пользователей не удалось");
+        return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
+    }
+
+    private static async Task<Results<Ok<CollectionResult<GetUsersProfileDto>>, BadRequest<string>>> GetUsersProfile(
+        ISender sender, ILogger<GetUsersProfileDto> logger)
+    {
+        var request = await sender.Send(new GetUsersProfileRequest());
+
+        if (request.IsSuccess)
+        {
+            logger.LogDebug($"LogDebug ================ Пользователи успешно получены (профили)");
+            return TypedResults.Ok(request);
+        }
+
+        logger.LogError($"LogDebugError ================ Получить пользователей не удалось (профили)");
         return TypedResults.BadRequest(string.Join(", ", request.ValidationErrors!));
     }
 

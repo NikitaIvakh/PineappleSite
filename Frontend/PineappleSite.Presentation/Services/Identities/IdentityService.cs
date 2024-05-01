@@ -87,6 +87,15 @@ public partial interface IIdentityClient
 
     /// <returns>Success</returns>
     /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+    System.Threading.Tasks.Task<GetUsersProfileDtoCollectionResult> GetUsersProfileAsync();
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+    System.Threading.Tasks.Task<GetUsersProfileDtoCollectionResult> GetUsersProfileAsync(System.Threading.CancellationToken cancellationToken);
+
+    /// <returns>Success</returns>
+    /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
     System.Threading.Tasks.Task<GetUserDtoResult> GetUserAsync(string userId);
 
     /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
@@ -804,6 +813,95 @@ public partial class IdentityClient : IIdentityClient
                     if (status_ == 200)
                     {
                         var objectResponse_ = await ReadObjectResponseAsync<GetUsersDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        return objectResponse_.Object;
+                    }
+                    else
+                    if (status_ == 400)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<string>(response_, headers_, cancellationToken).ConfigureAwait(false);
+                        if (objectResponse_.Object == null)
+                        {
+                            throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
+                        }
+                        throw new IdentityExceptions<string>("Bad Request", status_, objectResponse_.Text, headers_, objectResponse_.Object, null);
+                    }
+                    else
+                    {
+                        var responseData_ = response_.Content == null ? null : await response_.Content.ReadAsStringAsync().ConfigureAwait(false);
+                        throw new IdentityExceptions("The HTTP status code of the response was not expected (" + status_ + ").", status_, responseData_, headers_, null);
+                    }
+                }
+                finally
+                {
+                    if (disposeResponse_)
+                        response_.Dispose();
+                }
+            }
+        }
+        finally
+        {
+            if (disposeClient_)
+                client_.Dispose();
+        }
+    }
+
+    /// <returns>Success</returns>
+    /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+    public virtual System.Threading.Tasks.Task<GetUsersProfileDtoCollectionResult> GetUsersProfileAsync()
+    {
+        return GetUsersProfileAsync(System.Threading.CancellationToken.None);
+    }
+
+    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
+    /// <returns>Success</returns>
+    /// <exception cref="IdentityExceptions">A server side error occurred.</exception>
+    public virtual async System.Threading.Tasks.Task<GetUsersProfileDtoCollectionResult> GetUsersProfileAsync(System.Threading.CancellationToken cancellationToken)
+    {
+        var client_ = HttpClient;
+        var disposeClient_ = false;
+        try
+        {
+            using (var request_ = new System.Net.Http.HttpRequestMessage())
+            {
+                request_.Method = new System.Net.Http.HttpMethod("GET");
+                request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+
+                var urlBuilder_ = new System.Text.StringBuilder();
+                
+                urlBuilder_.Append("api");
+                urlBuilder_.Append('/');
+                urlBuilder_.Append("users");
+                urlBuilder_.Append('/');
+                urlBuilder_.Append("GetUsersProfile");
+
+                PrepareRequest(client_, request_, urlBuilder_);
+
+                var url_ = urlBuilder_.ToString();
+                request_.RequestUri = new System.Uri(url_, System.UriKind.RelativeOrAbsolute);
+
+                PrepareRequest(client_, request_, url_);
+
+                var response_ = await client_.SendAsync(request_, System.Net.Http.HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
+                var disposeResponse_ = true;
+                try
+                {
+                    var headers_ = System.Linq.Enumerable.ToDictionary(response_.Headers, h_ => h_.Key, h_ => h_.Value);
+                    if (response_.Content != null && response_.Content.Headers != null)
+                    {
+                        foreach (var item_ in response_.Content.Headers)
+                            headers_[item_.Key] = item_.Value;
+                    }
+
+                    ProcessResponse(client_, response_);
+
+                    var status_ = (int)response_.StatusCode;
+                    if (status_ == 200)
+                    {
+                        var objectResponse_ = await ReadObjectResponseAsync<GetUsersProfileDtoCollectionResult>(response_, headers_, cancellationToken).ConfigureAwait(false);
                         if (objectResponse_.Object == null)
                         {
                             throw new IdentityExceptions("Response was null which was not expected.", status_, objectResponse_.Text, headers_, null);
@@ -2225,6 +2323,73 @@ public partial class GetUsersDtoCollectionResult
 
     [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public System.Collections.Generic.ICollection<GetUsersDto> Data { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int Count { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class GetUsersProfileDto
+{
+    [Newtonsoft.Json.JsonProperty("userId", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string UserId { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("firstName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string FirstName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("lastName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string LastName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("userName", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string UserName { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("emailAddress", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string EmailAddress { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("description", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string Description { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("age", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int? Age { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("imageUrl", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ImageUrl { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("imageLocalPath", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ImageLocalPath { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("createdTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.DateTimeOffset? CreatedTime { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("modifiedTime", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.DateTimeOffset? ModifiedTime { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("role", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<string> Role { get; set; }
+
+}
+
+[System.CodeDom.Compiler.GeneratedCode("NJsonSchema", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
+public partial class GetUsersProfileDtoCollectionResult
+{
+    [Newtonsoft.Json.JsonProperty("isSuccess", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public bool IsSuccess { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("successMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string SuccessMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("errorMessage", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public string ErrorMessage { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("statusCode", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public int? StatusCode { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("validationErrors", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<string> ValidationErrors { get; set; }
+
+    [Newtonsoft.Json.JsonProperty("data", Required = Newtonsoft.Json.Required.Default, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
+    public System.Collections.Generic.ICollection<GetUsersProfileDto> Data { get; set; }
 
     [Newtonsoft.Json.JsonProperty("count", Required = Newtonsoft.Json.Required.DisallowNull, NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore)]
     public int Count { get; set; }

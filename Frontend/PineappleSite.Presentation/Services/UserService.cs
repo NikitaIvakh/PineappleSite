@@ -13,7 +13,6 @@ public sealed class UserService(
     : BaseIdentityService(localStorageService, identityClient, httpContextAccessor), IUserService
 {
     private readonly IIdentityClient _identityClient = identityClient;
-    private readonly IHttpContextAccessor _httpContextAccessor = httpContextAccessor;
 
     public async Task<IdentityCollectionResult<GetUsersViewModel>> GetAllUsersAsync()
     {
@@ -59,6 +58,58 @@ public sealed class UserService(
             {
                 StatusCode = exceptions.StatusCode,
                 ErrorMessage = exceptions.Result,
+                ValidationErrors = exceptions.Result,
+            };
+        }
+    }
+
+    public async Task<IdentityCollectionResult<GetUsersProfileViewModel>> GetUsersProfileAsync()
+    {
+        AddBearerToken();
+        try
+        {
+            var apiResponse = await _identityClient.GetUsersProfileAsync();
+            var getUsersProfileViewModel = apiResponse.Data.Select(key => new GetUsersProfileViewModel
+            (
+                UserId: key.UserId,
+                FirstName: key.FirstName,
+                LastName: key.LastName,
+                UserName: key.UserName,
+                EmailAddress: key.EmailAddress,
+                Description: key.Description,
+                Age: key.Age,
+                ImageUrl: key.ImageUrl,
+                ImageLocalPath: key.ImageLocalPath,
+                CreatedTime: key.CreatedTime,
+                ModifiedTime: key.ModifiedTime,
+                Role: key.Role
+            )).ToList();
+
+            if (apiResponse.IsSuccess)
+            {
+                return new IdentityCollectionResult<GetUsersProfileViewModel>()
+                {
+                    Count = apiResponse.Count,
+                    Data = getUsersProfileViewModel,
+                    StatusCode = apiResponse.StatusCode,
+                    SuccessMessage = apiResponse.SuccessMessage,
+                };
+            }
+
+            return new IdentityCollectionResult<GetUsersProfileViewModel>()
+            {
+                StatusCode = apiResponse.StatusCode,
+                ErrorMessage = apiResponse.ErrorMessage,
+                ValidationErrors = string.Join(", ", apiResponse.ValidationErrors),
+            };
+        }
+
+        catch (IdentityExceptions<string> exceptions)
+        {
+            return new IdentityCollectionResult<GetUsersProfileViewModel>()
+            {
+                ErrorMessage = exceptions.Result,
+                StatusCode = exceptions.StatusCode,
                 ValidationErrors = exceptions.Result,
             };
         }

@@ -1,0 +1,115 @@
+﻿@using PineappleSite.Presentation.Extecsions
+@using PineappleSite.Presentation.Utility
+@model PineappleSite.Presentation.Models.Users.UpdateUserProfileViewModel
+
+@{
+    ViewData["Title"] = "Обновить пользователя";
+    <link rel="stylesheet" href="~/css/users/userProfile.css" asp-append-version="true"/>
+}
+
+<form asp-action="ProfileForAdmin" class="form-container rounded bg-white mt-0 mb-md-0 ml-0 py-0 card shadow border-4 mt-3 mb-md-4" enctype="multipart/form-data">
+    <div class="container rounded bg-white">
+        <div class="row">
+            <div class="col-md-4 user-profile">
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5">
+                    <img class="rounded-circle mt-5" src="@(Model.ImageUrl ?? string.Empty)" alt="@Localizer["User Profile Image"]" loading="lazy">
+                    <span class="font-weight-bold">@Model.UserName</span>
+                    <span class="text-black-50">@Model.EmailAddress</span>
+                    <span class="text-black-50">
+                        @{
+                            foreach (var role in Model.Roles!)
+                            {
+                                @role
+                            }
+                        }
+                    </span>
+                    <span> </span>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="p-3 py-5">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h4 style="font-size: 130%">@Localizer["User profile"] - @Model.UserName</h4>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6">
+                            <label class="labels">@Localizer["First name"]</label>
+                            <input type="text" class="form-control mb-3" placeholder="@Localizer["First name"]" asp-for="FirstName">
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="labels">@Localizer["Last name"]</label>
+                            <input type="text" class="form-control mb-3" placeholder="@Localizer["Last name"]" asp-for="LastName">
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <label class="labels">@Localizer["EmailAddress"]</label>
+                            <input type="text" class="form-control mb-3" placeholder="@Localizer["EmailAddress"]" asp-for="EmailAddress" readonly/>
+                            <span asp-validation-for="EmailAddress" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">@Localizer["UserName"]</label>
+                            <input type="text" class="form-control mb-3" placeholder="@Localizer["UserName"]" asp-for="UserName"/>
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">@Localizer["Age"]</label>
+                            <input type="text" class="form-control mb-3" placeholder="@Localizer["Age"]" asp-for="Age"/>
+                            <span asp-validation-for="Age" class="text-danger"></span>
+                        </div>
+                        <br/>
+                        <div class="col-md-12">
+                            <label class="labels">@Localizer["Description"]</label>
+                            <textarea type="text" class="form-control mb-3" placeholder="@Localizer["Description"]" asp-for="Description" rows="3"></textarea>
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="labels">@Localizer["ChangePassword"]</label>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" placeholder="@Localizer["InputNewPassword"]" value="" asp-for="Password">
+                                <button type="button" class="btn btn-secondary" id="togglePassword">
+                                    <i class="fa fa-eye"></i>@Localizer["Show"]
+                                </button>
+                            </div>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="col-md-12">
+                            <input class="form-control" asp-for="Id" readonly hidden/>
+                            <span class="text-danger" asp-validation-for="Id" hidden></span>
+                        </div>
+                        <div class="col-md-12">
+                            <label class="control-label pt-2" style="font-size:20px;">@Localizer["Picture"]</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input asp-for="Avatar" type="file" class="form-control" id="avatarInput" accept="image/*" onchange="previewImage(event)">
+                            <input asp-for="ImageUrl" hidden class="form-control" id="imageUrlInput">
+                            <input asp-for="ImageLocalPath" hidden class="form-control">
+                            <span asp-validation-for="Avatar" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-primary profile-button" value="Обновить">@Localizer["SaveProfile"]</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="~/js/users/userProfile.js" asp-append-version="true"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input').on('input', function () {
+            $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+</script>

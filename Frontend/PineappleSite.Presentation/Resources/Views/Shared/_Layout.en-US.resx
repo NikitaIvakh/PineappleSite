@@ -152,4 +152,7 @@
   <data name="Pineapple Logo" xml:space="preserve">
     <value>Pineapple logo</value>
   </data>
+  <data name="UsersProfile" xml:space="preserve">
+    <value>Users profile</value>
+  </data>
 </root>

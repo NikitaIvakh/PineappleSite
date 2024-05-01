@@ -6,6 +6,8 @@ namespace PineappleSite.Presentation.Contracts;
 public interface IUserService
 {
     Task<IdentityCollectionResult<GetUsersViewModel>> GetAllUsersAsync();
+    
+    Task<IdentityCollectionResult<GetUsersProfileViewModel>> GetUsersProfileAsync();
 
     Task<IdentityResult<GetUserViewModel>> GetUserAsync(string id);
 

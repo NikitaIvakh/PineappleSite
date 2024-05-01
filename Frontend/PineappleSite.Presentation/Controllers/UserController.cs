@@ -33,7 +33,7 @@ public sealed class UserController(
                                        key.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)) ||
                                    key.UserName.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase))
                         .ToList();
-                    
+
                     users = new IdentityCollectionResult<GetUsersViewModel>
                     {
                         Data = searchUsers,
@@ -52,12 +52,67 @@ public sealed class UserController(
                 {
                     return View(paginatedUsers);
                 }
-                
+
                 TempData["error"] = "Нет результатов";
                 return RedirectToAction(nameof(Index));
             }
 
             TempData["error"] = users.ValidationErrors;
+            return RedirectToAction(nameof(Index));
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+
+    // GET: UserController
+    public async Task<ActionResult> GetUsersProfile(string searchUser, string currentFilter, int? pageNumber)
+    {
+        try
+        {
+            var usersProfile = await userService.GetUsersProfileAsync();
+
+            if (usersProfile.IsSuccess)
+            {
+                if (!string.IsNullOrEmpty(searchUser))
+                {
+                    var searchUsers = usersProfile.Data!.Where(
+                            key => key.FirstName!.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                                   key.LastName!.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase) ||
+                                   key.EmailAddress!.Contains(searchUser,
+                                       StringComparison.CurrentCultureIgnoreCase) ||
+                                   key.Role.Any(key =>
+                                       key.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase)) ||
+                                   key.UserName!.Contains(searchUser, StringComparison.CurrentCultureIgnoreCase))
+                        .ToList();
+
+                    usersProfile = new IdentityCollectionResult<GetUsersProfileViewModel>
+                    {
+                        Data = searchUsers,
+                    };
+                }
+
+                ViewData["SearchUser"] = searchUser;
+                ViewData["CurrentFilter"] = currentFilter;
+
+                const int pageSize = 10;
+                var filteredUsers = usersProfile.Data!.AsQueryable();
+                var paginatedUsers =
+                    PaginatedList<GetUsersProfileViewModel>.Create(filteredUsers, pageNumber ?? 1, pageSize);
+
+                if (paginatedUsers.Count != 0)
+                {
+                    return View(paginatedUsers);
+                }
+
+                TempData["error"] = "Нет результатов";
+                return RedirectToAction(nameof(Index));
+            }
+
+            TempData["error"] = usersProfile.ValidationErrors;
             return RedirectToAction(nameof(Index));
         }
 
@@ -209,6 +264,62 @@ public sealed class UserController(
         }
     }
 
+    public async Task<ActionResult> ProfileForAdmin(string userId, string? password)
+    {
+        try
+        {
+            var user = await userService.GetUserAsync(userId, password);
+
+            var updateUserProfile = new UpdateUserProfileViewModel
+            {
+                Id = user.Data?.UserId,
+                FirstName = user.Data!.FirstName,
+                LastName = user.Data.LastName,
+                EmailAddress = user.Data.EmailAddress,
+                UserName = user.Data.UserName,
+                Description = user.Data.Description,
+                Age = user.Data.Age,
+                Roles = user.Data.Role,
+                ImageUrl = user.Data.ImageUrl,
+                ImageLocalPath = user.Data.ImageLocalPath,
+                Password = user.Data.Password,
+            };
+
+            return View(updateUserProfile);
+        }
+
+        catch (Exception ex)
+        {
+            ModelState.AddModelError(string.Empty, ex.Message);
+            return RedirectToAction(nameof(Index));
+        }
+    }
+    
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<ActionResult> ProfileForAdmin(UpdateUserProfileViewModel updateUserProfile)
+    {
+        try
+        {
+            var response = await userService.UpdateUserProfileAsync(updateUserProfile);
+
+            if (response.IsSuccess)
+            {
+                TempData["success"] = response.SuccessMessage;
+                return RedirectToAction(nameof(GetUsersProfile));
+            }
+
+            TempData["error"] = response.ValidationErrors;
+            return RedirectToAction(nameof(ProfileForAdmin));
+        }
+
+        catch (Exception exception)
+        {
+            ModelState.AddModelError(string.Empty, exception.Message);
+            return RedirectToAction(nameof(GetUsersProfile));
+        }
+    }
+    
     public async Task<ActionResult> Profile(string? password)
     {
         try

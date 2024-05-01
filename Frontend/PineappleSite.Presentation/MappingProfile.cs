@@ -46,6 +46,7 @@ public sealed class MappingProfile : Profile
         CreateMap<TokenModelDto, TokenModelViewModel>().ReverseMap();
 
         CreateMap<GetUserDto, GetUserViewModel>().ReverseMap();
+        CreateMap<GetUsersProfileDto, GetUsersProfileViewModel>().ReverseMap();
         CreateMap<CreateUserDto, CreateUserViewModel>().ReverseMap();
         CreateMap<DeleteUserDto, DeleteUserViewModel>().ReverseMap();
         CreateMap<UpdateUserDto, UpdateUserViewModel>().ReverseMap();

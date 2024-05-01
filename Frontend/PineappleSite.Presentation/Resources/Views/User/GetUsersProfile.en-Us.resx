@@ -117,42 +117,82 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Coupons" xml:space="preserve">
-    <value>Купоны</value>
+  <data name="Add a new user" xml:space="preserve">
+    <value>Add a new user</value>
   </data>
-  <data name="Favourites" xml:space="preserve">
-    <value>Избранное</value>
+  <data name="Clear" xml:space="preserve">
+    <value>Clear</value>
   </data>
-  <data name="For the administrator" xml:space="preserve">
-    <value>Для администратора</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="Home" xml:space="preserve">
-    <value>Домой</value>
+  <data name="Delete selected ones" xml:space="preserve">
+    <value>Delete selected ones</value>
   </data>
-  <data name="Order Management" xml:space="preserve">
-    <value>Управление заказами</value>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
   </data>
-  <data name="Privacy" xml:space="preserve">
-    <value>Конфиденциальность</value>
+  <data name="Do you really want to delete these records?" xml:space="preserve">
+    <value>Delete?</value>
   </data>
-  <data name="Products" xml:space="preserve">
-    <value>Продукты</value>
+  <data name="Do you really want to delete this entry?" xml:space="preserve">
+    <value>Delete?</value>
   </data>
-  <data name="Users" xml:space="preserve">
-    <value>Пользователи</value>
+  <data name="EmailAddress" xml:space="preserve">
+    <value>Email address</value>
   </data>
-  <data name="Services provided" xml:space="preserve">
-    <value>Оказываемые услуги</value>
-    <comment>Оказываемые услуги</comment>
+  <data name="FirstName" xml:space="preserve">
+    <value>First name</value>
   </data>
-  <data name="Contacts" xml:space="preserve">
-    <value>Контакты</value>
-    <comment>Контакты</comment>
+  <data name="LastName" xml:space="preserve">
+    <value>Last name</value>
   </data>
-  <data name="Pineapple Logo" xml:space="preserve">
-    <value>Логотип Pineapple</value>
+  <data name="List of users" xml:space="preserve">
+    <value>List of users</value>
   </data>
-  <data name="UsersProfile" xml:space="preserve">
-    <value>Профили пользователей</value>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Previous</value>
+  </data>
+  <data name="RefreshToken" xml:space="preserve">
+    <value>Refresh token</value>
+  </data>
+  <data name="Registered users" xml:space="preserve">
+    <value>Registered users</value>
+  </data>
+  <data name="RevokeAllTokens" xml:space="preserve">
+    <value>Revoke all tokens</value>
+  </data>
+  <data name="RevokeToken" xml:space="preserve">
+    <value>Revoke token</value>
+  </data>
+  <data name="Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Search</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="User Search" xml:space="preserve">
+    <value>User search:</value>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>User name</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Profile Image" xml:space="preserve">
+    <value>Profile image</value>
+  </data>
+  <data name="Users Profiles" xml:space="preserve">
+    <value>Users profiles</value>
   </data>
 </root>

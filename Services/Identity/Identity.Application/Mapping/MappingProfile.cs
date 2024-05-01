@@ -11,6 +11,7 @@ public sealed class MappingProfile : Profile
         CreateMap<ApplicationUser, GetUserDto>().ReverseMap();
         CreateMap<ApplicationUser, GetUsersDto>().ReverseMap();
         CreateMap<ApplicationUser, GetUserForUpdateDto>().ReverseMap();
+        CreateMap<ApplicationUser, GetUsersProfileDto>().ReverseMap();
 
         CreateMap<ApplicationUser, CreateUserDto>().ReverseMap();
         CreateMap<ApplicationUser, UpdateUserDto>().ReverseMap();
