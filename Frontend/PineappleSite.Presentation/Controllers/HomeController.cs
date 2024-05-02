@@ -22,9 +22,13 @@ public sealed class HomeController(
     IFavouriteService favouriteService) : Controller
 {
     [HttpGet]
-    public Task<IActionResult> Index()
+    public async Task<IActionResult> Index()
     {
-        return Task.FromResult<IActionResult>(View());
+        var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
+        var result = await shoppingCartService.GetCartAsync(userId!);
+        ViewBag.CartItemCount = result.Data!.CartDetails.Count;
+        
+        return await Task.FromResult<IActionResult>(View());
     }
 
     [HttpGet]
@@ -162,7 +166,7 @@ public sealed class HomeController(
             };
 
             List<CartDetailsViewModel> cartViewModels = [cartDetailsViewModel];
-            
+
             var cartViewModel = new CartViewModel() { CartHeader = cartHeader, CartDetails = cartViewModels };
             var response = await shoppingCartService.CartUpsertAsync(cartViewModel);
 
@@ -219,17 +223,17 @@ public sealed class HomeController(
     {
         return View();
     }
-    
+
     public IActionResult ServicesProvided()
     {
         return View();
     }
-    
+
     public IActionResult Contacts()
     {
         return View();
     }
-    
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
