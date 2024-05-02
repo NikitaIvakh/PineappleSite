@@ -183,4 +183,7 @@
   <data name="UserName" xml:space="preserve">
     <value>Отображаемое имя</value>
   </data>
+  <data name="Delete User" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
 </root>
