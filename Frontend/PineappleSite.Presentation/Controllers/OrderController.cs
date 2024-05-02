@@ -29,6 +29,7 @@ public sealed class OrderController(IOrderService orderService) : Controller
                 {
                     "approved" => response.Data?.Where(key => key.Status == StaticDetails.StatusApproved),
                     "readyforpickup" => response.Data?.Where(key => key.Status == StaticDetails.StatusReadyForPickup),
+                    "completed" => response.Data?.Where(key => key.Status == StaticDetails.StatusCompleted),
                     "cancelled" => response.Data?.Where(key =>
                         key.Status is StaticDetails.StatusCancelled or StaticDetails.StatusRefunded),
                     _ => response.Data

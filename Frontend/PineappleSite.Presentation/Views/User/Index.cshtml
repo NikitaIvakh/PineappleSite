@@ -80,8 +80,8 @@
                             <td class="some-format">
                                 <input type="checkbox" name="selectedUserIds" value="@item.UserId"/>
                             </td>
-                            <td class="some-format">@item.FirstName</td>
-                            <td class="some-format">@item.LastName</td>
+                            <td class="some-format">@(item.FirstName.Length > 10 ? item.FirstName[..10] + "..." : item.FirstName)</td>
+                            <td class="some-format">@(item.LastName.Length > 10 ? item.LastName[..10] + "..." : item.LastName)</td>
                             <td class="some-format">@item.UserName</td>
                             <td class="some-format">
                                 @{

@@ -89,8 +89,8 @@
                                         <input type="checkbox" name="selectedProducts" value="@item.Id"/>
                                     </td>
                                     <td class="some-format">@item.Id</td>
-                                    <td class="some-format">@item.Name</td>
-                                    <td class="some-format">@item.Description</td>
+                                    <td class="some-format">@(item.Name.Length > 10 ? item.Name[..10] + "..." : item.Name)</td>
+                                    <td class="some-format">@(item.Description.Length > 10 ? item.Description[..10] + "..." : item.Description)</td>
                                     <td class="some-format">@item.ProductCategory</td>
                                     <td class="some-format">@item.Price</td>
                                     <td class="some-format" style="padding: 0;">

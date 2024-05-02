@@ -10,10 +10,15 @@ $(document).ready(function () {
             loadDataTable("readyforpickup");
         } else {
 
-            if (url.includes("cancelled")) {
-                loadDataTable("cancelled");
+            if (url.includes("completed")) {
+                loadDataTable("completed")
             } else {
-                loadDataTable("all");
+                
+                if (url.includes("cancelled")) {
+                    loadDataTable("cancelled");
+                } else {
+                    loadDataTable("all");
+                }
             }
         }
     }

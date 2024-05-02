@@ -13,7 +13,7 @@
     <form asp-action="GetProducts" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
-                <label for="searchProduct" style="color:white; font-size: 20px;">@Localizer["Search product"]</label>
+                <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Search product"]</label>
             </p>
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
