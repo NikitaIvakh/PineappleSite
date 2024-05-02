@@ -8,11 +8,9 @@ using PineappleSite.Presentation.Models.Paginated;
 using PineappleSite.Presentation.Models.Products;
 using PineappleSite.Presentation.Models.ShoppingCart;
 using PineappleSite.Presentation.Services.Products;
-using PineappleSite.Presentation.Services.ShoppingCarts;
 using System.Diagnostics;
 using System.Globalization;
 using System.Security.Claims;
-using PineappleSite.Presentation.Services.Favourite;
 
 namespace PineappleSite.Presentation.Controllers;
 
@@ -24,10 +22,6 @@ public sealed class HomeController(
     [HttpGet]
     public async Task<IActionResult> Index()
     {
-        var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
-        var result = await shoppingCartService.GetCartAsync(userId!);
-        ViewBag.CartItemCount = result.Data!.CartDetails.Count;
-        
         return await Task.FromResult<IActionResult>(View());
     }
 

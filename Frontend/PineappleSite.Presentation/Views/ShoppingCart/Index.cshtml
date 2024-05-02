@@ -25,11 +25,11 @@
                     <div class="card-body">
                         <div class=" d-none d-lg-block">
                             <div class="row text-info">
-                                <div class="col-lg-2"></div>
+                                <div class="col-lg-2 text-center"></div>
                                 <div class="col-lg-5">@Localizer["Product details"]</div>
-                                <div class="col-lg-2">@Localizer["Price"]</div>
-                                <div class="col-lg-2">@Localizer["Quantity"]</div>
-                                <div class="col-lg-1"></div>
+                                <div class="col-lg-2 text-center">@Localizer["Price"]</div>
+                                <div class="col-lg-2 text-center">@Localizer["Quantity"]</div>
+                                <div class="col-lg-1 text-center">@Localizer["Delete"]</div>
                             </div>
                         </div>
                         <hr/>
@@ -49,10 +49,10 @@
                                         </h5>
                                         <div style="font-size:11px;">@Html.Raw(cartObj?.Product?.Description)</div>
                                     </div>
-                                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                    <div class="col-3 col-md-2 pt-md-4 text-center" style="font-size:11px;">
                                         <span style="font-size:17px;">@cartObj?.Product?.Price Br</span>
                                     </div>
-                                    <div class="col-3 col-md-2 pt-md-4" style="font-size:11px;">
+                                    <div class="col-3 col-md-2 pt-md-4 text-center" style="font-size:11px;">
                                         <span style="font-size:17px;">@cartObj?.Count</span>
                                     </div>
                                     <div class="col-2 col-lg-1 p-0 pt-lg-4 text-center">
@@ -76,7 +76,7 @@
                                     {
                                         <span>@Localizer["Coupon"]</span>
                                         <input name="CartViewModel.CartHeader.CouponCode" value="@Model.Data.CartHeader.CouponCode"/>
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="ApplyCoupon">@Localizer["Apply"]</button>
+                                        <button type="submit" class="btn btn-sm btn-success" style="margin-top: -0.7%" asp-action="ApplyCoupon">@Localizer["Apply"]</button>
                                         <span class="text-danger" name="CartViewModel.CartHeader.CouponCode" asp-validation-for="Data.CartHeader.CouponCode"></span>
                                     }
 
@@ -84,7 +84,8 @@
                                     {
                                         <span>@Localizer["Coupon"]</span>
                                         <input asp-for="Data.CartHeader.CouponCode" disabled/>
-                                        <button type="submit" class="btn btn-sm btn-success" asp-action="RemoveCoupon">@Localizer["Delete"]</button>
+                                        <button type="submit" class="btn btn-sm btn-success" style="margin-top: -0.7%" asp-action="RemoveCoupon">@Localizer["Delete"]</button>
+                                        <span class="text-danger" name="CartViewModel.CartHeader.CouponCode" asp-validation-for="Data.CartHeader.CouponCode"></span>
                                     }
                                 }
                             </div>

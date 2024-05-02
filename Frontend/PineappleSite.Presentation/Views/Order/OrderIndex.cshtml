@@ -80,11 +80,9 @@
     </div>
 </div>
 
-@section Scripts {
-    <script src="~/js/orders/orderIndex.js"></script>
-}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" asp-append-version="true"></script>
+<script src="~/js/orders/orderIndex.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
         $('input').on('input', function () {
