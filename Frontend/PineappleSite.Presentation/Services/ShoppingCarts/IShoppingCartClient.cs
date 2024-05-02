@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.ShoppingCarts
+﻿namespace PineappleSite.Presentation.Services.ShoppingCarts;
+
+public partial interface IShoppingCartClient
 {
-    public partial interface IShoppingCartClient
-    {
-        HttpClient HttpClient { get; }
-    }
+    HttpClient HttpClient { get; }
 }

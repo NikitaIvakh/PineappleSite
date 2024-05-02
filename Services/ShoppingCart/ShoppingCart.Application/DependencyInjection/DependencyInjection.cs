@@ -20,6 +20,6 @@ public static class DependencyInjection
         services.AddValidatorsFromAssemblies([Assembly.GetExecutingAssembly()]);
         services.AddMediatR(config => config.RegisterServicesFromAssemblies([Assembly.GetExecutingAssembly()]));
 
-        services.AddScoped<IRabbitMQMessageSender, RabbitMQMessageSender>();
+        services.AddScoped<IRabbitMqMessageSender, RabbitMqMessageSender>();
     }
 }

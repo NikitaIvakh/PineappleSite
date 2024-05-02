@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Infrastructure.RabbitMQ.Common
+﻿namespace PineappleSite.Infrastructure.RabbitMQ.Common;
+
+public interface IRabbitMqMessageSender
 {
-    public interface IRabbitMQMessageSender
-    {
-        bool SendMessage(object baseMessage, string? queueName);
-    }
+    bool SendMessage(object baseMessage, string? queueName);
 }

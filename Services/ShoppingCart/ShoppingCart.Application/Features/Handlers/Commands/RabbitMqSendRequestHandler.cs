@@ -8,7 +8,7 @@ using ShoppingCart.Domain.Results;
 
 namespace ShoppingCart.Application.Features.Handlers.Commands;
 
-public sealed class RabbitMqSendRequestHandler(IRabbitMQMessageSender messageSender, IConfiguration configuration)
+public sealed class RabbitMqSendRequestHandler(IRabbitMqMessageSender messageSender, IConfiguration configuration)
     : IRequestHandler<RabbitMqSendRequest, Result<bool>>
 {
     public Task<Result<bool>> Handle(RabbitMqSendRequest request, CancellationToken cancellationToken)

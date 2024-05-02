@@ -3,45 +3,37 @@ using PineappleSite.Infrastructure.RabbitMQ.Common;
 using RabbitMQ.Client;
 using System.Text;
 
-namespace PineappleSite.Infrastructure.RabbitMQ.Events
+namespace PineappleSite.Infrastructure.RabbitMQ.Events;
+
+public sealed class RabbitMqMessageSender : IRabbitMqMessageSender
 {
-    public class RabbitMQMessageSender : IRabbitMQMessageSender
+    private const string HostName = "localhost";
+    private const string UserName = "guest";
+    private const string Password = "guest";
+    private IConnection _connection = null!;
+
+    public bool SendMessage(object baseMessage, string? queueName)
     {
-        private readonly string _hostName;
-        private readonly string _userName;
-        private readonly string _password;
-        private IConnection _connection;
-
-        public RabbitMQMessageSender()
+        var connectionFactory = new ConnectionFactory
         {
-            _hostName = "localhost";
-            _userName = "guest";
-            _password = "guest";
-        }
+            HostName = HostName,
+            UserName = UserName,
+            Password = Password
+        };
 
-        public bool SendMessage(object baseMessage, string? queueName)
-        {
-            var connectionFactory = new ConnectionFactory
-            {
-                HostName = _hostName,
-                UserName = _userName,
-                Password = _password
-            };
+        _connection = connectionFactory.CreateConnection();
 
-            _connection = connectionFactory.CreateConnection();
+        using var channel = _connection.CreateModel();
+        channel.QueueDeclare(queue: queueName, true, false, false, null);
 
-            using var channel = _connection.CreateModel();
-            channel.QueueDeclare(queue: queueName, true, false, false, null);
+        var json = JsonConvert.SerializeObject(baseMessage);
+        var body = Encoding.UTF8.GetBytes(json);
 
-            var json = JsonConvert.SerializeObject(baseMessage);
-            var body = Encoding.UTF8.GetBytes(json);
+        var properties = channel.CreateBasicProperties();
+        properties.ContentType = "application/json";
 
-            var properties = channel.CreateBasicProperties();
-            properties.ContentType = "application/json";
+        channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body);
 
-            channel.BasicPublish(exchange: "", routingKey: queueName, basicProperties: properties, body);
-
-            return true;
-        }
+        return true;
     }
 }
