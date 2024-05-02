@@ -195,4 +195,7 @@
   <data name="Users Profiles" xml:space="preserve">
     <value>Профили пользователей</value>
   </data>
+  <data name="User Imape" xml:space="preserve">
+    <value>Картинка профиля пользователя</value>
+  </data>
 </root>

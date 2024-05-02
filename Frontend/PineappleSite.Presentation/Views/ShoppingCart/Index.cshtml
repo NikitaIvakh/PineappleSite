@@ -50,7 +50,7 @@
                                         <div style="font-size:11px;">@Html.Raw(cartObj?.Product?.Description)</div>
                                     </div>
                                     <div class="col-3 col-md-2 pt-md-4 text-center" style="font-size:11px;">
-                                        <span style="font-size:17px;">@cartObj?.Product?.Price Br</span>
+                                        <span style="font-size:17px;">@cartObj?.Product?.Price Byn</span>
                                     </div>
                                     <div class="col-3 col-md-2 pt-md-4 text-center" style="font-size:11px;">
                                         <span style="font-size:17px;">@cartObj?.Count</span>
@@ -90,11 +90,11 @@
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Br<br/></span>
+                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Byn<br/></span>
                                 @{
                                     if (Model.Data.CartHeader.Discount > 0)
                                     {
-                                        <span class="text-success"> @Localizer["Discount amount"] @Model.Data.CartHeader.Discount Br</span>
+                                        <span class="text-success"> @Localizer["Discount amount"] @Model.Data.CartHeader.Discount Byn</span>
                                     }
                                 }
                             </div>
