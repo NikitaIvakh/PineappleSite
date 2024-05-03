@@ -7,7 +7,7 @@ public class UpdateProductViewModel
 {
     public int Id { get; init; }
 
-    [MaxLength(30, ErrorMessage = "Строка не должна превышать 30 символов")]
+    [MaxLength(100, ErrorMessage = "Строка не должна превышать 100 символов")]
     [MinLength(3, ErrorMessage = "Строка должна быть более 3 символов")]
     public required string Name { get; init; }
 

@@ -8,7 +8,7 @@ public sealed class CreateValidator : AbstractValidator<CreateProductDto>
     public CreateValidator()
     {
         RuleFor(key => key.Name).NotEmpty().NotNull()
-            .MaximumLength(30).WithMessage("Строка не должна превышать 30 символов.")
+            .MaximumLength(100).WithMessage("Строка не должна превышать 100 символов.")
             .MinimumLength(3).WithMessage("Строка должна быть более 3 символов.");
 
         RuleFor(key => key.Description).NotEmpty().NotNull()
