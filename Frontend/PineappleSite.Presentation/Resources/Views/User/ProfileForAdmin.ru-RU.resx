@@ -57,4 +57,7 @@
     <data name="User Profile Image" xml:space="preserve">
         <value>Картинка профиля клиента</value>
     </data>
+    <data name="Go back" xml:space="preserve">
+        <value>Вернуться назад</value>
+    </data>
 </root>

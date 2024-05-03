@@ -132,7 +132,7 @@ public sealed class ProductController(
         {
             TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
         }
     }
 
@@ -185,14 +185,16 @@ public sealed class ProductController(
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Edit), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Edit),
+                new { pageNumber = pageNumber, productId = updateProductViewModel.Id });
         }
 
         catch (Exception exception)
         {
             TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Edit),
+                new { pageNumber = pageNumber, productId = updateProductViewModel.Id });
         }
     }
 
