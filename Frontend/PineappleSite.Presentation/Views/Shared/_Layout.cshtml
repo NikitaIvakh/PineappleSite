@@ -43,7 +43,7 @@
                                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">@Localizer["For the administrator"]</a>
                                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                                         <li>
-                                            <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index">@Localizer["Coupons"]</a>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Coupon" asp-action="Index" asp-route-pageNumber="1">@Localizer["Coupons"]</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="GetProducts">@Localizer["Products"]</a>
