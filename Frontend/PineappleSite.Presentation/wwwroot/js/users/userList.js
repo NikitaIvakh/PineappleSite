@@ -1,4 +1,5 @@
-﻿document.getElementById("clearSearch").addEventListener("click", function () {
+﻿
+document.getElementById("clearSearch").addEventListener("click", function () {
     document.getElementById("searchUser").value = "";
     window.location.href = "/User/Index";
 });

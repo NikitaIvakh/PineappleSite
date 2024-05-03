@@ -376,9 +376,7 @@ public sealed class UserController(
             return RedirectToAction(nameof(Index));
         }
     }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
+    
     public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds, int? pageNumber)
     {
         try
