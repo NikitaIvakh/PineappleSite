@@ -54,11 +54,11 @@ public sealed class UserController(
                 }
 
                 TempData["error"] = "Нет результатов";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
             }
 
             TempData["error"] = users.ValidationErrors;
-            return RedirectToAction(nameof(Create));
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
         }
 
         catch (Exception exception)
@@ -109,11 +109,11 @@ public sealed class UserController(
                 }
 
                 TempData["error"] = "Нет результатов";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
             }
 
             TempData["error"] = usersProfile.ValidationErrors;
-            return RedirectToAction(nameof(Create));
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
         }
 
         catch (Exception exception)
