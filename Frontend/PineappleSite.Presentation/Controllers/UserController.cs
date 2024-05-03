@@ -468,6 +468,7 @@ public sealed class UserController(
     }
 
     [HttpPost]
+    [ValidateAntiForgeryToken]
     public async Task<ActionResult> RevokeAllTokens()
     {
         try

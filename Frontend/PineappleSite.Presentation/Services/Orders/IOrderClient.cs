@@ -1,7 +1,6 @@
-﻿namespace PineappleSite.Presentation.Services.Orders
+﻿namespace PineappleSite.Presentation.Services.Orders;
+
+public partial interface IOrderClient
 {
-    public partial interface IOrderClient
-    {
-        HttpClient HttpClient { get; }
-    }
+    HttpClient HttpClient { get; }
 }

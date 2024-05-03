@@ -42,7 +42,7 @@
             </div>
             <div class="card-footer row bg-dark">
                 <div class="col-12 col-md-6 pb-1">
-                    <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" style="height:50px;">@Localizer["Back to Products"]</a>
+                    <a class="btn btn-success btn-square form-control btn-lg" asp-action="GetProducts" asp-route-pageNumber="@Context.Request.Query["pageNumber"]" style="height:50px;">@Localizer["Back to Products"]</a>
                 </div>
                 <div class="col-12 col-md-6 text-end">
                     <div class="d-flex justify-content-end">

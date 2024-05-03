@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="row mt-auto mb-0">
                                         <div class="col">
-                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-id="@product.Id">@Localizer["View details"]</a>
+                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-id="@product.Id" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["View details"]</a>
                                         </div>
                                     </div>
                                 </div>

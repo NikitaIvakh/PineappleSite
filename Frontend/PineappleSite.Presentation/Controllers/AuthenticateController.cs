@@ -72,7 +72,7 @@ public sealed class AuthenticateController(IIdentityService identityService, IHt
     }
 
     [HttpPost]
-    public Task<ActionResult> Logout(string? returnUrl)
+    public async Task<ActionResult> Logout(string? returnUrl)
     {
         returnUrl ??= Url.Content("/");
         var result =
@@ -80,7 +80,7 @@ public sealed class AuthenticateController(IIdentityService identityService, IHt
 
         if (!result.IsCompletedSuccessfully)
         {
-            return Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
+            return await Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
         }
 
         TempData["success"] = "Вы успешно вышли из аккаунта";
@@ -88,6 +88,6 @@ public sealed class AuthenticateController(IIdentityService identityService, IHt
         httpContextAccessor.HttpContext!.Response.Cookies.Delete("JWTToken");
         httpContextAccessor.HttpContext!.Response.Cookies.Delete("AuthenticateCookie");
 
-        return Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
+        return await Task.FromResult<ActionResult>(LocalRedirect(returnUrl));
     }
 }

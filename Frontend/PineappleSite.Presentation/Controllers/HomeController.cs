@@ -58,7 +58,7 @@ public sealed class HomeController(
                 ViewData["CurrentFilter"] = currentFilter;
 
                 const int pageIndex = 9;
-                var filteredProducts = products.Data!.AsQueryable();
+                var filteredProducts = products.Data.AsQueryable();
                 var paginatedProducts =
                     PaginatedList<ProductViewModel>.Create(filteredProducts, pageNumber ?? 1, pageIndex);
 
@@ -75,7 +75,7 @@ public sealed class HomeController(
             return RedirectToAction(nameof(Index));
         }
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> GetProductDetails(int id)
     {

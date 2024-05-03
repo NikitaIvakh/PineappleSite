@@ -81,12 +81,11 @@ public partial interface IOrderClient
 [System.CodeDom.Compiler.GeneratedCode("NSwag", "14.0.0.0 (NJsonSchema v11.0.0.0 (Newtonsoft.Json v13.0.0.0))")]
 public partial class OrderClient : IOrderClient
 {
-    private System.Net.Http.HttpClient _httpClient;
     private static System.Lazy<Newtonsoft.Json.JsonSerializerSettings> _settings = new System.Lazy<Newtonsoft.Json.JsonSerializerSettings>(CreateSerializerSettings, true);
 
     public OrderClient(System.Net.Http.HttpClient httpClient)
     {
-        _httpClient = httpClient;
+        HttpClient = httpClient;
     }
 
     private static Newtonsoft.Json.JsonSerializerSettings CreateSerializerSettings()
@@ -119,7 +118,7 @@ public partial class OrderClient : IOrderClient
         if (userId == null)
             throw new System.ArgumentNullException("userId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -213,7 +212,7 @@ public partial class OrderClient : IOrderClient
         if (orderId == null)
             throw new System.ArgumentNullException("orderId");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -307,7 +306,7 @@ public partial class OrderClient : IOrderClient
         if (body == null)
             throw new System.ArgumentNullException("body");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -403,7 +402,7 @@ public partial class OrderClient : IOrderClient
         if (body == null)
             throw new System.ArgumentNullException("body");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -499,7 +498,7 @@ public partial class OrderClient : IOrderClient
         if (body == null)
             throw new System.ArgumentNullException("body");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
@@ -595,7 +594,7 @@ public partial class OrderClient : IOrderClient
         if (body == null)
             throw new System.ArgumentNullException("body");
 
-        var client_ = _httpClient;
+        var client_ = HttpClient;
         var disposeClient_ = false;
         try
         {
