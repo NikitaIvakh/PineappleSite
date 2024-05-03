@@ -12,5 +12,8 @@ namespace PineappleSite.Presentation.Models.Products.Enum
 
         [Display(Name = "Напиток")]
         Drinks = 3,
+        
+        [Display(Name = "Горячее блюдо")]
+        Second = 4,
     }
 }

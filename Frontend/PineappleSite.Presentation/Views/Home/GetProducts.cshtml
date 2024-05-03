@@ -40,8 +40,8 @@
                                 <div class="card-body d-flex flex-column flex-fill">
                                     <p class="card-text">@Html.Raw(product.Description.Substring(0, Math.Min(product.Description.Length, 11)))...</p>
                                     <div class="d-flex justify-content-between py-2">
-                                        <span class="badge bg-warning text-white p-2">@product.ProductCategory.GetDisplayName()</span>
-                                        <span class="badge bg-warning text-white p-2">@product.Price Byn</span>
+                                        <span class="badge bg-warning text-white p-2" style="font-size: 15px">@product.ProductCategory.GetDisplayName()</span>
+                                        <span class="badge bg-warning text-white p-2" style="font-size: 15px">@product.Price Byn</span>
                                     </div>
                                     <div class="row mt-auto mb-0">
                                         <div class="col">

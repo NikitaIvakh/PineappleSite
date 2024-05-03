@@ -167,7 +167,6 @@ public partial class ProductClient : IProductClient
                 request_.Method = new System.Net.Http.HttpMethod("POST");
                 request_.Headers.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("text/plain"));
 
-
                 var urlBuilder_ = new System.Text.StringBuilder();
                 
                 urlBuilder_.Append("api");
@@ -920,6 +919,8 @@ public enum ProductCategory
     _2 = 2,
 
     _3 = 3,
+
+    _4 = 4,
 
 }
 

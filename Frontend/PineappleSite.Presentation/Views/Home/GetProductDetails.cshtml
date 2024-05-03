@@ -28,7 +28,7 @@
                         <div class="col-12 col-lg-8">
                             <div class="row pl-3">
                                 <div class="col-12">
-                                    <span class="badge bg-success text-white p-3 border">@Model.Product.ProductCategory.GetDisplayName()</span>
+                                    <span class="badge bg-success text-white p-3 border" style="font-size: 15px">@Model.Product.ProductCategory.GetDisplayName()</span>
                                     <p class="text-secondary">Описание: @Html.Raw(Model.Product.Description)</p>
                                     <div class="row mx-0">
                                         <input class="form-control" asp-for="Product.Count"/>
