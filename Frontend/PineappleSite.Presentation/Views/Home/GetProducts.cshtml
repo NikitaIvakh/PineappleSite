@@ -10,7 +10,7 @@
 }
 
 <div class="col-12 form-text">
-    <form asp-action="GetProducts" method="get">
+    <form asp-action="GetProducts" asp-route-pageNumber="@Context.Request.Query["pageNumber"]" method="get">
         <div class="form-actions no-color">
             <p class="mb-0">
                 <label for="searchProduct" style="font-size:20px; color:white">@Localizer["Search product"]</label>
@@ -18,8 +18,8 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button">@Localizer["Search"]</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button">@Localizer["Clear"]</button>
+                    <button type="submit" class="btn btn-primary search-button" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Search"]</button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Clear"]</button>
                 </div>
             </div>
         </div>
