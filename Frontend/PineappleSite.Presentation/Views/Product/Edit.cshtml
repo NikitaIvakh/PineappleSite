@@ -75,6 +75,7 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Image"]</label>
                 </div>
                 <div class="col-6 pb-3">
+                    <img src="@Model.ImageUrl" alt="@Localizer["Image"]" loading="lazy" style="width: 100px; height: 100px; object-fit: cover; display: block; margin: auto;">
                     <input asp-for="Avatar" class="form-control"/>
                     <span asp-validation-for="Avatar" class="text-danger"></span>
                 </div>

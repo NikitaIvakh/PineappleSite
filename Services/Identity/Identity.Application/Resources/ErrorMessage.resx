@@ -160,36 +160,36 @@
     <value>Такой электронный адрес уже используется</value>
   </data>
   <data name="ThisUserNameAlreadyExists" xml:space="preserve">
-    <value>Такое имя пользователя уже используется</value>
+    <value>Такое имя уже используется</value>
   </data>
   <data name="UpdateProfileError" xml:space="preserve">
     <value>Ошибка обновления профиля</value>
   </data>
   <data name="UserAlreadyExists" xml:space="preserve">
-    <value>Такой пользователь уже существует</value>
+    <value>Такой клиент уже существует</value>
   </data>
   <data name="UserCanNotBeCreated" xml:space="preserve">
-    <value>Пользовтаель не может быть создан</value>
+    <value>Клиент не может быть создан</value>
   </data>
   <data name="UserCanNotBeUpdated" xml:space="preserve">
     <value>Профиль не может быть обновлен</value>
   </data>
   <data name="UserCanNotDeleted" xml:space="preserve">
-    <value>Пользователь не может быть удален</value>
+    <value>Клиент не может быть удален</value>
   </data>
   <data name="UserNameError" xml:space="preserve">
     <value>Отображаемое имя на сайте введено неверно</value>
   </data>
   <data name="UserNotFound" xml:space="preserve">
-    <value>Такого пользователя не существует</value>
+    <value>Такого клиента не существует</value>
   </data>
   <data name="UsersConNotDeleted" xml:space="preserve">
-    <value>Пользователи не могут быть удалены</value>
+    <value>Клиенты не могут быть удалены</value>
   </data>
   <data name="UsersNotFound" xml:space="preserve">
-    <value>Пользователи не найдены</value>
+    <value>Клиенты не найдены</value>
   </data>
   <data name="UserUpdateError" xml:space="preserve">
-    <value>Ошибка обновления пользователя</value>
+    <value>Ошибка обновления клиента</value>
   </data>
 </root>

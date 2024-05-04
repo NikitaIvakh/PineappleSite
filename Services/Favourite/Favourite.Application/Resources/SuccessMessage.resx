@@ -121,15 +121,15 @@
     <value>Ваши избранные товары</value>
   </data>
   <data name="ProductSuccessfullyAddedToFavourite" xml:space="preserve">
-    <value>Продукт успешно добавлен в избранное</value>
+    <value>Продукция успешно добавлена в избранное</value>
   </data>
   <data name="ProductsSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукты успшено удалены</value>
+    <value>Продукции успшено удалены</value>
   </data>
   <data name="ProductSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукт успешно удален</value>
+    <value>Продукция успешно удалена</value>
   </data>
   <data name="ThereAreNoFavouriteProducts" xml:space="preserve">
-    <value>В избранном никаких товаров нет</value>
+    <value>В избранном никакой продукции нет</value>
   </data>
 </root>

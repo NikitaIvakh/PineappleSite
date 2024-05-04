@@ -72,7 +72,7 @@
                         <thead>
                         <tr>
                             <th class="some-format"></th>
-                            <th class="some-format">@Localizer["Id"]</th>
+                            @* <th class="some-format">@Localizer["Id"]</th> *@
                             <th class="some-format">@Localizer["Product name"]</th>
                             <th class="some-format">@Localizer["Description"]</th>
                             <th class="some-format">@Localizer["ProductCategory"]</th>
@@ -94,7 +94,7 @@
                                     <td class="some-format">
                                         <input type="checkbox" name="selectedProducts" value="@item.Id"/>
                                     </td>
-                                    <td class="some-format">@item.Id</td>
+                                    @* <td class="some-format">@item.Id</td> *@
                                     <td class="some-format">@(item.Name.Length > 10 ? item.Name[..10] + "..." : item.Name)</td>
                                     <td class="some-format">@(item.Description.Length > 10 ? item.Description[..10] + "..." : item.Description)</td>
                                     <td class="some-format">@item.ProductCategory</td>

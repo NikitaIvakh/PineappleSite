@@ -60,7 +60,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пока продуктов нет.
+        ///   Looks up a localized string similar to Пока продукции нет.
         /// </summary>
         internal static string ProductsNotFound {
             get {
@@ -69,7 +69,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты успешно удалены.
+        ///   Looks up a localized string similar to Продукции успешно удалены.
         /// </summary>
         internal static string ProductsSuccessfullyDeleted {
             get {
@@ -78,7 +78,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты успешно получены.
+        ///   Looks up a localized string similar to Продукции успешно получены.
         /// </summary>
         internal static string ProductsSuccessfullyGot {
             get {
@@ -87,7 +87,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно обновлен.
+        ///   Looks up a localized string similar to Продукция успешно обновлена.
         /// </summary>
         internal static string ProductsSuccessfullyUpdated {
             get {
@@ -96,7 +96,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно добавлен.
+        ///   Looks up a localized string similar to Продукция успешно добавлена.
         /// </summary>
         internal static string ProductSuccessfullyAdded {
             get {
@@ -105,7 +105,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно удален.
+        ///   Looks up a localized string similar to Продукция успешно удалена.
         /// </summary>
         internal static string ProductSuccessfullyDeleted {
             get {
@@ -114,7 +114,7 @@ namespace Product.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно получен.
+        ///   Looks up a localized string similar to Продукция успешно получена.
         /// </summary>
         internal static string ProductSuccessfullyGot {
             get {

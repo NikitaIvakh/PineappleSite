@@ -96,7 +96,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт не может быть удален.
+        ///   Looks up a localized string similar to Продукция не может быть удалена.
         /// </summary>
         internal static string ProductCanNotDeleted {
             get {
@@ -105,7 +105,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт не найден.
+        ///   Looks up a localized string similar to Продукция не найдена.
         /// </summary>
         internal static string ProductNotFound {
             get {
@@ -114,7 +114,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты не могут быть удалены.
+        ///   Looks up a localized string similar to Продукции не могут быть удалены.
         /// </summary>
         internal static string ProductsCanNotDeleted {
             get {
@@ -123,7 +123,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты не найдены.
+        ///   Looks up a localized string similar to Продукции не найдены.
         /// </summary>
         internal static string ProductsNotFound {
             get {

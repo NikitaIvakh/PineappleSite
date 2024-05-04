@@ -186,7 +186,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Такое имя пользователя уже используется.
+        ///   Looks up a localized string similar to Такое имя уже используется.
         /// </summary>
         internal static string ThisUserNameAlreadyExists {
             get {
@@ -204,7 +204,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Такой пользователь уже существует.
+        ///   Looks up a localized string similar to Такой клиент уже существует.
         /// </summary>
         internal static string UserAlreadyExists {
             get {
@@ -213,7 +213,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользовтаель не может быть создан.
+        ///   Looks up a localized string similar to Клиент не может быть создан.
         /// </summary>
         internal static string UserCanNotBeCreated {
             get {
@@ -231,7 +231,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователь не может быть удален.
+        ///   Looks up a localized string similar to Клиент не может быть удален.
         /// </summary>
         internal static string UserCanNotDeleted {
             get {
@@ -249,7 +249,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Такого пользователя не существует.
+        ///   Looks up a localized string similar to Такого клиента не существует.
         /// </summary>
         internal static string UserNotFound {
             get {
@@ -258,7 +258,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователи не могут быть удалены.
+        ///   Looks up a localized string similar to Клиенты не могут быть удалены.
         /// </summary>
         internal static string UsersConNotDeleted {
             get {
@@ -267,7 +267,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователи не найдены.
+        ///   Looks up a localized string similar to Клиенты не найдены.
         /// </summary>
         internal static string UsersNotFound {
             get {
@@ -276,7 +276,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ошибка обновления пользователя.
+        ///   Looks up a localized string similar to Ошибка обновления клиента.
         /// </summary>
         internal static string UserUpdateError {
             get {

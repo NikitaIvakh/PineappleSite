@@ -130,18 +130,18 @@
     <value>Сообщение успешно отправлено</value>
   </data>
   <data name="ProductsSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукты успешно удалены</value>
+    <value>Продукции успешно удалены</value>
   </data>
   <data name="ProductSuccessfullyAddedShoppingCart" xml:space="preserve">
-    <value>Товар успешно добавлен в корзину</value>
+    <value>Продукция успешно добавлена в корзину</value>
   </data>
   <data name="ProductSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукт успешно удален</value>
+    <value>Продукция успешно удалена</value>
   </data>
   <data name="ShoppingCartIsEmpty" xml:space="preserve">
     <value>Ваша корзина пуста! Добавьте товары</value>
   </data>
   <data name="YourShoppingCart" xml:space="preserve">
-    <value>Ваша корзина с товарами</value>
+    <value>Ваша корзина с продукцией</value>
   </data>
 </root>

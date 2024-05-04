@@ -87,6 +87,7 @@ public sealed class ProductController(
                     Description = product.Data.Description,
                     ProductCategory = product.Data.ProductCategory,
                     Price = product.Data.Price,
+                    ImageUrl = product.Data.ImageUrl,
                 };
 
                 return View(productViewModel);
@@ -152,6 +153,7 @@ public sealed class ProductController(
                     Description = product.Data.Description,
                     ProductCategory = product.Data.ProductCategory,
                     Price = product.Data.Price,
+                    ImageUrl = product.Data.ImageUrl,
                 };
 
                 return View(updateUserViewModel);

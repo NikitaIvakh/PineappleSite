@@ -87,7 +87,7 @@ namespace Coupon.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Купон успешно создан.
+        ///   Looks up a localized string similar to Купон успешно добавлен.
         /// </summary>
         internal static string CouponSuccessfullyCreated {
             get {

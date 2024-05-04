@@ -78,7 +78,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Токены всех пользователей успешно удалены.
+        ///   Looks up a localized string similar to Токены всех клиентов успешно удалены.
         /// </summary>
         internal static string TokensSuccessfullyDeleted {
             get {
@@ -87,7 +87,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Токен пользователя успешно удален.
+        ///   Looks up a localized string similar to Токен клиента успешно удален.
         /// </summary>
         internal static string TokenSuccessfullyDeleted {
             get {
@@ -105,7 +105,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Профиль пользователя успешно обновлен.
+        ///   Looks up a localized string similar to Профиль клиента успешно обновлен.
         /// </summary>
         internal static string UserProfileSuccessfullyUpdated {
             get {
@@ -114,7 +114,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователи успешно удалены.
+        ///   Looks up a localized string similar to Клиенты успешно удалены.
         /// </summary>
         internal static string UsersSuccessfullyDeleted {
             get {
@@ -123,7 +123,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователи успешно получены.
+        ///   Looks up a localized string similar to Клиенты успешно получены.
         /// </summary>
         internal static string UsersSuccessfullyGeted {
             get {
@@ -132,7 +132,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователь успешно создан.
+        ///   Looks up a localized string similar to Клиент успешно добавлен.
         /// </summary>
         internal static string UserSuccessfullyCreated {
             get {
@@ -141,7 +141,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователь успешно удален.
+        ///   Looks up a localized string similar to Клиент успешно удален.
         /// </summary>
         internal static string UserSuccessfullyDeleted {
             get {
@@ -150,7 +150,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Полььзователь успешно получен.
+        ///   Looks up a localized string similar to Клиент успешно получен.
         /// </summary>
         internal static string UserSuccessfullyGot {
             get {
@@ -159,7 +159,7 @@ namespace Identity.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Пользователь успешно обновлен.
+        ///   Looks up a localized string similar to Клиент успешно обновлен.
         /// </summary>
         internal static string UserSuccessfullyUpdated {
             get {

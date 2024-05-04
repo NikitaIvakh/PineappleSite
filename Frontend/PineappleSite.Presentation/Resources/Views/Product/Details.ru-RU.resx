@@ -138,4 +138,7 @@
   <data name="ProductCategory" xml:space="preserve">
     <value>Категория</value>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>Картинка</value>
+  </data>
 </root>

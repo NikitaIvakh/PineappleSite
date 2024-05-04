@@ -138,4 +138,7 @@
   <data name="ProductCategory" xml:space="preserve">
     <value>Product category</value>
   </data>
+  <data name="Image" xml:space="preserve">
+    <value>Picture</value>
+  </data>
 </root>

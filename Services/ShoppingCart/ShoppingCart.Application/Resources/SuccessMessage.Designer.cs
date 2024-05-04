@@ -96,7 +96,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты успешно удалены.
+        ///   Looks up a localized string similar to Продукции успешно удалены.
         /// </summary>
         internal static string ProductsSuccessfullyDeleted {
             get {
@@ -105,7 +105,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Товар успешно добавлен в корзину.
+        ///   Looks up a localized string similar to Продукция успешно добавлена в корзину.
         /// </summary>
         internal static string ProductSuccessfullyAddedShoppingCart {
             get {
@@ -114,7 +114,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно удален.
+        ///   Looks up a localized string similar to Продукция успешно удалена.
         /// </summary>
         internal static string ProductSuccessfullyDeleted {
             get {
@@ -132,7 +132,7 @@ namespace ShoppingCart.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ваша корзина с товарами.
+        ///   Looks up a localized string similar to Ваша корзина с продукцией.
         /// </summary>
         internal static string YourShoppingCart {
             get {

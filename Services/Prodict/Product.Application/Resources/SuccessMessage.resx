@@ -118,24 +118,24 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ProductsNotFound" xml:space="preserve">
-    <value>Пока продуктов нет</value>
+    <value>Пока продукции нет</value>
   </data>
   <data name="ProductsSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукты успешно удалены</value>
+    <value>Продукции успешно удалены</value>
   </data>
   <data name="ProductsSuccessfullyUpdated" xml:space="preserve">
-    <value>Продукт успешно обновлен</value>
+    <value>Продукция успешно обновлена</value>
   </data>
   <data name="ProductSuccessfullyAdded" xml:space="preserve">
-    <value>Продукт успешно добавлен</value>
+    <value>Продукция успешно добавлена</value>
   </data>
   <data name="ProductSuccessfullyDeleted" xml:space="preserve">
-    <value>Продукт успешно удален</value>
+    <value>Продукция успешно удалена</value>
   </data>
   <data name="ProductsSuccessfullyGot" xml:space="preserve">
-    <value>Продукты успешно получены</value>
+    <value>Продукции успешно получены</value>
   </data>
   <data name="ProductSuccessfullyGot" xml:space="preserve">
-    <value>Продукт успешно получен</value>
+    <value>Продукция успешно получена</value>
   </data>
 </root>

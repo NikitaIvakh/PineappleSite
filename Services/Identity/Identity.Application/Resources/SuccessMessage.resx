@@ -124,33 +124,33 @@
     <value>Вы успешно зарегистрировались</value>
   </data>
   <data name="TokensSuccessfullyDeleted" xml:space="preserve">
-    <value>Токены всех пользователей успешно удалены</value>
+    <value>Токены всех клиентов успешно удалены</value>
   </data>
   <data name="TokenSuccessfullyDeleted" xml:space="preserve">
-    <value>Токен пользователя успешно удален</value>
+    <value>Токен клиента успешно удален</value>
   </data>
   <data name="TokensUpdatedSuccessfully" xml:space="preserve">
     <value>Токены успешно обновлены</value>
   </data>
   <data name="UserProfileSuccessfullyUpdated" xml:space="preserve">
-    <value>Профиль пользователя успешно обновлен</value>
+    <value>Профиль клиента успешно обновлен</value>
   </data>
   <data name="UsersSuccessfullyDeleted" xml:space="preserve">
-    <value>Пользователи успешно удалены</value>
+    <value>Клиенты успешно удалены</value>
   </data>
   <data name="UsersSuccessfullyGeted" xml:space="preserve">
-    <value>Пользователи успешно получены</value>
+    <value>Клиенты успешно получены</value>
   </data>
   <data name="UserSuccessfullyCreated" xml:space="preserve">
-    <value>Пользователь успешно создан</value>
+    <value>Клиент успешно добавлен</value>
   </data>
   <data name="UserSuccessfullyDeleted" xml:space="preserve">
-    <value>Пользователь успешно удален</value>
+    <value>Клиент успешно удален</value>
   </data>
   <data name="UserSuccessfullyGot" xml:space="preserve">
-    <value>Полььзователь успешно получен</value>
+    <value>Клиент успешно получен</value>
   </data>
   <data name="UserSuccessfullyUpdated" xml:space="preserve">
-    <value>Пользователь успешно обновлен</value>
+    <value>Клиент успешно обновлен</value>
   </data>
 </root>

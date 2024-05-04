@@ -69,7 +69,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукты успшено удалены.
+        ///   Looks up a localized string similar to Продукции успшено удалены.
         /// </summary>
         internal static string ProductsSuccessfullyDeleted {
             get {
@@ -78,7 +78,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно добавлен в избранное.
+        ///   Looks up a localized string similar to Продукция успешно добавлена в избранное.
         /// </summary>
         internal static string ProductSuccessfullyAddedToFavourite {
             get {
@@ -87,7 +87,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Продукт успешно удален.
+        ///   Looks up a localized string similar to Продукция успешно удалена.
         /// </summary>
         internal static string ProductSuccessfullyDeleted {
             get {
@@ -96,7 +96,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to В избранном никаких товаров нет.
+        ///   Looks up a localized string similar to В избранном никакой продукции нет.
         /// </summary>
         internal static string ThereAreNoFavouriteProducts {
             get {
