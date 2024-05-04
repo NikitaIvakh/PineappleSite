@@ -139,7 +139,7 @@
     <value>Продукция</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Пользователи</value>
+    <value>Клиенты</value>
   </data>
   <data name="Services provided" xml:space="preserve">
     <value>Оказываемые услуги</value>
@@ -153,6 +153,6 @@
     <value>Логотип Pineapple</value>
   </data>
   <data name="UsersProfile" xml:space="preserve">
-    <value>Профили пользователей</value>
+    <value>Профили клиентов</value>
   </data>
 </root>

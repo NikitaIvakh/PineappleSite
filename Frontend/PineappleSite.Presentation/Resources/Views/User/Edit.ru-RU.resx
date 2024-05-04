@@ -142,7 +142,7 @@
     <value>Роль</value>
   </data>
   <data name="Update user" xml:space="preserve">
-    <value>Обновить пользователя</value>
+    <value>Обновить клиента</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Отображаемое имя</value>

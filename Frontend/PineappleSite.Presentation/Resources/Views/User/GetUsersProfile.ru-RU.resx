@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add a new user" xml:space="preserve">
-    <value>Добавить нового пользователя</value>
+    <value>Добавить нового клиента</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Очистить</value>
@@ -148,7 +148,7 @@
     <value>Фамилия</value>
   </data>
   <data name="List of users" xml:space="preserve">
-    <value>Список пользователей</value>
+    <value>Список клиентов</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Вперед</value>
@@ -160,7 +160,7 @@
     <value>Обновить токены</value>
   </data>
   <data name="Registered users" xml:space="preserve">
-    <value>Зарегистрированные пользователи</value>
+    <value>Зарегистрированные клиенты</value>
   </data>
   <data name="RevokeAllTokens" xml:space="preserve">
     <value>Удалить все токены</value>
@@ -178,7 +178,7 @@
     <value>Обновить</value>
   </data>
   <data name="User Search" xml:space="preserve">
-    <value>Поиск пользователя:</value>
+    <value>Поиск клиента:</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Отображаемое имя</value>
@@ -193,9 +193,9 @@
     <value>Возраст</value>
   </data>
   <data name="Users Profiles" xml:space="preserve">
-    <value>Профили пользователей</value>
+    <value>Профили клиентов</value>
   </data>
   <data name="User Imape" xml:space="preserve">
-    <value>Картинка профиля пользователя</value>
+    <value>Картинка профиля клиента</value>
   </data>
 </root>

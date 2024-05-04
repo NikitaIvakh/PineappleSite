@@ -42,12 +42,15 @@
         <value>Show</value>
     </data>
     <data name="User profile" xml:space="preserve">
-        <value>User profile</value>
+        <value>Profile client</value>
     </data>
     <data name="UserName" xml:space="preserve">
         <value>User name</value>
     </data>
     <data name="User Profile Image" xml:space="preserve">
         <value>User profile image</value>
+    </data>
+    <data name="Admin profile" xml:space="preserve">
+        <value>Admin profile</value>
     </data>
 </root>

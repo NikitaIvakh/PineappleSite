@@ -1,4 +1,6 @@
-﻿@using PineappleSite.Presentation.Extecsions
+﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Mvc.TagHelpers
+@using PineappleSite.Presentation.Extecsions
 @using PineappleSite.Presentation.Utility
 @model PineappleSite.Presentation.Models.Users.UpdateUserProfileViewModel
 
@@ -29,7 +31,17 @@
             <div class="col-md-8">
                 <div class="p-3 py-5">
                     <div class="d-flex justify-content-between align-items-center mb-3">
-                        <h4 style="font-size: 130%">@Localizer["User profile"] - @Model.UserName</h4>
+                        @{
+                            if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
+                            {
+                                <h4 style="font-size: 130%">@Localizer["Admin profile"] - @Model.UserName</h4>
+                            }
+
+                            else
+                            {
+                                <h4 style="font-size: 130%">@Localizer["User profile"] - @Model.UserName</h4>
+                            }
+                        }
                     </div>
                     <div class="row mt-3">
                         <div class="col-md-6">

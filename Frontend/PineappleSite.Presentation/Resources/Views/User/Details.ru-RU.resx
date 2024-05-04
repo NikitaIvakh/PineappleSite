@@ -139,7 +139,7 @@
     <value>Роль</value>
   </data>
   <data name="User details" xml:space="preserve">
-    <value>Детали пользователя</value>
+    <value>Детали клиента</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>Отображаемое имя</value>

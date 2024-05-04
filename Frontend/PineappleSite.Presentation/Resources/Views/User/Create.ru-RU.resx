@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add user" xml:space="preserve">
-    <value>Добавить пользователя</value>
+    <value>Добавить клиента</value>
   </data>
   <data name="EmailAddress" xml:space="preserve">
     <value>Почтовый адрес</value>

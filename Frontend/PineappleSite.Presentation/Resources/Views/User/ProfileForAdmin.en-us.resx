@@ -42,7 +42,7 @@
         <value>Show</value>
     </data>
     <data name="User profile" xml:space="preserve">
-        <value>User profile</value>
+        <value>Client profile</value>
     </data>
     <data name="UserName" xml:space="preserve">
         <value>User name</value>
@@ -52,5 +52,8 @@
     </data>
     <data name="Go back" xml:space="preserve">
         <value>Go back</value>
+    </data>
+    <data name="Admin profile" xml:space="preserve">
+        <value>Admin profile</value>
     </data>
 </root>

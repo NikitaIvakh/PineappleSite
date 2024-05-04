@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Add a new user" xml:space="preserve">
-    <value>Add a new user</value>
+    <value>Add a new client</value>
   </data>
   <data name="Clear" xml:space="preserve">
     <value>Clear</value>
@@ -148,7 +148,7 @@
     <value>Last name</value>
   </data>
   <data name="List of users" xml:space="preserve">
-    <value>List of users</value>
+    <value>List of clients</value>
   </data>
   <data name="Next" xml:space="preserve">
     <value>Next</value>
@@ -160,7 +160,7 @@
     <value>RefreshToken</value>
   </data>
   <data name="Registered users" xml:space="preserve">
-    <value>Registered users</value>
+    <value>Registered clients</value>
   </data>
   <data name="RevokeAllTokens" xml:space="preserve">
     <value>Revoke all tokens</value>
@@ -178,7 +178,7 @@
     <value>Update</value>
   </data>
   <data name="User Search" xml:space="preserve">
-    <value>User Search:</value>
+    <value>Client search:</value>
   </data>
   <data name="UserName" xml:space="preserve">
     <value>User name</value>

@@ -139,7 +139,7 @@
     <value>Products</value>
   </data>
   <data name="Users" xml:space="preserve">
-    <value>Users</value>
+    <value>Clients</value>
   </data>
   <data name="Services provided" xml:space="preserve">
     <value>Services provided</value>
@@ -153,6 +153,6 @@
     <value>Pineapple logo</value>
   </data>
   <data name="UsersProfile" xml:space="preserve">
-    <value>Users profile</value>
+    <value>Clients profile</value>
   </data>
 </root>
