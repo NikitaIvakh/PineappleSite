@@ -130,7 +130,7 @@
     <value>Детали</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Почта</value>
+    <value>Адрес электронной почты</value>
   </data>
   <data name="FirstName" xml:space="preserve">
     <value>Имя</value>

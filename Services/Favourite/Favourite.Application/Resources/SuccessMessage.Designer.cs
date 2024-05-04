@@ -60,7 +60,7 @@ namespace Favourite.Application.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Ваши избранные товары.
+        ///   Looks up a localized string similar to Ваша избранная продукция.
         /// </summary>
         internal static string FavouriteProducts {
             get {

@@ -121,7 +121,7 @@
     <value>Добавить клиента</value>
   </data>
   <data name="EmailAddress" xml:space="preserve">
-    <value>Почтовый адрес</value>
+    <value>Адрес электронной почты</value>
   </data>
   <data name="Go back" xml:space="preserve">
     <value>Вернуться назад</value>

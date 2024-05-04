@@ -28,7 +28,7 @@
         <value>Фамилия</value>
     </data>
     <data name="EmailAddress" xml:space="preserve">
-        <value>Электронная почта</value>
+        <value>Адрес электронной почты</value>
     </data>
     <data name="UserName" xml:space="preserve">
         <value>Отображаемое имя</value>

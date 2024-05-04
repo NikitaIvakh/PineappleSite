@@ -25,39 +25,39 @@
                     <div class="row">
                         <div class="col-12 col-lg-6 pb-4">
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Name"]</div>
+                                <div class="col-3 text-center align-self-center">@Localizer["Name"]</div>
                                 <div class="col-9">
                                     <input asp-for="Name" readonly class="form-control"/>
                                 </div>
                             </div>
 
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Phone"]</div>
+                                <div class="col-3 text-center align-self-center">@Localizer["Phone"]</div>
                                 <div class="col-9">
                                     <input asp-for="PhoneNumber" readonly class="form-control"/>
                                 </div>
                             </div>
 
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Email"]</div>
-                                <div class="col-9">
+                                <div class="col-5 text-center align-self-center">@Localizer["Email"]</div>
+                                <div class="col-7">
                                     <input asp-for="Email" readonly class="form-control"/>
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Delivery Address"]</div>
-                                <div class="col-9">
+                                <div class="col-4 text-center align-self-center">@Localizer["Delivery Address"]</div>
+                                <div class="col-8">
                                     <input asp-for="Address" readonly class="form-control"/>
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Ordrer Time"]</div>
+                                <div class="col-3 text-center align-self-center">@Localizer["Ordrer Time"]</div>
                                 <div class="col-9">
                                     <input value="@Model.OrderTime.ToShortDateString()" readonly class="form-control"/>
                                 </div>
                             </div>
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Delivery Date"]</div>
+                                <div class="col-3 text-center align-self-center">@Localizer["Delivery Date"]</div>
                                 <div class="col-9">
                                     <input value="@Model.DeliveryDate" readonly class="form-control"/>
                                 </div>
@@ -67,13 +67,13 @@
                                 if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)
                                 {
                                     <div class="row my-1">
-                                        <div class="col-3">@Localizer["Session Id"]</div>
+                                        <div class="col-3 text-center align-self-center">@Localizer["Session Id"]</div>
                                         <div class="col-9">
                                             <input asp-for="StripeSessionId" readonly class="form-control"/>
                                         </div>
                                     </div>
                                     <div class="row my-1">
-                                        <div class="col-3">@Localizer["Payment Id"]</div>
+                                        <div class="col-3 text-center align-self-center">@Localizer["Payment Id"]</div>
                                         <div class="col-9">
                                             <input asp-for="PaymentIntentId" readonly class="form-control"/>
                                         </div>
@@ -82,7 +82,7 @@
                             }
 
                             <div class="row my-1">
-                                <div class="col-3">@Localizer["Order status"]</div>
+                                <div class="col-3 text-center align-self-center">@Localizer["Order status"]</div>
                                 <div class="col-9">
                                     <input asp-for="Status" readonly class="form-control"/>
                                 </div>

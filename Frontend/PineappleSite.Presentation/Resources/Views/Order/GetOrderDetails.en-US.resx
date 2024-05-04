@@ -133,7 +133,7 @@
     <value>Delivery Date</value>
   </data>
   <data name="Email" xml:space="preserve">
-    <value>Email</value>
+    <value>Email address</value>
   </data>
   <data name="Name" xml:space="preserve">
     <value>Name</value>
