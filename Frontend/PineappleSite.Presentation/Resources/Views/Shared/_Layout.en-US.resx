@@ -155,4 +155,7 @@
   <data name="UsersProfile" xml:space="preserve">
     <value>Clients profile</value>
   </data>
+  <data name="Shopping cart" xml:space="preserve">
+    <value>Shopping cart</value>
+  </data>
 </root>

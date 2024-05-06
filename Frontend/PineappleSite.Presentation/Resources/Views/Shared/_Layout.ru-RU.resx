@@ -155,4 +155,7 @@
   <data name="UsersProfile" xml:space="preserve">
     <value>Профили клиентов</value>
   </data>
+  <data name="Shopping cart" xml:space="preserve">
+    <value>Корзина</value>
+  </data>
 </root>
