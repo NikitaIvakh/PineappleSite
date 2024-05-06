@@ -23,7 +23,7 @@ public class DeleteUserListRequestHandlerTest : TestCommandHandler
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.Count.Should().Be(2);
-        result.SuccessMessage.Should().Be("Пользователи успешно удалены");
+        result.SuccessMessage.Should().Be("Клиенты успешно удалены");
         result.ErrorMessage.Should().BeNullOrEmpty();
         result.ValidationErrors.Should().BeNullOrEmpty();
     }
@@ -41,7 +41,7 @@ public class DeleteUserListRequestHandlerTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Пользователи не найдены");
+        result.ErrorMessage.Should().Be("Клиенты не найдены");
         result.SuccessMessage.Should().BeNullOrEmpty();
     }
 }

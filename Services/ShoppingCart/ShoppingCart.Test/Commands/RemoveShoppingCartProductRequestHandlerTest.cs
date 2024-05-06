@@ -29,7 +29,7 @@ public sealed class RemoveShoppingCartProductRequestHandlerTest : TestCommandHan
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(205);
-        result.SuccessMessage.Should().Be("Продукт успешно удален");
+        result.SuccessMessage.Should().Be("Продукция успешно удалена");
     }
     
     [Fact]
@@ -50,7 +50,7 @@ public sealed class RemoveShoppingCartProductRequestHandlerTest : TestCommandHan
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Продукты не найдены");
-        result.ValidationErrors.Should().Equal("Продукты не найдены");
+        result.ErrorMessage.Should().Be("Продукции не найдены");
+        result.ValidationErrors.Should().Equal("Продукции не найдены");
     }
 }

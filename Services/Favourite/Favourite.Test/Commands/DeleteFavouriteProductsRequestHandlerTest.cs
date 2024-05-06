@@ -45,6 +45,6 @@ public sealed class DeleteFavouriteProductsRequestHandlerTest : TestCommandHandl
 
         // Assert
         result.StatusCode.Should().Be(404);
-        result.ErrorMessage.Should().Be("Продукты не найдены");
+        result.ErrorMessage.Should().Be("Продукции не найдены");
     }
 }

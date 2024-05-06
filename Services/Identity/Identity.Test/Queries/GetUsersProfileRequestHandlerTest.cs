@@ -22,6 +22,6 @@ public sealed class GetUsersProfileRequestHandlerTest : TestQueryHandler
         result.Data.Should().NotBeNull();
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(200);
-        result.SuccessMessage.Should().Be("Пользователи успешно получены");
+        result.SuccessMessage.Should().Be("Клиенты успешно получены");
     }   
 }

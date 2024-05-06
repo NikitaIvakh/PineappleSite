@@ -38,7 +38,7 @@ public sealed class FavouriteProductUpsertRequestHandlerTest : TestCommandHandle
         result.StatusCode.Should().Be(201);
         result.IsSuccess.Should().BeTrue();
         result.ErrorMessage.Should().BeNullOrEmpty();
-        result.SuccessMessage.Should().Be("Продукт успешно добавлен в избранное");
+        result.SuccessMessage.Should().Be("Продукция успешно добавлена в избранное");
     }
 
     [Fact]
@@ -71,6 +71,6 @@ public sealed class FavouriteProductUpsertRequestHandlerTest : TestCommandHandle
         result.StatusCode.Should().Be(201);
         result.IsSuccess.Should().BeTrue();
         result.ErrorMessage.Should().BeNullOrEmpty();
-        result.SuccessMessage.Should().Be("Продукт успешно добавлен в избранное");
+        result.SuccessMessage.Should().Be("Продукция успешно добавлена в избранное");
     }
 }

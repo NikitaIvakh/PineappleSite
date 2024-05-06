@@ -39,7 +39,7 @@ public sealed class UpdateProductRequestHandlerTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        result.SuccessMessage.Should().Be("Продукт успешно обновлен");
+        result.SuccessMessage.Should().Be("Продукция успешно обновлена");
         result.ValidationErrors.Should().BeNullOrEmpty();
     }
 

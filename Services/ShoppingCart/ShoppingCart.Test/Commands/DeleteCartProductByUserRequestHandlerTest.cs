@@ -32,7 +32,7 @@ public sealed class DeleteCartProductByUserRequestHandlerTest : TestCommandHandl
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(205);
-        result.SuccessMessage.Should().Be("Продукт успешно удален");
+        result.SuccessMessage.Should().Be("Продукция успешно удалена");
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public sealed class DeleteCartProductByUserRequestHandlerTest : TestCommandHandl
         // Assert
         result.IsSuccess.Should().BeFalse();
         result.StatusCode.Should().Be(404);
-        result.ErrorMessage.Should().Be("Продукт не найден");
-        result.ValidationErrors.Should().Equal("Продукт не найден");
+        result.ErrorMessage.Should().Be("Продукция не найдена");
+        result.ValidationErrors.Should().Equal("Продукция не найдена");
     }
 }

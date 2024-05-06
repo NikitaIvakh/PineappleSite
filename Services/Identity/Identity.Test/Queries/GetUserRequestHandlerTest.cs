@@ -44,7 +44,7 @@ public sealed class GetUserRequestHandlerTest : TestQueryHandler
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Такого пользователя не существует");
+        result.ErrorMessage.Should().Be("Такого клиента не существует");
         result.StatusCode.Should().Be((int)StatusCode.NotFound);
     }
 }

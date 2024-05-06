@@ -30,7 +30,7 @@ public sealed class CreateProductRequestHanlderTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        result.SuccessMessage.ShouldBe("Продукт успешно добавлен");
+        result.SuccessMessage.ShouldBe("Продукция успешно добавлена");
         result.ValidationErrors.ShouldBeNull();
     }
 

@@ -30,7 +30,7 @@ public sealed class DeleteUserRequestHandlerTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.SuccessMessage.Should().Be("Пользователь успешно удален");
+        result.SuccessMessage.Should().Be("Клиент успешно удален");
         result.ErrorMessage.Should().BeNullOrEmpty();
         result.ValidationErrors.Should().BeNullOrEmpty();
     }
@@ -50,7 +50,7 @@ public sealed class DeleteUserRequestHandlerTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Такого пользователя не существует");
+        result.ErrorMessage.Should().Be("Такого клиента не существует");
         result.SuccessMessage.Should().BeNullOrEmpty();
     }
 }

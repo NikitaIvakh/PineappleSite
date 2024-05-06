@@ -29,7 +29,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
 
         // Assert
         result.IsSuccess.Should().BeTrue();
-        result.SuccessMessage.Should().Be("Продукт успешно удален");
+        result.SuccessMessage.Should().Be("Продукция успешно удалена");
         result.StatusCode.Should().Be(205);
     }
 
@@ -47,7 +47,7 @@ public sealed class DeleteFavouriteProductRequestHandlerTest : TestCommandHandle
 
         // Assert
         result.IsSuccess.Should().BeFalse();
-        result.ErrorMessage.Should().Be("Продукт не найден");
+        result.ErrorMessage.Should().Be("Продукция не найдена");
         result.StatusCode.Should().Be(404);
     }
 }

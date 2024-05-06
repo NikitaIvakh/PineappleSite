@@ -39,7 +39,7 @@ public sealed class ShoppingCartUpsertRequestHandlerTest : TestCommandHandler
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(201);
-        result.SuccessMessage.Should().Be("Товар успешно добавлен в корзину");
+        result.SuccessMessage.Should().Be("Продукция успешно добавлена в корзину");
     }
 
     [Fact]
@@ -72,6 +72,6 @@ public sealed class ShoppingCartUpsertRequestHandlerTest : TestCommandHandler
         // Assert
         result.IsSuccess.Should().BeTrue();
         result.StatusCode.Should().Be(201);
-        result.SuccessMessage.Should().Be("Товар успешно добавлен в корзину");
+        result.SuccessMessage.Should().Be("Продукция успешно добавлена в корзину");
     }
 }

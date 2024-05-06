@@ -23,7 +23,7 @@ public sealed class DeleteProductRequestHandlerTest : TestCommandHandler
 
         // Assert
         result.IsSuccess.ShouldBeTrue();
-        result.SuccessMessage.Should().Be("Продукт успешно удален");
+        result.SuccessMessage.Should().Be("Продукция успешно удалена");
         result.ValidationErrors.ShouldBeNull();
     }
 
