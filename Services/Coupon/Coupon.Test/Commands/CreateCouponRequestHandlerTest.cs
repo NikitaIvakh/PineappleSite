@@ -24,7 +24,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         );
 
         StripeConfiguration.ApiKey = "sk_test_51O90F4D1JYWWRL6F1K5vbfmQJeQuN8YRrNQYhq1I3l6OHyRqe6kzhS6wYYelu1YXtjftts7Ela0WDdmIafeGRS6n00AL3kb8tV";
-        
+    
         // Act
         var result = await handler.Handle(new CreateCouponRequest(createCouponDto), CancellationToken.None);
 
@@ -34,7 +34,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().BeNullOrEmpty();
         result.ValidationErrors.Should().BeNullOrEmpty();
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_CouponCode_Max()
     {
@@ -55,7 +55,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal("Код купона не должен превышать 20 символов");
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_CouponCode_Min()
     {
@@ -76,7 +76,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal("Код купона должен превышать 3 символа");
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_DiscountAmount_Max()
     {
@@ -101,7 +101,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
            "Сумма скидки не должна превышать стоимость продукта"
         );
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_DiscountAmount_Min()
     {
@@ -122,7 +122,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ErrorMessage.Should().Be("Купон не может быть создан");
         result.ValidationErrors.Should().Equal("Сумма скидки купона должна превышать 2 единицы");
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_MinAmount_Max()
     {
@@ -146,7 +146,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
             "Стоимость товара должна быть ниже 101 единицы"
         );
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_MinAmount_Min()
     {
@@ -171,7 +171,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
            "Стоимость товара должна превышать 2 единицы"
         );
     }
-    
+
     [Fact]
     public async Task CreateCouponRequestHandler_FailOrWrong_AllFields()
     {
