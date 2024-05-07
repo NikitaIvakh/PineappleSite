@@ -7,7 +7,6 @@ using Orders.Test.Common;
 
 namespace Orders.Test.Commands;
 
-
 public sealed class CreateOrderRequestHandlerTest : TestCommandsHandler
 {
     [Fact]
