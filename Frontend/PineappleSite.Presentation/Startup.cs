@@ -12,6 +12,8 @@ namespace PineappleSite.Presentation;
 
 public static class Startup
 {
+    private const string GatewayUrl = "https://localhost:7777";
+
     public static void ConfigurePresentationServices(this IServiceCollection services)
     {
         ConfigureHttpClients(services);
@@ -22,22 +24,22 @@ public static class Startup
     private static void ConfigureHttpClients(IServiceCollection services)
     {
         services.AddHttpClient<ICouponClient, CouponClient>(couponClient =>
-            couponClient.BaseAddress = new Uri("https://localhost:7777"));
+            couponClient.BaseAddress = new Uri(GatewayUrl));
 
         services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient =>
-            identityClient.BaseAddress = new Uri("https://localhost:7777"));
+            identityClient.BaseAddress = new Uri(GatewayUrl));
 
         services.AddHttpClient<IProductClient, ProductClient>(productClient =>
-            productClient.BaseAddress = new Uri("https://localhost:7777"));
+            productClient.BaseAddress = new Uri(GatewayUrl));
 
         services.AddHttpClient<IFavouriteClient, FavouriteClient>(favoritesClient =>
-            favoritesClient.BaseAddress = new Uri("https://localhost:7777"));
+            favoritesClient.BaseAddress = new Uri(GatewayUrl));
 
         services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart =>
-            cart.BaseAddress = new Uri("https://localhost:7777"));
+            cart.BaseAddress = new Uri(GatewayUrl));
 
         services.AddHttpClient<IOrderClient, OrderClient>(order =>
-            order.BaseAddress = new Uri("https://localhost:7777"));
+            order.BaseAddress = new Uri(GatewayUrl));
     }
 
     private static void ConfigureServices(IServiceCollection services)
