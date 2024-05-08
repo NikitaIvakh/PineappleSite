@@ -11,7 +11,7 @@ applicationBuilder.Services.AddHttpContextAccessor();
 applicationBuilder.Services.AddHttpClient();
 applicationBuilder.Services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
 
-applicationBuilder.Services.ConfigurePresentationServices();
+applicationBuilder.Services.ConfigurePresentationServices(applicationBuilder.Configuration);
 
 applicationBuilder.Services.AddLocalization(options =>
 {

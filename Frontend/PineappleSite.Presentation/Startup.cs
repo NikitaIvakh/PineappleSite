@@ -12,34 +12,34 @@ namespace PineappleSite.Presentation;
 
 public static class Startup
 {
-    private const string GatewayUrl = "https://localhost:7777";
-
-    public static void ConfigurePresentationServices(this IServiceCollection services)
+    public static void ConfigurePresentationServices(this IServiceCollection services, IConfiguration congiguration)
     {
-        ConfigureHttpClients(services);
+        ConfigureHttpClients(services, congiguration);
         ConfigureServices(services);
         ConfigureCookieFile(services);
     }
 
-    private static void ConfigureHttpClients(IServiceCollection services)
+    private static void ConfigureHttpClients(IServiceCollection services, IConfiguration configuration)
     {
+        var gatewayUrl = configuration["ConnectionStrings:GatewayUrl"];
+
         services.AddHttpClient<ICouponClient, CouponClient>(couponClient =>
-            couponClient.BaseAddress = new Uri(GatewayUrl));
+            couponClient.BaseAddress = new Uri(gatewayUrl!));
 
         services.AddHttpClient<IIdentityClient, IdentityClient>(identityClient =>
-            identityClient.BaseAddress = new Uri(GatewayUrl));
+            identityClient.BaseAddress = new Uri(gatewayUrl!));
 
         services.AddHttpClient<IProductClient, ProductClient>(productClient =>
-            productClient.BaseAddress = new Uri(GatewayUrl));
+            productClient.BaseAddress = new Uri(gatewayUrl!));
 
         services.AddHttpClient<IFavouriteClient, FavouriteClient>(favoritesClient =>
-            favoritesClient.BaseAddress = new Uri(GatewayUrl));
+            favoritesClient.BaseAddress = new Uri(gatewayUrl!));
 
         services.AddHttpClient<IShoppingCartClient, ShoppingCartClient>(cart =>
-            cart.BaseAddress = new Uri(GatewayUrl));
+            cart.BaseAddress = new Uri(gatewayUrl!));
 
         services.AddHttpClient<IOrderClient, OrderClient>(order =>
-            order.BaseAddress = new Uri(GatewayUrl));
+            order.BaseAddress = new Uri(gatewayUrl!));
     }
 
     private static void ConfigureServices(IServiceCollection services)
