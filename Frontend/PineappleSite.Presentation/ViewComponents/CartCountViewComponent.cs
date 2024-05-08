@@ -1,8 +1,8 @@
-﻿using System.Net.Http.Headers;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PineappleSite.Presentation.Contracts;
 using PineappleSite.Presentation.Services.ShoppingCarts;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 
 namespace PineappleSite.Presentation.ViewComponents;
 
@@ -17,9 +17,7 @@ public sealed class CartCountViewComponent(
         AddBearerToken();
         try
         {
-            var userId = contextAccessor.HttpContext!.User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)
-                ?.FirstOrDefault()?.Value;
-
+            var userId = contextAccessor.HttpContext!.User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()?.Value;
             var result = await shoppingCartService.GetCartAsync(userId!);
             var cartItemsCount = result.Data!.CartDetails.Count;
             return Content(cartItemsCount.ToString());
