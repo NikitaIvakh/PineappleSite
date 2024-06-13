@@ -33,7 +33,11 @@ public class GetProductsRequestHandler(IProductRepository repository, IMemoryCac
                 };
             }
 
-            var getAllProducts = await repository.GetAll().OrderBy(key => key.Id).ToListAsync(cancellationToken);
+            var getAllProducts = await repository
+                    .GetAll()
+                    .OrderBy(key => key.ProductCategory)
+                    .ThenBy(key => key.Name)
+                    .ToListAsync(cancellationToken);
 
             if (getAllProducts.Count == 0)
             {

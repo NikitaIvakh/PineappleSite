@@ -37,7 +37,10 @@ public sealed class GetCouponsRequestHandler(
                 }
             }
 
-            var couponsFromDb = await couponRepository.GetAllAsync().OrderByDescending(key => key.CouponCode)
+            var couponsFromDb = await couponRepository
+                .GetAllAsync()
+                .OrderByDescending(key => key.DiscountAmount)
+                .ThenBy(key => key.MinAmount)
                 .ToListAsync(cancellationToken);
 
             if (couponsFromDb.Count == 0)

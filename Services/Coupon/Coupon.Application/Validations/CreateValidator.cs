@@ -17,9 +17,19 @@ public sealed class CreateValidator : AbstractValidator<CreateCouponDto>
             .MustAsync(DiscountAmountIsNotHigherThenProductAmount)
             .WithMessage("Сумма скидки не должна превышать стоимость продукта");
 
+        RuleFor(key => key.DiscountAmount).NotEmpty().NotNull()
+            .MustAsync(DifferenceBetweenDiscountAmountAndMinAmount)
+            .WithMessage("Разница между скидкой и стоимостью продукции должна быть в пределах 30 единиц");
+
         RuleFor(key => key.MinAmount).NotEmpty().NotNull()
             .LessThanOrEqualTo(101).WithMessage("Стоимость товара должна быть ниже 101 единицы")
             .GreaterThanOrEqualTo(2).WithMessage("Стоимость товара должна превышать 2 единицы");
+    }
+
+    private static Task<bool> DifferenceBetweenDiscountAmountAndMinAmount(CreateCouponDto coupon, double discountAmount,
+        ValidationContext<CreateCouponDto> arg3, CancellationToken arg4)
+    {
+        return Task.FromResult(coupon.MinAmount - 30 > discountAmount);
     }
 
     private static Task<bool> DiscountAmountIsNotHigherThenProductAmount(CreateCouponDto coupon,
