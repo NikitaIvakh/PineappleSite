@@ -66,8 +66,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Price"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <textarea class="form-control" asp-for="Price"></textarea>
-                    <span class="text-danger" asp-validation-for="Price"></span>
+                    <textarea class="form-control" asp-for="Price" type="number"></textarea>
+                    <span class="text-danger" asp-validation-for="Price" type="number"></span>
                 </div>
             </div>
             <div class="row">

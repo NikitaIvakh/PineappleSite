@@ -31,8 +31,8 @@
                                     <span class="badge bg-success text-white p-3 border" style="font-size: 15px">@Model.Product.ProductCategory.GetDisplayName()</span>
                                     <p class="text-secondary">Описание: @Html.Raw(Model.Product.Description)</p>
                                     <div class="row mx-0">
-                                        <input class="form-control" asp-for="Product.Count"/>
-                                        <span class="text-danger" asp-validation-for="Product.Count"></span>
+                                        <input class="form-control" asp-for="Product.Count" type="number">
+                                        <span class="text-danger" asp-validation-for="Product.Count" type="number"></span>
                                     </div>
                                 </div>
                             </div>
