@@ -244,6 +244,15 @@ public sealed class UserController(
     {
         try
         {
+            var userIdExistUser = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
+                ?.Value;
+
+            if (userId == userIdExistUser)
+            {
+                TempData["error"] = "Вы не можете сами себя удалить!";
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            }
+
             var deleteUser = new DeleteUserViewModel(userId);
             var response = await userService.DeleteUserAsync(deleteUser);
 
@@ -376,7 +385,7 @@ public sealed class UserController(
             return RedirectToAction(nameof(Index));
         }
     }
-    
+
     public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds, int? pageNumber)
     {
         try
