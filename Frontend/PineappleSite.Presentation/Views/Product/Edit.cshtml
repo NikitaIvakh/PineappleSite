@@ -81,10 +81,18 @@
                 </div>
             </div>
             <div class="col-5 offset-1">
-                <a class="btn-primary btn form-control" asp-action="GetProducts" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Go back to the products"]</a>
+                <a class="btn-primary btn form-control"
+                   asp-action="GetProducts"
+                   asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                   asp-route-searchProduct="@Context.Request.Query["searchProduct"]">
+                    @Localizer["Go back to the products"]
+                </a>
             </div>
             <div class="col-5">
-                <input type="submit" value="@Localizer["Update product"]" asp-route-pageNumber="@Context.Request.Query["pageNumber"]" class="btn btn-success form-control"/>
+                <input type="submit" value="@Localizer["Update product"]"
+                       asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                       asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
+                       class="btn btn-success form-control"/>
             </div>
         </div>
     </div>

@@ -72,7 +72,7 @@ public sealed class ProductController(
     }
 
     // GET: ProductController/Details/5
-    public async Task<ActionResult> Details(int productId)
+    public async Task<ActionResult> Details(int productId, int? pageNumber, string? searchProduct)
     {
         try
         {
@@ -94,13 +94,15 @@ public sealed class ProductController(
             }
 
             TempData["error"] = product.ValidationErrors;
-            return RedirectToAction(nameof(GetProducts));
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts));
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
@@ -113,7 +115,8 @@ public sealed class ProductController(
     // POST: ProductController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(CreateProductViewModel createProductViewModel, int? pageNumber)
+    public async Task<ActionResult> Create(CreateProductViewModel createProductViewModel, int? pageNumber,
+        string? searchProduct)
     {
         try
         {
@@ -122,23 +125,24 @@ public sealed class ProductController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
     // GET: ProductController/Edit/5
-    public async Task<ActionResult> Edit(int productId)
+    public async Task<ActionResult> Edit(int productId, int? pageNumber, string? searchProduct)
     {
         try
         {
@@ -160,21 +164,24 @@ public sealed class ProductController(
             }
 
             TempData["error"] = product.ValidationErrors;
-            return RedirectToAction(nameof(GetProducts));
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts));
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
     // POST: ProductController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(UpdateProductViewModel updateProductViewModel, int? pageNumber)
+    public async Task<ActionResult> Edit(UpdateProductViewModel updateProductViewModel, int? pageNumber,
+        string? searchProduct)
     {
         try
         {
@@ -183,12 +190,13 @@ public sealed class ProductController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
             return RedirectToAction(nameof(Edit),
-                new { pageNumber = pageNumber, productId = updateProductViewModel.Id });
+                new { pageNumber = pageNumber, productId = updateProductViewModel.Id, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
@@ -196,14 +204,14 @@ public sealed class ProductController(
             TempData["error"] = "Такой продукт уже существует";
             ModelState.AddModelError(string.Empty, exception.Message);
             return RedirectToAction(nameof(Edit),
-                new { pageNumber = pageNumber, productId = updateProductViewModel.Id });
+                new { pageNumber = pageNumber, productId = updateProductViewModel.Id, searchProduct = searchProduct });
         }
     }
 
     // POST: ProductController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(int productId, int? pageNumber)
+    public async Task<ActionResult> Delete(int productId, int? pageNumber, string? searchProduct)
     {
         try
         {
@@ -216,21 +224,25 @@ public sealed class ProductController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
-    public async Task<ActionResult> DeleteProductList(List<int> selectedProducts, int? pageNumber)
+    public async Task<ActionResult> DeleteProductList(List<int> selectedProducts, int? pageNumber,
+        string? searchProduct)
     {
         try
         {
@@ -249,17 +261,20 @@ public sealed class ProductController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 }

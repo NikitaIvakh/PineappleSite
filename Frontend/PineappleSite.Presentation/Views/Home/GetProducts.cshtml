@@ -18,8 +18,16 @@
             <div class="input-group mb-3">
                 <input type="text" class="form-control" name="searchProduct" id="searchProduct" value="@ViewData["SearchProduct"]"/>
                 <div class="input-group-append">
-                    <button type="submit" class="btn btn-primary search-button" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Search"]</button>
-                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Clear"]</button>
+                    <button type="submit" class="btn btn-primary search-button"
+                            asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                            asp-route-searchProduct="@Context.Request.Query["searchProduct"]">
+                        @Localizer["Search"]
+                    </button>
+                    <button type="button" id="clearSearch" class="btn btn-secondary clear-button"
+                            asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                            asp-route-searchProduct="@Context.Request.Query["searchProduct"]">
+                        @Localizer["Clear"]
+                    </button>
                 </div>
             </div>
         </div>
@@ -45,7 +53,14 @@
                                     </div>
                                     <div class="row mt-auto mb-0">
                                         <div class="col">
-                                            <a class="btn btn-primary" asp-controller="Home" asp-action="GetProductDetails" asp-route-id="@product.Id" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["View details"]</a>
+                                            <a class="btn btn-primary"
+                                               asp-controller="Home"
+                                               asp-action="GetProductDetails"
+                                               asp-route-id="@product.Id"
+                                               asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                                               asp-route-searchProduct="@Context.Request.Query["searchProduct"]">
+                                                @Localizer["View details"]
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
@@ -60,6 +75,7 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex - 1)"
+                       asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
                        class="page-item">
                         <span>&laquo; @Localizer["Previous"]</span>
                     </a>
@@ -69,6 +85,7 @@
                     <a asp-action="GetProducts"
                        asp-route-currentFilter="@ViewData["CurrentFilter"]"
                        asp-route-pageNumber="@(Model.PageIndex + 1)"
+                       asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
                        class="page-item">
                         <span>@Localizer["Next"] &raquo;</span>
                     </a>

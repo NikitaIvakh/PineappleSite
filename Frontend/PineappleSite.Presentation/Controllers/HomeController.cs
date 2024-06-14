@@ -77,7 +77,7 @@ public sealed class HomeController(
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetProductDetails(int id)
+    public async Task<IActionResult> GetProductDetails(int id, int? pageNumber, string? searchProduct)
     {
         try
         {
@@ -135,19 +135,21 @@ public sealed class HomeController(
             }
 
             TempData["error"] = product.ValidationErrors;
-            return RedirectToAction(nameof(GetProducts));
+            return RedirectToAction(nameof(GetProducts),
+                new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
     [HttpPost]
     [ActionName("AddToCart")]
-    public async Task<IActionResult> AddToCart(ProductFavouriteViewModel productViewModel, int? pageNumber)
+    public async Task<IActionResult> AddToCart(ProductFavouriteViewModel productViewModel, int? pageNumber,
+        string? searchProduct)
     {
         try
         {
@@ -167,23 +169,25 @@ public sealed class HomeController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
     [HttpPost]
     [ActionName("AddToFavorites")]
-    public async Task<IActionResult> AddToFavorites(ProductFavouriteViewModel productViewModel, int? pageNumber)
+    public async Task<IActionResult> AddToFavorites(ProductFavouriteViewModel productViewModel, int? pageNumber,
+        string? searchProduct)
     {
         try
         {
@@ -199,17 +203,18 @@ public sealed class HomeController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetProducts), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetProducts),
+                    new { pageNumber = pageNumber, searchProduct = searchProduct });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
 
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchProduct = searchProduct });
         }
     }
 
