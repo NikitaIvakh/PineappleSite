@@ -76,7 +76,12 @@
                 </div>
             </div>
             <div class="col-5 offset-3">
-                <a class="btn-primary btn form-control" asp-action="Index" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Go back"]</a>
+                <a class="btn-primary btn form-control"
+                   asp-action="Index"
+                   asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                   asp-route-searchUser="@Context.Request.Query["searchUser"]">
+                    @Localizer["Go back"]
+                </a>
             </div>
         </div>
     </div>

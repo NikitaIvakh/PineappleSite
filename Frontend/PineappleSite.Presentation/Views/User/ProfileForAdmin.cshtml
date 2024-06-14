@@ -102,10 +102,21 @@
                         </div>
                     </div>
                     <div class="mt-3">
-                        <button class="btn btn-primary profile-button" value="Обновить" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["SaveProfile"]</button>
+                        <button class="btn btn-primary profile-button"
+                                value="Обновить"
+                                asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                                asp-route-searchUser="@Context.Request.Query["searchUser"]">
+                            @Localizer["SaveProfile"]
+                        </button>
                     </div>
                     <div class="mt-3">
-                        <a class="btn btn-primary profile-button" asp-controller="User" asp-action="GetUsersProfile" asp-route-pageNumber="@Context.Request.Query["pageNumber"]">@Localizer["Go back"]</a>
+                        <a class="btn btn-primary profile-button"
+                           asp-controller="User"
+                           asp-action="GetUsersProfile"
+                           asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                           asp-route-searchUser="@Context.Request.Query["searchUser"]">
+                            @Localizer["Go back"]
+                        </a>
                     </div>
                 </div>
             </div>

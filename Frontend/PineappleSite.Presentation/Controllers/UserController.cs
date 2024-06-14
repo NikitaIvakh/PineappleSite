@@ -54,11 +54,11 @@ public sealed class UserController(
                 }
 
                 TempData["error"] = "Нет результатов";
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = users.ValidationErrors;
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
@@ -109,11 +109,11 @@ public sealed class UserController(
                 }
 
                 TempData["error"] = "Нет результатов";
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = usersProfile.ValidationErrors;
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
@@ -124,7 +124,7 @@ public sealed class UserController(
     }
 
     // GET: UserController/Details/5
-    public async Task<ActionResult> Details(string userId)
+    public async Task<ActionResult> Details(string userId, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -137,13 +137,13 @@ public sealed class UserController(
             }
 
             TempData["error"] = user.ValidationErrors;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
@@ -156,7 +156,7 @@ public sealed class UserController(
     // POST: UserController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(CreateUserViewModel createUserViewModel, int? pageNumber)
+    public async Task<ActionResult> Create(CreateUserViewModel createUserViewModel, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -165,22 +165,22 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
     // GET: UserController/Edit/5
-    public async Task<ActionResult> Edit(string userId)
+    public async Task<ActionResult> Edit(string userId, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -201,20 +201,20 @@ public sealed class UserController(
             }
 
             TempData["error"] = userWithRoles.ValidationErrors;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
     // POST: UserController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(UpdateUserViewModel updateUser, int? pageNumber)
+    public async Task<ActionResult> Edit(UpdateUserViewModel updateUser, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -223,24 +223,25 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Edit), new { pageNumber = pageNumber, userId = updateUser.Id });
+            return RedirectToAction(nameof(Edit),
+                new { pageNumber = pageNumber, userId = updateUser.Id, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
     // POST: UserController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(string userId, int? pageNumber)
+    public async Task<ActionResult> Delete(string userId, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -250,7 +251,7 @@ public sealed class UserController(
             if (userId == userIdExistUser)
             {
                 TempData["error"] = "Вы не можете сами себя удалить!";
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             var deleteUser = new DeleteUserViewModel(userId);
@@ -259,17 +260,17 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
@@ -306,7 +307,8 @@ public sealed class UserController(
 
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> ProfileForAdmin(UpdateUserProfileViewModel updateUserProfile, int? pageNumber)
+    public async Task<ActionResult> ProfileForAdmin(UpdateUserProfileViewModel updateUserProfile, int? pageNumber,
+        string? searchUser)
     {
         try
         {
@@ -315,17 +317,18 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(GetUsersProfile), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(GetUsersProfile),
+                    new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(ProfileForAdmin), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(ProfileForAdmin), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(GetUsersProfile), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(GetUsersProfile), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
@@ -386,7 +389,7 @@ public sealed class UserController(
         }
     }
 
-    public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds, int? pageNumber)
+    public async Task<ActionResult> DeleteUserList(List<string> selectedUserIds, int? pageNumber, string? searchUser)
     {
         try
         {
@@ -402,17 +405,17 @@ public sealed class UserController(
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchUser = searchUser });
         }
     }
 
