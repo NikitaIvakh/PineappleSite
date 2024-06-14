@@ -31,8 +31,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Discount Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="DiscountAmount" type="number"/>
-                    <span class="text-danger" asp-validation-for="DiscountAmount" type="number"></span>
+                    <input class="form-control" asp-for="DiscountAmount" type="number" inputmode="decimal"/>
+                    <span class="text-danger" asp-validation-for="DiscountAmount" type="number" inputmode="decimal"></span>
                 </div>
             </div>
             <div class="row">
@@ -40,8 +40,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Min Amount"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <input class="form-control" asp-for="MinAmount" type="number"/>
-                    <span class="text-danger" asp-validation-for="MinAmount" type="number"></span>
+                    <input class="form-control" asp-for="MinAmount" type="number" inputmode="decimal"/>
+                    <span class="text-danger" asp-validation-for="MinAmount" type="number" inputmode="decimal"></span>
                 </div>
             </div>
             <div class="col-5 offset-1">
