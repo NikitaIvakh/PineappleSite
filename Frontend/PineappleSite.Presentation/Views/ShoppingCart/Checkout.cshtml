@@ -3,7 +3,7 @@
 
 @{
     ViewData["Title"] = Localizer["Creating an order"];
-    DateTime currentDate = DateTime.Now;
+    DateTime currentDate = DateTime.Now.AddDays(1);
     DateTime maxDate = currentDate.AddDays(3).Date;
     string minTime = "09:00";
     string maxTime = "21:00";
