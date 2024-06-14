@@ -13,6 +13,8 @@ public sealed class OrderDetailsTypeConfiguration : IEntityTypeConfiguration<Ord
         builder.HasOne(key => key.OrderHeader).WithMany(key => key.OrderDetails)
             .HasForeignKey(key => key.OrderHeaderId);
 
+        builder.Property(key => key.Price).HasColumnType("numeric(10, 2)");
+
         builder.Ignore(key => key.Product);
     }
 }

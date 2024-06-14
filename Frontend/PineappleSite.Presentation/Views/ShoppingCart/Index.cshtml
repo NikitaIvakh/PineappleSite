@@ -90,7 +90,7 @@
                                 }
                             </div>
                             <div class="col-6 text-end">
-                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Model.Data.CartHeader.CartTotal Byn<br/></span>
+                                <span class="text-danger" style="font-size:21px;">@Localizer["Total cost"] @Math.Round(Model.Data.CartHeader.CartTotal, 2) Byn<br/></span>
                                 @{
                                     if (Model.Data.CartHeader.Discount > 0)
                                     {

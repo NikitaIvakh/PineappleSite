@@ -31,7 +31,7 @@
                                     <span class="badge bg-success text-white p-3 border" style="font-size: 15px">@Model.Product.ProductCategory.GetDisplayName()</span>
                                     <p class="text-secondary">Описание: @Html.Raw(Model.Product.Description)</p>
                                     <div class="row mx-0">
-                                        <input class="form-control" asp-for="Product.Count" type="number">
+                                        <input class="form-control" asp-for="Product.Count" type="number" step="1">
                                         <span class="text-danger" asp-validation-for="Product.Count" type="number"></span>
                                     </div>
                                 </div>
@@ -52,10 +52,12 @@
                 </div>
                 <div class="col-12 col-md-6 text-end">
                     <div class="d-flex justify-content-end">
-                        <button asp-action="AddToCart" asp-controller="Home" value="@Model.Product.Id" type="submit" 
-                                asp-route-pageNumber="@Context.Request.Query["pageNumber"]" 
+                        <button asp-action="AddToCart" asp-controller="Home" value="@Model.Product.Id" type="submit"
+                                asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
                                 asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
-                                class="btn btn-primary form-control btn-lg me-2" style="height:50px;">@Localizer["AddToCart"]</button>
+                                class="btn btn-primary form-control btn-lg me-2" style="height:50px;">
+                            @Localizer["AddToCart"]
+                        </button>
                         @{
                             if (Model.Favourite != null && Model.Favourite.FavouriteDetails != null && Model.Favourite.FavouriteDetails.Any(fd => fd.ProductId == Model.Product.Id))
                             {

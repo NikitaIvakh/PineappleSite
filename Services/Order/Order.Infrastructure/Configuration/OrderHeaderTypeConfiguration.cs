@@ -11,5 +11,8 @@ public sealed class OrderHeaderTypeConfiguration : IEntityTypeConfiguration<Orde
         builder.HasKey(key => key.OrderHeaderId);
         builder.Property(key => key.UserId).IsRequired(false);
         builder.Property(key => key.CouponCode).IsRequired(false);
+
+        builder.Property(key => key.Discount).HasColumnType("numeric(10, 2)");
+        builder.Property(key => key.OrderTotal).HasColumnType("numeric(10, 2)");
     }
 }

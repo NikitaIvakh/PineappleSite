@@ -96,7 +96,7 @@ public sealed class ProductService(
                 product.Name,
                 product.Description,
                 (ProductCategory?)product.ProductCategory,
-                product.Price,
+                (double)product.Price,
                 avatarFileParameter);
 
             if (apiResponse.IsSuccess)
@@ -146,7 +146,7 @@ public sealed class ProductService(
                 product.Name,
                 product.Description,
                 (ProductCategory?)product.ProductCategory,
-                product.Price,
+                (double)product.Price,
                 avatarFileParameter,
                 product.ImageUrl,
                 product.ImageLocalPath);

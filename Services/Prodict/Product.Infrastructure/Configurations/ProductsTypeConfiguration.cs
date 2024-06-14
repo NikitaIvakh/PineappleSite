@@ -11,8 +11,9 @@ public sealed class ProductsTypeConfiguration : IEntityTypeConfiguration<Product
     {
         builder.HasKey(key => key.Id);
         builder.Property(key => key.ProductCategory).HasConversion<string>();
+        builder.Property(key => key.Price).HasColumnType("numeric(10, 2)");
 
-        SeedData(builder);
+        // SeedData(builder);
     }
 
     private static void SeedData(EntityTypeBuilder<ProductEntity> builder)

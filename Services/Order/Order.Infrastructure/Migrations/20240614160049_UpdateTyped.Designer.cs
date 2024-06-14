@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Order.Infrastructure;
@@ -11,9 +12,11 @@ using Order.Infrastructure;
 namespace Order.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240614160049_UpdateTyped")]
+    partial class UpdateTyped
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace Order.Infrastructure.Migrations
                     b.Property<int>("OrderHeaderId")
                         .HasColumnType("integer");
 
-                    b.Property<double>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric(10, 2)");
 
                     b.Property<int>("ProductId")
@@ -69,7 +72,7 @@ namespace Order.Infrastructure.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<double>("Discount")
+                    b.Property<decimal>("Discount")
                         .HasColumnType("numeric(10, 2)");
 
                     b.Property<string>("Email")
@@ -81,7 +84,7 @@ namespace Order.Infrastructure.Migrations
                     b.Property<DateTime>("OrderTime")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<double>("OrderTotal")
+                    b.Property<decimal>("OrderTotal")
                         .HasColumnType("numeric(10, 2)");
 
                     b.Property<string>("PaymentIntentId")

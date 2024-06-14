@@ -20,7 +20,7 @@ public sealed class CreateProductViewModel
 
     [Required(ErrorMessage = "Поле обязательно к заполнению")]
     [Range(5, 1000, ErrorMessage = "Стоимость товара доложна быть более 5, но не более 1000")]
-    public double Price { get; init; }
+    public decimal Price { get; init; }
 
     public IFormFile? Avatar { get; init; }
 

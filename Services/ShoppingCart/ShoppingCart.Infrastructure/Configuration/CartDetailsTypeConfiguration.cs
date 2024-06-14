@@ -10,6 +10,7 @@ public sealed class CartDetailsTypeConfiguration : IEntityTypeConfiguration<Cart
     {
         builder.HasKey(key => key.CartDetailsId);
         builder.HasOne(key => key.CartHeader).WithMany().HasForeignKey(key => key.CartHeaderId);
+        builder.Property(key => key.Count).HasColumnType("numeric(10, 2)");
 
         builder.Ignore(key => key.Product);
     }
