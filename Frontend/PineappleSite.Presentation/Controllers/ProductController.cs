@@ -156,7 +156,7 @@ public sealed class ProductController(
                     Name = product.Data.Name,
                     Description = product.Data.Description,
                     ProductCategory = product.Data.ProductCategory,
-                    Price = (decimal)product.Data.Price,
+                    Price = product.Data.Price,
                     ImageUrl = product.Data.ImageUrl,
                 };
 

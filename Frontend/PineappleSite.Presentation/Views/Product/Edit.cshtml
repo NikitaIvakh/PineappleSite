@@ -41,8 +41,8 @@
                     <label class="control-label pt-2" style="font-size:20px;">@Localizer["Description"]</label>
                 </div>
                 <div class="col-6 pb-3">
-                    <textarea class="form-control" asp-for="Description"></textarea>
-                    <span class="text-danger" asp-validation-for="Description"></span>
+                    <textarea class="form-control" asp-for="Description" type="text"></textarea>
+                    <span class="text-danger" asp-validation-for="Description" type="text"></span>
                 </div>
             </div>
             <div class="row">
@@ -105,7 +105,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        $('input').on('input', function () {
+        $('input[type="text"]').on('input', function () {
             $(this).val($(this).val().replace(/^\s+/, ''));
         });
     });

@@ -146,7 +146,7 @@ public sealed class ProductService(
                 product.Name,
                 product.Description,
                 (ProductCategory?)product.ProductCategory,
-                (double)product.Price,
+                product.Price,
                 avatarFileParameter,
                 product.ImageUrl,
                 product.ImageLocalPath);
