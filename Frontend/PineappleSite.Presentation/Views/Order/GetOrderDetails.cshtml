@@ -62,6 +62,12 @@
                                     <input value="@Model.DeliveryDate" readonly class="form-control"/>
                                 </div>
                             </div>
+                            @* <div class="row my-1"> *@
+                            @*     <div class="col-3 text-center align-self-center">@Localizer["Coupon Code"]</div> *@
+                            @*     <div class="col-9"> *@
+                            @*         <input value="@Model.CouponCode" readonly class="form-control"/> *@
+                            @*     </div> *@
+                            @* </div> *@
 
                             @{
                                 if (User.Claims.Where(key => key.Type == ClaimTypes.Role)?.FirstOrDefault()?.Value == StaticDetails.RoleAdmin)

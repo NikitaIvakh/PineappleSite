@@ -65,7 +65,7 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
     }
 
     // GET: CouponController/Details/5
-    public async Task<ActionResult> Details(string couponId)
+    public async Task<ActionResult> Details(string couponId, string? searchCode)
     {
         try
         {
@@ -77,7 +77,7 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             }
 
             TempData["error"] = coupon.ValidationErrors;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new {searchCode = searchCode});
         }
 
         catch (Exception exception)
@@ -96,7 +96,7 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
     // POST: CouponController/Create
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Create(CreateCouponViewModel couponViewModel, int? pageNumber)
+    public async Task<ActionResult> Create(CreateCouponViewModel couponViewModel, int? pageNumber, string? searchCode)
     {
         try
         {
@@ -105,22 +105,22 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Create), new { pageNumber = pageNumber, searchCode = searchCode });
         }
 
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
     }
 
     // GET: CouponController/Edit/5
-    public async Task<ActionResult> Edit(string couponId)
+    public async Task<ActionResult> Edit(string couponId, string? searchCode)
     {
         try
         {
@@ -140,20 +140,20 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             }
 
             TempData["error"] = coupon.ValidationErrors;
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new{searchCode = searchCode});
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new{searchCode = searchCode});
         }
     }
 
     // POST: CouponController/Edit/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Edit(string couponId, UpdateCouponViewModel updateCoupon, int? pageNumber)
+    public async Task<ActionResult> Edit(string couponId, UpdateCouponViewModel updateCoupon, int? pageNumber, string? searchCode)
     {
         try
         {
@@ -162,24 +162,24 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Edit), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Edit), new { pageNumber = pageNumber, searchCode = searchCode });
         }
 
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
     }
 
     // POST: CouponController/Delete/5
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<ActionResult> Delete(string couponId, DeleteCouponViewModel deleteCoupon, int? pageNumber)
+    public async Task<ActionResult> Delete(string couponId, DeleteCouponViewModel deleteCoupon, int? pageNumber, string? searchCode)
     {
         try
         {
@@ -192,21 +192,21 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
 
         catch (Exception ex)
         {
             ModelState.AddModelError(string.Empty, ex.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
     }
 
-    public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons, int? pageNumber)
+    public async Task<ActionResult> DeleteMultiple(List<string> selectedCoupons, int? pageNumber, string? searchCode)
     {
         try
         {
@@ -235,17 +235,17 @@ public sealed class CouponController(ICouponService couponService, IShoppingCart
             if (response.IsSuccess)
             {
                 TempData["success"] = response.SuccessMessage;
-                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+                return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
             }
 
             TempData["error"] = response.ValidationErrors;
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
 
         catch (Exception exception)
         {
             ModelState.AddModelError(string.Empty, exception.Message);
-            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber });
+            return RedirectToAction(nameof(Index), new { pageNumber = pageNumber, searchCode = searchCode });
         }
     }
 }

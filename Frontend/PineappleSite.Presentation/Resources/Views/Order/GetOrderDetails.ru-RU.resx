@@ -186,4 +186,7 @@
   <data name="OrderDelivered" xml:space="preserve">
     <value>Заказ доставлен</value>
   </data>
+  <data name="Coupon Code" xml:space="preserve">
+    <value>Примененный купон</value>
+  </data>
 </root>
