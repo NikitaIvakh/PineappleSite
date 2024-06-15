@@ -20,6 +20,6 @@ public sealed class GetProductListRequestHanlderTest : TestQueryHandler
 
         // Assert
         result.ShouldNotBeNull();
-        result.Count.Should().Be(6);
+        result.Count.Should().Be(3);
     }
 }

@@ -98,7 +98,8 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ValidationErrors.Should().Equal
         (
            "Сумма скидки купона не должна превышать 101 единицу", 
-           "Сумма скидки не должна превышать стоимость продукта"
+           "Сумма скидки не должна превышать стоимость продукта",
+           "Разница между скидкой и стоимостью продукции должна быть в пределах 30 единиц"
         );
     }
 
@@ -168,6 +169,7 @@ public sealed class CreateCouponRequestHandlerTest : TestCommandHandler
         result.ValidationErrors.Should().Equal
         (
            "Сумма скидки не должна превышать стоимость продукта", 
+           "Разница между скидкой и стоимостью продукции должна быть в пределах 30 единиц",
            "Стоимость товара должна превышать 2 единицы"
         );
     }

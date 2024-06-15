@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using Microsoft.EntityFrameworkCore;
 using Product.Application.Features.Commands.Handlers;
 using Product.Application.Features.Requests.Handlers;
 using Product.Domain.DTOs;
@@ -15,7 +16,12 @@ public sealed class DeleteProductsRequestHandlerTest : TestCommandHandler
     {
         // Arrange
         var handler = new DeleteProductsRequestHandler(Repository, DeleteProductsValidator, MemoryCache);
-        var deleteProducts = new DeleteProductsDto(new List<int> { 1, 2 });
+        var deleteProducts = new DeleteProductsDto(new List<int> { 4, 5 });
+
+        foreach (var entity in Context.ChangeTracker.Entries())
+        {
+            entity.State = EntityState.Detached;
+        }
 
         // Act
         var result = await handler.Handle(new DeleteProductsRequest(deleteProducts), CancellationToken.None);
