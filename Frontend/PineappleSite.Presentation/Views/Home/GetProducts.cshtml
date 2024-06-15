@@ -44,7 +44,7 @@
                         <div class="p-0 my-3 border rounded">
                             <div class="card d-flex flex-column h-100">
                                 <h3 class="card-title text-black-50 text-center py-2">@(product.Name.Length > 21 ? product.Name[..21] + "..." : product.Name)</h3>
-                                <img src="@product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded" alt="@Localizer["Product Image"]" loading="lazy">
+                                <img src="@product.ImageUrl" style="border-radius:35px;" width="400" height="400" class="rounded" alt="@Localizer["Product Image"]" loading="lazy">
                                 <div class="card-body d-flex flex-column flex-fill">
                                     <p class="card-text">@Html.Raw(product.Description.Substring(0, Math.Min(product.Description.Length, 16)))...</p>
                                     <div class="d-flex justify-content-between py-2">
