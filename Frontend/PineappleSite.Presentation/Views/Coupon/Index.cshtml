@@ -171,3 +171,12 @@
         window.location.href = document.getElementById("searchForm").action + "?culture=" + culture;
     });
 </script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[type="text"]').on('input', function () {
+            $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+</script>

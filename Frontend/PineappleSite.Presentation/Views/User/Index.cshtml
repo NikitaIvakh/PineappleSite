@@ -192,3 +192,12 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script src="~/js/users/userList.js" asp-append-version="true"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[type="text"]').on('input', function () {
+            $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+</script>
