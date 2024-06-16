@@ -4,11 +4,11 @@
 
 @{
     ViewData["Title"] = @Localizer["Home Page"];
-    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/css/home/getProductDetails.css" asp-append-version="true" />
 }
 
 <form method="post" action="/GetProductDetails">
-    <input asp-for="Product.Id" hidden/>
+    <input asp-for="Product.Id" hidden />
     <div class="pt-4">
         <div class="card container" style="border:1px solid #808080;">
             <div class="card-header bg-dark text-light row" style="border-radius: 0px;">
@@ -23,7 +23,7 @@
                 <div class="container rounded p-2">
                     <div class="row">
                         <div class="col-12 col-lg-4 p-1 text-center">
-                            <img src="@Model.Product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" alt="@Localizer["Product Image"]" loading="lazy"/>
+                            <img src="@Model.Product.ImageUrl" style="border-radius:35px;" width="100%" class="rounded car-image" alt="@Localizer["Product Image"]" loading="lazy" />
                         </div>
                         <div class="col-12 col-lg-8">
                             <div class="row pl-3">
@@ -61,28 +61,26 @@
                         @{
                             if (Model.Favourite != null && Model.Favourite.FavouriteDetails != null && Model.Favourite.FavouriteDetails.Any(fd => fd.ProductId == Model.Product.Id))
                             {
-                                <button
-                                    hidden
-                                    asp-action="AddToFavorites"
-                                    asp-controller="Home"
-                                    value="@Model.Product.Id"
-                                    type="submit"
-                                    asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
-                                    asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
-                                    class="btn btn-primary form-control btn-lg" style="height:50px;">
+                                <button hidden
+                                        asp-action="AddToFavorites"
+                                        asp-controller="Home"
+                                        value="@Model.Product.Id"
+                                        type="submit"
+                                        asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                                        asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
+                                        class="btn btn-primary form-control btn-lg" style="height:50px;">
                                     @Localizer["AddToFavorites"]
                                 </button>
                             }
                             else
                             {
-                                <button
-                                    asp-action="AddToFavorites"
-                                    asp-controller="Home"
-                                    value="@Model.Product.Id"
-                                    type="submit"
-                                    asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
-                                    asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
-                                    class="btn btn-primary form-control btn-lg" style="height:50px;">
+                                <button asp-action="AddToFavorites"
+                                        asp-controller="Home"
+                                        value="@Model.Product.Id"
+                                        type="submit"
+                                        asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
+                                        asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
+                                        class="btn btn-primary form-control btn-lg" style="height:50px;">
                                     @Localizer["AddToFavorites"]
                                 </button>
                             }
@@ -95,5 +93,15 @@
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial"/>
+    <partial name="_ValidationScriptsPartial" />
 }
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('input[type="number"]').on('input', function () {
+            var sanitizedValue = $(this).val().replace(/^\s+/, '').replace(/\./g, '');
+            $(this).val(sanitizedValue);
+        });
+    });
+</script>
