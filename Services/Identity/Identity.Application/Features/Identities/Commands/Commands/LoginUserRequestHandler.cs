@@ -4,17 +4,17 @@ using Identity.Application.Resources;
 using Identity.Application.Services;
 using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class LoginUserRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     AuthRequestValidator authValidator,
     ITokenService tokenService,
     IConfiguration configuration) : IRequestHandler<LoginUserRequest, Result<AuthResponseDto>>
@@ -55,8 +55,7 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.AuthRequest.EmailAddress.ToLower(), cancellationToken);
+            var user = await userManager.FindByEmailAsync(request.AuthRequest.EmailAddress.ToLower());
 
             if (user is null)
             {
@@ -70,7 +69,7 @@ public sealed class LoginUserRequestHandler(
             }
 
             var isValidPassword =
-                await userRepository.CheckPasswordAsync(user, request.AuthRequest.Password.Trim());
+                await userManager.CheckPasswordAsync(user, request.AuthRequest.Password.Trim());
 
             if (!isValidPassword)
             {
@@ -86,7 +85,7 @@ public sealed class LoginUserRequestHandler(
                 };
             }
 
-            var roles = await userRepository.GetUserRolesAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
 
             var accessToken = tokenService.CreateToken(user, roles);
             user.RefreshToken = configuration.GenerateRefreshToken();
@@ -95,15 +94,15 @@ public sealed class LoginUserRequestHandler(
 
             var outputUser = new AuthResponseDto
             (
-                FirstName: user.FirstName,
-                LastName: user.LastName,
-                UserName: user.UserName!,
-                EmailAddress: user.Email!.ToLower(),
+                FirstName: user.FirstName.Trim(),
+                LastName: user.LastName.Trim(),
+                UserName: user.UserName!.Trim(),
+                EmailAddress: user.Email!.Trim().ToLower(),
                 JwtToken: accessToken,
                 RefreshToken: user.RefreshToken
             );
 
-            await userRepository.UpdateUserAsync(user, cancellationToken);
+            await userManager.UpdateAsync(user);
 
             return new Result<AuthResponseDto>
             {

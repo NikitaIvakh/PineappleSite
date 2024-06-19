@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
 using Identity.Application.Features.Users.Commands.Queries;
 using Identity.Application.Features.Users.Requests.Queries;
+using Identity.Domain.Entities.Users;
 using Identity.Test.Common;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 
 namespace Identity.Test.Queries;
@@ -12,7 +15,7 @@ public sealed class GetUsersProfileRequestHandlerTest : TestQueryHandler
     public async Task GetUsersProfileRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new GetUsersProfileRequestHandler(UserRepository, MemoryCache);
+        var handler = new GetUsersProfileRequestHandler(UserManager, MemoryCache);
 
         // Act
         var result = await handler.Handle(new GetUsersProfileRequest(), CancellationToken.None);

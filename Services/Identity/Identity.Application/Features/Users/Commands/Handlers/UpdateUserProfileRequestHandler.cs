@@ -4,18 +4,16 @@ using Identity.Application.Validators;
 using Identity.Domain.DTOs.Identities;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class UpdateUserProfileRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     UpdateUserProfileValidator userProfileValidator,
     IHttpContextAccessor httpContextAccessor,
     IMemoryCache memoryCache) : IRequestHandler<UpdateUserProfileRequest, Result<GetUserForUpdateDto>>
@@ -65,8 +63,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Id == request.UpdateUserProfile.Id, cancellationToken);
+            var user = await userManager.FindByIdAsync(request.UpdateUserProfile.Id);
 
             if (user is null)
             {
@@ -79,10 +76,10 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            user.FirstName = request.UpdateUserProfile.FirstName?.Trim() ?? string.Empty;;
+            user.FirstName = request.UpdateUserProfile.FirstName?.Trim() ?? string.Empty;
             user.LastName = request.UpdateUserProfile.LastName?.Trim() ?? string.Empty;
-            user.UserName = request.UpdateUserProfile.UserName?.Trim() ?? string.Empty;;
-            user.Description = request.UpdateUserProfile.Description?.Trim() ?? string.Empty;; 
+            user.UserName = request.UpdateUserProfile.UserName?.Trim() ?? string.Empty;
+            user.Description = request.UpdateUserProfile.Description?.Trim() ?? string.Empty;
             user.Email = request.UpdateUserProfile.EmailAddress?.Trim().ToLower() ?? string.Empty;
             user.Age = request.UpdateUserProfile?.Age;
 
@@ -94,7 +91,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 user.PasswordHash = newPassword;
             }
 
-            await userRepository.UpdateUserAsync(user, cancellationToken);
+            await userManager.UpdateAsync(user);
 
             if (request.UpdateUserProfile?.Avatar is not null)
             {
@@ -114,7 +111,7 @@ public sealed class UpdateUserProfileRequestHandler(
                     user.ImageUrl = null;
                     user.ImageLocalPath = null;
 
-                    await userRepository.UpdateUserAsync(user, cancellationToken);
+                    await userManager.UpdateAsync(user);
                 }
 
                 var fileName = $"Id_{user.Id}------{Guid.NewGuid()}" +
@@ -148,7 +145,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 request.UpdateUserProfile = request.UpdateUserProfile with { ImageLocalPath = user.ImageLocalPath };
             }
 
-            var result = await userRepository.UpdateUserAsync(user, cancellationToken);
+            var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
             {
@@ -164,7 +161,7 @@ public sealed class UpdateUserProfileRequestHandler(
                 };
             }
 
-            var roles = await userRepository.GetUserRolesAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
             var getUser = new GetUserForUpdateDto
             (
                 UserId: user.Id,

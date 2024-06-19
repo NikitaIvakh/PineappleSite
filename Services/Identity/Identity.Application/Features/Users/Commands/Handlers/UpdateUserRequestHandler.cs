@@ -1,17 +1,18 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class UpdateUserRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     UpdateUserValidator updateUserValidator,
     IMemoryCache memoryCache) : IRequestHandler<UpdateUserRequest, Result<Unit>>
 {
@@ -56,8 +57,7 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Id == request.UpdateUser.Id, cancellationToken);
+            var user = await userManager.FindByIdAsync(request.UpdateUser.Id);
 
             if (user is null)
             {
@@ -73,7 +73,7 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            var otherUserWithSameName = await userRepository.GetUsers()
+            var otherUserWithSameName = await userManager.Users
                 .FirstOrDefaultAsync(key =>
                         key.UserName == request.UpdateUser.UserName &&
                         key.Id != request.UpdateUser.Id,
@@ -94,7 +94,7 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            var existUserEmail = await userRepository.GetUsers()
+            var existUserEmail = await userManager.Users
                 .FirstOrDefaultAsync(key =>
                         key.Email == request.UpdateUser.EmailAddress &&
                         key.Id != request.UpdateUser.Id,
@@ -118,10 +118,10 @@ public sealed class UpdateUserRequestHandler(
             user.Id = request.UpdateUser.Id;
             user.FirstName = request.UpdateUser.FirstName.Trim();
             user.LastName = request.UpdateUser.LastName.Trim();
-            user.UserName = request.UpdateUser.UserName.Trim();
+            user.UserName = request.UpdateUser.UserName.Trim().Replace(" ", "");
             user.Email = request.UpdateUser.EmailAddress.Trim().ToLower();
 
-            var result = await userRepository.UpdateUserAsync(user, cancellationToken);
+            var result = await userManager.UpdateAsync(user);
 
             if (!result.Succeeded)
             {
@@ -136,8 +136,9 @@ public sealed class UpdateUserRequestHandler(
                 };
             }
 
-            await userRepository.RemoveFromRolesAsync(user, cancellationToken);
-            await userRepository.AddUserToRoleAsync(user, request.UpdateUser.UserRoles.ToString(), cancellationToken);
+            var roles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, roles);
+            await userManager.AddToRoleAsync(user, request.UpdateUser.UserRoles.ToString());
             memoryCache.Remove(CacheKey);
 
             return new Result<Unit>

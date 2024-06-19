@@ -1,22 +1,23 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class DeleteUsersRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     DeleteUsersValidator deleteValidator,
     IMemoryCache memoryCache) : IRequestHandler<DeleteUsersRequest, CollectionResult<Unit>>
 {
     private const string CacheKey = "СacheUserKey";
-    
+
     public async Task<CollectionResult<Unit>> Handle(DeleteUsersRequest request, CancellationToken cancellationToken)
     {
         try
@@ -53,7 +54,7 @@ public sealed class DeleteUsersRequestHandler(
                 };
             }
 
-            var users = await userRepository.GetUsers()
+            var users = await userManager.Users
                 .Where(key => request.DeleteUsers.UserIds.Contains(key.Id))
                 .ToListAsync(cancellationToken);
 
@@ -87,10 +88,10 @@ public sealed class DeleteUsersRequestHandler(
                     user.ImageUrl = null;
                     user.ImageLocalPath = null;
 
-                    await userRepository.UpdateUserAsync(user, cancellationToken);
+                    await userManager.UpdateAsync(user);
                 }
 
-                var result = await userRepository.DeleteUserAsync(user);
+                var result = await userManager.DeleteAsync(user);
 
                 if (!result.Succeeded)
                 {

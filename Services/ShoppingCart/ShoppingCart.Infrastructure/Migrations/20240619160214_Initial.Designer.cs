@@ -11,8 +11,8 @@ using ShoppingCart.Infrastructure;
 namespace ShoppingCart.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240614155654_UpdateTyped")]
-    partial class UpdateTyped
+    [Migration("20240619160214_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -35,7 +35,7 @@ namespace ShoppingCart.Infrastructure.Migrations
                     b.Property<int>("CartHeaderId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal>("Count")
+                    b.Property<double>("Count")
                         .HasColumnType("numeric(10, 2)");
 
                     b.Property<int>("ProductId")

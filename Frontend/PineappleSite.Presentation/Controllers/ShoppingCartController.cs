@@ -27,6 +27,7 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
             var userId = User.Claims.Where(key => key.Type == ClaimTypes.NameIdentifier)?.FirstOrDefault()
                 ?.Value;
             var result = await shoppingCartService.GetCartAsync(userId);
+            var couponCode = cartViewModel.CartHeader.CouponCode.ToLower();
 
             if (result.IsSuccess)
             {
@@ -36,7 +37,7 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
                     {
                         CartHeaderId = result.Data!.CartHeader.CartHeaderId,
                         UserId = userId,
-                        CouponCode = cartViewModel.CartHeader.CouponCode,
+                        CouponCode = couponCode,
                         Discount = result.Data.CartHeader.Discount,
                         CartTotal = result.Data.CartHeader.CartTotal,
                     },

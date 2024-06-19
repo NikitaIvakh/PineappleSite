@@ -1,22 +1,21 @@
 ﻿using Identity.Application.Features.Identities.Requests.Commands;
 using Identity.Application.Resources;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
-public sealed class RevokeTokenRequestHandler(IUserRepository userRepository)
+public sealed class RevokeTokenRequestHandler(UserManager<ApplicationUser> userManager)
     : IRequestHandler<RevokeTokenRequest, Result<Unit>>
 {
     public async Task<Result<Unit>> Handle(RevokeTokenRequest request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.UserName == request.UserName, cancellationToken: cancellationToken);
+            var user = await userManager.FindByNameAsync(request.UserName);
 
             if (user is null)
             {
@@ -31,7 +30,7 @@ public sealed class RevokeTokenRequestHandler(IUserRepository userRepository)
 
             user.RefreshToken = null;
             user.RefreshTokenExpiresTime = DateTime.UtcNow;
-            await userRepository.UpdateUserAsync(user, cancellationToken);
+            await userManager.UpdateAsync(user);
 
             return new Result<Unit>
             {

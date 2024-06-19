@@ -1,7 +1,5 @@
 ﻿using Identity.Domain.Entities.Users;
-using Identity.Domain.Interfaces;
 using Identity.Infrastructure.Health;
-using Identity.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,13 +18,19 @@ public static class DependencyInjection
 
     private static void RegisterServices(IServiceCollection services)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole<string>>()
+        services.AddIdentity<ApplicationUser, IdentityRole<string>>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false; 
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 5; 
+            })
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddUserManager<UserManager<ApplicationUser>>()
             .AddSignInManager<SignInManager<ApplicationUser>>();
 
         services.AddScoped<RoleManager<IdentityRole<string>>>();
-        services.AddScoped<IUserRepository, UserRepository>();
     }
 
     private static void RegisterDbConnectionString(IServiceCollection services, IConfiguration configuration)

@@ -9,7 +9,7 @@ public sealed class AuthRequestViewModel
     [Required(ErrorMessage = "Адрес электронной почты не может быть пустым")]
     [MinLength(2, ErrorMessage = "Адрес электронной почты должен быть более 2 символов")]
     [MaxLength(50, ErrorMessage = "Адрес электронной почты не может превышать 50 символов")]
-    public required string EmailAddress { get; init; }
+    public required string EmailAddress { get; set; }
 
     [DataType(DataType.Password)]
     [Required(ErrorMessage = "Поле обязательно для заполнения")]

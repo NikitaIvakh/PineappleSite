@@ -31,7 +31,7 @@ public sealed class CreateUserViewModel
     [Required(ErrorMessage = "Поле обязательно для заполнения")]
     [MinLength(5, ErrorMessage = "Длина строки имени пользователя должна быть более 5 символов")]
     [MaxLength(50, ErrorMessage = "Длина строки имени пользователя не должна превышать 50 символов")]
-    public required string EmailAddress { get; init; }
+    public required string EmailAddress { get; set; }
 
     [Required(ErrorMessage = "Поле обязательно для заполнения")]
     public UserRoles Roles { get; init; }

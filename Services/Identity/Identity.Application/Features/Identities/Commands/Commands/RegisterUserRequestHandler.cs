@@ -4,17 +4,15 @@ using Identity.Application.Validators;
 using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class RegisterUserRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     RegisterValidator validationRules,
     IMemoryCache memoryCache) : IRequestHandler<RegisterUserRequest, Result<string>>
 {
@@ -60,8 +58,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress.ToLower(), cancellationToken);
+            var existsEmail = await userManager.FindByEmailAsync(request.RegisterRequest.EmailAddress);
 
             if (existsEmail is not null)
             {
@@ -78,8 +75,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var existsUserName = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.UserName == request.RegisterRequest.UserName, cancellationToken);
+            var existsUserName = await userManager.FindByNameAsync(request.RegisterRequest.UserName);
 
             if (existsUserName is not null)
             {
@@ -101,9 +97,10 @@ public sealed class RegisterUserRequestHandler(
                 Id = Guid.NewGuid().ToString(),
                 FirstName = request.RegisterRequest.FirstName.Trim(),
                 LastName = request.RegisterRequest.LastName.Trim(),
-                UserName = request.RegisterRequest.UserName.Trim(),
-                Email = request.RegisterRequest.EmailAddress.Trim().ToLower(),
+                UserName = request.RegisterRequest.UserName.Trim().Replace(" ", ""),
+                Email = request.RegisterRequest.EmailAddress.Trim().ToLower().Replace(" ", ""),
                 EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString(),
             };
 
             var passwordHasher =
@@ -126,7 +123,7 @@ public sealed class RegisterUserRequestHandler(
             }
 
             var result =
-                await userRepository.CreateUserAsync(user, request.RegisterRequest.Password, cancellationToken);
+                await userManager.CreateAsync(user, request.RegisterRequest.Password);
 
             if (!result.Succeeded)
             {
@@ -143,8 +140,7 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            var userFromDb = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.RegisterRequest.EmailAddress.ToLower(), cancellationToken);
+            var userFromDb = await userManager.FindByEmailAsync(user.Email);
 
             if (userFromDb is null)
             {
@@ -157,12 +153,12 @@ public sealed class RegisterUserRequestHandler(
                 };
             }
 
-            await userRepository.AddUserToRoleAsync(user, RoleConst.User, cancellationToken);
+            await userManager.AddToRoleAsync(user, RoleConst.User);
             memoryCache.Remove(CacheKey);
 
             return new Result<string>
             {
-                Data = userFromDb.Id,
+                Data = user.Id,
                 StatusCode = (int)StatusCode.Created,
                 SuccessMessage = SuccessMessage.ResourceManager.GetString("SuccessfullyRegister", ErrorMessage.Culture),
             };

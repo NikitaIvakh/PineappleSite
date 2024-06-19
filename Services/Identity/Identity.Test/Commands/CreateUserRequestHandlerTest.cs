@@ -2,8 +2,11 @@
 using Identity.Application.Features.Users.Commands.Handlers;
 using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
 using Identity.Test.Common;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 
 namespace Identity.Test.Commands;
@@ -14,7 +17,7 @@ public sealed class CreateUserRequestHandlerTest : TestCommandHandler
     public async Task CreateUserRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new CreateUserRequestHandler(UserRepository, CreateUserValidation, MemoryCache);
+        var handler = new CreateUserRequestHandler(UserManager, CreateUserValidation, MemoryCache);
         var createUserDto = new CreateUserDto
         (
             FirstName: "TestUsename1",

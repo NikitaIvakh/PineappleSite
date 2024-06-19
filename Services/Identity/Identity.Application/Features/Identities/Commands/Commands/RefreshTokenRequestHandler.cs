@@ -7,13 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.IdentityModel.Tokens.Jwt;
 using Identity.Application.Extensions;
-using Identity.Domain.Interfaces;
-using Microsoft.EntityFrameworkCore;
+using Identity.Domain.Entities.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Identities.Commands.Commands;
 
 public sealed class RefreshTokenRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     IConfiguration configuration) : IRequestHandler<RefreshTokenRequest, Result<ObjectResult>>
 {
     public async Task<Result<ObjectResult>> Handle(RefreshTokenRequest request, CancellationToken cancellationToken)
@@ -40,8 +40,7 @@ public sealed class RefreshTokenRequestHandler(
             }
 
             var userName = principal.Identity!.Name;
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.UserName == userName, cancellationToken);
+            var user = await userManager.FindByNameAsync(userName);
 
             if (user is null || user.RefreshToken != refreshToken ||
                 user.RefreshTokenExpiresTime <= DateTime.UtcNow)

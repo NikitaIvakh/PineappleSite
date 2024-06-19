@@ -1,20 +1,17 @@
 ﻿using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Application.Resources;
 using Identity.Application.Validators;
-using Identity.Domain.DTOs.Authentications;
 using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Handlers;
 
 public sealed class CreateUserRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     CreateUserValidation createValidator,
     IMemoryCache memoryCache) : IRequestHandler<CreateUserRequest, Result<Unit>>
 {
@@ -60,8 +57,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var userExists = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.UserName == request.CreateUser.UserName, cancellationToken);
+            var userExists = await userManager.FindByNameAsync(request.CreateUser.UserName);
 
             if (userExists is not null)
             {
@@ -77,8 +73,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            var existsEmail = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Email == request.CreateUser.EmailAddress, cancellationToken);
+            var existsEmail = await userManager.FindByEmailAsync(request.CreateUser.EmailAddress.ToLower());
 
             if (existsEmail is not null)
             {
@@ -103,12 +98,13 @@ public sealed class CreateUserRequestHandler(
                 UserName = request.CreateUser.UserName.Trim(),
                 Email = request.CreateUser.EmailAddress.Trim().ToLower(),
                 EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
             };
 
             var passwordHasher = new PasswordHasher<ApplicationUser>().HashPassword(user, request.CreateUser.Password);
             user.PasswordHash = passwordHasher;
 
-            var result = await userRepository.CreateUserAsync(user, request.CreateUser.Password, cancellationToken);
+            var result = await userManager.CreateAsync(user, request.CreateUser.Password);
 
             if (!result.Succeeded)
             {
@@ -124,7 +120,7 @@ public sealed class CreateUserRequestHandler(
                 };
             }
 
-            await userRepository.AddUserToRoleAsync(user, request.CreateUser.Roles.ToString(), cancellationToken);
+            await userManager.AddToRoleAsync(user, request.CreateUser.Roles.ToString());
             memoryCache.Remove(CacheKey);
 
             return new Result<Unit>

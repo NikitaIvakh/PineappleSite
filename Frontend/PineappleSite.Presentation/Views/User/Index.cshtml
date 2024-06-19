@@ -45,6 +45,7 @@
     </div>
 </form>
 <form id="deleteSelectedForm"
+      asp-controller="User"
       asp-action="DeleteUserList"
       asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
       asp-route-searchUser="@Context.Request.Query["searchUser"]"
@@ -78,9 +79,7 @@
                             type="submit"
                             class="btn btn-danger"
                             style="display:none;"
-                            form="deleteSelectedForm"
-                            asp-route-pageNumber="@Context.Request.Query["pageNumber"]"
-                            asp-route-searchUser="@Context.Request.Query["searchUser"]">
+                            form="deleteSelectedForm">
                         @Localizer["Delete selected ones"]
                     </button>
                     <div class="col-12 form-text">
@@ -190,14 +189,30 @@
     </div>
 </form>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js" asp-append-version="true"></script>
 <script src="~/js/users/userList.js" asp-append-version="true"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" asp-append-version="true"></script>
 <script>
     $(document).ready(function () {
         $('input[type="text"]').on('input', function () {
             $(this).val($(this).val().replace(/^\s+/, ''));
+        });
+    });
+
+    document.getElementById("clearSearch").addEventListener("click", function () {
+        document.getElementById("searchUser").value = "";
+        window.location.href = "/User/Index";
+    });
+
+    $(document).ready(function () {
+        $('input[name="selectedUserIds"]').change(function () {
+            var selectedCount = $('input[name="selectedUserIds"]:checked').length;
+            if (selectedCount >= 2) {
+                $('#deleteAllButton').show();
+            } else {
+                $('#deleteAllButton').hide();
+            }
         });
     });
 </script>

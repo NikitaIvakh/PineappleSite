@@ -1,16 +1,17 @@
 ﻿using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
-public sealed class GetUsersProfileRequestHandler(IUserRepository userRepository, IMemoryCache memoryCache)
+public sealed class GetUsersProfileRequestHandler(UserManager<ApplicationUser> userManager, IMemoryCache memoryCache)
     : IRequestHandler<GetUsersProfileRequest, CollectionResult<GetUsersProfileDto>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -31,7 +32,7 @@ public sealed class GetUsersProfileRequestHandler(IUserRepository userRepository
                 };
             }
 
-            var users = await userRepository.GetUsers().ToListAsync(cancellationToken);
+            var users = await userManager.Users.ToListAsync(cancellationToken);
 
             if (users.Count == 0)
             {
@@ -48,7 +49,7 @@ public sealed class GetUsersProfileRequestHandler(IUserRepository userRepository
 
             foreach (var user in users)
             {
-                var roles = await userRepository.GetUserRolesAsync(user);
+                var roles = await userManager.GetRolesAsync(user);
                 getUsersProfile.Add(new GetUsersProfileDto
                 (
                     UserId: user.Id,

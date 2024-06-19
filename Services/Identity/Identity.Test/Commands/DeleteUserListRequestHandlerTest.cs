@@ -2,7 +2,10 @@
 using Identity.Application.Features.Users.Commands.Handlers;
 using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Test.Common;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 
 namespace Identity.Test.Commands;
@@ -13,7 +16,7 @@ public class DeleteUserListRequestHandlerTest : TestCommandHandler
     public async Task DeleteUserListRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new DeleteUsersRequestHandler(UserRepository, DeleteUsers, MemoryCache);
+        var handler = new DeleteUsersRequestHandler(UserManager, DeleteUsers, MemoryCache);
         var deleteUserList = new DeleteUsersDto(new List<string>()
             { "8e445865-a24d-4543-a6c6-9443d048cdb9", "9e224968-33e4-4652-b7b7-8574d048cdb9" });
 
@@ -32,7 +35,7 @@ public class DeleteUserListRequestHandlerTest : TestCommandHandler
     public async Task DeleteUserListRequestHandlerTest_Success_FailOrWrongIds()
     {
         // Arrange
-        var handler = new DeleteUsersRequestHandler(UserRepository, DeleteUsers, MemoryCache);
+        var handler = new DeleteUsersRequestHandler(UserManager, DeleteUsers, MemoryCache);
         var deleteUserList = new DeleteUsersDto(new List<string>()
             { "8e445865-a24d-4543-a6c6-9443d048cdb1", "9e224968-33e4-4652-b7b7-8574d048cdb2" });
 

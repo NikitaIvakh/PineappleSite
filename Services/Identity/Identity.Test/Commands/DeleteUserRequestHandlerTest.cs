@@ -2,8 +2,11 @@
 using Identity.Application.Features.Users.Commands.Handlers;
 using Identity.Application.Features.Users.Requests.Handlers;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Test.Common;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using Xunit;
 
 namespace Identity.Test.Commands;
@@ -14,7 +17,7 @@ public sealed class DeleteUserRequestHandlerTest : TestCommandHandler
     public async Task DeleteUserRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new DeleteUserRequestHandler(UserRepository, DeleteUser, MemoryCache);
+        var handler = new DeleteUserRequestHandler(UserManager, DeleteUser, MemoryCache);
         var deleteUser = new DeleteUserDto
         (
             UserId: "3B189631-D179-4200-B77C-B8FC0FD28037"
@@ -39,7 +42,7 @@ public sealed class DeleteUserRequestHandlerTest : TestCommandHandler
     public async Task DeleteUserRequestHandlerTest_FailOrWrongId()
     {
         // Arrange
-        var handler = new DeleteUserRequestHandler(UserRepository, DeleteUser, MemoryCache);
+        var handler = new DeleteUserRequestHandler(UserManager, DeleteUser, MemoryCache);
         var deleteUser = new DeleteUserDto
         (
             UserId: "3B189631-D179-4200-B77C-B8FC0FD28011"

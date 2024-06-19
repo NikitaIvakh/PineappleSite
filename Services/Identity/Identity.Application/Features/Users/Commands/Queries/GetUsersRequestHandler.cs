@@ -6,12 +6,13 @@ using Identity.Application.Resources;
 using Identity.Domain.Enum;
 using Microsoft.Extensions.Caching.Memory;
 using Identity.Application.Features.Users.Requests.Queries;
-using Identity.Domain.Interfaces;
+using Identity.Domain.Entities.Users;
+using Microsoft.AspNetCore.Identity;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
 public sealed class GetUsersRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     IMemoryCache memoryCache) : IRequestHandler<GetUsersRequest, CollectionResult<GetUsersDto>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -32,7 +33,7 @@ public sealed class GetUsersRequestHandler(
                 };
             }
 
-            var users = await userRepository.GetUsers().ToListAsync(cancellationToken);
+            var users = await userManager.Users.ToListAsync(cancellationToken);
 
             if (users.Count == 0)
             {
@@ -49,7 +50,7 @@ public sealed class GetUsersRequestHandler(
 
             foreach (var user in users)
             {
-                var role = await userRepository.GetUserRolesAsync(user);
+                var role = await userManager.GetRolesAsync(user);
                 getUsersDtoList.Add(new GetUsersDto
                 (
                     UserId: user.Id,

@@ -6,8 +6,6 @@ using Identity.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Identity.Application.Validators;
 using Identity.Domain.Entities.Users;
-using Identity.Domain.Interfaces;
-using Identity.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
@@ -24,12 +22,12 @@ public class TestCommandHandler : IDisposable
     protected readonly CreateUserValidation CreateUserValidation;
     protected readonly UpdateUserValidator UpdateUserValidator;
     protected readonly AuthRequestValidator AuthRequest;
+    protected readonly UserManager<ApplicationUser> UserManager;
 
     protected readonly IMapper Mapper;
     protected readonly ApplicationDbContext Context;
     protected readonly IHttpContextAccessor HttpContextAccessor;
     protected readonly IMemoryCache MemoryCache;
-    protected readonly IUserRepository UserRepository;
     protected readonly ITokenService TokenService;
     protected readonly IConfiguration Configuration;
 
@@ -56,7 +54,7 @@ public class TestCommandHandler : IDisposable
         var userStore = new UserStore<ApplicationUser>(Context);
         var passwordHasher = new PasswordHasher<ApplicationUser>();
 
-        UserManager<ApplicationUser> userManager = new UserManager<ApplicationUser>(
+        UserManager = new UserManager<ApplicationUser>(
             userStore,
             null,
             passwordHasher,
@@ -66,8 +64,6 @@ public class TestCommandHandler : IDisposable
             new IdentityErrorDescriber(),
             new ServiceCollection().BuildServiceProvider(),
             new LoggerFactory().CreateLogger<UserManager<ApplicationUser>>());
-        
-        UserRepository = new UserRepository(Context, userManager);
     }
 
     public void Dispose() => IdentityDbContextFactory.Destroy(Context);

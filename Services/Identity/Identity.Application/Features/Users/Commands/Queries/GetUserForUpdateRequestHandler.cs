@@ -1,17 +1,17 @@
 ﻿using Identity.Application.Features.Users.Requests.Queries;
 using Identity.Application.Resources;
 using Identity.Domain.DTOs.Identities;
+using Identity.Domain.Entities.Users;
 using Identity.Domain.Enum;
-using Identity.Domain.Interfaces;
 using Identity.Domain.ResultIdentity;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace Identity.Application.Features.Users.Commands.Queries;
 
 public sealed class GetUserForUpdateRequestHandler(
-    IUserRepository userRepository,
+    UserManager<ApplicationUser> userManager,
     IMemoryCache memoryCache) : IRequestHandler<GetUserForUpdateRequest, Result<GetUserForUpdateDto>>
 {
     private const string CacheKey = "СacheUserKey";
@@ -32,8 +32,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 };
             }
 
-            var user = await userRepository.GetUsers()
-                .FirstOrDefaultAsync(key => key.Id == request.UserId, cancellationToken);
+            var user = await userManager.FindByIdAsync(request.UserId);
 
             if (user is null)
             {
@@ -48,7 +47,7 @@ public sealed class GetUserForUpdateRequestHandler(
                 };
             }
 
-            var roles = await userRepository.GetUserRolesAsync(user);
+            var roles = await userManager.GetRolesAsync(user);
             var getUserFotUpdate = new GetUserForUpdateDto
             (
                 UserId: user.Id,

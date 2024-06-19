@@ -1,7 +1,10 @@
 ﻿using FluentAssertions;
 using Identity.Application.Features.Users.Commands.Queries;
 using Identity.Application.Features.Users.Requests.Queries;
+using Identity.Domain.Entities.Users;
 using Identity.Test.Common;
+using Microsoft.AspNetCore.Identity;
+using Moq;
 using Xunit;
 
 namespace Identity.Test.Queries;
@@ -12,7 +15,7 @@ public sealed class GetUserForUpdateRequestHandlerTest : TestQueryHandler
     public async Task GetUserForUpdateRequestHandlerTest_Success()
     {
         // Arrange
-        var handler = new GetUserForUpdateRequestHandler(UserRepository, MemoryCache);
+        var handler = new GetUserForUpdateRequestHandler(UserManager, MemoryCache);
         const string userId = "3B189631-D179-4200-B77C-B8FC0FD28037";
         const string password = "P@ssword1";
 
@@ -30,7 +33,7 @@ public sealed class GetUserForUpdateRequestHandlerTest : TestQueryHandler
     public async Task GetUserForUpdateRequestHandlerTest_FailOrWrong_UserId()
     {
         // Arrange
-        var handler = new GetUserForUpdateRequestHandler(UserRepository, MemoryCache);
+        var handler = new GetUserForUpdateRequestHandler(UserManager, MemoryCache);
         const string userId = "3B189631-D179-4200-B77C-B8FC0FD28099";
         const string password = "P@ssword1";
 

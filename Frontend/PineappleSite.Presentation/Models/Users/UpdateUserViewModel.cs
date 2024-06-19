@@ -22,7 +22,7 @@ public sealed class UpdateUserViewModel
     [MinLength(2, ErrorMessage = "Адрес электронной почты должен быть более 2 символов")]
     [MaxLength(50, ErrorMessage = "Адрес электронной почты не может превышать 50 символов")]
     [DataType(DataType.EmailAddress, ErrorMessage = "Введите действительный адрес электронной почты")]
-    public required string EmailAddress { get; init; }
+    public required string EmailAddress { get; set; }
 
     [Required(ErrorMessage = "Поле обязательно для заполнения")]
     [MinLength(5, ErrorMessage = "Длина строки имени пользователя должна быть более 5 символов")]
