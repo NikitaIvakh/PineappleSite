@@ -213,10 +213,11 @@ public sealed class ShoppingCartController(IShoppingCartService shoppingCartServ
             var deliveryDate = cartViewModel.CartHeader.DeliveryDate;
             var deliveryDateUtc = DateTime.SpecifyKind((DateTime)deliveryDate!, DateTimeKind.Utc);
             cartViewModel.CartHeader.DeliveryDate = deliveryDateUtc;
+            cartViewModel.CartHeader.Email = cartViewModel.CartHeader.Email!.ToLower();
 
             var cart = await GetShoppingCartAfterAuthenticate();
             cart.Data!.CartHeader.PhoneNumber = cartViewModel.CartHeader.PhoneNumber;
-            cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email;
+            cart.Data.CartHeader.Email = cartViewModel.CartHeader.Email!.ToLower();
             cart.Data.CartHeader.Name = cartViewModel.CartHeader.Name;
             cart.Data.CartHeader.Address = cartViewModel.CartHeader.Address;
             cart.Data.CartHeader.DeliveryDate = cartViewModel.CartHeader.DeliveryDate;
