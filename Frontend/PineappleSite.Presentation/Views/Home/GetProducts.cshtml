@@ -80,6 +80,18 @@
                         <span>&laquo; @Localizer["Previous"]</span>
                     </a>
                 }
+
+                @for (int i = 1; i <= Model.TotalPages; i++)
+                {
+                    <a asp-action="GetProducts"
+                       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+                       asp-route-pageNumber="@i"
+                       asp-route-searchProduct="@Context.Request.Query["searchProduct"]"
+                       class="page-item @(i == Model.PageIndex ? "active" : "")">
+                        <span>@i</span>
+                    </a>
+                }
+
                 @if (Model.HasNextPage)
                 {
                     <a asp-action="GetProducts"
